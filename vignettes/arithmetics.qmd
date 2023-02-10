@@ -1,0 +1,309 @@
+---
+title: "Arithmetics on Hi-C experiments"
+date: "2023-01-12"
+author: Jacques SERIZAY
+format:
+    html:
+        theme: [cosmo, theme-cosmo.scss]
+        highlight: tango
+        toc: true
+        toc-depth: 3
+        number-sections: true
+        self-contained: true
+        embed-resources: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+    layout = 'l-page', 
+    echo = TRUE, 
+    warning = FALSE, error = FALSE, message = FALSE
+)
+```
+
+**Aim:** This notebook illustrates how to leverage `HiCExperiment` data structure 
+with `HiContacts` package to operate on Hi-C matrices. 
+
+```{r}
+library(tidyverse)
+devtools::load_all('~/repos/HiCExperiment')
+devtools::load_all('~/repos/fourDNData/')
+devtools::load_all('~/repos/HiCool/')
+devtools::load_all('~/repos/HiContacts')
+```
+
+## Data import and basic matrix arithmetics
+
+### Playing with yeast data
+
+We will start by importing a WT `.mcool` file in R and perform normalization on 
+the imported matrix.
+
+```{r yeast_norm}
+wt_cf <- CoolFile('data/S288C_WT.mcool', resolution = 1000, pairsFile = 'data/S288C_WT.pairs')
+wt <- import(wt_cf)
+contacts <- wt[c('II')] |> normalize(niters = 200)
+contacts
+p <- cowplot::plot_grid(
+    plotMatrix(contacts, use.scores = 'count', scale = 'log10'),
+    plotMatrix(contacts, use.scores = 'ICE', scale = 'log10', limits = c(-4, -1)), 
+    ncol = 2
+)
+p
+```
+
+We can do the same for a Hi-C dataset generated in a eco1 mutant. 
+
+```{r yeast_merge}
+eco1_cf <- CoolFile('data/S288C_Eco1-AID.mcool', resolution = 1000, pairsFile = 'data/S288C_Eco1-AID.pairs')
+eco1 <- import(eco1_cf)
+eco1
+```
+
+Now that we have these two `HiCExperiment` objects, we can: 
+
+1. `refocus` to change the field of view then
+2. `zoom` to change the resolution then
+3. `detrend` to calculate ovserved/expected fold-change and 
+4. `despeckle` to remove background noise by applying a smoothing kernel
+
+Them we can proceed to divide the contact matrix of the WT sample by the eco1 sample and plot each `HiCExperiment` matrix.
+
+```{r yeast_divide}
+wt_II <- wt |> 
+    refocus('II') |> 
+    zoom(2000) |> 
+    detrend() |> 
+    despeckle(use.scores = 'detrended')
+eco1_II <- eco1 |> 
+    refocus('II') |> 
+    zoom(2000) |> 
+    detrend() |> 
+    despeckle(use.scores = 'detrended')
+div_contacts <- divide(wt_II, by = eco1_II) 
+div_contacts
+p_div <- cowplot::plot_grid(
+    plotMatrix(wt_II, use.scores = 'count', scale = 'log10'), 
+    plotMatrix(wt_II, use.scores = 'balanced', scale = 'log10', limits = c(-4, -1)), 
+    plotMatrix(eco1_II, use.scores = 'balanced', scale = 'log10', limits = c(-4, -1)), 
+    plotMatrix(div_contacts, use.scores = 'balanced.fc', scale = 'log2', limits = c(-1, 1), cmap = bwrColors()), 
+    ncol = 4
+)
+p_div
+```
+
+Focusing on a narrower genomic region, it may be relevant to point out specific 
+topological features, such as focal loops ("dots" in the contact matrices) or 
+domain borders. We can do this by providing relevant arguments to the plotting function. 
+
+We can also `aggregate` Hi-C maps over a list of genomic coordinates, either on-diagonal (e.g. for border aggregated plots) or off-diagonal (e.g. for loop aggregated plots).
+
+```{r yeast_detrend}
+topologicalFeatures(wt_II, 'loops') <- rtracklayer::import('data/S288C-loops.bedpe') |> 
+    InteractionSet::makeGInteractionsFromGRangesPairs()
+topologicalFeatures(wt_II, 'borders') <- rtracklayer::import('data/S288C-borders.bed')
+contacts <- refocus(wt_II, 'II:400000-700000') |> 
+    zoom(1000) |>
+    detrend() |> 
+    despeckle(use.scores = 'detrended', focal.size = 2)
+aggr_loops <- aggregate(contacts, targets = topologicalFeatures(wt_II, 'loops'), flankingBins = 25)
+aggr_borders <- aggregate(contacts, targets = topologicalFeatures(wt_II, 'borders'), flankingBins = 15)
+aggr_borders
+p_yeast_2 <- cowplot::plot_grid(
+    plotMatrix(
+        contacts, 
+        use.scores = 'balanced'
+    ),
+    plotMatrix(
+        contacts, 
+        use.scores = 'despeckled', 
+        loops = topologicalFeatures(wt_II, 'loops'), 
+        borders = topologicalFeatures(wt_II, 'borders'), 
+        scale = 'linear', 
+        limits = c(-1, 1), 
+        cmap = bwrColors()
+    ),
+    plotMatrix(
+        aggr_loops, 
+        use.scores = 'detrended', 
+        scale = 'linear', 
+        limits = c(-1, 1), 
+        cmap = rainbowColors()
+    ),
+    plotMatrix(
+        aggr_borders, 
+        use.scores = 'detrended', 
+        scale = 'linear', 
+        limits = c(-0.5, 0.5), 
+        cmap = bwrColors()
+    ), 
+    nrow = 1
+)
+p_yeast_2
+```
+
+### Playing with mammalian data
+
+The same operations (i.e. detrending, despeckling, ,,,) are also possible on larger genomes. 
+On top of that, it is sometimes useful to `autocorrelate` the Hi-C matrix to highlight
+the compartments "plaid" pattern.
+
+Here, the `maxDistance` argument can be used to plot triangular horizontal matrices rather 
+than square matrices. 
+
+```{r NPCs}
+## G0G1 neural progenitors cells  (FACS sorted, Sox1-GFP+), Bonev et al. 2017
+npcs_mcool <- fourDNData('4DNESJ9SIAV5', type = 'mcool')
+npcs_large <- import(npcs_mcool, focus = 'chr3:80000000-120000000', resolution = 250000) |> 
+    autocorrelate()
+npcs_narrow <- import(npcs_mcool, focus = 'chr3:100800000-102400000', resolution = 5000) |> 
+    detrend() |> 
+    despeckle(use.scores = 'detrended')
+p_mammals_1 <- cowplot::plot_grid(
+    plotMatrix(npcs_large, use.scores = 'balanced', scale = 'log10', limits = c(-4, -1), maxDistance = 30000000), 
+    plotMatrix(npcs_large, use.scores = 'autocorrelated', scale = 'linear', limits = c(-1, 1), cmap = bgrColors(), maxDistance = 30000000), 
+    plotMatrix(npcs_narrow, use.scores = 'balanced', scale = 'log10', limits = c(-4, -2), maxDistance = 1200000), 
+    plotMatrix(npcs_narrow, use.scores = 'expected', scale = 'log10', limits = c(-4, -2), maxDistance = 1200000), 
+    plotMatrix(npcs_narrow, use.scores = 'detrended', scale = 'linear', limits = c(-1, 1), maxDistance = 1200000, cmap = rainbowColors()), 
+    plotMatrix(npcs_narrow, use.scores = 'despeckled', scale = 'linear', limits = c(-2, 2), maxDistance = 1200000, cmap = rainbowColors()), 
+    ncol = 1
+)
+p_mammals_1
+```
+
+Finally, `subsample`ing interactions from a Hi-C experiment can easily be 
+performed, and this is done proportionally with the distance-dependent 
+interaction frequency. Furthermore, if a Hi-C experiment has been binned to a small resolution, 
+it can be `coarsen`ed to any larger resolution. 
+
+```{r subsample}
+sub_npcs_0.5 <- subsample(npcs_narrow, 0.5)
+sub_npcs_0.1 <- subsample(npcs_narrow, 0.1) |> 
+    detrend()
+sub_npcs_0.1_rebinned <- coarsen(sub_npcs_0.1, 10000) |> 
+    detrend() 
+p_mammals_2 <- cowplot::plot_grid(
+    plotMatrix(npcs_narrow, use.scores = 'balanced', limits = c(-4, -2), maxDistance = 1200000), 
+    plotMatrix(sub_npcs_0.5, use.scores = 'balanced', limits = c(-4, -2), maxDistance = 1200000), 
+    plotMatrix(sub_npcs_0.1, use.scores = 'balanced', limits = c(-4, -2), maxDistance = 1200000), 
+    plotMatrix(sub_npcs_0.1, use.scores = 'detrended', scale = 'linear', limits = c(-1, 1), maxDistance = 1200000, cmap = rainbowColors()), 
+    plotMatrix(sub_npcs_0.1_rebinned, use.scores = 'balanced', maxDistance = 1200000), 
+    plotMatrix(sub_npcs_0.1_rebinned, use.scores = 'detrended', scale = 'linear', limits = c(-1, 1), maxDistance = 1200000, cmap = rainbowColors()), 
+    ncol = 1
+)
+p_mammals_2
+```
+
+## Hi-C related arithmetics: P(s), virtual 4c profiles, cis/trans ratios, ...
+
+To illustrate advanced Hi-C related arithmetics, we will use a Hi-C map generated in 
+a yeast mutant, which contains segments of `Mycoides mycoides`
+chromosome translocated within the chromosome XVI. 
+
+```{r import}
+synthChr_cf <- CoolFile(
+    'data/S288C_Mmyco-transloc.mcool', 
+    resolution = 8000, 
+    pairsFile = 'data/S288C_Mmyco-transloc.pairs'
+)
+availableChromosomes(synthChr_cf)
+synthChr <- import(synthChr_cf) |> 
+    detrend() |> 
+    despeckle(use.scores = 'detrended') |> 
+    autocorrelate(detrend = FALSE, ignore_ndiags = 4)
+synthChr_zoomed <- import(synthChr_cf, focus = 'chrXVI-Mmmyco_inv870kb', resolution = 1000) 
+```
+
+We can compute a P(s) per chromosome for this sample using the `distanceLaw` function, 
+as well as a `scalogram` along each chromosome, and `cisTransRatio`s. 
+
+```{r ps_cistrans}
+### ----- Distance law
+ps <- distanceLaw(synthChr, by_chr = TRUE) |>  
+    mutate(type = case_when(chr == 'chrXVI-Mmmyco_inv870kb' ~ 'XVI-Myco', TRUE ~ 'WT')) |> 
+    mutate(type = factor(type, c('WT', 'XVI-Myco')))
+p1 <- plotMatrix(synthChr[c('chrXIII', 'chrXIV', 'chrXV', 'chrXVI-Mmmyco_inv870kb')], limits = c(-4, -1), cmap = afmhotrColors())
+p2 <- plotPs(ps, ggplot2::aes(x = binned_distance, y = norm_p, group = chr, color = type)) + 
+    scale_color_manual(values = c('#c6c6c6', '#ca0000'))
+p3 <- plotPsSlope(ps, ggplot2::aes(x = binned_distance, y = slope, group = chr, color = type)) + 
+    scale_color_manual(values = c('#c6c6c6', '#ca0000'))
+p1
+p2
+p3
+
+### ----- scalograms
+scalo <- scalogram(synthChr) 
+p4 <- plotMatrix(synthChr['chrXVI-Mmmyco_inv870kb'], use.scores = 'autocorrelated', limits = c(-0.8, 0.8), scale = 'linear', cmap = bwrColors())
+p5 <- plotScalogram(scalo |> filter(chr == 'chrXVI-Mmmyco_inv870kb'), ylim = c(1e3, 1e5))
+p <- cowplot::plot_grid(p4, p5, align = 'hv', axis = 'tblr', nrow = 1, rel_widths = c(1, 2)) 
+p4
+p5
+
+### ----- cis/trans ratios
+ct <- cisTransRatio(synthChr) |> filter(chr != 'chrXII')
+p7 <- ggplot(ct, aes(x = chr, y = trans_pct)) + 
+    geom_col(position = position_stack()) + 
+    theme_bw() + 
+    guides(x=guide_axis(angle = 90))
+p7
+```
+
+Using the mammalian NPCs dataset as an example, we can also generate virtual 
+4C profiles. 
+
+```{r NPCs_v4c}
+### ----- virtual 4c (NPCs)
+v4C_loop <- virtual4C(npcs_narrow, viewpoint = GRanges('chr3:100965000-100975000'), use.scores = 'balanced') |> 
+    plyranges::mutate(
+        score = score/sum(score),
+        score = zoo::rollmean(score, k = 2, na.pad = TRUE, align = 'center'), 
+        viewpoint = 'loop'
+    )
+v4C_TAD <- virtual4C(npcs_narrow, viewpoint = GRanges('chr3:101695000-101705000'), use.scores = 'balanced') |> 
+    plyranges::mutate(
+        score = score/sum(score),
+        score = zoo::rollmean(score, k = 2, na.pad = TRUE, align = 'center'), 
+        viewpoint = 'TAD'
+    )
+v4C_loop2 <- virtual4C(npcs_narrow, viewpoint = GRanges('chr3:102145000-102155000'), use.scores = 'balanced') |> 
+    plyranges::mutate(
+        score = score/sum(score),
+        score = zoo::rollmean(score, k = 2, na.pad = TRUE, align = 'center'), 
+        viewpoint = 'loop2'
+    )
+p8 <- plot4C(c(v4C_loop, v4C_TAD, v4C_loop2), ggplot2::aes(x = center, y = score, col = viewpoint, fill = viewpoint)) + 
+    ggplot2::coord_cartesian(ylim = c(0, 0.03))
+p8
+```
+
+## Compute everyting
+
+```{r compile_plots}
+library(patchwork)
+# p_yeast_1
+# p_yeast_2
+# p_mammals_1
+# p_mammals_2
+
+p_myco_1 <- cowplot::plot_grid(p1, p4, align = 'hv', axis = 'tblr', nrow = 1)
+p_myco_2 <- cowplot::plot_grid(
+    cowplot::plot_grid(p2, p3, align = 'hv', axis = 'tblr', nrow = 2),
+    p7, 
+    align = 'hv', axis = 'tblr', nrow = 1
+)
+
+layout <- "
+AAAAAAAAAAAA
+AAAAAAAAAAAA
+BBBBBBBBBBBB
+BBBBBBBBBBBB
+CCCDDDEEEEEE
+CCCDDDEEEEEE
+CCCDDDFFFFFF
+CCCDDDFFFFFF
+CCCDDDGGGGGG
+CCCDDDHHHHHH
+"
+p_final <- p_div + p_yeast_2 + p_mammals_1 + p_mammals_2 + p_myco_1 + p_myco_2 + p5 + p8 + plot_layout(design = layout)
+ggsave('arithmetics.pdf', width = unit(21, 'cm'), height = unit(29, 'cm'))
+```
