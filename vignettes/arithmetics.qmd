@@ -276,7 +276,7 @@ p8 <- plot4C(c(v4C_loop, v4C_TAD, v4C_loop2), ggplot2::aes(x = center, y = score
 p8
 ```
 
-## Compute everyting
+## Generate final figure
 
 ```{r compile_plots}
 library(patchwork)
