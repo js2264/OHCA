@@ -1,0 +1,355 @@
+---
+title: "Investigating the role of cohesin regulators in distance-dependent chromatin interactions"
+date: "2023-01-12"
+author: Jacques SERIZAY
+format:
+    html:
+        theme: [cosmo, theme-cosmo.scss]
+        highlight: tango
+        toc: true
+        toc-depth: 3
+        number-sections: true
+        self-contained: true
+        embed-resources: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+    layout = 'l-page', 
+    echo = TRUE, 
+    warning = FALSE, error = FALSE, message = FALSE
+)
+```
+
+**Aim:** This notebook illustrates how to check correlation between replicates 
+and across samples, and statistically identify genomic loci which are 
+differentially interacting between samples. s
+
+- P(s): check differences in general trend
+- HiCrep: Identify which bands are correlated or not between samples
+- HiCcompare: Find loci of enriched interactions
+
+```{r}
+library(tidyverse)
+devtools::load_all('~/repos/HiCExperiment')
+devtools::load_all('~/repos/HiContacts')
+devtools::load_all('~/repos/HiCool')
+```
+
+## Process data with `HiColol`
+
+We will leverage Hi-C sequencing data published in Dauban et al., 2019. 
+We will focus on four different samples: 
+
+- Yeast WT cells in G1 phase
+- Yeast WT cells in G2 phase
+- Yeast wpl1- cells in G2 phase
+- Yeast wpl1-/eco1- cells in G2 phase
+
+Each sample has replicates, excepted the wpl1-/eco1- cells. 
+
+We can recover reads from `SRA` using curl in a shell terminal. 
+
+```{shell eval = FALSE}
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/004/SRR8769554/SRR8769554_1.fastq.gz -o data/W303_G1_WT_rep1_R1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/004/SRR8769554/SRR8769554_2.fastq.gz -o data/W303_G1_WT_rep1_R2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/076/SRR10687276/SRR10687276_1.fastq.gz -o data/W303_G1_WT_rep2_R1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/076/SRR10687276/SRR10687276_2.fastq.gz -o data/W303_G1_WT_rep2_R2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/009/SRR8769549/SRR8769549_1.fastq.gz -o data/W303_G2M_WT_rep1_R1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/009/SRR8769549/SRR8769549_2.fastq.gz -o data/W303_G2M_WT_rep1_R2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/081/SRR10687281/SRR10687281_1.fastq.gz -o data/W303_G2M_WT_rep2_R1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/081/SRR10687281/SRR10687281_2.fastq.gz -o data/W303_G2M_WT_rep2_R2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/001/SRR8769551/SRR8769551_1.fastq.gz -o data/W303_G2M_wpl1_rep1_R1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/001/SRR8769551/SRR8769551_2.fastq.gz -o data/W303_G2M_wpl1_rep1_R2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/078/SRR10687278/SRR10687278_1.fastq.gz -o data/W303_G2M_wpl1_rep2_R1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/078/SRR10687278/SRR10687278_2.fastq.gz -o data/W303_G2M_wpl1_rep2_R2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/005/SRR8769555/SRR8769555_1.fastq.gz -o data/W303_G2M_wpl1-eco1_R1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/005/SRR8769555/SRR8769555_2.fastq.gz -o data/W303_G2M_wpl1-eco1_R2.fastq.gz
+```
+
+In R, we can then process these samples with `HiCool`. The first time HiCool is 
+executed, it will automatically install all the required dependencies in the background 
+before proceeded to read mapping and pairs filtering using the `hicstuff` 
+python library under the hood. 
+
+```{r eval = FALSE}
+G1_rep1 <- HiCool(
+    r1 = 'data/W303_G1_WT_rep1_R1.fastq.gz', 
+    r2 = 'data/W303_G1_WT_rep1_R2.fastq.gz', 
+    genome = 'R64-1-1', 
+    restriction = 'DpnII', 
+    iterative = FALSE, 
+    threads = 15, 
+    output = 'data/HiCool/', 
+    scratch = '/data/scratch/'
+)
+G1_rep2 <- HiCool(
+    r1 = 'data/W303_G1_WT_rep2_R1.fastq.gz', 
+    r2 = 'data/W303_G1_WT_rep2_R2.fastq.gz', 
+    genome = 'R64-1-1', 
+    restriction = 'DpnII', 
+    iterative = FALSE, 
+    threads = 15, 
+    output = 'data/HiCool/', 
+    scratch = '/data/scratch/'
+)
+G2M_rep1 <- HiCool(
+    r1 = 'data/W303_G2M_WT_rep1_R1.fastq.gz', 
+    r2 = 'data/W303_G2M_WT_rep1_R2.fastq.gz', 
+    genome = 'R64-1-1', 
+    restriction = 'DpnII', 
+    iterative = FALSE, 
+    threads = 15, 
+    output = 'data/HiCool/', 
+    scratch = '/data/scratch/'
+)
+G2M_rep2 <- HiCool(
+    r1 = 'data/W303_G2M_WT_rep2_R1.fastq.gz', 
+    r2 = 'data/W303_G2M_WT_rep2_R2.fastq.gz', 
+    genome = 'R64-1-1', 
+    restriction = 'DpnII', 
+    iterative = FALSE, 
+    threads = 15, 
+    output = 'data/HiCool/', 
+    scratch = '/data/scratch/'
+)
+G2M_wpl1_rep1 <- HiCool(
+    r1 = 'data/W303_G2M_wpl1_rep1_R1.fastq.gz', 
+    r2 = 'data/W303_G2M_wpl1_rep1_R2.fastq.gz', 
+    genome = 'R64-1-1', 
+    restriction = 'DpnII', 
+    iterative = FALSE, 
+    threads = 15, 
+    output = 'data/HiCool/', 
+    scratch = '/data/scratch/'
+)
+G2M_wpl1_rep2 <- HiCool(
+    r1 = 'data/W303_G2M_wpl1_rep2_R1.fastq.gz', 
+    r2 = 'data/W303_G2M_wpl1_rep2_R2.fastq.gz', 
+    genome = 'R64-1-1', 
+    restriction = 'DpnII', 
+    iterative = FALSE, 
+    threads = 15, 
+    output = 'data/HiCool/', 
+    scratch = '/data/scratch/'
+)
+G2M_wpl1_eco1_rep1 <- HiCool(
+    r1 = 'data/W303_G2M_wpl1-eco1_R1.fastq.gz', 
+    r2 = 'data/W303_G2M_wpl1-eco1_R2.fastq.gz', 
+    genome = 'R64-1-1', 
+    restriction = 'DpnII', 
+    iterative = FALSE, 
+    threads = 15, 
+    output = 'data/HiCool/', 
+    scratch = '/data/scratch/'
+)
+```
+
+## Plot matrices of merged replicates
+
+We can point to processed files generated with `HiCool` by using
+the `importHiCoolFolder` function, and then import these files with the 
+`import` function.
+
+```{r}
+## -- Import in R
+cfs <- list(
+    G1_rep1 = importHiCoolFolder('data/HiCool', 'GK8ISZ'), 
+    G1_rep2 = importHiCoolFolder('data/HiCool', 'SWZTO0'), 
+    G2M_rep1 = importHiCoolFolder('data/HiCool', '3KHHUE'), 
+    G2M_rep2 = importHiCoolFolder('data/HiCool', 'UVNG7M'), 
+    G2M_wpl1_rep1 = importHiCoolFolder('data/HiCool', 'Q4KX6Z'), 
+    G2M_wpl1_rep2 = importHiCoolFolder('data/HiCool', '3N0L25'), 
+    G2M_wpl1_eco1_rep1 = importHiCoolFolder('data/HiCool', 'LHMXWE')
+)
+cfs[['G1_rep1']]
+hce <- map(cfs, import)
+hce[['G1_rep1']]
+```
+
+Let's start by merging chrX for replicates of the same experiment and plot 
+resulting matrices. 
+
+```{r}
+hce_merged_X <- list(
+    G1 = merge(hce[[1]]['X:1-700000'], hce[[2]]['X:1-700000']), 
+    G2M = merge(hce[[3]]['X:1-700000'], hce[[4]]['X:1-700000']), 
+    G2M_wpl1 = merge(hce[[5]]['X:1-700000'], hce[[6]]['X:1-700000']), 
+    G2M_wpl1_eco1 = hce[[7]]['X:1-700000']
+)
+maps <- imap(hce_merged_X, ~ plotMatrix(.x, limits = c(-3.5, -1.5)))
+p_maps <- cowplot::plot_grid(plotlist = maps, nrow = 1)
+p_maps
+```
+
+## Make sure replicates are comparable 
+
+### Compute P(s) per replicate and plot it
+
+However, one needs to ensure that replicates of the same sample are indeed comparable 
+before merging them. The first thing that can be checked is the distance-dependent 
+interaction frequency (a.k.a `P(s)`) between replicates. 
+
+```{r}
+ps <- imap(hce, ~ distanceLaw(.x) |> mutate(sample = .y)) |> dplyr::bind_rows(ps)
+p_ps <- plotPs(
+    ps, 
+    ggplot2::aes(x = binned_distance, y = norm_p, group = sample, color = sample)
+)
+p_ps
+```
+
+### Compute correlation between different samples/replicates
+
+This can be done using the `hicrep` package. We will only compute the correlation 
+of the 7 different Hi-C maps on chrII cis interactions here. 
+
+```{r}
+mats <- map(hce, ~ interactions(.x["II"], fillout.regions = TRUE) |> 
+    gi2cm('count') |> 
+    cm2matrix(sparse = TRUE)
+)
+df <- lapply(1:7, function(i) {
+    lapply(1:7, function(j) {
+        data.frame(
+            i = names(hce)[i], 
+            j = names(hce)[j], 
+            scc = hicrep::get.scc(
+                mats[[i]], mats[[j]], 
+                resol = 1000, 
+                h = 2, 
+                lbr = 5000, 
+                ubr = 200000
+            )$scc
+        ) |>
+            mutate(i = factor(i, names(cfs))) |>
+            mutate(j = factor(j, names(cfs)))
+    }) |> bind_rows()
+}) |> bind_rows()
+p_corr <- ggplot(df, aes(x = i, y = j, fill = scc)) + 
+    geom_tile() + 
+    scale_x_discrete(guide = guide_axis(angle = 90)) + 
+    theme_bw() + 
+    coord_fixed(ratio = 1) + 
+    scale_fill_gradientn(colours = bgrColors())
+p_corr
+```
+
+## Compare distance-dependent correlation between samples 
+
+P(s) curves show that the interaction frequency vary differently as a function 
+of the genomic distance across different samples. However, this does not 
+validate whether the patterns of interactions are the same at short, medium, 
+or long-range between samples.  
+This distance-dependent correlation of interactions can be calculated between 
+pairs of samples again using `hicrep`. 
+
+```{r}
+df <- BiocParallel::bplapply(c('II', 'IV', 'V', 'VII', 'VIII', 'IX', 'X', 'XI', 'XIII', 'XIV', 'XVI'), 
+    function(CHR) {
+        len <- seqlengths(seqinfo(hce[[1]])[CHR])[[1]]
+        foc <- paste0(CHR, ':20000-', {round(len/1000)-20}*1000)
+        hce_merged_CHR <- list(
+            G1 = merge(hce[[1]][foc], hce[[2]][foc]), 
+            G2M = merge(hce[[3]][foc], hce[[4]][foc]), 
+            G2M_wpl1 = merge(hce[[5]][foc], hce[[6]][foc]), 
+            G2M_wpl1_eco1 = hce[[7]][foc]
+        )
+        mats <- map(hce_merged_CHR, ~ interactions(.x, fillout.regions = TRUE) |> 
+            gi2cm('count') |> 
+            cm2matrix()
+        )
+        lapply(2, function(i) {
+            lapply(1:4, function(j) {
+                data.frame(
+                    chr = CHR,
+                    i = names(hce_merged_CHR)[i], 
+                    j = names(hce_merged_CHR)[j], 
+                    dist = seq(5000, 200000, 1000),
+                    scc = hicrep::get.scc(
+                        mats[[i]], mats[[j]], 
+                        resol = 1000, h = 2, 
+                        lbr = 5000, ubr = 200000
+                    ) 
+                ) |> 
+                    mutate(i = factor(i, names(hce_merged_CHR))) |>
+                    filter(i == 'G2M', j != 'G2M') |>
+                    mutate(j = factor(j, names(hce_merged_CHR)))
+            }) |> bind_rows()
+        }) |> bind_rows()
+    }, 
+    BPPARAM = BiocParallel::SerialParam(progressbar = TRUE)
+) |> bind_rows() |> 
+    group_by(j, dist) |> 
+    filter(chr %in% c('II', 'IV', 'V', 'VII', 'VIII', 'IX', 'X', 'XI', 'XIII', 'XIV', 'XVI')) |>
+    summarize(
+        mean = Rmisc::CI(scc.corr, ci = 0.90)[2], 
+        CI_up = Rmisc::CI(scc.corr, ci = 0.90)[1], 
+        CI_down = Rmisc::CI(scc.corr, ci = 0.90)[3]
+    )
+p_distances <- ggplot(df, aes(x = dist, y = mean, ymax = CI_up, ymin = CI_down)) + 
+    geom_line(aes(col = j)) + 
+    geom_ribbon(aes(fill = j), alpha = 0.2, col = NA) + 
+    theme_bw() + 
+    labs(x = "Stratum (genomic distance)", y = 'Stratum-corrected correlation')
+p_distances
+```
+
+## Differential interaction analysis with multiHiCcompare
+
+We can also do a formal statistical comparison of interaction frequency for each 
+interaction, using the `multiHiCcompare` package.
+Here, we will reformat `HiCExperiment` objects to pass them to 
+the `make_hicexp` function from `multiHiCcompare`, to specifically compare 
+G2M WT vs wpl1 mutant interactions on chrXI. 
+
+```{r}
+hce_list <- map(hce, ~ zoom(.x['XI'], 2000))
+hic_table <- map(hce_list, ~ interactions(.x) |>
+    as.data.frame() |> 
+    dplyr::select(start1, start2, count) |> 
+    dplyr::mutate(start1 = start1, start2 = start2, chr = 1) |> 
+    dplyr::relocate(chr)
+)
+data(centros_yeast)
+mhicc <- multiHiCcompare::make_hicexp(
+    data_list = hic_table[c(3, 4, 5, 6)], 
+    groups = factor(c(1, 1, 2, 2)), 
+    A.min = 1, 
+    remove_regions = centros_yeast
+) |> 
+    multiHiCcompare::cyclic_loess(span = 0.2) |> 
+    multiHiCcompare::hic_exactTest()
+df <- cbind(mhicc@hic_table, multiHiCcompare::results(mhicc)[,c(5, 7, 8)]) |> 
+    as_tibble() |> 
+    mutate(dist = D*resolution(hce[[1]])) |> 
+    mutate(group = case_when(
+        region1 < 430000 & region2 > 450000 ~ 'inter_arms',
+        region1 >= 430000 & region2 <= 450000 ~ 'at_centro',
+        TRUE ~ 'arms'
+    )) |> filter(group %in% c('arms', 'inter_arms')) |> 
+    mutate(sign = p.value <= 0.05 & abs(logFC) >= 1)
+p_hiccompare1 <- ggplot(df, aes(x = logFC, y = -log10(p.value), col = sign)) + 
+    geom_point(size = 0.2) + 
+    theme_bw() + 
+    facet_wrap(~group) + 
+    ylim(c(0, 6)) + 
+    theme(legend.position = 'none') + 
+    scale_color_manual(values = c('grey', 'black'))
+p_hiccompare1
+gis <- dplyr::rename(df, seqnames1 = chr, start1 = region1, start2 = region2) |> 
+    mutate(seqnames2 = seqnames1, end1 = start1 + resolution(hce[[1]])-1, end2 = start2 + resolution(hce[[1]])-1) |> 
+    filter(abs(logFC) >= 1) |>
+    df2gi() 
+p_hiccompare2 <- plotMatrix(gis, 'logFC', scale = 'linear', limits = c(-2, 2), cmap = bgrColors(), rasterize = FALSE)
+p_hiccompare2
+```
+
+## Generate final figure
+
+```{r}
+p_final <- cowplot::plot_grid(
+    p_maps, p_ps, p_corr, p_distances, p_hiccompare1, p_hiccompare2
+)
+ggsave('yeast.pdf', width = unit(21, 'cm'), height = unit(12, 'cm'))
+```

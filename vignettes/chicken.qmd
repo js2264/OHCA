@@ -22,8 +22,8 @@ knitr::opts_chunk$set(
 ```
 
 **Aim:** This notebook illustrates how to recover Hi-C data from 4DN data portal 
-using the `fourDNAData` interface and dig into A/B compartment remodeling in 
-chiken cells entering mitosis (from Gibcus et al. 2018). 
+using the `fourDNAData` interface and study A/B compartment remodeling in 
+chiken cells during mitosis entry (from Gibcus et al. 2018). 
 
 ```{r}
 library(tidyverse)
@@ -210,7 +210,6 @@ p_interactions <- ggplot(df, aes(x = type, y = score, group = type, fill = type)
     ylim(c(-2, 2))
 p_interactions
 ```
-
 
 ## Generate final figure
 

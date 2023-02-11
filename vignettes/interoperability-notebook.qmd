@@ -1,0 +1,88 @@
+---
+title: "Interoperability of HiCExperiment with other packages"
+date: "2023-01-12"
+author: Jacques SERIZAY
+format:
+    html:
+        theme: [cosmo, theme-cosmo.scss]
+        highlight: tango
+        toc: true
+        toc-depth: 3
+        number-sections: true
+        self-contained: true
+        embed-resources: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+    layout = 'l-page', 
+    eval = FALSE, echo = TRUE, 
+    warning = FALSE, error = FALSE, message = FALSE
+)
+```
+
+## HiCcompare
+
+```{r}
+x_1 <- import(...)
+x_2 <- import(...)
+locus <- ...
+hicc <- HiCcompare::create.hic.table(
+    interactions(x_1[locus]),
+    interactions(x_2[locus])
+) |> 
+    HiCcompare::hic_loess(Plot = FALSE, Plot.smooth = FALSE, parallel = TRUE) |> 
+    HiCcompare::hic_compare(Plot = FALSE, Plot.smooth = FALSE, parallel = TRUE)
+```
+
+## hicrep
+
+```{r}
+list_x <- map(..., import)
+chr <- ...
+mats <- map(list_x, ~ interactions(.x[chr], fillout.regions = TRUE) |> 
+    gi2cm('count') |> 
+    cm2matrix(sparse = TRUE)
+)
+cors <- lapply(seq_along(mats), function(i) {
+    lapply(seq_along(mats), function(j) {
+        data.frame(
+            i = names(list_x)[i], 
+            j = names(list_x)[j], 
+            dist = seq(5000, 200000, 1000),
+            scc = hicrep::get.scc(mats[[i]], mats[[j]], resol = 1000, h = 2, lbr = 5000, ubr = 200000) 
+        )
+    }) |> bind_rows()
+}) |> bind_rows()
+```
+
+## TopDom
+
+```{r}
+x <- import(...)
+data <- list()
+data$bins <- interactions(x, fillout.regions = TRUE) |> 
+    regions() |> 
+    as.data.frame() |> 
+    mutate(id = 1:n()) |> 
+    select(id, seqnames, start, end) |>
+    rename(chr = seqnames, from.coord = start, to.coord = end)
+data$counts <- as(x, 'matrix') |> base::as.matrix()
+class(data) <- 'TopDomData'
+td <- TopDom::TopDom(data, window.size = 5)
+```
+
+
+
+## GOTHiC
+
+```{r}
+
+```
+
+## HiCDOC
+
+```{r}
+
+```
+
