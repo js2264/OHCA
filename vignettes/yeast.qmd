@@ -248,12 +248,11 @@ pairs of samples again using `hicrep`.
 df <- BiocParallel::bplapply(c('II', 'IV', 'V', 'VII', 'VIII', 'IX', 'X', 'XI', 'XIII', 'XIV', 'XVI'), 
     function(CHR) {
         len <- seqlengths(seqinfo(hce[[1]])[CHR])[[1]]
-        foc <- paste0(CHR, ':20000-', {round(len/1000)-20}*1000)
         hce_merged_CHR <- list(
-            G1 = merge(hce[[1]][foc], hce[[2]][foc]), 
-            G2M = merge(hce[[3]][foc], hce[[4]][foc]), 
-            G2M_wpl1 = merge(hce[[5]][foc], hce[[6]][foc]), 
-            G2M_wpl1_eco1 = hce[[7]][foc]
+            G1 = merge(hce[[1]][CHR], hce[[2]][CHR]), 
+            G2M = merge(hce[[3]][CHR], hce[[4]][CHR]), 
+            G2M_wpl1 = merge(hce[[5]][CHR], hce[[6]][CHR]), 
+            G2M_wpl1_eco1 = hce[[7]][CHR]
         )
         mats <- map(hce_merged_CHR, ~ interactions(.x, fillout.regions = TRUE) |> 
             gi2cm('count') |> 
@@ -281,7 +280,6 @@ df <- BiocParallel::bplapply(c('II', 'IV', 'V', 'VII', 'VIII', 'IX', 'X', 'XI', 
     BPPARAM = BiocParallel::SerialParam(progressbar = TRUE)
 ) |> bind_rows() |> 
     group_by(j, dist) |> 
-    filter(chr %in% c('II', 'IV', 'V', 'VII', 'VIII', 'IX', 'X', 'XI', 'XIII', 'XIV', 'XVI')) |>
     summarize(
         mean = Rmisc::CI(scc.corr, ci = 0.90)[2], 
         CI_up = Rmisc::CI(scc.corr, ci = 0.90)[1], 

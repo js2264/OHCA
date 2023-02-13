@@ -81,7 +81,7 @@ We can then compute eigen vectors for each sample.
 
 ```{r eval = FALSE}
 chrs <- seqnames(seqinfo(hics[[1]]))[seqlengths(seqinfo(hics[[1]])) > 2e6]
-hics_comps <- imap(hics, ~ getCompartments(
+hics <- imap(hics, ~ getCompartments(
     .x, 
     resolution = 250000, 
     chromosomes = chrs, 
@@ -89,7 +89,7 @@ hics_comps <- imap(hics, ~ getCompartments(
     BPPARAM = BiocParallel::SerialParam(progressbar = TRUE)
 ))
 ## - To export phased compartment eigenvectors
-imap(hics_comps, ~ metadata(.x)$eigens |> 
+imap(hics, ~ metadata(.x)$eigens |> 
     GenomicRanges::coverage(weight = 'eigen') |>
     rtracklayer::export(paste0('eigens_', .y, '.bw'))
 ) 

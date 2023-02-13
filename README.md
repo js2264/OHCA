@@ -1,3 +1,3 @@
 # Orchestrating Hi-C analysis with Bioconductor
 
-See [vignettes](vignettes/)
+[👉📖 OHCA book](https://js2264.github.io/OHCA/)

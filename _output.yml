@@ -1,0 +1,16 @@
+bookdown::gitbook:
+  config:
+    fontsettings:
+      theme: white
+    download: null
+    sharing:
+      github: yes
+      facebook: no
+      twitter: no
+      linkedin: no
+    toc:
+      before: |
+        <li><a href="./">OHCA book</a></li>
+  css: style.css
+  split_by: "chapter"
+  citation_package: natbib

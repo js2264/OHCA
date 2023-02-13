@@ -1,0 +1,29 @@
+Package: OHCA
+Title: Orchestrating Hi-C analysis with Bioconductor
+Version: 0.98.0
+Date: 2023-02-13
+Authors@R:
+    c(person(given = "Jacques",
+           family = "Serizay",
+           role = c("aut", "cre"),
+           email = "jacquesserizay@gmail.com",
+           comment = c(ORCID = "0000-0002-4295-0624")))
+Description: Orchestrating Hi-C analysis with Bioconductor
+License: MIT + file LICENSE
+URL: https://github.com/js2264/OHCA
+BugReports: https://github.com/js2264/OHCA/issues
+Depends:
+    HiCExperiment,
+    HiContacts, 
+    HiContactsData
+Imports:
+    cowplot,
+    rebook
+biocViews:
+    HiC,
+    DNA3DStructure
+Encoding: UTF-8
+VignetteBuilder: knitr
+LazyData: false
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3

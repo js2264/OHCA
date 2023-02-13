@@ -1,0 +1,18 @@
+# HiCExperiment S4 class
+
+
+```{r yeast_norm}
+library(HiContacts)
+library(HiContactsData)
+library(HiCExperiment)
+wt_cf <- HiContactsData::HiContactsData('yeast_wt', 'mcool')
+wt <- import(wt_cf, format = 'cool')
+contacts <- normalize(wt['II'], niters = 200)
+contacts
+p <- cowplot::plot_grid(
+    plotMatrix(contacts, use.scores = 'count', scale = 'log10'),
+    plotMatrix(contacts, use.scores = 'ICE', scale = 'log10', limits = c(-4, -1)), 
+    ncol = 2
+)
+p
+```

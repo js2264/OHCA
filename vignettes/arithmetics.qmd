@@ -84,8 +84,8 @@ div_contacts <- divide(wt_II, by = eco1_II)
 div_contacts
 p_div <- cowplot::plot_grid(
     plotMatrix(wt_II, use.scores = 'count', scale = 'log10'), 
-    plotMatrix(wt_II, use.scores = 'balanced', scale = 'log10', limits = c(-4, -1)), 
     plotMatrix(eco1_II, use.scores = 'balanced', scale = 'log10', limits = c(-4, -1)), 
+    plotMatrix(wt_II, compare.to = eco1_II, use.scores = 'balanced', scale = 'log10', limits = c(-4, -1)), 
     plotMatrix(div_contacts, use.scores = 'balanced.fc', scale = 'log2', limits = c(-1, 1), cmap = bwrColors()), 
     ncol = 4
 )

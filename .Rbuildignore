@@ -1,0 +1,14 @@
+^LICENSE\.md$
+^_pkgdown\.yml$
+data
+^data$
+^docs$
+^pkgdown$
+^\.github$
+^\.pre-commit-config\.yaml$
+^doc$
+^Meta$
+^Dockerfile$
+^Makefile$
+^_bookdown\.yml$
+^build_book\.sh$

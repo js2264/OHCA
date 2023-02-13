@@ -1,0 +1,19 @@
+--- 
+title: "Orchestrating Hi-C analysis with Bioconductor"
+documentclass: book
+biblio-style: apalike
+link-citations: yes
+github-repo: js2264/OHCA
+---
+
+```{r, echo=FALSE}
+.gh_url <- file.path('https://github.com', rmarkdown::metadata[['github-repo']])
+```
+
+---
+date: "`r rebook::openingDetails(Copyright='J. Serizay', Source=.gh_url)`"
+url: "`r .gh_url`"
+---
+
+# Introduction {-}
+
