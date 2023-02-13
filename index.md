@@ -22,19 +22,3 @@ url: "https://github.com/js2264/OHCA"
 
 # Introduction {-}
 
-I am a test book! 
-
-6
-
-Testing, testing! 
-
-More numbers:9.
-
-
-```r
-1+2+3+32
-```
-
-```
-## [1] 38
-```

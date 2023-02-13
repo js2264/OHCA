@@ -1,54 +1,4 @@
-# Looking for plots
-
-
-```r
-plot(1,1)
-```
-
-<div class="figure">
-<img src="Chapter1_files/figure-html/test-plot-1.png" alt="something something" width="672" />
-<p class="caption">(\#fig:test-plot)something something</p>
-</div>
-
-
-```r
-plot(1,1)
-```
-
-<div class="figure">
-<img src="Chapter1_files/figure-html/more-plot-1.png" alt="something something" width="960" />
-<p class="caption">(\#fig:more-plot)something something</p>
-</div>
-
-
-```r
-plot(1,2)
-```
-
-<div class="figure">
-<img src="Chapter1_files/figure-html/more-plot2-1.png" alt="something something" width="672" />
-<p class="caption">(\#fig:more-plot2)something something</p>
-</div>
-
-
-```r
-plot(1,1)
-```
-
-<div class="figure">
-<img src="Chapter1_files/figure-html/more-plot3-1.png" alt="something something" width="672" />
-<p class="caption">(\#fig:more-plot3)something something</p>
-</div>
-
-
-```r
-plot(1,1)
-```
-
-<div class="figure">
-<img src="Chapter1_files/figure-html/blah-plot-1.png" alt="something something" width="672" />
-<p class="caption">(\#fig:blah-plot)something something</p>
-</div>
+# HiCExperiment S4 class
 
 
 
@@ -135,7 +85,7 @@ wt_cf <- HiContactsData::HiContactsData('yeast_wt', 'mcool')
 ```
 
 ```
-## snapshotDate(): 2023-02-08
+## snapshotDate(): 2023-02-13
 ```
 
 ```
@@ -170,7 +120,7 @@ contacts
 ```
 ## `HiCExperiment` object with 471,364 contacts over 814 regions 
 ## -------
-## fileName: "/root/.cache/R/ExperimentHub/3918f87601_7752" 
+## fileName: "/root/.cache/R/ExperimentHub/3834d2bc1d_7752" 
 ## focus: "II" 
 ## resolutions(5): 1000 2000 4000 8000 16000
 ## active resolution: 1000 
