@@ -120,7 +120,7 @@ contacts
 ```
 ## `HiCExperiment` object with 471,364 contacts over 814 regions 
 ## -------
-## fileName: "/root/.cache/R/ExperimentHub/3834d2bc1d_7752" 
+## fileName: "/root/.cache/R/ExperimentHub/38344631e2_7752" 
 ## focus: "II" 
 ## resolutions(5): 1000 2000 4000 8000 16000
 ## active resolution: 1000 
