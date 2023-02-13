@@ -22,3 +22,23 @@ url: "https://github.com/js2264/OHCA"
 
 # Introduction {-}
 
+This site is the web-based version of the book entitled "Orchestrating Hi-C analysis with Bioconductor".  
+
+In this book, we will cover fundamentals topis: 
+
+- What Hi-C is experimentally and computationally 
+- The different `R` classes implemented to analyse Hi-C
+- Parsing and manipulating Hi-C data in R
+- Hi-C data visualization
+
+We will then focus on more Hi-C-focused questions: 
+
+- Performing "arithmetics" on Hi-C matrices
+- Computing Hi-C-specific metrics
+- Finding topological features from a Hi-C contact matrix
+
+The following advanced topics will also be introduced: 
+
+- Hi-C interoperability in R/Bioconductor
+
+

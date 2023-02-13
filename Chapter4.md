@@ -1,6 +1,4 @@
-# (PART) Fundamentals {-} 
-
-# Hi-C principles
+# Hi-C data visualization
 
 ## Session info 
 

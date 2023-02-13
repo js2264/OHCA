@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Orchestrating Hi-C analysis with Bioconductor</title>
-  <meta name="description" content="Orchestrating Hi-C analysis with Bioconductor" />
+  <title>Chapter 1 Hi-C principles | Orchestrating Hi-C analysis with Bioconductor</title>
+  <meta name="description" content="Chapter 1 Hi-C principles | Orchestrating Hi-C analysis with Bioconductor" />
   <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Orchestrating Hi-C analysis with Bioconductor" />
+  <meta property="og:title" content="Chapter 1 Hi-C principles | Orchestrating Hi-C analysis with Bioconductor" />
   <meta property="og:type" content="book" />
   
   
   <meta name="github-repo" content="js2264/OHCA" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Orchestrating Hi-C analysis with Bioconductor" />
+  <meta name="twitter:title" content="Chapter 1 Hi-C principles | Orchestrating Hi-C analysis with Bioconductor" />
   
   
   
@@ -28,8 +28,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="hi-c-principles.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="genomic-representations-in-r.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -196,42 +196,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Orchestrating Hi-C analysis with Bioconductor</h1>
-<p class="date"><em><strong>Authors:</strong> Jacques Serizay [aut, cre]<br/> <strong>Version:</strong> 0.98.0<br/> <strong>Modified:</strong> 2023-02-13<br/> <strong>Compiled:</strong> 2023-02-13<br/> <strong>Environment:</strong> R Under development (unstable) (2023-02-09 r83797), Bioconductor 3.17<br/> <strong>License:</strong> MIT + file LICENSE<br/> <strong>Copyright:</strong> J. Serizay<br/> <strong>Source:</strong> <a href="https://github.com/js2264/OHCA" class="uri">https://github.com/js2264/OHCA</a></em></p>
-</div>
-<div id="introduction" class="section level1 unnumbered hasAnchor">
-<h1>Introduction<a href="index.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This site is the web-based version of the book entitled “Orchestrating Hi-C analysis with Bioconductor”.</p>
-<p>In this book, we will cover fundamentals topis:</p>
-<ul>
-<li>What Hi-C is experimentally and computationally</li>
-<li>The different <code>R</code> classes implemented to analyse Hi-C</li>
-<li>Parsing and manipulating Hi-C data in R</li>
-<li>Hi-C data visualization</li>
-</ul>
-<p>We will then focus on more Hi-C-focused questions:</p>
-<ul>
-<li>Performing “arithmetics” on Hi-C matrices</li>
-<li>Computing Hi-C-specific metrics</li>
-<li>Finding topological features from a Hi-C contact matrix</li>
-</ul>
-<p>The following advanced topics will also be introduced:</p>
-<ul>
-<li>Hi-C interoperability in R/Bioconductor</li>
-</ul>
+<div id="hi-c-principles" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Hi-C principles<a href="hi-c-principles.html#hi-c-principles" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="session-info" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Session info<a href="hi-c-principles.html#session-info" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="hi-c-principles.html#cb1-1" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>()</span></code></pre></div>
+<pre><code>## ─ Session info ───────────────────────────────────────────────────────────────
+##  setting  value
+##  version  R Under development (unstable) (2023-02-09 r83797)
+##  os       Ubuntu 22.04.1 LTS
+##  system   x86_64, linux-gnu
+##  ui       X11
+##  language (EN)
+##  collate  en_US.UTF-8
+##  ctype    en_US.UTF-8
+##  tz       America/New_York
+##  date     2023-02-13
+##  pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
+## 
+## ─ Packages ───────────────────────────────────────────────────────────────────
+##  package     * version date (UTC) lib source
+##  bookdown      0.32    2023-01-17 [1] CRAN (R 4.3.0)
+##  bslib         0.4.2   2022-12-16 [1] CRAN (R 4.3.0)
+##  cachem        1.0.6   2021-08-19 [1] CRAN (R 4.3.0)
+##  cli           3.6.0   2023-01-09 [1] CRAN (R 4.3.0)
+##  digest        0.6.31  2022-12-11 [1] CRAN (R 4.3.0)
+##  evaluate      0.20    2023-01-17 [1] CRAN (R 4.3.0)
+##  fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.3.0)
+##  htmltools     0.5.4   2022-12-07 [1] CRAN (R 4.3.0)
+##  jquerylib     0.1.4   2021-04-26 [1] CRAN (R 4.3.0)
+##  jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.3.0)
+##  knitr         1.42    2023-01-25 [1] CRAN (R 4.3.0)
+##  R6            2.5.1   2021-08-19 [1] CRAN (R 4.3.0)
+##  rlang         1.0.6   2022-09-24 [1] CRAN (R 4.3.0)
+##  rmarkdown     2.20    2023-01-19 [1] CRAN (R 4.3.0)
+##  sass          0.4.5   2023-01-24 [1] CRAN (R 4.3.0)
+##  sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.3.0)
+##  xfun          0.37    2023-01-31 [1] CRAN (R 4.3.0)
+##  yaml          2.3.7   2023-01-23 [1] CRAN (R 4.3.0)
+## 
+##  [1] /usr/local/lib/R/site-library
+##  [2] /usr/local/lib/R/library
+## 
+## ──────────────────────────────────────────────────────────────────────────────</code></pre>
 
 </div>
-
-
-
+</div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="hi-c-principles.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="genomic-representations-in-r.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

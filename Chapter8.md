@@ -1,6 +1,6 @@
-# (PART) Fundamentals {-} 
+# (PART) Extra topics {-} 
 
-# Hi-C principles
+# Interoperability with other Hi-C packages
 
 ## Session info 
 
