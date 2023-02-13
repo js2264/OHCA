@@ -1,0 +1,6 @@
+fig:test-plot
+fig:more-plot
+fig:more-plot2
+fig:more-plot3
+fig:blah-plot
+looking-for-plots
