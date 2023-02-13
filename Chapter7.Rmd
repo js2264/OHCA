@@ -1,6 +1,4 @@
-# (PART) Fundamentals {-} 
-
-# Hi-C principles
+# Finding topological features in Hi-C 
 
 ## Session info 
 

@@ -1,6 +1,4 @@
-# (PART) Fundamentals {-} 
-
-# Hi-C principles
+# Computing Hi-C specific metrics
 
 ## Session info 
 

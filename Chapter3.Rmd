@@ -1,6 +1,4 @@
-# (PART) Fundamentals {-} 
-
-# Hi-C principles
+# Parsing and manipulating Hi-C data in R
 
 ## Session info 
 

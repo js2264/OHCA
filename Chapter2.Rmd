@@ -1,0 +1,19 @@
+# Genomic representations in R
+
+## `GRanges` class
+
+## `GInteractions` class
+
+## `HiCExperiment` class
+
+```{r yeast_norm}
+library(HiCExperiment)
+contacts <- contacts_yeast(full = TRUE)
+contacts
+```
+
+## Session info 
+
+```{r}
+sessioninfo::session_info()
+```

@@ -17,8 +17,9 @@ Depends:
     HiContacts, 
     HiContactsData
 Imports:
-    cowplot,
-    rebook
+    cowplot, 
+    rebook, 
+    sessioninfo
 biocViews:
     HiC,
     DNA3DStructure

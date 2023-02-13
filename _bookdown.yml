@@ -9,5 +9,12 @@ language:
 output_dir: "docs"
 rmd_files: [
     "index.Rmd",
-    "Chapter1.Rmd"
+    "Chapter1.Rmd", 
+    "Chapter2.Rmd", 
+    "Chapter3.Rmd", 
+    "Chapter4.Rmd", 
+    "Chapter5.Rmd", 
+    "Chapter6.Rmd", 
+    "Chapter7.Rmd", 
+    "Chapter8.Rmd"  
 ]

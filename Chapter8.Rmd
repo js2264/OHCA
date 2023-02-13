@@ -1,0 +1,9 @@
+# (PART) Extra topics {-} 
+
+# Interoperability with other Hi-C packages
+
+## Session info 
+
+```{r}
+sessioninfo::session_info()
+```
