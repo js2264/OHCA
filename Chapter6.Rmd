@@ -1,6 +1,25 @@
 # Computing Hi-C specific metrics
 
-## Session info 
+```{r include=FALSE}
+knitr::opts_chunk$set(
+    cache = TRUE, 
+    layout = 'l-page', 
+    echo = TRUE, 
+    warning = FALSE, 
+    error = FALSE, 
+    message = FALSE
+)
+```
+
+## Distance law(s)
+
+## Virtual 4C profiles
+
+## Cis/trans ratios
+
+## Scalograms
+
+## Session info {-}
 
 ```{r}
 sessioninfo::session_info()

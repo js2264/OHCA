@@ -1,16 +1,23 @@
-bookdown::gitbook:
+bookdown::bs4_book:
+  theme:
+    primary: "#480F1F"
+  repo: https://github.com/js2264/OHCA
   config:
     fontsettings:
       theme: white
     download: null
     sharing:
-      github: yes
-      facebook: no
-      twitter: no
-      linkedin: no
+      github: true
+      facebook: false
+      twitter: false
+      linkedin: false
+    info: false
     toc:
+      collapse: section
+      scroll_highlight: true
       before: |
         <li><a href="./">OHCA book</a></li>
   css: style.css
   split_by: "chapter"
   citation_package: natbib
+

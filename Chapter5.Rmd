@@ -1,5 +1,16 @@
 # (PART) Advanced Hi-C topics {-} 
 
+```{r include=FALSE}
+knitr::opts_chunk$set(
+    cache = TRUE, 
+    layout = 'l-page', 
+    echo = TRUE, 
+    warning = FALSE, 
+    error = FALSE, 
+    message = FALSE
+)
+```
+
 # Performing arithmetics on Hi-C matrices
 
 **Aim:** This notebook illustrates how to leverage `HiCExperiment` data structure 
@@ -260,7 +271,7 @@ p8 <- plot4C(c(v4C_loop, v4C_TAD, v4C_loop2), ggplot2::aes(x = center, y = score
 p8
 ```
 
-## Session info 
+## Session info {-}
 
 ```{r}
 sessioninfo::session_info()

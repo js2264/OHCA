@@ -1,6 +1,48 @@
 # Parsing and manipulating Hi-C data in R
 
-## Session info 
+```{r include=FALSE}
+knitr::opts_chunk$set(
+    cache = TRUE, 
+    layout = 'l-page', 
+    echo = TRUE, 
+    warning = FALSE, 
+    error = FALSE, 
+    message = FALSE
+)
+```
+
+## File formats for Hi-C data 
+
+::: {.rmdnote}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+:::
+
+## Importing Hi-C contact matrices in R
+
+::: {.rmdimportant}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+:::
+
+## Importing Hi-C pairs in R
+
+::: {.rmdcaution}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+:::
+
+::: {.rmdtip}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+:::
+
+::: {.rmdwarning}
+The `bs4_book` style also includes an `.rmdnote` callout block
+like this one.
+:::
+
+## Session info {-}
 
 ```{r}
 sessioninfo::session_info()

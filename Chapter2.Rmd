@@ -1,4 +1,15 @@
-# Genomic representations in R
+# Representation of genomic data in R
+
+```{r include=FALSE}
+knitr::opts_chunk$set(
+    cache = TRUE, 
+    layout = 'l-page', 
+    echo = TRUE, 
+    warning = FALSE, 
+    error = FALSE, 
+    message = FALSE
+)
+```
 
 ## `GRanges` class
 
@@ -12,7 +23,7 @@ contacts <- contacts_yeast(full = TRUE)
 contacts
 ```
 
-## Session info 
+## Session info {-}
 
 ```{r}
 sessioninfo::session_info()

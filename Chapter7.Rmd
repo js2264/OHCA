@@ -1,6 +1,31 @@
 # Finding topological features in Hi-C 
 
-## Session info 
+```{r include=FALSE}
+knitr::opts_chunk$set(
+    cache = TRUE, 
+    layout = 'l-page', 
+    echo = TRUE, 
+    warning = FALSE, 
+    error = FALSE, 
+    message = FALSE
+)
+```
+
+## Chromosome compartments 
+
+### Computing eigenvectors
+
+### Annotating A/B compartments
+
+## Topological domains
+
+### Computing diamond insulation score
+
+### Annotating domain borders
+
+## Chromatin loops 
+
+## Session info {-}
 
 ```{r}
 sessioninfo::session_info()

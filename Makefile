@@ -1,10 +1,9 @@
 RCMD := Rscript -e
-SHCMD := /bin/bash
 
 .PHONY: render
 render: ## Render OHCA book
 	@echo "📖 Rendering OHCA book"
-	$(RCMD) 'bookdown::render_book("index.Rmd", "bookdown::gitbook")'
+	$(RCMD) 'bookdown::render_book("index.Rmd")'
 
 .PHONY: install
 install: ## Install OHCA package and dependencies.
@@ -12,9 +11,9 @@ install: ## Install OHCA package and dependencies.
 	$(RCMD) 'BiocManager::install("js2264/HiCExperiment", dependencies = TRUE)'
 	$(RCMD) 'BiocManager::install("js2264/HiContacts", dependencies = TRUE)'
 	$(RCMD) 'BiocManager::install("js2264/HiContactsData", dependencies = TRUE)'
-	# $(RCMD) 'BiocManager::install("js2264/HiCool", dependencies = TRUE)'
-	# $(RCMD) 'BiocManager::install("js2264/fourDNData", dependencies = TRUE)'
-	# $(RCMD) 'BiocManager::install("js2264/DNAZooData", dependencies = TRUE)'
+	$(RCMD) 'BiocManager::install("js2264/HiCool", dependencies = TRUE)'
+	$(RCMD) 'BiocManager::install("js2264/fourDNData", dependencies = TRUE)'
+	$(RCMD) 'BiocManager::install("js2264/DNAZooData", dependencies = TRUE)'
 	$(RCMD) 'devtools::install()'
 
 .PHONY: deps
@@ -37,6 +36,10 @@ render-test: ## Test rendering locally
 	$(RCMD) 'unlink("docs/", recursive=TRUE)'
 	$(RCMD) 'unlink("OHCA: Orchestrating Hi-C analysis with Bioconductor.rds")'
 	$(RCMD) 'unlink(list.files(".", pattern = ".*rds"))'
+	$(RCMD) 'servr::httd("/data/scratch/OHCA/")'
+
+.PHONY: serve
+serve: ## serve local static site
 	$(RCMD) 'servr::httd("/data/scratch/OHCA/")'
 
 .PHONY: help

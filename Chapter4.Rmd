@@ -1,6 +1,41 @@
 # Hi-C data visualization
 
-## Session info 
+```{r include=FALSE}
+knitr::opts_chunk$set(
+    cache = TRUE, 
+    layout = 'l-page', 
+    echo = TRUE, 
+    warning = FALSE, 
+    error = FALSE, 
+    message = FALSE
+)
+```
+
+## Visualizing Hi-C maps
+
+### Single maps 
+
+### Side-by-side maps 
+
+### Horizontal maps 
+
+### Aggregated Hi-C maps
+
+## Hi-C maps customization options
+
+### Choosing scores
+
+### Choosing color map
+
+### Choosing scale
+
+## Extra Hi-C map visualization tools 
+
+### Saddle plots
+
+### Montages
+
+## Session info  {-}
 
 ```{r}
 sessioninfo::session_info()

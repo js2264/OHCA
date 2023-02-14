@@ -6,6 +6,7 @@ rmd_subdir: yes
 language:
   ui:
     chapter_name: "Chapter "
+output: bookdown::bs4_book
 output_dir: "docs"
 rmd_files: [
     "index.Rmd",
