@@ -1,4 +1,6 @@
-# Genomic representations in R
+# Representation of genomic data in R
+
+
 
 ## `GRanges` class
 
@@ -10,36 +12,13 @@
 ```r
 library(HiCExperiment)
 contacts <- contacts_yeast(full = TRUE)
-```
-
-```
-## snapshotDate(): 2023-02-13
-```
-
-```
-## see ?HiContactsData and browseVignettes('HiContactsData') for documentation
-```
-
-```
-## downloading 1 resources
-```
-
-```
-## retrieving 1 resource
-```
-
-```
-## loading from cache
-```
-
-```r
 contacts
 ```
 
 ```
 ## `HiCExperiment` object with 8,757,906 contacts over 763 regions 
 ## -------
-## fileName: "/root/.cache/R/ExperimentHub/4f412dfa66_7752" 
+## fileName: "/root/.cache/R/ExperimentHub/4f267aba72_7752" 
 ## focus: "whole genome" 
 ## resolutions(5): 1000 2000 4000 8000 16000
 ## active resolution: 16000 
@@ -50,7 +29,7 @@ contacts
 ## metadata(0):
 ```
 
-## Session info 
+## Session info {-}
 
 
 ```r
@@ -68,7 +47,7 @@ sessioninfo::session_info()
 ##  collate  en_US.UTF-8
 ##  ctype    en_US.UTF-8
 ##  tz       America/New_York
-##  date     2023-02-13
+##  date     2023-02-14
 ##  pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
@@ -99,6 +78,7 @@ sessioninfo::session_info()
 ##  dbplyr                 * 2.3.0     2023-01-16 [1] CRAN (R 4.3.0)
 ##  DelayedArray             0.25.0    2022-11-01 [1] Bioconductor
 ##  digest                   0.6.31    2022-12-11 [1] CRAN (R 4.3.0)
+##  downlit                  0.4.2     2022-07-05 [1] CRAN (R 4.3.0)
 ##  dplyr                    1.1.0     2023-01-29 [1] CRAN (R 4.3.0)
 ##  ellipsis                 0.3.2     2021-04-29 [1] CRAN (R 4.3.0)
 ##  evaluate                 0.20      2023-01-17 [1] CRAN (R 4.3.0)
@@ -106,15 +86,16 @@ sessioninfo::session_info()
 ##  fansi                    1.0.4     2023-01-22 [1] CRAN (R 4.3.0)
 ##  fastmap                  1.1.0     2021-01-25 [1] CRAN (R 4.3.0)
 ##  filelock                 1.0.2     2018-10-05 [1] CRAN (R 4.3.0)
+##  fs                       1.6.1     2023-02-06 [1] CRAN (R 4.3.0)
 ##  generics                 0.1.3     2022-07-05 [1] CRAN (R 4.3.0)
 ##  GenomeInfoDb             1.35.15   2023-02-02 [1] Bioconductor
 ##  GenomeInfoDbData         1.2.9     2023-02-13 [1] Bioconductor
 ##  GenomicRanges            1.51.4    2022-12-15 [1] Bioconductor
 ##  glue                     1.6.2     2022-02-24 [1] CRAN (R 4.3.0)
-##  HiCExperiment          * 0.99.9    2023-02-13 [1] Github (js2264/HiCExperiment@7f73f79)
-##  HiContactsData         * 1.1.9     2023-02-13 [1] Github (js2264/HiContactsData@275fab4)
+##  HiCExperiment          * 0.99.9    2023-02-14 [1] Github (js2264/HiCExperiment@7f73f79)
+##  HiContactsData         * 1.1.9     2023-02-14 [1] Github (js2264/HiContactsData@275fab4)
 ##  htmltools                0.5.4     2022-12-07 [1] CRAN (R 4.3.0)
-##  httpuv                   1.6.8     2023-01-12 [1] CRAN (R 4.3.0)
+##  httpuv                   1.6.9     2023-02-14 [1] CRAN (R 4.3.0)
 ##  httr                     1.4.4     2022-08-17 [1] CRAN (R 4.3.0)
 ##  InteractionSet           1.27.0    2022-11-01 [1] Bioconductor
 ##  interactiveDisplayBase   1.37.0    2022-11-01 [1] Bioconductor
@@ -161,6 +142,7 @@ sessioninfo::session_info()
 ##  vroom                    1.6.1     2023-01-22 [1] CRAN (R 4.3.0)
 ##  withr                    2.5.0     2022-03-03 [1] CRAN (R 4.3.0)
 ##  xfun                     0.37      2023-01-31 [1] CRAN (R 4.3.0)
+##  xml2                     1.3.3     2021-11-30 [1] CRAN (R 4.3.0)
 ##  xtable                   1.8-4     2019-04-21 [1] CRAN (R 4.3.0)
 ##  XVector                  0.39.0    2022-11-01 [1] Bioconductor
 ##  yaml                     2.3.7     2023-01-23 [1] CRAN (R 4.3.0)

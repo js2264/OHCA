@@ -4,13 +4,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Welcome | Orchestrating Hi-C analysis with Bioconductor</title>
+<title>Introduction | Orchestrating Hi-C analysis with Bioconductor</title>
 <meta name="author" content="Jacques Serizay">
 <meta name="generator" content="bookdown 0.32 with bs4_book()">
-<meta property="og:title" content="Welcome | Orchestrating Hi-C analysis with Bioconductor">
+<meta property="og:title" content="Introduction | Orchestrating Hi-C analysis with Bioconductor">
 <meta property="og:type" content="book">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Welcome | Orchestrating Hi-C analysis with Bioconductor">
+<meta name="twitter:title" content="Introduction | Orchestrating Hi-C analysis with Bioconductor">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.4.2/transition.js"></script><script src="libs/bs3compat-0.4.2/tabs.js"></script><script src="libs/bs3compat-0.4.2/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
@@ -19,9 +19,9 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
 <link rel="stylesheet" href="style.css">
-<meta name="description" content="A book created with bookdown.">
-<meta property="og:description" content="A book created with bookdown.">
-<meta name="twitter:description" content="A book created with bookdown.">
+<meta name="description" content="This book is divided in three parts: Part I: Fundamentals concepts Chapter 1: What Hi-C is, experimentally and computationally Chapter 2: The different R classes implemented to analyse Hi-C...">
+<meta property="og:description" content="This book is divided in three parts: Part I: Fundamentals concepts Chapter 1: What Hi-C is, experimentally and computationally Chapter 2: The different R classes implemented to analyse Hi-C...">
+<meta name="twitter:description" content="This book is divided in three parts: Part I: Fundamentals concepts Chapter 1: What Hi-C is, experimentally and computationally Chapter 2: The different R classes implemented to analyse Hi-C...">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -43,8 +43,8 @@
 
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
         <ul class="book-toc list-unstyled">
-<li><a class="active" href="index.html">Welcome</a></li>
-<li><a class="" href="introduction.html">Introduction</a></li>
+<li><a class="" href="index.html">Welcome</a></li>
+<li><a class="active" href="introduction.html">Introduction</a></li>
 <li class="book-part">Fundamentals</li>
 <li><a class="" href="hi-c-principles.html"><span class="header-section-number">1</span> Hi-C principles</a></li>
 <li><a class="" href="representation-of-genomic-data-in-r.html"><span class="header-section-number">2</span> Representation of genomic data in R</a></li>
@@ -63,19 +63,37 @@
         </div>
       </nav>
 </div>
-  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><!--bookdown:title:end--><!--bookdown:title:start--><div id="welcome" class="section level1 unnumbered">
-<h1>
-<img src="cover.jpg" class="cover" width="328" height="328">Welcome<a class="anchor" aria-label="anchor" href="#welcome"><i class="fas fa-link"></i></a>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="introduction" class="section level1 unnumbered">
+<h1>Introduction<a class="anchor" aria-label="anchor" href="#introduction"><i class="fas fa-link"></i></a>
 </h1>
-<p><strong>Authors:</strong> Jacques Serizay [aut, cre]<br><strong>Version:</strong> 0.98.0<br><strong>Modified:</strong> 2023-02-13<br><strong>Compiled:</strong> 2023-02-14<br><strong>Environment:</strong> R Under development (unstable) (2023-02-09 r83797), Bioconductor 3.17<br><strong>License:</strong> MIT + file LICENSE<br><strong>Copyright:</strong> J. Serizay<br><strong>Source:</strong> <a href="https://github.com/js2264/OHCA" class="uri">https://github.com/js2264/OHCA</a></p>
-<p>This is the online version of <strong>Orchestrating Hi-C analysis with Bioconductor</strong>.</p>
+<p>This book is divided in three parts:</p>
+<p><strong>Part I: Fundamentals concepts</strong></p>
+<ul>
+<li>Chapter 1: What Hi-C is, experimentally and computationally</li>
+<li>Chapter 2: The different <code>R</code> classes implemented to analyse Hi-C</li>
+<li>Chapter 3: Parsing and manipulating Hi-C data in R</li>
+<li>Chapter 4: Hi-C data visualization</li>
+</ul>
+<p><strong>Part II: In-depth Hi-C analysis</strong></p>
+<ul>
+<li>Chapter 5: Performing “arithmetics” on Hi-C matrices</li>
+<li>Chapter 6: Computing Hi-C-specific metrics</li>
+<li>Chapter 7: Finding topological features from a Hi-C contact matrix</li>
+</ul>
+<p><strong>Part III: Advanced Hi-C considerations</strong></p>
+<ul>
+<li>Chapter 8: Hi-C interoperability in R/Bioconductor</li>
+</ul>
 </div>
+
+
+
   <div class="chapter-nav">
-<div class="empty"></div>
-<div class="next"><a href="introduction.html">Introduction</a></div>
+<div class="prev"><a href="index.html">Welcome</a></div>
+<div class="next"><a href="hi-c-principles.html"><span class="header-section-number">1</span> Hi-C principles</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#welcome">Welcome</a></li></ul>
+      <ul class="nav navbar-nav"><li><a class="nav-link" href="#introduction">Introduction</a></li></ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">

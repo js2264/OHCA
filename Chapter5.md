@@ -1,5 +1,7 @@
 # (PART) Advanced Hi-C topics {-} 
 
+
+
 # Performing arithmetics on Hi-C matrices
 
 **Aim:** This notebook illustrates how to leverage `HiCExperiment` data structure 
@@ -16,118 +18,9 @@ the imported matrix.
 ```r
 library(HiCExperiment)
 library(HiContactsData)
-```
-
-```
-## Loading required package: ExperimentHub
-```
-
-```
-## Loading required package: BiocGenerics
-```
-
-```
-## 
-## Attaching package: 'BiocGenerics'
-```
-
-```
-## The following object is masked from 'package:HiCExperiment':
-## 
-##     as.data.frame
-```
-
-```
-## The following objects are masked from 'package:stats':
-## 
-##     IQR, mad, sd, var, xtabs
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     anyDuplicated, aperm, append, as.data.frame, basename, cbind,
-##     colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
-##     get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
-##     match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
-##     Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,
-##     table, tapply, union, unique, unsplit, which.max, which.min
-```
-
-```
-## Loading required package: AnnotationHub
-```
-
-```
-## Loading required package: BiocFileCache
-```
-
-```
-## Loading required package: dbplyr
-```
-
-```r
 library(HiContacts)
-```
-
-```
-## 
-## Attaching package: 'HiContacts'
-```
-
-```
-## The following objects are masked from 'package:HiCExperiment':
-## 
-##     contacts_yeast, contacts_yeast_eco1
-```
-
-```
-## The following object is masked from 'package:base':
-## 
-##     merge
-```
-
-```r
 mcf <- HiContactsData('yeast_wt', 'mcool')
-```
-
-```
-## snapshotDate(): 2023-02-13
-```
-
-```
-## see ?HiContactsData and browseVignettes('HiContactsData') for documentation
-```
-
-```
-## loading from cache
-```
-
-```r
 pf <- HiContactsData('yeast_wt', 'pairs.gz')
-```
-
-```
-## snapshotDate(): 2023-02-13
-```
-
-```
-## see ?HiContactsData and browseVignettes('HiContactsData') for documentation
-```
-
-```
-## downloading 1 resources
-```
-
-```
-## retrieving 1 resource
-```
-
-```
-## loading from cache
-```
-
-```r
 cf <- CoolFile(mcf, resolution = 1000, pairsFile = pf)
 wt <- import(cf)
 contacts <- wt[c('II')] |> normalize(niters = 200)
@@ -144,14 +37,14 @@ contacts
 ```
 ## `HiCExperiment` object with 471,364 contacts over 814 regions 
 ## -------
-## fileName: "/root/.cache/R/ExperimentHub/4f412dfa66_7752" 
+## fileName: "/root/.cache/R/ExperimentHub/4f267aba72_7752" 
 ## focus: "II" 
 ## resolutions(5): 1000 2000 4000 8000 16000
 ## active resolution: 1000 
 ## interactions: 74360 
 ## scores(3): count balanced ICE 
 ## topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) 
-## pairsFile: /root/.cache/R/ExperimentHub/98d098c68_7753 
+## pairsFile: /root/.cache/R/ExperimentHub/9813c3026b_7753 
 ## metadata(0):
 ```
 
@@ -170,53 +63,7 @@ We can do the same for a Hi-C dataset generated in a eco1 mutant.
 
 ```r
 mcf <- HiContactsData('yeast_eco1', 'mcool')
-```
-
-```
-## snapshotDate(): 2023-02-13
-```
-
-```
-## see ?HiContactsData and browseVignettes('HiContactsData') for documentation
-```
-
-```
-## downloading 1 resources
-```
-
-```
-## retrieving 1 resource
-```
-
-```
-## loading from cache
-```
-
-```r
 pf <- HiContactsData('yeast_eco1', 'pairs.gz')
-```
-
-```
-## snapshotDate(): 2023-02-13
-```
-
-```
-## see ?HiContactsData and browseVignettes('HiContactsData') for documentation
-```
-
-```
-## downloading 1 resources
-```
-
-```
-## retrieving 1 resource
-```
-
-```
-## loading from cache
-```
-
-```r
 cf <- CoolFile(mcf, resolution = 1000, pairsFile = pf)
 eco1 <- import(cf)
 eco1
@@ -225,14 +72,14 @@ eco1
 ```
 ## `HiCExperiment` object with 19,136,736 contacts over 12,079 regions 
 ## -------
-## fileName: "/root/.cache/R/ExperimentHub/98296f72bc_7754" 
+## fileName: "/root/.cache/R/ExperimentHub/982b13cac4_7754" 
 ## focus: "whole genome" 
 ## resolutions(5): 1000 2000 4000 8000 16000
 ## active resolution: 1000 
 ## interactions: 6474816 
 ## scores(2): count balanced 
 ## topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) 
-## pairsFile: /root/.cache/R/ExperimentHub/9879d4af57_7755 
+## pairsFile: /root/.cache/R/ExperimentHub/983fe98037_7755 
 ## metadata(0):
 ```
 
@@ -297,139 +144,7 @@ We can also `aggregate` Hi-C maps over a list of genomic coordinates, either on-
 
 ```r
 library(rtracklayer)
-```
-
-```
-## Loading required package: GenomicRanges
-```
-
-```
-## Loading required package: stats4
-```
-
-```
-## Loading required package: S4Vectors
-```
-
-```
-## 
-## Attaching package: 'S4Vectors'
-```
-
-```
-## The following object is masked from 'package:HiCExperiment':
-## 
-##     metadata<-
-```
-
-```
-## The following objects are masked from 'package:base':
-## 
-##     expand.grid, I, unname
-```
-
-```
-## Loading required package: IRanges
-```
-
-```
-## Loading required package: GenomeInfoDb
-```
-
-```
-## 
-## Attaching package: 'rtracklayer'
-```
-
-```
-## The following object is masked from 'package:AnnotationHub':
-## 
-##     hubUrl
-```
-
-```r
 library(InteractionSet)
-```
-
-```
-## Loading required package: SummarizedExperiment
-```
-
-```
-## Loading required package: MatrixGenerics
-```
-
-```
-## Loading required package: matrixStats
-```
-
-```
-## 
-## Attaching package: 'MatrixGenerics'
-```
-
-```
-## The following objects are masked from 'package:matrixStats':
-## 
-##     colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
-##     colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
-##     colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
-##     colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
-##     colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
-##     colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
-##     colWeightedMeans, colWeightedMedians, colWeightedSds,
-##     colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
-##     rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
-##     rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
-##     rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
-##     rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
-##     rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
-##     rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
-##     rowWeightedSds, rowWeightedVars
-```
-
-```
-## Loading required package: Biobase
-```
-
-```
-## Welcome to Bioconductor
-## 
-##     Vignettes contain introductory material; view with
-##     'browseVignettes()'. To cite Bioconductor, see
-##     'citation("Biobase")', and for packages 'citation("pkgname")'.
-```
-
-```
-## 
-## Attaching package: 'Biobase'
-```
-
-```
-## The following object is masked from 'package:MatrixGenerics':
-## 
-##     rowMedians
-```
-
-```
-## The following objects are masked from 'package:matrixStats':
-## 
-##     anyMissing, rowMedians
-```
-
-```
-## The following object is masked from 'package:ExperimentHub':
-## 
-##     cache
-```
-
-```
-## The following object is masked from 'package:AnnotationHub':
-## 
-##     cache
-```
-
-```r
 topologicalFeatures(wt_II, 'loops') <- system.file('extdata', 'S288C-loops.bedpe', package = 'HiCExperiment') |> 
     import() |> 
     makeGInteractionsFromGRangesPairs()
@@ -440,52 +155,14 @@ contacts <- refocus(wt_II, 'II:400000-700000') |>
     detrend() |> 
     despeckle(use.scores = 'detrended', focal.size = 2)
 aggr_loops <- aggregate(contacts, targets = topologicalFeatures(wt_II, 'loops'), flankingBins = 25)
-```
-
-```
-## Going through preflight checklist...
-```
-
-```
-## Parsing the entire contact matrice as a sparse matrix...
-```
-
-```
-## Modeling distance decay...
-```
-
-```
-## Filtering for contacts within provided targets...
-```
-
-```r
 aggr_borders <- aggregate(contacts, targets = topologicalFeatures(wt_II, 'borders'), flankingBins = 15)
-```
-
-```
-## Going through preflight checklist...
-```
-
-```
-## Parsing the entire contact matrice as a sparse matrix...
-```
-
-```
-## Modeling distance decay...
-```
-
-```
-## Filtering for contacts within provided targets...
-```
-
-```r
 aggr_borders
 ```
 
 ```
 ## `AggrHiCExperiment` object over 810 targets 
 ## -------
-## fileName: "/root/.cache/R/ExperimentHub/4f412dfa66_7752" 
+## fileName: "/root/.cache/R/ExperimentHub/4f267aba72_7752" 
 ## focus: 810 targets 
 ## resolutions(5): 1000 2000 4000 8000 16000
 ## active resolution: 1000 
@@ -493,7 +170,7 @@ aggr_borders
 ## scores(4): count balanced expected detrended 
 ## slices(4): count balanced expected detrended 
 ## topologicalFeatures: targets(810) compartments(0) borders(814) loops(162) viewpoints(0) 
-## pairsFile: /root/.cache/R/ExperimentHub/98d098c68_7753 
+## pairsFile: /root/.cache/R/ExperimentHub/9813c3026b_7753 
 ## metadata(0):
 ```
 
@@ -673,7 +350,7 @@ p8 <- plot4C(c(v4C_loop, v4C_TAD, v4C_loop2), ggplot2::aes(x = center, y = score
 p8
 ```
 
-## Session info 
+## Session info {-}
 
 
 ```r
@@ -691,7 +368,7 @@ sessioninfo::session_info()
 ##  collate  en_US.UTF-8
 ##  ctype    en_US.UTF-8
 ##  tz       America/New_York
-##  date     2023-02-13
+##  date     2023-02-14
 ##  pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
@@ -726,6 +403,7 @@ sessioninfo::session_info()
 ##  dbplyr                 * 2.3.0     2023-01-16 [1] CRAN (R 4.3.0)
 ##  DelayedArray             0.25.0    2022-11-01 [1] Bioconductor
 ##  digest                   0.6.31    2022-12-11 [1] CRAN (R 4.3.0)
+##  downlit                  0.4.2     2022-07-05 [1] CRAN (R 4.3.0)
 ##  dplyr                    1.1.0     2023-01-29 [1] CRAN (R 4.3.0)
 ##  ellipsis                 0.3.2     2021-04-29 [1] CRAN (R 4.3.0)
 ##  evaluate                 0.20      2023-01-17 [1] CRAN (R 4.3.0)
@@ -734,6 +412,7 @@ sessioninfo::session_info()
 ##  farver                   2.1.1     2022-07-06 [1] CRAN (R 4.3.0)
 ##  fastmap                  1.1.0     2021-01-25 [1] CRAN (R 4.3.0)
 ##  filelock                 1.0.2     2018-10-05 [1] CRAN (R 4.3.0)
+##  fs                       1.6.1     2023-02-06 [1] CRAN (R 4.3.0)
 ##  generics                 0.1.3     2022-07-05 [1] CRAN (R 4.3.0)
 ##  GenomeInfoDb           * 1.35.15   2023-02-02 [1] Bioconductor
 ##  GenomeInfoDbData         1.2.9     2023-02-13 [1] Bioconductor
@@ -744,12 +423,12 @@ sessioninfo::session_info()
 ##  ggrastr                  1.0.1     2021-12-08 [1] CRAN (R 4.3.0)
 ##  glue                     1.6.2     2022-02-24 [1] CRAN (R 4.3.0)
 ##  gtable                   0.3.1     2022-09-01 [1] CRAN (R 4.3.0)
-##  HiCExperiment          * 0.99.9    2023-02-13 [1] Github (js2264/HiCExperiment@7f73f79)
-##  HiContacts             * 1.1.1     2023-02-13 [1] Github (js2264/HiContacts@417a53c)
-##  HiContactsData         * 1.1.9     2023-02-13 [1] Github (js2264/HiContactsData@275fab4)
+##  HiCExperiment          * 0.99.9    2023-02-14 [1] Github (js2264/HiCExperiment@7f73f79)
+##  HiContacts             * 1.1.1     2023-02-14 [1] Github (js2264/HiContacts@417a53c)
+##  HiContactsData         * 1.1.9     2023-02-14 [1] Github (js2264/HiContactsData@275fab4)
 ##  highr                    0.10      2022-12-22 [1] CRAN (R 4.3.0)
 ##  htmltools                0.5.4     2022-12-07 [1] CRAN (R 4.3.0)
-##  httpuv                   1.6.8     2023-01-12 [1] CRAN (R 4.3.0)
+##  httpuv                   1.6.9     2023-02-14 [1] CRAN (R 4.3.0)
 ##  httr                     1.4.4     2022-08-17 [1] CRAN (R 4.3.0)
 ##  InteractionSet         * 1.27.0    2022-11-01 [1] Bioconductor
 ##  interactiveDisplayBase   1.37.0    2022-11-01 [1] Bioconductor
@@ -810,6 +489,7 @@ sessioninfo::session_info()
 ##  withr                    2.5.0     2022-03-03 [1] CRAN (R 4.3.0)
 ##  xfun                     0.37      2023-01-31 [1] CRAN (R 4.3.0)
 ##  XML                      3.99-0.13 2022-12-04 [1] CRAN (R 4.3.0)
+##  xml2                     1.3.3     2021-11-30 [1] CRAN (R 4.3.0)
 ##  xtable                   1.8-4     2019-04-21 [1] CRAN (R 4.3.0)
 ##  XVector                  0.39.0    2022-11-01 [1] Bioconductor
 ##  yaml                     2.3.7     2023-01-23 [1] CRAN (R 4.3.0)
