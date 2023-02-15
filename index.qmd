@@ -1,9 +1,4 @@
---- 
-documentclass: book
-biblio-style: apalike
-link-citations: yes
-github-repo: js2264/OHCA
----
+# Welcome {-}
 
 ```{r echo=FALSE}
 .gh_url <- file.path('https://github.com', rmarkdown::metadata[['github-repo']])
@@ -11,7 +6,11 @@ github-repo: js2264/OHCA
 
 `r rebook::openingDetails(Copyright='J. Serizay', Source=.gh_url)`
 
-This is the online version of **Orchestrating Hi-C analysis with Bioconductor**.  
+This is the landing page of the **"Orchestrating Hi-C analysis with Bioconductor"** 
+book. The primary aim of this book is to introduce the `R` user to Hi-C analysis. It 
+starts with key concepts important for the analysis of chromatin conformation capture and then 
+presents `Bioconductor` tools that can be leveraged to process, analyse, explore and visualize 
+Hi-C data. 
 
 # Introduction {-}
 
@@ -19,20 +18,20 @@ This book is divided in three parts:
 
 **Part I: Fundamentals concepts**
 
-- Chapter 1: What Hi-C is, experimentally and computationally 
-- Chapter 2: The different `R` classes implemented to analyse Hi-C
-- Chapter 3: Parsing and manipulating Hi-C data in R
-- Chapter 4: Hi-C data visualization  
+- [Chapter 1: What Hi-C is, experimentally and computationally](principles.qmd)
+- [Chapter 2: The different `R` classes implemented to analyse Hi-C](data-representation.qmd)
+- [Chapter 3: Parsing and manipulating Hi-C data in R](parsing.qmd)
+- [Chapter 4: Hi-C data visualization](visualization.qmd)
 
 
 **Part II: In-depth Hi-C analysis**
 
-- Chapter 5: Performing Hi-C arithmetics
-- Chapter 6: Computing Hi-C-specific metrics
-- Chapter 7: Finding topological features from a Hi-C contact matrix  
+- [Chapter 5: Performing Hi-C arithmetics](arithmetics.qmd)
+- [Chapter 6: Computing Hi-C important metrics](metrics.qmd)
+- [Chapter 7: Finding topological features from a Hi-C contact matrix](topological-features.qmd)
 
 
 **Part III: Advanced Hi-C topics**
 
-- Chapter 8: Hi-C analysis worflows
-- Chapter 9: Hi-C interoperability notebooks
+- [Chapter 8: Hi-C analysis worflows](workflows.qmd)
+- [Chapter 9: Hi-C interoperability notebooks](interoperability.qmd)

@@ -3,17 +3,17 @@ RCMD := Rscript -e
 .PHONY: render
 render: ## Render OHCA book
 	@echo "📖 Rendering OHCA book"
-	$(RCMD) 'quarto::quarto_render()'
+	quarto render
 
 .PHONY: serve
 serve: ## serve local static site
-	$(RCMD) 'servr::httd("docs")'
+	$(RCMD) 'servr::httd("docs", port = 4444)'
 
 .PHONY: render-serve
 render-serve: ## Test rendering locally
 	@echo "📖 Rendering OHCA book locally"
-	$(RCMD) 'quarto::quarto_render()'
-	$(RCMD) 'servr::httd("docs")'
+	quarto render
+	$(RCMD) 'servr::httd("docs", port = 4444)'
 
 .PHONY: install
 install: ## Install OHCA package and dependencies.

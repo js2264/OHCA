@@ -19,24 +19,25 @@ book:
   repo-actions: [edit, issue]
   chapters:
     - index.qmd
-    - part: "Hi-C fundamentals"
+    - part: "Fundamentals concepts"
       chapters:
-        - Chapter1.qmd
-        - Chapter2.qmd
-        - Chapter3.qmd
-        - Chapter4.qmd
+        - principles.qmd
+        - data-representation.qmd
+        - parsing.qmd
+        - visualization.qmd
     - part: "In-depth Hi-C analysis"
       chapters:
-        - Chapter5.qmd
-        - Chapter6.qmd
-        - Chapter7.qmd
-    - part: "Extra topics"
+        - arithmetics.qmd
+        - metrics.qmd
+        - topological-features.qmd
+    - part: "Advanced Hi-C topics"
       chapters:
-        - Chapter8.qmd
-        - Chapter9.qmd
+        - workflows.qmd
+        - interoperability.qmd
 
 format:
   html:
+    default-image-extension: pdf
     theme:
       - cosmo
       - OHCA.scss
