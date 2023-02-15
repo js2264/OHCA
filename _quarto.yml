@@ -1,0 +1,47 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "OHCA: Orchestrating Hi-C analysis with Bioconductor"
+  reader-mode: false
+  page-footer:
+    left: |
+      OHCA: Orchestrating Hi-C analysis with Bioconductor was written by 
+      Jacques Serizay
+    right: |
+      This book was built with <a href="https://quarto.org/">Quarto</a>.
+  cover-image: cover.jpg
+  favicon: cover.jpg
+  site-url: https://github.com/js2264.OHCA/
+  repo-url: https://github.com/js2264.OHCA/
+  repo-branch: main
+  repo-actions: [edit, issue]
+  chapters:
+    - index.qmd
+    - part: "Hi-C fundamentals"
+      chapters:
+        - Chapter1.qmd
+        - Chapter2.qmd
+        - Chapter3.qmd
+        - Chapter4.qmd
+    - part: "In-depth Hi-C analysis"
+      chapters:
+        - Chapter5.qmd
+        - Chapter6.qmd
+        - Chapter7.qmd
+    - part: "Extra topics"
+      chapters:
+        - Chapter8.qmd
+        - Chapter9.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+      - OHCA.scss
+    code-link: true
+    author-meta: "Jacques Serizay"
+    callout-appearance: simple
+
+editor: visual

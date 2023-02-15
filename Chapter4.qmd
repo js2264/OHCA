@@ -1,14 +1,8 @@
 # Hi-C data visualization
 
-```{r include=FALSE}
-knitr::opts_chunk$set(
-    cache = TRUE, 
-    layout = 'l-page', 
-    echo = TRUE, 
-    warning = FALSE, 
-    error = FALSE, 
-    message = FALSE
-)
+```{r}
+#| echo: false
+source("_common.R")
 ```
 
 ## Visualizing Hi-C maps
@@ -35,8 +29,3 @@ knitr::opts_chunk$set(
 
 ### Montages
 
-## Session info  {-}
-
-```{r}
-sessioninfo::session_info()
-```

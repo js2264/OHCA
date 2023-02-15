@@ -1,0 +1,31 @@
+# Interoperability with other Hi-C packages
+
+```{r}
+#| echo: false
+source("_common.R")
+```
+
+## General Bioconductor 
+
+### Add topological features 
+
+```{r}
+
+```
+
+### Align tracks from `.bw` files 
+
+```{r}
+
+```
+
+## HiCrep
+
+## (multi)HiCcompare
+
+## TopDom
+
+## GOTHiC
+
+## HiCDOC
+

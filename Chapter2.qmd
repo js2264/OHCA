@@ -1,0 +1,18 @@
+# Representation of genomic data in R
+
+```{r}
+#| echo: false
+source("_common.R")
+```
+
+## `GRanges` class
+
+## `GInteractions` class
+
+## `HiCExperiment` class
+
+```{r yeast_norm}
+library(HiCExperiment)
+contacts <- contacts_yeast(full = TRUE)
+contacts
+```

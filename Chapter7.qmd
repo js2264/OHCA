@@ -1,19 +1,17 @@
 # Finding topological features in Hi-C 
 
-```{r include=FALSE}
-knitr::opts_chunk$set(
-    cache = TRUE, 
-    layout = 'l-page', 
-    echo = TRUE, 
-    warning = FALSE, 
-    error = FALSE, 
-    message = FALSE
-)
+```{r}
+#| echo: false
+source("_common.R")
 ```
 
 ## Chromosome compartments 
 
 ### Computing eigenvectors
+
+```{r}
+
+```
 
 ### Annotating A/B compartments
 
@@ -25,8 +23,3 @@ knitr::opts_chunk$set(
 
 ## Chromatin loops 
 
-## Session info {-}
-
-```{r}
-sessioninfo::session_info()
-```

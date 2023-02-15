@@ -1,0 +1,10 @@
+# Hi-C principles
+
+```{r}
+#| echo: false
+source("_common.R")
+```
+
+## Experimental considerations
+
+## *In silico* representation of Hi-C data

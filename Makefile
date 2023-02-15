@@ -3,7 +3,17 @@ RCMD := Rscript -e
 .PHONY: render
 render: ## Render OHCA book
 	@echo "📖 Rendering OHCA book"
-	$(RCMD) 'bookdown::render_book("index.Rmd")'
+	$(RCMD) 'quarto::quarto_render()'
+
+.PHONY: serve
+serve: ## serve local static site
+	$(RCMD) 'servr::httd("docs")'
+
+.PHONY: render-serve
+render-serve: ## Test rendering locally
+	@echo "📖 Rendering OHCA book locally"
+	$(RCMD) 'quarto::quarto_render()'
+	$(RCMD) 'servr::httd("docs")'
 
 .PHONY: install
 install: ## Install OHCA package and dependencies.
@@ -25,22 +35,8 @@ deps: ## Install missing OHCA dependencies
 git: ## Automated commit and pushing to github rpeo
 	@echo "📨 Pushing to GH"
 	git add .
-	git commit -m "automated commit"
+	git commit -m "make git"
 	git push
-
-.PHONY: render-test
-render-test: ## Test rendering locally
-	@echo "📖 Rendering OHCA book locally"
-	$(RCMD) 'bookdown::render_book(".")'
-	$(RCMD) 'file.copy("docs/", "/data/scratch/OHCA/", recursive=TRUE)'
-	$(RCMD) 'unlink("docs/", recursive=TRUE)'
-	$(RCMD) 'unlink("OHCA: Orchestrating Hi-C analysis with Bioconductor.rds")'
-	$(RCMD) 'unlink(list.files(".", pattern = ".*rds"))'
-	$(RCMD) 'servr::httd("/data/scratch/OHCA/")'
-
-.PHONY: serve
-serve: ## serve local static site
-	$(RCMD) 'servr::httd("/data/scratch/OHCA/")'
 
 .PHONY: help
 help:

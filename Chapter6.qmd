@@ -1,0 +1,100 @@
+# Computing Hi-C specific metrics
+
+```{r}
+#| echo: false
+source("_common.R")
+```
+
+To illustrate advanced Hi-C analysis, we will use a Hi-C map generated in 
+a yeast mutant, which contains segments of `Mycoides mycoides`
+chromosome translocated within the chromosome XVI. 
+
+## Distance law(s)
+
+```{r import, eval = FALSE}
+library(HiCExperiment)
+library(HiContactsData)
+library(HiContacts)
+synthChr_cf <- CoolFile(
+    'data/S288C_Mmyco-transloc.mcool', 
+    resolution = 8000, 
+    pairsFile = 'data/S288C_Mmyco-transloc.pairs'
+)
+availableChromosomes(synthChr_cf)
+synthChr <- import(synthChr_cf) |> 
+    detrend() |> 
+    despeckle(use.scores = 'detrended') |> 
+    autocorrelate(detrend = FALSE, ignore_ndiags = 4)
+synthChr_zoomed <- import(synthChr_cf, focus = 'chrXVI-Mmmyco_inv870kb', resolution = 1000) 
+```
+
+We can compute a P(s) per chromosome for this sample using the `distanceLaw` function.
+
+```{r ps, eval = FALSE}
+### ----- Distance law
+ps <- distanceLaw(synthChr, by_chr = TRUE) |>  
+    mutate(type = case_when(chr == 'chrXVI-Mmmyco_inv870kb' ~ 'XVI-Myco', TRUE ~ 'WT')) |> 
+    mutate(type = factor(type, c('WT', 'XVI-Myco')))
+p1 <- plotMatrix(synthChr[c('chrXIII', 'chrXIV', 'chrXV', 'chrXVI-Mmmyco_inv870kb')], limits = c(-4, -1), cmap = afmhotrColors())
+p2 <- plotPs(ps, ggplot2::aes(x = binned_distance, y = norm_p, group = chr, color = type)) + 
+    scale_color_manual(values = c('#c6c6c6', '#ca0000'))
+p3 <- plotPsSlope(ps, ggplot2::aes(x = binned_distance, y = slope, group = chr, color = type)) + 
+    scale_color_manual(values = c('#c6c6c6', '#ca0000'))
+p1
+p2
+p3
+```
+
+## Scalograms
+
+```{r eval = FALSE}
+### ----- scalograms
+scalo <- scalogram(synthChr) 
+p4 <- plotMatrix(synthChr['chrXVI-Mmmyco_inv870kb'], use.scores = 'autocorrelated', limits = c(-0.8, 0.8), scale = 'linear', cmap = bwrColors())
+p5 <- plotScalogram(scalo |> filter(chr == 'chrXVI-Mmmyco_inv870kb'), ylim = c(1e3, 1e5))
+p <- cowplot::plot_grid(p4, p5, align = 'hv', axis = 'tblr', rel_widths = c(1, 2)) 
+p4
+p5
+```
+
+## Cis/trans ratios
+
+```{r eval = FALSE}
+### ----- cis/trans ratios
+ct <- cisTransRatio(synthChr) |> filter(chr != 'chrXII')
+p7 <- ggplot(ct, aes(x = chr, y = trans_pct)) + 
+    geom_col(position = position_stack()) + 
+    theme_bw() + 
+    guides(x=guide_axis(angle = 90))
+p7
+```
+
+## Virtual 4C profiles
+
+Using the mammalian NPCs dataset as an example, we can also generate virtual 
+4C profiles. 
+
+```{r NPCs_v4c, eval = FALSE}
+### ----- virtual 4c (NPCs)
+v4C_loop <- virtual4C(npcs_narrow, viewpoint = GRanges('chr3:100965000-100975000'), use.scores = 'balanced') |> 
+    plyranges::mutate(
+        score = score/sum(score),
+        score = zoo::rollmean(score, k = 2, na.pad = TRUE, align = 'center'), 
+        viewpoint = 'loop'
+    )
+v4C_TAD <- virtual4C(npcs_narrow, viewpoint = GRanges('chr3:101695000-101705000'), use.scores = 'balanced') |> 
+    plyranges::mutate(
+        score = score/sum(score),
+        score = zoo::rollmean(score, k = 2, na.pad = TRUE, align = 'center'), 
+        viewpoint = 'TAD'
+    )
+v4C_loop2 <- virtual4C(npcs_narrow, viewpoint = GRanges('chr3:102145000-102155000'), use.scores = 'balanced') |> 
+    plyranges::mutate(
+        score = score/sum(score),
+        score = zoo::rollmean(score, k = 2, na.pad = TRUE, align = 'center'), 
+        viewpoint = 'loop2'
+    )
+p8 <- plot4C(c(v4C_loop, v4C_TAD, v4C_loop2), ggplot2::aes(x = center, y = score, col = viewpoint, fill = viewpoint)) + 
+    ggplot2::coord_cartesian(ylim = c(0, 0.03))
+p8
+```

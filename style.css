@@ -1,8 +1,0 @@
-@media (min-width: 1200px)
-.container-fluid main {
-    max-width: 60rem !important;
-}
-
-#content {
-    font-size: 0.9rem;
-}

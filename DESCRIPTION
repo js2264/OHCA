@@ -19,6 +19,7 @@ Depends:
 Imports:
     cowplot, 
     rebook, 
+    quarto, 
     sessioninfo
 biocViews:
     HiC,

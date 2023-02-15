@@ -1,17 +1,13 @@
 --- 
-title: "Orchestrating Hi-C analysis with Bioconductor"
 documentclass: book
 biblio-style: apalike
 link-citations: yes
 github-repo: js2264/OHCA
-author: "Jacques Serizay"
 ---
 
-```{r, echo=FALSE}
+```{r echo=FALSE}
 .gh_url <- file.path('https://github.com', rmarkdown::metadata[['github-repo']])
 ```
-
-# <img src="cover.jpg" class="cover" width="328" height="328"/>Welcome {-}
 
 `r rebook::openingDetails(Copyright='J. Serizay', Source=.gh_url)`
 
@@ -31,11 +27,12 @@ This book is divided in three parts:
 
 **Part II: In-depth Hi-C analysis**
 
-- Chapter 5: Performing "arithmetics" on Hi-C matrices
+- Chapter 5: Performing Hi-C arithmetics
 - Chapter 6: Computing Hi-C-specific metrics
 - Chapter 7: Finding topological features from a Hi-C contact matrix  
 
 
-**Part III: Advanced Hi-C considerations**
+**Part III: Advanced Hi-C topics**
 
-- Chapter 8: Hi-C interoperability in R/Bioconductor
+- Chapter 8: Hi-C analysis worflows
+- Chapter 9: Hi-C interoperability notebooks

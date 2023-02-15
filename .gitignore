@@ -4,3 +4,8 @@
 data
 docs
 _bookdown_files
+*_cache
+*_files
+_book
+.quarto
+/.quarto/
