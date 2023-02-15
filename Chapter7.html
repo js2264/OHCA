@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>OHCA: Orchestrating Hi-C analysis with Bioconductor</title>
+<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 7&nbsp; Finding topological features in Hi-C</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -27,7 +27,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./Chapter1.html" rel="next">
+<link href="./Chapter8.html" rel="next">
+<link href="./Chapter6.html" rel="prev">
 <link href="./cover.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -61,7 +62,9 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">OHCA: Orchestrating Hi-C analysis with Bioconductor</h1>
+      <h1 class="quarto-secondary-nav-title">
+<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span>
+</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -85,7 +88,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">Introduction</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -138,7 +141,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Chapter7.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span></a>
+  <a href="./Chapter7.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span></a>
   </div>
 </li>
       </ul>
@@ -169,12 +172,28 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<li>
+<a href="#chromosome-compartments" id="toc-chromosome-compartments" class="nav-link active" data-scroll-target="#chromosome-compartments"><span class="toc-section-number">7.1</span>  Chromosome compartments</a>
+  <ul class="collapse">
+<li><a href="#computing-eigenvectors" id="toc-computing-eigenvectors" class="nav-link" data-scroll-target="#computing-eigenvectors"><span class="toc-section-number">7.1.1</span>  Computing eigenvectors</a></li>
+  <li><a href="#annotating-ab-compartments" id="toc-annotating-ab-compartments" class="nav-link" data-scroll-target="#annotating-ab-compartments"><span class="toc-section-number">7.1.2</span>  Annotating A/B compartments</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#topological-domains" id="toc-topological-domains" class="nav-link" data-scroll-target="#topological-domains"><span class="toc-section-number">7.2</span>  Topological domains</a>
+  <ul class="collapse">
+<li><a href="#computing-diamond-insulation-score" id="toc-computing-diamond-insulation-score" class="nav-link" data-scroll-target="#computing-diamond-insulation-score"><span class="toc-section-number">7.2.1</span>  Computing diamond insulation score</a></li>
+  <li><a href="#annotating-domain-borders" id="toc-annotating-domain-borders" class="nav-link" data-scroll-target="#annotating-domain-borders"><span class="toc-section-number">7.2.2</span>  Annotating domain borders</a></li>
+  </ul>
+</li>
+  <li><a href="#chromatin-loops" id="toc-chromatin-loops" class="nav-link" data-scroll-target="#chromatin-loops"><span class="toc-section-number">7.3</span>  Chromatin loops</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/Chapter7.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title d-none d-lg-block">OHCA: Orchestrating Hi-C analysis with Bioconductor</h1>
+<h1 class="title d-none d-lg-block">
+<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span>
+</h1>
 </div>
 
 
@@ -187,32 +206,26 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
-</header><p><img src="cover.jpg" title="OHCA: Orchestrating Hi-C analysis with Bioconductor" class="quarto-cover-image img-fluid"></p>
-<div class="cell">
+</header><div class="cell">
 
 </div>
-<p><strong>Authors:</strong> Jacques Serizay [aut, cre]<br><strong>Version:</strong> 0.98.0<br><strong>Modified:</strong> 2023-02-13<br><strong>Compiled:</strong> 2023-02-15<br><strong>Environment:</strong> R Under development (unstable) (2023-02-09 r83797), Bioconductor 3.17<br><strong>License:</strong> MIT + file LICENSE<br><strong>Copyright:</strong> J. Serizay<br><strong>Source:</strong> https://github.com/js2264/OHCA</p>
-<p>This is the online version of <strong>Orchestrating Hi-C analysis with Bioconductor</strong>.</p>
-<section id="introduction" class="level1 unnumbered"><h1 class="unnumbered">Introduction</h1>
-<p>This book is divided in three parts:</p>
-<p><strong>Part I: Fundamentals concepts</strong></p>
-<ul>
-<li>Chapter 1: What Hi-C is, experimentally and computationally</li>
-<li>Chapter 2: The different <code>R</code> classes implemented to analyse Hi-C</li>
-<li>Chapter 3: Parsing and manipulating Hi-C data in R</li>
-<li>Chapter 4: Hi-C data visualization</li>
-</ul>
-<p><strong>Part II: In-depth Hi-C analysis</strong></p>
-<ul>
-<li>Chapter 5: Performing Hi-C arithmetics</li>
-<li>Chapter 6: Computing Hi-C-specific metrics</li>
-<li>Chapter 7: Finding topological features from a Hi-C contact matrix</li>
-</ul>
-<p><strong>Part III: Advanced Hi-C topics</strong></p>
-<ul>
-<li>Chapter 8: Hi-C analysis worflows</li>
-<li>Chapter 9: Hi-C interoperability notebooks</li>
-</ul>
+<section id="chromosome-compartments" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="chromosome-compartments">
+<span class="header-section-number">7.1</span> Chromosome compartments</h2>
+<section id="computing-eigenvectors" class="level3" data-number="7.1.1"><h3 data-number="7.1.1" class="anchored" data-anchor-id="computing-eigenvectors">
+<span class="header-section-number">7.1.1</span> Computing eigenvectors</h3>
+<div class="cell" data-hash="Chapter7_cache/html/unnamed-chunk-2_7d844762ac7e41bf903628fe400ed7ad">
+
+</div>
+</section><section id="annotating-ab-compartments" class="level3" data-number="7.1.2"><h3 data-number="7.1.2" class="anchored" data-anchor-id="annotating-ab-compartments">
+<span class="header-section-number">7.1.2</span> Annotating A/B compartments</h3>
+</section></section><section id="topological-domains" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="topological-domains">
+<span class="header-section-number">7.2</span> Topological domains</h2>
+<section id="computing-diamond-insulation-score" class="level3" data-number="7.2.1"><h3 data-number="7.2.1" class="anchored" data-anchor-id="computing-diamond-insulation-score">
+<span class="header-section-number">7.2.1</span> Computing diamond insulation score</h3>
+</section><section id="annotating-domain-borders" class="level3" data-number="7.2.2"><h3 data-number="7.2.2" class="anchored" data-anchor-id="annotating-domain-borders">
+<span class="header-section-number">7.2.2</span> Annotating domain borders</h3>
+</section></section><section id="chromatin-loops" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="chromatin-loops">
+<span class="header-section-number">7.3</span> Chromatin loops</h2>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
@@ -348,10 +361,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./Chapter6.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Computing Hi-C specific metrics</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Chapter1.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./Chapter8.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflows</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
