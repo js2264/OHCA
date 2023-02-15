@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>OHCA: Orchestrating Hi-C analysis with Bioconductor</title>
+<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 1&nbsp; Hi-C principles</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -18,6 +18,25 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -27,7 +46,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./principles.html" rel="next">
+<link href="./data-representation.html" rel="next">
+<link href="./index.html" rel="prev">
 <link href="./cover.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -61,7 +81,9 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">OHCA: Orchestrating Hi-C analysis with Bioconductor</h1>
+      <h1 class="quarto-secondary-nav-title">
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span>
+</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -85,7 +107,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">Welcome</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -98,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./principles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span></a>
+  <a href="./principles.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -169,13 +191,30 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<li>
+<a href="#experimental-considerations" id="toc-experimental-considerations" class="nav-link active" data-scroll-target="#experimental-considerations"><span class="toc-section-number">1.1</span>  Experimental considerations</a>
+  <ul class="collapse">
+<li><a href="#general-procedure" id="toc-general-procedure" class="nav-link" data-scroll-target="#general-procedure"><span class="toc-section-number">1.1.1</span>  General procedure</a></li>
+  <li><a href="#c-variants" id="toc-c-variants" class="nav-link" data-scroll-target="#c-variants"><span class="toc-section-number">1.1.2</span>  C variants</a></li>
+  <li><a href="#sequencing" id="toc-sequencing" class="nav-link" data-scroll-target="#sequencing"><span class="toc-section-number">1.1.3</span>  Sequencing</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#in-silico-representation-of-hi-c-data" id="toc-in-silico-representation-of-hi-c-data" class="nav-link" data-scroll-target="#in-silico-representation-of-hi-c-data"><span class="toc-section-number">1.2</span>  <em>In silico</em> representation of Hi-C data</a>
+  <ul class="collapse">
+<li><a href="#processing-workflow" id="toc-processing-workflow" class="nav-link" data-scroll-target="#processing-workflow"><span class="toc-section-number">1.2.1</span>  Processing workflow</a></li>
+  <li><a href="#pairs" id="toc-pairs" class="nav-link" data-scroll-target="#pairs"><span class="toc-section-number">1.2.2</span>  Pairs</a></li>
+  <li><a href="#binned-contact-matrices" id="toc-binned-contact-matrices" class="nav-link" data-scroll-target="#binned-contact-matrices"><span class="toc-section-number">1.2.3</span>  Binned contact matrices</a></li>
+  </ul>
+</li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/principles.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title d-none d-lg-block">OHCA: Orchestrating Hi-C analysis with Bioconductor</h1>
+<h1 class="title d-none d-lg-block">
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span>
+</h1>
 </div>
 
 
@@ -188,33 +227,110 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
-</header>
-<section id="welcome" class="level1 unnumbered"><h1 class="unnumbered">Welcome</h1><p><img src="cover.jpg" title="OHCA: Orchestrating Hi-C analysis with Bioconductor" class="quarto-cover-image img-fluid"></p>
-<div class="cell">
+</header><div class="cell">
 
 </div>
-<p><strong>Authors:</strong> Jacques Serizay [aut, cre]<br><strong>Version:</strong> 0.98.0<br><strong>Modified:</strong> 2023-02-13<br><strong>Compiled:</strong> 2023-02-15<br><strong>Environment:</strong> R Under development (unstable) (2023-02-09 r83797), Bioconductor 3.17<br><strong>License:</strong> MIT + file LICENSE<br><strong>Copyright:</strong> J. Serizay</p>
-<p>This is the landing page of the <strong>“Orchestrating Hi-C analysis with Bioconductor”</strong> book. The primary aim of this book is to introduce the <code>R</code> user to Hi-C analysis. It starts with key concepts important for the analysis of chromatin conformation capture and then presents <code>Bioconductor</code> tools that can be leveraged to process, analyse, explore and visualize Hi-C data.</p>
-</section><section id="introduction" class="level1 unnumbered"><h1 class="unnumbered">Introduction</h1>
-<p>This book is divided in three parts:</p>
-<p><strong>Part I: Fundamentals concepts</strong></p>
-<ul>
-<li><a href="./principles.html">Chapter 1: What Hi-C is, experimentally and computationally</a></li>
-<li><a href="./data-representation.html">Chapter 2: The different <code>R</code> classes implemented to analyse Hi-C</a></li>
-<li><a href="./parsing.html">Chapter 3: Parsing and manipulating Hi-C data in R</a></li>
-<li><a href="./visualization.html">Chapter 4: Hi-C data visualization</a></li>
-</ul>
-<p><strong>Part II: In-depth Hi-C analysis</strong></p>
-<ul>
-<li><a href="./arithmetics.html">Chapter 5: Performing Hi-C arithmetics</a></li>
-<li><a href="./metrics.html">Chapter 6: Computing Hi-C important metrics</a></li>
-<li><a href="./topological-features.html">Chapter 7: Finding topological features from a Hi-C contact matrix</a></li>
-</ul>
-<p><strong>Part III: Advanced Hi-C topics</strong></p>
-<ul>
-<li><a href="./workflows.html">Chapter 8: Hi-C analysis worflows</a></li>
-<li><a href="./interoperability.html">Chapter 9: Hi-C interoperability notebooks</a></li>
-</ul>
+<div class="callout-note callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This section introduces the reader to general Hi-C experimental and computational considerations.</p>
+</div>
+</div>
+</div>
+<section id="experimental-considerations" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="experimental-considerations">
+<span class="header-section-number">1.1</span> Experimental considerations</h2>
+<section id="general-procedure" class="level3" data-number="1.1.1"><h3 data-number="1.1.1" class="anchored" data-anchor-id="general-procedure">
+<span class="header-section-number">1.1.1</span> General procedure</h3>
+<p>The Hi-C procedure (<span class="citation" data-cites="Lieberman-Aiden2009Oct">Lieberman-Aiden et al. (<a href="#ref-Lieberman-Aiden2009Oct" role="doc-biblioref">2009</a>)</span>) stems from the clever combination of high-throughput sequencing and Chromatin Conformation Capture (3C) experimental approach (<span class="citation" data-cites="Dekker2002Feb">Dekker et al. (<a href="#ref-Dekker2002Feb" role="doc-biblioref">2002</a>)</span>).<br>
+In Hi-C, chromatin is crosslinked within intact nuclei and enzymatically digested (usually with one or several restriction enzymes, but Hi-C variants using MNase or DNase exist). End-repair introduces biotinylated dNTPs and is followed by religation, which generates chimeric DNA fragments consisting of genomic loci originally lying in spatial proximity, usually crosslinked to a shared protein complex. After religation, DNA fragments are sheared, biotin-containing fragments are pulled-down and converted into a sequencing library.</p>
+<p><img src="images/20230215221337.png" class="img-fluid"></p>
+</section><section id="c-variants" class="level3" data-number="1.1.2"><h3 data-number="1.1.2" class="anchored" data-anchor-id="c-variants">
+<span class="header-section-number">1.1.2</span> C variants</h3>
+<p>A number of C variants have been proposed since the publication of the original 3C method (reviewed by <span class="citation" data-cites="J.O.2017Jan">J. O. et al. (<a href="#ref-J.O.2017Jan" role="doc-biblioref">2017</a>)</span>), the main ones being Capture-C and ChIA-PET (see procedure below).</p>
+<p>XXX</p>
+<p>Capture-C is useful to quantify interactions between a set of regulatory elements of interest. ChIA-PET, on the other hand, can identify interactions mediated by a specific protein of interest.</p>
+</section><section id="sequencing" class="level3" data-number="1.1.3"><h3 data-number="1.1.3" class="anchored" data-anchor-id="sequencing">
+<span class="header-section-number">1.1.3</span> Sequencing</h3>
+<p>Hi-C libraries are traditionally sequenced with short-read technology, and are by essence paired-end libraries. For this reason, the end result of the experimental side of the Hi-C consists of two fastq files, each one containing sequences for one extremity of the DNA fragments purified during Hi-C. These are the two files we need to move on to the computational side of Hi-C.</p>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Why do we do Hi-C?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>XXX</p>
+</div>
+</div>
+<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+What is a fastq file?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fastq files are plain text files (usually compressed, with the <code>.gz</code> extension). They are generated by the sequencing machine during a sequencing run, and for Hi-C, necessarily come in pairs, generally called <code>*_R1.fq.gz</code> and <code>*_R2.fq.gz</code>.</p>
+<p>Here is the first read listed in <code>sample_R1.fq.gz</code> file:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>sample_R1.fq.gz</strong></pre>
+</div>
+<pre><code>@SRR5399542.1.1 DH1DQQN1:393:H9GEWADXX:1:1101:1187:2211 length=24
+CAACTTCAATACCAGCAGCAGCAA
++
+CCCFFFFFHHHHHJJJJJIJJJJJ</code></pre>
+</div>
+<p>And here is the first read listed in <code>sample_R2.fq.gz</code> file:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>sample_R2.fq.gz</strong></pre>
+</div>
+<pre><code>@SRR5399542.1.1 DH1DQQN1:393:H9GEWADXX:1:1101:1187:2211 length=24
+GCTGTTGTTGTTGTTGTATTTGCA
++
+@@@FFFFFFHHHHIJJIJJHIIEH</code></pre>
+</div>
+<p>These two reads are the first listed in their respective file. Notice how they bear the same name (first line): they form a pair. The second line corresponds to the sequence read by the sequencer, the third line is a single <code>+</code> separator, and the last line indicates the per-base sequencing quality following a nebulous cypher.</p>
+</div>
+</div>
+</section></section><section id="in-silico-representation-of-hi-c-data" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="in-silico-representation-of-hi-c-data">
+<span class="header-section-number">1.2</span> <em>In silico</em> representation of Hi-C data</h2>
+<section id="processing-workflow" class="level3" data-number="1.2.1"><h3 data-number="1.2.1" class="anchored" data-anchor-id="processing-workflow">
+<span class="header-section-number">1.2.1</span> Processing workflow</h3>
+<p>XXX</p>
+</section><section id="pairs" class="level3" data-number="1.2.2"><h3 data-number="1.2.2" class="anchored" data-anchor-id="pairs">
+<span class="header-section-number">1.2.2</span> Pairs</h3>
+<p>XXX</p>
+</section><section id="binned-contact-matrices" class="level3" data-number="1.2.3"><h3 data-number="1.2.3" class="anchored" data-anchor-id="binned-contact-matrices">
+<span class="header-section-number">1.2.3</span> Binned contact matrices</h3>
+<p>XXX</p>
+<section id="hic-matrices" class="level4" data-number="1.2.3.1"><h4 data-number="1.2.3.1" class="anchored" data-anchor-id="hic-matrices">
+<span class="header-section-number">1.2.3.1</span> <code>.hic</code> matrices</h4>
+<p>XXX</p>
+</section><section id="mcool-matrices" class="level4" data-number="1.2.3.2"><h4 data-number="1.2.3.2" class="anchored" data-anchor-id="mcool-matrices">
+<span class="header-section-number">1.2.3.2</span> <code>.(m)cool</code> matrices</h4>
+<p>XXX</p>
+</section></section></section><section id="references" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-Dekker2002Feb" class="csl-entry" role="doc-biblioentry">
+Dekker, Job, Karsten Rippe, Martijn Dekker, and Nancy Kleckner. 2002. <span>“<span>Capturing Chromosome Conformation</span>.”</span> <em>Science</em> 295 (5558): 1306–11. <a href="https://doi.org/10.1126/science.1067799">https://doi.org/10.1126/science.1067799</a>.
+</div>
+<div id="ref-J.O.2017Jan" class="csl-entry" role="doc-biblioentry">
+J. O., Davies, Oudelaar A. M., Higgs D. R., and Hughes J. R. 2017. <span>“<span class="nocase">How best to identify chromosomal interactions: a comparison of approaches.</span>”</span> <em>Nat. Methods</em> 14 (2): 125–34. <a href="https://doi.org/10.1038/nmeth.4146">https://doi.org/10.1038/nmeth.4146</a>.
+</div>
+<div id="ref-Lieberman-Aiden2009Oct" class="csl-entry" role="doc-biblioentry">
+Lieberman-Aiden, Erez, Nynke L. van Berkum, Louise Williams, Maxim Imakaev, Tobias Ragoczy, Agnes Telling, Ido Amit, et al. 2009. <span>“<span class="nocase">Comprehensive mapping of long range interactions reveals folding principles of the human genome</span>.”</span> <em>Science (New York, N.Y.)</em> 326 (5950): 289. <a href="https://doi.org/10.1126/science.1181369">https://doi.org/10.1126/science.1181369</a>.
+</div>
+</div>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
@@ -350,10 +466,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./principles.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./data-representation.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Representation of genomic data in R</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

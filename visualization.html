@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 3&nbsp; Parsing and manipulating Hi-C data in R</title>
+<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 4&nbsp; Hi-C data visualization</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -27,8 +27,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./Chapter4.html" rel="next">
-<link href="./Chapter2.html" rel="prev">
+<link href="./arithmetics.html" rel="next">
+<link href="./parsing.html" rel="prev">
 <link href="./cover.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -63,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parsing and manipulating Hi-C data in R</span>
+<span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hi-C data visualization</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -88,12 +88,12 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Hi-C fundamentals</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Fundamentals concepts</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -101,22 +101,22 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Chapter1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span></a>
+  <a href="./principles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Chapter2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Representation of genomic data in R</span></a>
+  <a href="./data-representation.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Representation of genomic data in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Chapter3.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parsing and manipulating Hi-C data in R</span></a>
+  <a href="./parsing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parsing and manipulating Hi-C data in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Chapter4.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hi-C data visualization</span></a>
+  <a href="./visualization.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hi-C data visualization</span></a>
   </div>
 </li>
       </ul>
@@ -131,24 +131,24 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Chapter5.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Performing arithmetics on Hi-C matrices</span></a>
+  <a href="./arithmetics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Performing arithmetics on Hi-C matrices</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Chapter6.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Computing Hi-C specific metrics</span></a>
+  <a href="./metrics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Computing Hi-C specific metrics</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Chapter7.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span></a>
+  <a href="./topological-features.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span></a>
   </div>
 </li>
       </ul>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Extra topics</a>
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">Advanced Hi-C topics</a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -156,12 +156,12 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Chapter8.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflows</span></a>
+  <a href="./workflows.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflows</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Chapter9.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
+  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
       </ul>
@@ -172,15 +172,36 @@ ul.task-list li input[type="checkbox"] {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#file-formats-for-hi-c-data" id="toc-file-formats-for-hi-c-data" class="nav-link active" data-scroll-target="#file-formats-for-hi-c-data"><span class="toc-section-number">3.1</span>  File formats for Hi-C data</a></li>
-  <li><a href="#importing-hi-c-contact-matrices-in-r" id="toc-importing-hi-c-contact-matrices-in-r" class="nav-link" data-scroll-target="#importing-hi-c-contact-matrices-in-r"><span class="toc-section-number">3.2</span>  Importing Hi-C contact matrices in R</a></li>
-  <li><a href="#importing-hi-c-pairs-in-r" id="toc-importing-hi-c-pairs-in-r" class="nav-link" data-scroll-target="#importing-hi-c-pairs-in-r"><span class="toc-section-number">3.3</span>  Importing Hi-C pairs in R</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/Chapter3.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<li>
+<a href="#visualizing-hi-c-maps" id="toc-visualizing-hi-c-maps" class="nav-link active" data-scroll-target="#visualizing-hi-c-maps"><span class="toc-section-number">4.1</span>  Visualizing Hi-C maps</a>
+  <ul class="collapse">
+<li><a href="#single-maps" id="toc-single-maps" class="nav-link" data-scroll-target="#single-maps"><span class="toc-section-number">4.1.1</span>  Single maps</a></li>
+  <li><a href="#side-by-side-maps" id="toc-side-by-side-maps" class="nav-link" data-scroll-target="#side-by-side-maps"><span class="toc-section-number">4.1.2</span>  Side-by-side maps</a></li>
+  <li><a href="#horizontal-maps" id="toc-horizontal-maps" class="nav-link" data-scroll-target="#horizontal-maps"><span class="toc-section-number">4.1.3</span>  Horizontal maps</a></li>
+  <li><a href="#aggregated-hi-c-maps" id="toc-aggregated-hi-c-maps" class="nav-link" data-scroll-target="#aggregated-hi-c-maps"><span class="toc-section-number">4.1.4</span>  Aggregated Hi-C maps</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#hi-c-maps-customization-options" id="toc-hi-c-maps-customization-options" class="nav-link" data-scroll-target="#hi-c-maps-customization-options"><span class="toc-section-number">4.2</span>  Hi-C maps customization options</a>
+  <ul class="collapse">
+<li><a href="#choosing-scores" id="toc-choosing-scores" class="nav-link" data-scroll-target="#choosing-scores"><span class="toc-section-number">4.2.1</span>  Choosing scores</a></li>
+  <li><a href="#choosing-color-map" id="toc-choosing-color-map" class="nav-link" data-scroll-target="#choosing-color-map"><span class="toc-section-number">4.2.2</span>  Choosing color map</a></li>
+  <li><a href="#choosing-scale" id="toc-choosing-scale" class="nav-link" data-scroll-target="#choosing-scale"><span class="toc-section-number">4.2.3</span>  Choosing scale</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#extra-hi-c-map-visualization-tools" id="toc-extra-hi-c-map-visualization-tools" class="nav-link" data-scroll-target="#extra-hi-c-map-visualization-tools"><span class="toc-section-number">4.3</span>  Extra Hi-C map visualization tools</a>
+  <ul class="collapse">
+<li><a href="#saddle-plots" id="toc-saddle-plots" class="nav-link" data-scroll-target="#saddle-plots"><span class="toc-section-number">4.3.1</span>  Saddle plots</a></li>
+  <li><a href="#montages" id="toc-montages" class="nav-link" data-scroll-target="#montages"><span class="toc-section-number">4.3.2</span>  Montages</a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/visualization.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parsing and manipulating Hi-C data in R</span>
+<span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hi-C data visualization</span>
 </h1>
 </div>
 
@@ -197,44 +218,33 @@ ul.task-list li input[type="checkbox"] {
 </header><div class="cell">
 
 </div>
-<section id="file-formats-for-hi-c-data" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="file-formats-for-hi-c-data">
-<span class="header-section-number">3.1</span> File formats for Hi-C data</h2>
-<div class="callout-note callout callout-style-simple">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>The <code>bs4_book</code> style also includes an <code>.rmdnote</code> callout block like this one.</p>
-</div>
-</div>
-</div>
-</section><section id="importing-hi-c-contact-matrices-in-r" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="importing-hi-c-contact-matrices-in-r">
-<span class="header-section-number">3.2</span> Importing Hi-C contact matrices in R</h2>
-<div class="callout-tip callout callout-style-simple">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>The <code>bs4_book</code> style also includes an <code>.rmdnote</code> callout block like this one.</p>
-</div>
-</div>
-</div>
-</section><section id="importing-hi-c-pairs-in-r" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="importing-hi-c-pairs-in-r">
-<span class="header-section-number">3.3</span> Importing Hi-C pairs in R</h2>
-<div class="rmdcaution">
-<p>The <code>bs4_book</code> style also includes an <code>.rmdnote</code> callout block like this one.</p>
-</div>
-<div class="rmdtip">
-<p>The <code>bs4_book</code> style also includes an <code>.rmdnote</code> callout block like this one.</p>
-</div>
-<div class="rmdwarning">
-<p>The <code>bs4_book</code> style also includes an <code>.rmdnote</code> callout block like this one.</p>
-</div>
+<section id="visualizing-hi-c-maps" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="visualizing-hi-c-maps">
+<span class="header-section-number">4.1</span> Visualizing Hi-C maps</h2>
+<section id="single-maps" class="level3" data-number="4.1.1"><h3 data-number="4.1.1" class="anchored" data-anchor-id="single-maps">
+<span class="header-section-number">4.1.1</span> Single maps</h3>
+</section><section id="side-by-side-maps" class="level3" data-number="4.1.2"><h3 data-number="4.1.2" class="anchored" data-anchor-id="side-by-side-maps">
+<span class="header-section-number">4.1.2</span> Side-by-side maps</h3>
+</section><section id="horizontal-maps" class="level3" data-number="4.1.3"><h3 data-number="4.1.3" class="anchored" data-anchor-id="horizontal-maps">
+<span class="header-section-number">4.1.3</span> Horizontal maps</h3>
+</section><section id="aggregated-hi-c-maps" class="level3" data-number="4.1.4"><h3 data-number="4.1.4" class="anchored" data-anchor-id="aggregated-hi-c-maps">
+<span class="header-section-number">4.1.4</span> Aggregated Hi-C maps</h3>
+</section></section><section id="hi-c-maps-customization-options" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="hi-c-maps-customization-options">
+<span class="header-section-number">4.2</span> Hi-C maps customization options</h2>
+<section id="choosing-scores" class="level3" data-number="4.2.1"><h3 data-number="4.2.1" class="anchored" data-anchor-id="choosing-scores">
+<span class="header-section-number">4.2.1</span> Choosing scores</h3>
+</section><section id="choosing-color-map" class="level3" data-number="4.2.2"><h3 data-number="4.2.2" class="anchored" data-anchor-id="choosing-color-map">
+<span class="header-section-number">4.2.2</span> Choosing color map</h3>
+</section><section id="choosing-scale" class="level3" data-number="4.2.3"><h3 data-number="4.2.3" class="anchored" data-anchor-id="choosing-scale">
+<span class="header-section-number">4.2.3</span> Choosing scale</h3>
+</section></section><section id="extra-hi-c-map-visualization-tools" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="extra-hi-c-map-visualization-tools">
+<span class="header-section-number">4.3</span> Extra Hi-C map visualization tools</h2>
+<section id="saddle-plots" class="level3" data-number="4.3.1"><h3 data-number="4.3.1" class="anchored" data-anchor-id="saddle-plots">
+<span class="header-section-number">4.3.1</span> Saddle plots</h3>
+</section><section id="montages" class="level3" data-number="4.3.2"><h3 data-number="4.3.2" class="anchored" data-anchor-id="montages">
+<span class="header-section-number">4.3.2</span> Montages</h3>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -367,13 +377,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./Chapter2.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Representation of genomic data in R</span></span>
+      <a href="./parsing.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parsing and manipulating Hi-C data in R</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Chapter4.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hi-C data visualization</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./arithmetics.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Performing arithmetics on Hi-C matrices</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
