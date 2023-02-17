@@ -17,10 +17,13 @@ Depends:
     HiContacts, 
     HiContactsData
 Imports:
+    multiHiCcompare,
     cowplot, 
     rebook, 
     quarto, 
     sessioninfo
+Remotes:
+    TaoYang-dev/hicrep
 biocViews:
     HiC,
     DNA3DStructure

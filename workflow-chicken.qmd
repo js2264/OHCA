@@ -1,0 +1,15 @@
+# Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry
+
+```{r}
+#| echo: false
+source("_common.R")
+```
+
+::: {.callout-important}
+### Aims
+:::
+
+::: {.callout-important}
+### Datasets
+We leverage five chicken datasets in this notebook. They are provided by the 4DN consortium: 
+:::

@@ -29,7 +29,7 @@ install: ## Install OHCA package and dependencies.
 .PHONY: deps
 deps: ## Install missing OHCA dependencies
 	@echo "🔗 Installing missing dependencies"
-	$(RCMD) 'devtools::install_dev_deps(".")'
+	$(RCMD) 'devtools::install_dev_deps(".", dependencies = c("Depends", "Imports", "Remotes"))'
 
 .PHONY: git
 git: ## Automated commit and pushing to github rpeo

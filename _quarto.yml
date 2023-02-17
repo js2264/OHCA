@@ -32,7 +32,8 @@ book:
         - topological-features.qmd
     - part: "Advanced Hi-C topics"
       chapters:
-        - workflows.qmd
+        - workflow-yeast.qmd
+        - workflow-chicken.qmd
         - interoperability.qmd
 
 format:

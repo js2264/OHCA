@@ -1,0 +1,294 @@
+# Hi-C analysis workflow: Distance-dependent interactions across yeast mutants
+
+```{r}
+#| echo: false
+source("_common.R")
+```
+
+::: {.callout-important}
+### Aims
+- Compute P(s) of several samples and compare them 
+- Compute distance-adjusted correlation between Hi-C datasets with `HiCRep`
+- Perform differential interaction analysis between Hi-C datasets with `multiHiCcompare`
+:::
+
+::: {.callout-important}
+### Datasets
+We leverage seven yeast datasets in this notebook. They are all available from SRA: 
+- SRR8769554: WT yeast strain, G1 phase (rep1)
+- SRR10687276: WT yeast strain, G1 phase (rep12)
+- SRR8769549: WT yeast strain, G2/M phase (rep1)
+- SRR10687281: WT yeast strain, G2/M phase (rep12)
+- SRR8769551: *wpl1* mutant yeast strain, G2/M phase (rep1)
+- SRR10687278: *wpl1* mutant yeast strain, G2/M phase (rep2)
+- SRR8769555: *wpl1/eco1* mutant yeast strain, G2/M phase
+:::
+
+## Recovering data from SRA
+
+The easiest for this is to directly fetch files from SRA from their FTP server. We can do so using the base `download.file` function. 
+
+```{r eval = FALSE}
+dir.create('data')
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/004/SRR8769554/SRR8769554_1.fastq.gz", "data/WT_G1_WT_rep1_R1.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/004/SRR8769554/SRR8769554_2.fastq.gz", "data/WT_G1_WT_rep1_R2.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/076/SRR10687276/SRR10687276_1.fastq.gz", "data/WT_G1_WT_rep2_R1.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/076/SRR10687276/SRR10687276_2.fastq.gz", "data/WT_G1_WT_rep2_R2.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/009/SRR8769549/SRR8769549_1.fastq.gz", "data/WT_G2M_WT_rep1_R1.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/009/SRR8769549/SRR8769549_2.fastq.gz", "data/WT_G2M_WT_rep1_R2.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/081/SRR10687281/SRR10687281_1.fastq.gz", "data/WT_G2M_WT_rep2_R1.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/081/SRR10687281/SRR10687281_2.fastq.gz", "data/WT_G2M_WT_rep2_R2.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/001/SRR8769551/SRR8769551_1.fastq.gz", "data/wpl1_G2M_rep1_R1.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/001/SRR8769551/SRR8769551_2.fastq.gz", "data/wpl1_G2M_rep1_R2.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/078/SRR10687278/SRR10687278_1.fastq.gz", "data/wpl1_G2M_rep2_R1.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/078/SRR10687278/SRR10687278_2.fastq.gz", "data/wpl1_G2M_rep2_R2.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/005/SRR8769555/SRR8769555_1.fastq.gz", "data/wpl1eco1_G2M_R1.fastq.gz")
+download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/005/SRR8769555/SRR8769555_2.fastq.gz", "data/wpl1eco1_G2M_R2.fastq.gz")
+```
+
+## Processing reads with HiCool 
+
+We will map each pair of fastqs on the yeast genome reference (`R64-1-1`) using `HiCool`. 
+
+```{r eval = FALSE}
+library(HiCool)
+samples <- c(
+    'WT_G1_rep1', 
+    'WT_G1_rep2', 
+    'WT_G2M_rep1', 
+    'WT_G2M_rep2', 
+    'wpl1_G2M_rep1', 
+    'wpl1_G2M_rep2', 
+    'wpl1eco1_G2M' 
+)
+purrr::map(samples, ~ HiCool(
+    r1 = paste0('data/', .x, '_R1.fastq.gz'), 
+    r2 = paste0('data/', .x, '_R2.fastq.gz'), 
+    genome = 'R64-1-1', 
+    restriction = 'DpnII', 
+    iterative = FALSE, 
+    threads = 15, 
+    output = 'data/HiCool/', 
+    scratch = '/data/scratch/'
+))
+```
+
+Processed samples are put in `data/HiCool` directory. `CoolFile` objects are pointers to individual contact matrices. We can create such objects by using the `importHiCoolFolder` utility function.
+
+```{r eval = FALSE}
+cfs <- list(
+    WT_G1_rep1 = importHiCoolFolder('data/HiCool', 'GK8ISZ'), 
+    WT_G1_rep2 = importHiCoolFolder('data/HiCool', 'SWZTO0'), 
+    WT_G2M_rep1 = importHiCoolFolder('data/HiCool', '3KHHUE'), 
+    WT_G2M_rep2 = importHiCoolFolder('data/HiCool', 'UVNG7M'), 
+    wpl1_G2M_rep1 = importHiCoolFolder('data/HiCool', 'Q4KX6Z'), 
+    wpl1_G2M_rep2 = importHiCoolFolder('data/HiCool', '3N0L25'), 
+    wpl1eco1_G2M = importHiCoolFolder('data/HiCool', 'LHMXWE')
+)
+cfs
+```
+
+```{r eval = FALSE, echo = FALSE}
+library(HiCool)
+cfs <- list(
+    WT_G1_rep1 = importHiCoolFolder('../OHCA-data/HiCool', 'GK8ISZ'), 
+    WT_G1_rep2 = importHiCoolFolder('../OHCA-data/HiCool', 'SWZTO0'), 
+    WT_G2M_rep1 = importHiCoolFolder('../OHCA-data/HiCool', '3KHHUE'), 
+    WT_G2M_rep2 = importHiCoolFolder('../OHCA-data/HiCool', 'UVNG7M'), 
+    wpl1_G2M_rep1 = importHiCoolFolder('../OHCA-data/HiCool', 'Q4KX6Z'), 
+    wpl1_G2M_rep2 = importHiCoolFolder('../OHCA-data/HiCool', '3N0L25'), 
+    wpl1eco1_G2M = importHiCoolFolder('../OHCA-data/HiCool', 'LHMXWE')
+)
+cfs
+```
+
+Now that these pointers have been defined, Hi-C contact matrices can be seamlessly imported in R with `import`. 
+
+```{r eval = FALSE}
+library(purrr)
+library(HiCExperiment)
+hics <- map(cfs, import)
+hics
+```
+
+## Plotting chromosome-wide matrices of merged replicates
+
+We can merge replicates with the `merge` function, and `map` the `plotMatrix` function over the resulting list of `HiCExperiment`s.
+
+```{r eval = FALSE}
+chr <- 'X'
+merged_replicates <- list(
+    WT_G1 = merge(hics[[1]][chr], hics[[2]][chr]), 
+    WT_G2M = merge(hics[[3]][chr], hics[[4]][chr]), 
+    wpl1_G2M = merge(hics[[5]][chr], hics[[6]][chr]), 
+    wpl1eco1_G2M = hics[[7]][chr]
+)
+library(dplyr)
+library(ggplot2)
+maps <- imap(merged_replicates, ~ plotMatrix(
+    .x, use.scores = 'balanced', limits = c(-3.5, -1.5)
+) + ggtitle(.y))
+p_maps <- cowplot::plot_grid(plotlist = maps)
+p_maps
+```
+
+We can already note that long-range contacts seem to increase in frequency, in G2/M vs G1, in *wpl1* vs WT and in *wpl1/eco1* vs *wpl1*. 
+
+## Compute P(s) per replicate and plot it
+
+Still using the `map` function, we can compute average P(s) for each replicate.  
+Note that since matrices were imported after `HiCool` processing with the `importHiCoolFolder`, 
+the associated `.pairs` file has been automatically added to each `HiCExperiment` object. Computation of the P(s) 
+will take a bit more time, as millions of pairs have to be imported in memory, but it will be accurate at the base resolution, rather than bin resolution from matrices. 
+
+The computed P(s) is stored for each sample as a `tibble`. 
+
+```{r eval = FALSE}
+pairsFile(hics[[1]])
+ps <- imap(hics, ~ distanceLaw(.x) |> mutate(sample = .y))
+ps[[1]]
+```
+
+We can bind all `tibbles` together and plot P(s) and their slope for each sample. 
+
+```{r eval = FALSE}
+df <- bind_rows(ps)
+p_ps <- plotPs(df, aes(x = binned_distance, y = norm_p, group = sample, color = sample))
+p_slope <- plotPsSlope(df, aes(x = binned_distance, y = slope, group = sample, color = sample))
+p_ps
+p_slope
+```
+
+## Correlation between replicates with `hicrep` 
+
+`hicrep` is a popular package to compute stratum-adjusted correlations between Hi-C datasets. 
+"Stratum" refers to the distance from the main diagonal: with increase distance from the main diagonal, 
+interactions of the DNA polymer are bound to decrease. `hicrep` computes a "per-stratum" correlation score and 
+computes a weighted average correlation for entire chromosomes. 
+
+We can check the documentation for `hicrep` main function, `get.scc`. This tells us that 
+`mat1` and `mat2` n*n intrachromosomal contact maps should be provided. Fortunately, 
+`HiCExperiment` objects can easily be coerced into actual dense matrices. Make sure to use the `count` scores, which are required by `hicrep`. 
+
+```{r eval = FALSE}
+hicrep::get.scc(
+    hics[['WT_G2M_rep1']]["IV"] |> interactions() |> gi2cm('count') |> cm2matrix(), 
+    hics[['WT_G2M_rep2']]["IV"] |> interactions() |> gi2cm('count') |> cm2matrix(), 
+    resol = 1000, h = 2, lbr = 5000, ubr = 50000
+)
+```
+
+This can be generalized to all pairwise combinations of Hi-C datasets. 
+
+```{r eval = FALSE}
+library(purrr)
+library(dplyr)
+library(ggplot2)
+mats <- map(hics, ~ .x["IV"] |> interactions() |> gi2cm('count') |> cm2matrix())
+df <- lapply(1:7, function(i) {
+    lapply(1:7, function(j) {
+        data.frame(
+            i = names(hce)[i], 
+            j = names(hce)[j], 
+            scc = hicrep::get.scc(mats[[i]], mats[[j]], resol = 1000, h = 2, lbr = 5000, ubr = 200000)$scc
+        ) |>
+            mutate(i = factor(i, names(cfs))) |>
+            mutate(j = factor(j, names(cfs)))
+    }) |> bind_rows()
+}) |> bind_rows()
+p_corr_IV <- ggplot(df, aes(x = i, y = j, fill = scc)) + 
+    geom_tile() + 
+    scale_x_discrete(guide = guide_axis(angle = 90)) + 
+    theme_bw() + 
+    coord_fixed(ratio = 1) + 
+    scale_fill_gradientn(colours = bgrColors())
+p_corr_IV
+```
+
+We can iterate over an extra level, to compute stratum-corrected correlation for all chromosomes. 
+Here, we will only compute correlation scores between any sample and `WT_G2M_rep1` sample. 
+
+```{r eval = FALSE}
+# Some chrs will be ignored as they are too small for this analysis 
+chrs <- c('II', 'IV', 'V', 'VII', 'VIII', 'IX', 'X', 'XI', 'XIII', 'XIV', 'XVI')
+df <- BiocParallel::bplapply(chrs, function(CHR) {
+    mats <- map(hics, ~ .x[CHR] |> interactions() |> gi2cm('count') |> cm2matrix())
+
+        lapply(c(1, 2, 4, 5, 6, 7), function(j) {
+            data.frame(
+                chr = CHR,
+                i = "WT_G2M_rep1", 
+                j = names(mats)[j], 
+                dist = seq(5000, 200000, 1000),
+                scc = hicrep::get.scc(mats[["WT_G2M_rep1"]], mats[[j]], resol = 1000, h = 2, lbr = 5000, ubr = 200000) 
+            ) |> mutate(j = factor(j, names(mats)))
+        }) |> bind_rows()
+
+}, BPPARAM = BiocParallel::SerialParam(progressbar = TRUE)) |> bind_rows()
+```
+
+A tiny bit of data wrangling will allow us to plot the mean+/-CI of stratum-adjusted correlations. 
+
+```{r eval = FALSE}
+df2 <- group_by(df, j, dist) |> 
+    summarize(
+        mean = Rmisc::CI(scc.corr, ci = 0.90)[2], 
+        CI_up = Rmisc::CI(scc.corr, ci = 0.90)[1], 
+        CI_down = Rmisc::CI(scc.corr, ci = 0.90)[3]
+    )
+
+p_distances <- ggplot(df2, aes(x = dist, y = mean, ymax = CI_up, ymin = CI_down)) + 
+    geom_line(aes(col = j)) + 
+    geom_ribbon(aes(fill = j), alpha = 0.2, col = NA) + 
+    theme_bw() + 
+    labs(x = "Stratum (genomic distance)", y = 'Stratum-corrected correlation')
+p_distances
+```
+
+## Differential interaction (DI) analysis with `multiHiCcompare`
+
+We will focus on the chr. `XI` and identify differentially interacting (DI) loci 
+between WT and *wpl1* mutant in G2/M. 
+
+```{r eval = FALSE}
+hce_list <- map(hce, ~ zoom(.x['XI'], 2000))
+hic_table <- map(hce_list, ~ interactions(.x) |>
+    as.data.frame() |> 
+    dplyr::select(start1, start2, count) |> 
+    dplyr::mutate(start1 = start1, start2 = start2, chr = 1) |> 
+    dplyr::relocate(chr)
+)
+mhicc <- multiHiCcompare::make_hicexp(data_list = hic_table[c(3, 4, 5, 6)], groups = factor(c(1, 1, 2, 2)), A.min = 1) |> 
+    multiHiCcompare::cyclic_loess(span = 0.2) |> 
+    multiHiCcompare::hic_exactTest()
+df <- cbind(mhicc@hic_table, multiHiCcompare::results(mhicc)[,c(5, 7, 8)]) |> 
+    as_tibble() |> 
+    mutate(dist = D*resolution(hce[[1]])) |> 
+    mutate(group = case_when(
+        region1 < 430000 & region2 > 450000 ~ 'inter_arms',
+        region1 >= 430000 & region2 <= 450000 ~ 'at_centro',
+        TRUE ~ 'arms'
+    )) |> filter(group %in% c('arms', 'inter_arms')) |> 
+    mutate(sign = p.value <= 0.05 & abs(logFC) >= 1)
+# p1 <- filter(df, abs(logFC) >= 1, p.adj <= 0.05) |> 
+#     ggplot(aes(x = dist, y = logFC, col = group)) + 
+#     geom_point() + 
+#     theme_bw()
+p1 <- ggplot(df, aes(x = logFC, y = -log10(p.value), col = sign)) + 
+    geom_point(size = 0.2) + 
+    theme_bw() + 
+    facet_wrap(~group) + 
+    ylim(c(0, 6)) + 
+    theme(legend.position = 'none') + 
+    scale_color_manual(values = c('grey', 'black'))
+gis <- dplyr::rename(df, seqnames1 = chr, start1 = region1, start2 = region2) |> 
+    mutate(seqnames2 = seqnames1, end1 = start1 + resolution(hce[[1]])-1, end2 = start2 + resolution(hce[[1]])-1) |> 
+    filter(abs(logFC) >= 1) |>
+    df2gi() 
+p2 <- plotMatrix(gis, 'logFC', scale = 'linear', limits = c(-2, 2), cmap = bgrColors(), rasterize = FALSE)
+p_hiccompare <- cowplot::plot_grid(p1, p2)
+ggsave('figures/yeast/plot_yeasts-logFC-vs-distance_XI.pdf', width = 12, height = 4)
+```
+
+
+
