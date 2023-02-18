@@ -2,42 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://github.com/js2264.OHCA/index.html</loc>
-    <lastmod>2023-02-15T22:14:32.527Z</lastmod>
+    <lastmod>2023-02-18T16:37:23.690Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/js2264.OHCA/principles.html</loc>
-    <lastmod>2023-02-15T22:14:32.527Z</lastmod>
+    <lastmod>2023-02-18T16:37:23.690Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/js2264.OHCA/data-representation.html</loc>
-    <lastmod>2023-02-15T22:14:32.527Z</lastmod>
+    <lastmod>2023-02-18T16:37:23.690Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/js2264.OHCA/parsing.html</loc>
-    <lastmod>2023-02-15T22:14:32.527Z</lastmod>
+    <lastmod>2023-02-18T16:37:23.694Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/js2264.OHCA/visualization.html</loc>
-    <lastmod>2023-02-15T22:14:32.531Z</lastmod>
+    <lastmod>2023-02-18T16:37:23.694Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/js2264.OHCA/arithmetics.html</loc>
-    <lastmod>2023-02-15T22:14:32.531Z</lastmod>
+    <loc>https://github.com/js2264.OHCA/matrix-centric.html</loc>
+    <lastmod>2023-02-18T16:37:23.694Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/js2264.OHCA/metrics.html</loc>
-    <lastmod>2023-02-15T22:14:32.535Z</lastmod>
+    <loc>https://github.com/js2264.OHCA/interactions-centric.html</loc>
+    <lastmod>2023-02-18T16:37:23.698Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/js2264.OHCA/topological-features.html</loc>
-    <lastmod>2023-02-15T22:14:32.535Z</lastmod>
+    <lastmod>2023-02-18T16:37:23.698Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/js2264.OHCA/workflows.html</loc>
-    <lastmod>2023-02-15T22:14:32.535Z</lastmod>
+    <loc>https://github.com/js2264.OHCA/workflow-yeast.html</loc>
+    <lastmod>2023-02-18T16:37:23.702Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/js2264.OHCA/workflow-chicken.html</loc>
+    <lastmod>2023-02-18T16:37:23.702Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/js2264.OHCA/interoperability.html</loc>
-    <lastmod>2023-02-15T22:14:32.535Z</lastmod>
+    <lastmod>2023-02-18T16:37:23.702Z</lastmod>
   </url>
 </urlset>

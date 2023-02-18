@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 5&nbsp; Performing arithmetics on Hi-C matrices</title>
+<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 5&nbsp; Contact matrix-centric analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -90,7 +90,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./metrics.html" rel="next">
+<link href="./interactions-centric.html" rel="next">
 <link href="./visualization.html" rel="prev">
 <link href="./cover.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -126,7 +126,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Performing arithmetics on Hi-C matrices</span>
+<span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Contact matrix-centric analysis</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -194,12 +194,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./arithmetics.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Performing arithmetics on Hi-C matrices</span></a>
+  <a href="./matrix-centric.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Contact matrix-centric analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./metrics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Computing Hi-C specific metrics</span></a>
+  <a href="./interactions-centric.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -219,12 +219,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflows.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflows</span></a>
+  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
+  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
       </ul>
@@ -242,12 +247,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#playing-with-mammalian-data" id="toc-playing-with-mammalian-data" class="nav-link" data-scroll-target="#playing-with-mammalian-data"><span class="toc-section-number">5.1.2</span>  Playing with mammalian data</a></li>
   </ul>
 </li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/arithmetics.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/matrix-centric.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Performing arithmetics on Hi-C matrices</span>
+<span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Contact matrix-centric analysis</span>
 </h1>
 </div>
 
@@ -270,7 +275,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="yeast-data" class="level3" data-number="5.1.1"><h3 data-number="5.1.1" class="anchored" data-anchor-id="yeast-data">
 <span class="header-section-number">5.1.1</span> Yeast data</h3>
 <p>We will start by importing a WT <code>.mcool</code> file in R and perform normalization on the imported matrix.</p>
-<div class="cell" data-hash="arithmetics_cache/html/yeast_norm_c534ff9b0b7a926e55e58c298a299050">
+<div class="cell" data-hash="matrix-centric_cache/html/yeast_norm_3f9c1c91a038132cfda84ea7ce75e633">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -356,7 +361,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">mcf</span>, resolution <span class="op">=</span> <span class="fl">1000</span>, pairsFile <span class="op">=</span> <span class="va">pf</span><span class="op">)</span></span>
 <span><span class="va">wt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
-<span><span class="va">contacts</span> <span class="op">&lt;-</span> <span class="va">wt</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'II'</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span> <span class="fu">normalize</span><span class="op">(</span>niters <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">contacts</span> <span class="op">&lt;-</span> <span class="fu">normalize</span><span class="op">(</span><span class="va">wt</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'II'</span><span class="op">)</span><span class="op">]</span>, niters <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>##  
   |                                                        
@@ -564,16 +569,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">contacts</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##  `HiCExperiment` object with 471,364 contacts over 814 regions 
+<pre><code>##  `HiCExperiment` object with 44,705,061 contacts over 814 regions 
 ##  -------
-##  fileName: "/root/.cache/R/ExperimentHub/707dd3f9c6_7752" 
+##  fileName: "/root/.cache/R/ExperimentHub/7032e0fd78_7752" 
 ##  focus: "II" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 1000 
 ##  interactions: 74360 
 ##  scores(3): count balanced ICE 
 ##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) 
-##  pairsFile: /root/.cache/R/ExperimentHub/f130a86bb7_7753 
+##  pairsFile: /root/.cache/R/ExperimentHub/f11d6261d1_7753 
 ##  metadata(0):</code></pre>
 </div>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span></span>
@@ -581,11 +586,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">contacts</span>, use.scores <span class="op">=</span> <span class="st">'ICE'</span>, scale <span class="op">=</span> <span class="st">'log10'</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="arithmetics_files/figure-html/yeast_norm-1.png" class="img-fluid" width="672"></p>
+<p><img src="matrix-centric_files/figure-html/yeast_norm-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>We can do the same for a Hi-C dataset generated in a eco1 mutant.</p>
-<div class="cell" data-hash="arithmetics_cache/html/yeast_merge_2eafddbeaf0ccb92bd1a01626202362f">
+<div class="cell" data-hash="matrix-centric_cache/html/yeast_merge_a1bb3a02fd63761dd44469dd420e77c0">
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mcf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_eco1'</span>, <span class="st">'mcool'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>##  snapshotDate(): 2023-02-14</code></pre>
@@ -622,16 +627,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="va">eco1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
 <span><span class="va">eco1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##  `HiCExperiment` object with 19,136,736 contacts over 12,079 regions 
+<pre><code>##  `HiCExperiment` object with 29,294,379,703 contacts over 12,079 regions 
 ##  -------
-##  fileName: "/root/.cache/R/ExperimentHub/f127e9de2_7754" 
+##  fileName: "/root/.cache/R/ExperimentHub/f15e124542_7754" 
 ##  focus: "whole genome" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 1000 
 ##  interactions: 6474816 
 ##  scores(2): count balanced 
 ##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) 
-##  pairsFile: /root/.cache/R/ExperimentHub/f169ff97ec_7755 
+##  pairsFile: /root/.cache/R/ExperimentHub/f165df61ab_7755 
 ##  metadata(0):</code></pre>
 </div>
 </div>
@@ -647,7 +652,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <code>despeckle</code> to remove background noise by applying a smoothing kernel</li>
 </ol>
 <p>Them we can proceed to divide the contact matrix of the WT sample by the eco1 sample and plot each <code>HiCExperiment</code> matrix.</p>
-<div class="cell" data-hash="arithmetics_cache/html/yeast_divide_7694217e65ce4aed20bfa9f3bde06776">
+<div class="cell" data-hash="matrix-centric_cache/html/yeast_divide_9676edf6d6bd74825a9fed86a82c8a6d">
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">wt_II</span> <span class="op">&lt;-</span> <span class="va">wt</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">refocus</a></span><span class="op">(</span><span class="st">'II'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="fl">2000</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -661,7 +666,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="va">div_contacts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/arithmetics.html">divide</a></span><span class="op">(</span><span class="va">wt_II</span>, by <span class="op">=</span> <span class="va">eco1_II</span><span class="op">)</span> </span>
 <span><span class="va">div_contacts</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>##  `HiCExperiment` object with 0 contacts over 407 regions 
+<pre><code>##  `HiCExperiment` object with 20,865,259 contacts over 407 regions 
 ##  -------
 ##  fileName: N/A 
 ##  focus: "II" 
@@ -681,12 +686,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="op">)</span></span>
 <span><span class="va">p_div</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="arithmetics_files/figure-html/yeast_divide-1.png" class="img-fluid" width="672"></p>
+<p><img src="matrix-centric_files/figure-html/yeast_divide-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Focusing on a narrower genomic region, it may be relevant to point out specific topological features, such as focal loops (“dots” in the contact matrices) or domain borders. We can do this by providing relevant arguments to the plotting function.</p>
 <p>We can also <code>aggregate</code> Hi-C maps over a list of genomic coordinates, either on-diagonal (e.g.&nbsp;for border aggregated plots) or off-diagonal (e.g.&nbsp;for loop aggregated plots).</p>
-<div class="cell" data-hash="arithmetics_cache/html/yeast_detrend_41934e93dc98e66d41000e745f360af9">
+<div class="cell" data-hash="matrix-centric_cache/html/yeast_detrend_31fff2764e4ab47bd9e95a44c8c6f1a9">
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rtracklayer</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>##  Loading required package: GenomicRanges</code></pre>
@@ -832,7 +837,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>##  `AggrHiCExperiment` object over 810 targets 
 ##  -------
-##  fileName: "/root/.cache/R/ExperimentHub/707dd3f9c6_7752" 
+##  fileName: "/root/.cache/R/ExperimentHub/7032e0fd78_7752" 
 ##  focus: 810 targets 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 1000 
@@ -840,7 +845,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  scores(4): count balanced expected detrended 
 ##  slices(4): count balanced expected detrended 
 ##  topologicalFeatures: targets(810) compartments(0) borders(814) loops(162) viewpoints(0) 
-##  pairsFile: /root/.cache/R/ExperimentHub/f130a86bb7_7753 
+##  pairsFile: /root/.cache/R/ExperimentHub/f11d6261d1_7753 
 ##  metadata(0):</code></pre>
 </div>
 <div class="sourceCode" id="cb83"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span></span>
@@ -873,14 +878,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="arithmetics_files/figure-html/yeast_detrend-1.png" class="img-fluid" width="672"></p>
+<p><img src="matrix-centric_files/figure-html/yeast_detrend-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section><section id="playing-with-mammalian-data" class="level3" data-number="5.1.2"><h3 data-number="5.1.2" class="anchored" data-anchor-id="playing-with-mammalian-data">
 <span class="header-section-number">5.1.2</span> Playing with mammalian data</h3>
 <p>The same operations (i.e.&nbsp;detrending, despeckling, ,,,) are also possible on larger genomes. On top of that, it is sometimes useful to <code>autocorrelate</code> the Hi-C matrix to highlight the compartments “plaid” pattern.</p>
 <p>Here, the <code>maxDistance</code> argument can be used to plot triangular horizontal matrices rather than square matrices.</p>
-<div class="cell" data-hash="arithmetics_cache/html/NPCs_572ba3029f11b465fdbed0fec2e9ba6a">
+<div class="cell" data-hash="matrix-centric_cache/html/NPCs_a39963ae50309b39f6371992548eabfa">
 <div class="sourceCode" id="cb84"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/fourDNData">fourDNData</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://wilkelab.org/cowplot/">cowplot</a></span><span class="op">)</span></span>
 <span><span class="co">## G0G1 neural progenitors cells  (FACS sorted, Sox1-GFP+), Bonev et al. 2017</span></span>
@@ -902,7 +907,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="va">p_mammals_1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Finally, <code>subsample</code>ing interactions from a Hi-C experiment can easily be performed, and this is done proportionally with the distance-dependent interaction frequency. Furthermore, if a Hi-C experiment has been binned to a small resolution, it can be <code>coarsen</code>ed to any larger resolution.</p>
-<div class="cell" data-hash="arithmetics_cache/html/subsample_53d9a29b72d8aad3ba0a093604cb3a52">
+<div class="cell" data-hash="matrix-centric_cache/html/subsample_ff560506797976044fcc79933cfde08c">
 <div class="sourceCode" id="cb85"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sub_npcs_0.5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/arithmetics.html">subsample</a></span><span class="op">(</span><span class="va">npcs_narrow</span>, <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="va">sub_npcs_0.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/arithmetics.html">subsample</a></span><span class="op">(</span><span class="va">npcs_narrow</span>, <span class="fl">0.1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/arithmetics.html">detrend</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -1059,8 +1064,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./metrics.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Computing Hi-C specific metrics</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./interactions-centric.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

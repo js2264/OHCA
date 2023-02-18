@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 8&nbsp; Hi-C analysis workflows</title>
+<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 9&nbsp; Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -28,7 +28,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./interoperability.html" rel="next">
-<link href="./topological-features.html" rel="prev">
+<link href="./workflow-yeast.html" rel="prev">
 <link href="./cover.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -63,7 +63,7 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflows</span>
+<span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -131,12 +131,12 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./arithmetics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Performing arithmetics on Hi-C matrices</span></a>
+  <a href="./matrix-centric.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Contact matrix-centric analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./metrics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Computing Hi-C specific metrics</span></a>
+  <a href="./interactions-centric.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -156,12 +156,17 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflows.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflows</span></a>
+  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
+  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
       </ul>
@@ -169,17 +174,12 @@ ul.task-list li input[type="checkbox"] {
     </ul>
 </div>
 </nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-<li><a href="#changes-in-distance-dependent-interactions-across-yeast-mutants" id="toc-changes-in-distance-dependent-interactions-across-yeast-mutants" class="nav-link active" data-scroll-target="#changes-in-distance-dependent-interactions-across-yeast-mutants"><span class="toc-section-number">8.1</span>  Changes in distance-dependent interactions across yeast mutants</a></li>
-  <li><a href="#changes-in-chromosome-compartment-cohesion-upon-mitosis-entry" id="toc-changes-in-chromosome-compartment-cohesion-upon-mitosis-entry" class="nav-link" data-scroll-target="#changes-in-chromosome-compartment-cohesion-upon-mitosis-entry"><span class="toc-section-number">8.2</span>  Changes in chromosome compartment cohesion upon mitosis entry</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/workflows.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflows</span>
+<span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span>
 </h1>
 </div>
 
@@ -196,13 +196,36 @@ ul.task-list li input[type="checkbox"] {
 </header><div class="cell">
 
 </div>
-<section id="changes-in-distance-dependent-interactions-across-yeast-mutants" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="changes-in-distance-dependent-interactions-across-yeast-mutants">
-<span class="header-section-number">8.1</span> Changes in distance-dependent interactions across yeast mutants</h2>
-</section><section id="changes-in-chromosome-compartment-cohesion-upon-mitosis-entry" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="changes-in-chromosome-compartment-cohesion-upon-mitosis-entry">
-<span class="header-section-number">8.2</span> Changes in chromosome compartment cohesion upon mitosis entry</h2>
+<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Aims
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Datasets
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We leverage five chicken datasets in this notebook. They are provided by the 4DN consortium:</p>
+</div>
+</div>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+
+</main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -335,13 +358,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./topological-features.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span></span>
+      <a href="./workflow-yeast.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./interoperability.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 6&nbsp; Computing Hi-C specific metrics</title>
+<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 6&nbsp; Interactions-centric analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -91,7 +91,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./topological-features.html" rel="next">
-<link href="./arithmetics.html" rel="prev">
+<link href="./matrix-centric.html" rel="prev">
 <link href="./cover.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -126,7 +126,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Computing Hi-C specific metrics</span>
+<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -194,12 +194,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./arithmetics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Performing arithmetics on Hi-C matrices</span></a>
+  <a href="./matrix-centric.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Contact matrix-centric analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./metrics.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Computing Hi-C specific metrics</span></a>
+  <a href="./interactions-centric.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -219,12 +219,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflows.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflows</span></a>
+  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
+  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
       </ul>
@@ -239,12 +244,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#scalograms" id="toc-scalograms" class="nav-link" data-scroll-target="#scalograms"><span class="toc-section-number">6.2</span>  Scalograms</a></li>
   <li><a href="#cistrans-ratios" id="toc-cistrans-ratios" class="nav-link" data-scroll-target="#cistrans-ratios"><span class="toc-section-number">6.3</span>  Cis/trans ratios</a></li>
   <li><a href="#virtual-4c-profiles" id="toc-virtual-4c-profiles" class="nav-link" data-scroll-target="#virtual-4c-profiles"><span class="toc-section-number">6.4</span>  Virtual 4C profiles</a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/metrics.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/interactions-centric.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Computing Hi-C specific metrics</span>
+<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span>
 </h1>
 </div>
 
@@ -264,7 +269,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>To illustrate advanced Hi-C analysis, we will use a Hi-C map generated in a yeast mutant, which contains segments of <code>Mycoides mycoides</code> chromosome translocated within the chromosome XVI.</p>
 <section id="distance-laws" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="distance-laws">
 <span class="header-section-number">6.1</span> Distance law(s)</h2>
-<div class="cell" data-hash="metrics_cache/html/import_40fd8e07d01d42df8848d20bd7185f39">
+<div class="cell" data-hash="interactions-centric_cache/html/import_a298a0fac6b2538dfd3b00eda69564b5">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContacts">HiContacts</a></span><span class="op">)</span></span>
@@ -281,7 +286,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="va">synthChr_zoomed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">synthChr_cf</span>, focus <span class="op">=</span> <span class="st">'chrXVI-Mmmyco_inv870kb'</span>, resolution <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can compute a P(s) per chromosome for this sample using the <code>distanceLaw</code> function.</p>
-<div class="cell" data-hash="metrics_cache/html/ps_43cbc99e9f49a3e917a2947c4de9aa36">
+<div class="cell" data-hash="interactions-centric_cache/html/ps_c5b4758c96f9d7f58dea4197d0528fec">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">### ----- Distance law</span></span>
 <span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/Ps.html">distanceLaw</a></span><span class="op">(</span><span class="va">synthChr</span>, by_chr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
 <span>    <span class="fu">mutate</span><span class="op">(</span>type <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span><span class="va">chr</span> <span class="op">==</span> <span class="st">'chrXVI-Mmmyco_inv870kb'</span> <span class="op">~</span> <span class="st">'XVI-Myco'</span>, <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">'WT'</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -297,7 +302,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section><section id="scalograms" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="scalograms">
 <span class="header-section-number">6.2</span> Scalograms</h2>
-<div class="cell" data-hash="metrics_cache/html/unnamed-chunk-2_81c4e8f603835947231179fc77916580">
+<div class="cell" data-hash="interactions-centric_cache/html/unnamed-chunk-2_f8e3c600cfd4393ad40f15f8ba87ed0c">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">### ----- scalograms</span></span>
 <span><span class="va">scalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/scalogram.html">scalogram</a></span><span class="op">(</span><span class="va">synthChr</span><span class="op">)</span> </span>
 <span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">synthChr</span><span class="op">[</span><span class="st">'chrXVI-Mmmyco_inv870kb'</span><span class="op">]</span>, use.scores <span class="op">=</span> <span class="st">'autocorrelated'</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.8</span>, <span class="fl">0.8</span><span class="op">)</span>, scale <span class="op">=</span> <span class="st">'linear'</span>, cmap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/palettes.html">bwrColors</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -308,7 +313,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section><section id="cistrans-ratios" class="level2" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="cistrans-ratios">
 <span class="header-section-number">6.3</span> Cis/trans ratios</h2>
-<div class="cell" data-hash="metrics_cache/html/unnamed-chunk-3_89a110dd1ce49b125c21d2eda44b6063">
+<div class="cell" data-hash="interactions-centric_cache/html/unnamed-chunk-3_28139994fa42fcf8bb599ce4bb642cc4">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">### ----- cis/trans ratios</span></span>
 <span><span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/cisTransRatio.html">cisTransRatio</a></span><span class="op">(</span><span class="va">synthChr</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">chr</span> <span class="op">!=</span> <span class="st">'chrXII'</span><span class="op">)</span></span>
 <span><span class="va">p7</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">ct</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">chr</span>, y <span class="op">=</span> <span class="va">trans_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -320,7 +325,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section><section id="virtual-4c-profiles" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="virtual-4c-profiles">
 <span class="header-section-number">6.4</span> Virtual 4C profiles</h2>
 <p>Using the mammalian NPCs dataset as an example, we can also generate virtual 4C profiles.</p>
-<div class="cell" data-hash="metrics_cache/html/NPCs_v4c_d55274e2e4a4d4e7feb86d5c52918b46">
+<div class="cell" data-hash="interactions-centric_cache/html/NPCs_v4c_68f0a33cad0d9d8d6a0eee67cb0d7890">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">### ----- virtual 4c (NPCs)</span></span>
 <span><span class="va">v4C_loop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/virtual4C.html">virtual4C</a></span><span class="op">(</span><span class="va">npcs_narrow</span>, viewpoint <span class="op">=</span> <span class="fu">GRanges</span><span class="op">(</span><span class="st">'chr3:100965000-100975000'</span><span class="op">)</span>, use.scores <span class="op">=</span> <span class="st">'balanced'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu">plyranges</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span></span>
@@ -479,8 +484,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./arithmetics.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Performing arithmetics on Hi-C matrices</span></span>
+      <a href="./matrix-centric.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Contact matrix-centric analysis</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
