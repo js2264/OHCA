@@ -27,8 +27,8 @@ book:
         - visualization.qmd
     - part: "In-depth Hi-C analysis"
       chapters:
-        - arithmetics.qmd
-        - metrics.qmd
+        - matrix-centric.qmd
+        - interactions-centric.qmd
         - topological-features.qmd
     - part: "Advanced Hi-C topics"
       chapters:

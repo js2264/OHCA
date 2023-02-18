@@ -16,20 +16,21 @@ render-serve: ## Test rendering locally
 	$(RCMD) 'servr::httd("docs", port = 4444)'
 
 .PHONY: install
-install: ## Install OHCA package and dependencies.
-	@echo "🚀 Installing package"
-	$(RCMD) 'BiocManager::install("js2264/HiCExperiment", dependencies = TRUE)'
-	$(RCMD) 'BiocManager::install("js2264/HiContacts", dependencies = TRUE)'
-	$(RCMD) 'BiocManager::install("js2264/HiContactsData", dependencies = TRUE)'
-	$(RCMD) 'BiocManager::install("js2264/HiCool", dependencies = TRUE)'
-	$(RCMD) 'BiocManager::install("js2264/fourDNData", dependencies = TRUE)'
-	$(RCMD) 'BiocManager::install("js2264/DNAZooData", dependencies = TRUE)'
-	$(RCMD) 'devtools::install()'
+install: ## Install OHCA package and dependencies with pak.
+	@echo "🚀 Installing OHCA package"
+	$(RCMD) 'install.packages("pak", repos = "https://r-lib.github.io/p/pak/devel/")'
+	$(RCMD) 'pak::pkg_install("js2264/HiCExperiment", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("js2264/HiCool", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("js2264/HiContacts", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("js2264/HiContactsData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("js2264/fourDNData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("js2264/DNAZooData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install(".", ask = FALSE)'
 
 .PHONY: deps
 deps: ## Install missing OHCA dependencies
-	@echo "🔗 Installing missing dependencies"
-	$(RCMD) 'devtools::install_dev_deps(".", dependencies = c("Depends", "Imports", "Remotes"))'
+	@echo "🔗 Installing missing OHCA dependencies"
+	$(RCMD) 'devtools::install_dev_deps(".", dependencies = c("Depends", "Imports"))'
 
 .PHONY: git
 git: ## Automated commit and pushing to github rpeo

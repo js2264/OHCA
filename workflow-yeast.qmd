@@ -227,7 +227,7 @@ df <- BiocParallel::bplapply(chrs, function(CHR) {
 }, BPPARAM = BiocParallel::SerialParam(progressbar = TRUE)) |> bind_rows()
 ```
 
-A tiny bit of data wrangling will allow us to plot the mean+/-CI of stratum-adjusted correlations. 
+A tiny bit of data wrangling will allow us to plot the mean +/- confidence interval (90%) of stratum-adjusted correlations across the different chromosomes. 
 
 ```{r eval = FALSE}
 df2 <- group_by(df, j, dist) |> 

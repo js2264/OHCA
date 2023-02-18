@@ -1,4 +1,4 @@
-# Computing Hi-C specific metrics
+# Interactions-centric analysis
 
 ```{r}
 #| echo: false

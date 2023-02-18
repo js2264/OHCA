@@ -30,12 +30,13 @@ This book is divided in three parts:
 
 **Part II: In-depth Hi-C analysis**
 
-- [Chapter 5: Performing Hi-C arithmetics](arithmetics.qmd)
-- [Chapter 6: Computing Hi-C important metrics](metrics.qmd)
+- [Chapter 5: Matrix-centric analysis](matrix-centric.qmd)
+- [Chapter 6: Interactions-centric analysis](interactions-centric.qmd)
 - [Chapter 7: Finding topological features from a Hi-C contact matrix](topological-features.qmd)
 
 
 **Part III: Advanced Hi-C topics**
 
-- [Chapter 8: Hi-C analysis worflows](workflows.qmd)
-- [Chapter 9: Hi-C interoperability notebooks](interoperability.qmd)
+- [Chapter 8: Hi-C workflow: Distance-dependent interactions across yeast mutants](workflow-yeast.qmd)
+- [Chapter 9: Hi-C workflow: Chromosome compartment cohesion upon mitosis entry](workflow-chicken.qmd)
+- [Chapter 10: Hi-C interoperability notebook](interoperability.qmd)

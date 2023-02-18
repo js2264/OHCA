@@ -14,6 +14,5 @@ LABEL org.opencontainers.image.version ${VERSION}
 COPY . /opt/OHCA
 WORKDIR /opt/OHCA
 
-RUN make deps
 RUN make install
 RUN make render

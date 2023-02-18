@@ -14,16 +14,20 @@ URL: https://github.com/js2264/OHCA
 BugReports: https://github.com/js2264/OHCA/issues
 Depends:
     HiCExperiment,
-    HiContacts, 
-    HiContactsData
+    HiCool,
+    HiContacts,
+    HiContactsData,
+    DNAZooData,
+    fourDNData
 Imports:
+    hicrep,
     multiHiCcompare,
-    cowplot, 
-    rebook, 
-    quarto, 
+    cowplot,
+    rebook,
+    quarto,
     sessioninfo
 Remotes:
-    TaoYang-dev/hicrep
+    github::TaoYang-dev/hicrep
 biocViews:
     HiC,
     DNA3DStructure

@@ -59,7 +59,7 @@ jobs:
           with:
             context: .
             GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
-            platforms: linux/amd64,linux/arm64
+            platforms: linux/amd64
             file: Dockerfile
             push: true
             tags: ${{ steps.meta.outputs.tags }}
