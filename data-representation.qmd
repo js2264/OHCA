@@ -9,10 +9,36 @@ source("_common.R")
 
 ## `GInteractions` class
 
+## `ContactFile` class
+
+Contact matrices can be in three different formats (see previous chapter): 
+
+- `.(m)cool` matrix (multi-scores, multi-resolution, indexed)
+- `.hic` matrix (multi-scores, multi-resolution, indexed)
+- HiC-pro derived matrix (single-score, single-resolution, non-indexed)
+
+Example contact matrix files can be obtained using `HiContactsData` function. 
+
+```{r}
+library(HiContactsData)
+coolf <- HiContactsData('yeast_wt', 'mcool')
+hicf <- HiContactsData('yeast_wt', 'hic')
+hicpromatrixf <- HiContactsData('yeast_wt', 'hicpro_matrix')
+hicproregionsf <- HiContactsData('yeast_wt', 'hicpro_bed')
+```
+
+A connection to each of these files can then be created in R using the matching function. 
+
+```{r}
+library(HiCExperiment)
+CoolFile(coolf)
+HicFile(hicf)
+HicproFile(hicpromatrixf, hicproregionsf)
+```
+
 ## `HiCExperiment` class
 
 ```{r yeast_norm}
-library(HiCExperiment)
-contacts <- contacts_yeast(full = TRUE)
-contacts
+hic <- contacts_yeast(full = TRUE)
+hic
 ```

@@ -5,7 +5,7 @@
 source("_common.R")
 ```
 
-## General Bioconductor 
+## Basic interoperability with Bioconductor 
 
 ### Add topological features 
 
@@ -21,7 +21,7 @@ source("_common.R")
 
 ## HiCrep
 
-## (multi)HiCcompare
+## multiHiCcompare
 
 ## TopDom
 

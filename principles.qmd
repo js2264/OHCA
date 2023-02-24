@@ -2,7 +2,7 @@
 bibliography: bibliography.bib
 ---
 
-# Hi-C principles
+# Hi-C pre-processing steps
 
 ```{r}
 #| echo: false
@@ -10,7 +10,7 @@ source("_common.R")
 ```
 
 ::: {.callout-note}
-This section introduces the reader to general Hi-C experimental and computational considerations. 
+This section introduces the reader to general Hi-C experimental and computational steps to perform the pre-processing of Hi-C. This encompasses read alignment, pairs generation and filtering and pairs binning into a contact matrix file. 
 :::
 
 ## Experimental considerations
@@ -32,20 +32,18 @@ biotin-containing fragments are pulled-down and converted into a sequencing libr
 A number of C variants have been proposed since the publication of the 
 original 3C method (reviewed by @J.O.2017Jan), the main ones being Capture-C and ChIA-PET (see procedure below). 
 
-XXX
+![](images/20230221172531.png)  
 
-Capture-C is useful to quantify interactions between a set of regulatory elements of interest. ChIA-PET, on the other hand, can identify interactions mediated by a 
-specific protein of interest. 
+Capture-C is useful to quantify interactions between a set of regulatory elements 
+of interest. ChIA-PET, on the other hand, can identify interactions mediated by a 
+specific protein of interest. Finally, an increasing number of Hi-C approaches rely on 
+long-read sequencing (e.g. @Deshpande2022Oct, @Tavares-Cadete2020Dec) to identify 
+clusters of 3D contacts. 
 
 ### Sequencing
 
 Hi-C libraries are traditionally sequenced with short-read technology, and are by essence paired-end libraries. For this reason, the end result of the experimental side of the Hi-C consists of two fastq files, each one containing sequences for one extremity of the DNA fragments purified during Hi-C. These are the two files we need 
 to move on to the computational side of Hi-C. 
-
-::: {.callout-tip}
-### Why do we do Hi-C? 
-XXX
-:::
 
 ::: {.callout-important}
 ### What is a fastq file?
@@ -76,11 +74,116 @@ Notice how they bear the same name (first line): they form a pair. The second
 line corresponds to the sequence read by the sequencer, the third line is a single `+` separator, and the last line indicates the per-base sequencing quality following a nebulous cypher. 
 :::
 
-## *In silico* representation of Hi-C data
+## Pre-processing of Hi-C data
 
 ### Processing workflow
 
-XXX
+#### Pipelines
+
+Several pipelines have been developed to process Hi-C data. A few of them 
+stand out from the crowd: 
+
+- `nf-distiller`: a combination of an aligner + `pairtools` + `cooler`
+- `HiC-pro`
+- `Juicer`
+
+A minimal workflow to pre-process Hi-C data is the following (adapted from @Open2C2023Jan): 
+
+```{shell}
+## These fields have to be set: 
+##    <index>
+##    <input.R1.fq.gz>
+##    <input.R2.fq.gz>
+##    <chromsizes.txt>
+##    <prefix>
+bwa mem2 -SP5M <index> <input.R1.fq.gz> <input.R2.fq.gz> \
+    | pairtools parse -c <chromsizes.txt> \
+    | pairtools sort \
+    | pairtools dedup \
+    | cooler cload pairs -c1 2 -p1 3 -c2 4 -p2 5 <chromsizes.txt>:10000 - <prefix>.cool
+cooler zoomify --balance --nproc 32 --resolutions 5000N --out <prefix>.mcool <prefix>.cool
+rm <prefix>.cool
+```
+
+::: {.callout-note}
+For larger genomes (> 1Gb) with more than few tens of M of reads per fastq (e.g. > 100M), 
+we recommend pre-processing data on an HPC cluster. Aligners, pairs procesing and matrix binning 
+can greatly benefit from parallelization over multiple CPUs (@Open2C2023Jan)).  
+To scale **up** data pre-processing, we recommend to rely on an efficient read 
+mapper such as `bwa`, followed by pairs parsing, sorting and deduplication with `pairtools` 
+and binning with `cooler`.  
+:::
+
+`hicstuff` is another integrated workflow to process Hi-C data. Some advantages 
+compared to solutions mentioned above are its simplicity, flexibilty and lightweight. 
+For shallow sequencing or Hi-C on smaller genomes, it efficiently parses fastq reads 
+and processes data into binned contact matrices with a single terminal command. 
+
+#### HiCool: hicstuff within R
+
+`hicstuff` is available as a standalone (`conda install -c bioconda hicstuff` it!). 
+It is also shipped in an R package: `HiCool`. Thus, `HiCool` can process fastq files 
+from within an R console.
+
+To demonstrate this, we first fetch example `.fastq` files: 
+
+```{r}
+library(HiContactsData)
+r1 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R1')
+r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
+```
+
+We then load the `HiCool` library and execute the eponymous `HiCool` function. 
+
+```{r}
+library(HiCool)
+hcf <- HiCool(
+    r1, 
+    r2, 
+    restriction = 'DpnII,HinfI', 
+    resolutions = c(4000, 8000, 16000), 
+    genome = 'R64-1-1', 
+    output = './HiCool/'
+)
+```
+
+::: {.callout-tip icon='false'}
+## HiCool arguments 
+Several arguments can be passed to `HiCool` and some are worth mentioning them: 
+- `r restriction`: (default: `r "DpnII,HinfI"`)
+- `r resolutions`: (default: `r NULL`, automatically inferring resolutions based on genome size)
+- `r iterative`: (default: `r TRUE`)
+- `r filter`: (default: `r TRUE`)
+- `r balancing_args`: (default: `r " --cis-only --min-nnz 3 --mad-max 7 "`)
+- `r threads`: (default: `r 1L`)
+:::
+
+Other `HiCool` arguments can be listed by checking `HiCool` documentation in R: `r ?HiCool`. 
+
+Once the processing is finished, `HiCool` function returns a `CoolFile` object. 
+
+```{r}
+hcf
+```
+
+A `CoolFile` object establishes a connection with a disk-stored `.(m)cool` file. Several "slots" 
+(i.e. pieces of information) are attached to a `CoolFile` object: 
+
+- The path to the disk-stored contact matrix;
+- The active resolution (by default, the finest resolution available in a multi-resolution contact matrix);
+- Optionally, the path to a matching `pairs` file (see below);
+- Some metadata.
+
+Slots of a `CoolFile` object can be accessed as follow: 
+
+```{r}
+resolution(hcf)
+pairsFile(hcf)
+S4Vectors::metadata(hcf)
+```
+
+In the next chapter, we will see how to import data from a `.cool` file or other contact matrix formats.  
+In the meantime, we will present the file formats for the Hi-C processed files. 
 
 ### Pairs 
 
