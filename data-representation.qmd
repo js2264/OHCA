@@ -1,3 +1,7 @@
+---
+bibliography: bibliography.bib
+---
+
 # Representation of genomic data in R
 
 ```{r}
@@ -5,13 +9,29 @@
 source("_common.R")
 ```
 
+::: {.callout-note}
+## Aims
+This notebook introduces the four main classes offered by `Bioconductor` which 
+support Hi-C analysis, describes their structure and how to interact with them:  
+- `GRanges`;  
+- `GInteractions`;  
+- `ContactFile`;  
+- `HiCExperiment`  
+:::
+
 ## `GRanges` class
+
+`GRanges` is a shorthand for `GenomicRanges`, a core class in `Bioconductor`. 
+The data structure has been published in the fundamental 2015 publication by `Bioconductor` (@Huber2015Feb). 
+
+`GenomicRanges` objects aim to provide a natural description of genomic 
+intervals and are incredibly versatile. 
 
 ## `GInteractions` class
 
 ## `ContactFile` class
 
-Contact matrices can be in three different formats (see previous chapter): 
+Contact matrices can be in three different formats (see [previous chapter](principles.qmd#binned-contact-matrix-files)): 
 
 - `.(m)cool` matrix (multi-scores, multi-resolution, indexed)
 - `.hic` matrix (multi-scores, multi-resolution, indexed)
@@ -42,3 +62,8 @@ HicproFile(hicpromatrixf, hicproregionsf)
 hic <- contacts_yeast(full = TRUE)
 hic
 ```
+
+## References {-}
+
+::: {#refs}
+:::

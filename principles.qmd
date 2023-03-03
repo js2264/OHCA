@@ -10,6 +10,7 @@ source("_common.R")
 ```
 
 ::: {.callout-note}
+## Aims
 This section introduces the reader to general Hi-C experimental and computational steps to perform the pre-processing of Hi-C. This encompasses read alignment, pairs generation and filtering and pairs binning into a contact matrix file. 
 :::
 
@@ -74,23 +75,32 @@ Notice how they bear the same name (first line): they form a pair. The second
 line corresponds to the sequence read by the sequencer, the third line is a single `+` separator, and the last line indicates the per-base sequencing quality following a nebulous cypher. 
 :::
 
-## Pre-processing of Hi-C data
+## Pre-processing Hi-C data
 
-### Processing workflow
-
-#### Pipelines
+### Processing pipelines
 
 Several pipelines have been developed to process Hi-C data. A few of them 
 stand out from the crowd: 
 
 - `nf-distiller`: a combination of an aligner + `pairtools` + `cooler`
-- `HiC-pro`
-- `Juicer`
+- `HiC-pro` (@Servant2015Dec)
+- `Juicer` (@Durand2016Jul)
 
-A minimal workflow to pre-process Hi-C data is the following (adapted from @Open2C2023Jan): 
+Fundamentally, the main steps performed by these pipelines are: 
 
-```{shell}
-## These fields have to be set: 
+1. Separate read mapping
+2. Pairs parsing
+3. Pairs sorting
+4. Pairs filtering
+5. Pairs binning into a contact matrix
+6. Normalization of contact matrix and multi-resolution matrix generation
+
+![](images/20230303125432.png)
+
+In practice, a minimal workflow to pre-process Hi-C data is the following (adapted from @Open2C2023Jan): 
+
+```{sh eval = FALSE}
+## Note these fields have to be replaced by appropriate variables: 
 ##    <index>
 ##    <input.R1.fq.gz>
 ##    <input.R2.fq.gz>
@@ -102,7 +112,6 @@ bwa mem2 -SP5M <index> <input.R1.fq.gz> <input.R2.fq.gz> \
     | pairtools dedup \
     | cooler cload pairs -c1 2 -p1 3 -c2 4 -p2 5 <chromsizes.txt>:10000 - <prefix>.cool
 cooler zoomify --balance --nproc 32 --resolutions 5000N --out <prefix>.mcool <prefix>.cool
-rm <prefix>.cool
 ```
 
 ::: {.callout-note}
@@ -114,12 +123,35 @@ mapper such as `bwa`, followed by pairs parsing, sorting and deduplication with 
 and binning with `cooler`.  
 :::
 
-`hicstuff` is another integrated workflow to process Hi-C data. Some advantages 
+### hicstuff
+
+`hicstuff` is an integrated workflow to process Hi-C data. Some advantages 
 compared to solutions mentioned above are its simplicity, flexibilty and lightweight. 
 For shallow sequencing or Hi-C on smaller genomes, it efficiently parses fastq reads 
 and processes data into binned contact matrices with a single terminal command. 
 
-#### HiCool: hicstuff within R
+`hicstuff` provides both a command-line interface (`CLI`) and a python `API` to 
+process fastq reads into a binned contact matrix. 
+A processing pipeline can be launched using the standard command `pipeline` as follows: 
+
+```{sh eval = FALSE}
+## Note these fields have to be replaced by appropriate variables: 
+##    <hicstuff-options>
+##    <genome.fa>
+##    <input.R1.fq.gz>
+##    <input.R2.fq.gz>
+hicstuff pipeline \
+   <hicstuff-options> \
+   --genome <genome.fa> \
+   <input.R1.fq.gz> \
+   <input.R2.fq.gz>  
+```
+
+`hicstuff` documentation website is available 
+[here: https://hicstuff.readthedocs.io/](https://hicstuff.readthedocs.io/en/latest/) 
+to read more about available options and interal processing steps. 
+
+### HiCool: hicstuff within R
 
 `hicstuff` is available as a standalone (`conda install -c bioconda hicstuff` it!). 
 It is also shipped in an R package: `HiCool`. Thus, `HiCool` can process fastq files 
@@ -127,7 +159,7 @@ from within an R console.
 
 To demonstrate this, we first fetch example `.fastq` files: 
 
-```{r}
+```{r fastqfiles}
 library(HiContactsData)
 r1 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R1')
 r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
@@ -135,7 +167,7 @@ r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
 
 We then load the `HiCool` library and execute the eponymous `HiCool` function. 
 
-```{r}
+```{r hicool_run}
 library(HiCool)
 hcf <- HiCool(
     r1, 
@@ -149,20 +181,20 @@ hcf <- HiCool(
 
 ::: {.callout-tip icon='false'}
 ## HiCool arguments 
-Several arguments can be passed to `HiCool` and some are worth mentioning them: 
-- `r restriction`: (default: `r "DpnII,HinfI"`)
-- `r resolutions`: (default: `r NULL`, automatically inferring resolutions based on genome size)
-- `r iterative`: (default: `r TRUE`)
-- `r filter`: (default: `r TRUE`)
-- `r balancing_args`: (default: `r " --cis-only --min-nnz 3 --mad-max 7 "`)
-- `r threads`: (default: `r 1L`)
+Several arguments can be passed to `HiCool` and some are worth mentioning them:   
+- `restriction`: (default: `"DpnII,HinfI"`)  
+- `resolutions`: (default: `NULL`, automatically inferring resolutions based on genome size)  
+- `iterative`: (default: `TRUE`)  
+- `filter`: (default: `TRUE`)  
+- `balancing_args`: (default: `" --cis-only --min-nnz 3 --mad-max 7 "`)  
+- `threads`: (default: `1L`)  
 :::
 
-Other `HiCool` arguments can be listed by checking `HiCool` documentation in R: `r ?HiCool`. 
+Other `HiCool` arguments can be listed by checking `HiCool` documentation in R: `?HiCool::HiCool`. 
 
 Once the processing is finished, `HiCool` function returns a `CoolFile` object. 
 
-```{r}
+```{r hcf}
 hcf
 ```
 
@@ -176,30 +208,204 @@ A `CoolFile` object establishes a connection with a disk-stored `.(m)cool` file.
 
 Slots of a `CoolFile` object can be accessed as follow: 
 
-```{r}
+```{r slots}
 resolution(hcf)
 pairsFile(hcf)
-S4Vectors::metadata(hcf)
+metadata(hcf)
 ```
 
 In the next chapter, we will see how to import data from a `.cool` file or other contact matrix formats.  
-In the meantime, we will present the file formats for the Hi-C processed files. 
+In the meantime, we will present the file formats for the processed, disk-stored files. 
 
-### Pairs 
+## Hi-C file formats
 
-XXX
+Two main output files are typically generated during Hi-C data pre-processing: 
 
-### Binned contact matrices
+- Pairs files
+- Binned contact matrix files
 
-XXX
+We will now describe the structure of these different types of files. 
 
-#### `.hic` matrices
+### Pairs files
 
-XXX
+A "pairs" file (optionally, but generally filtered and sorted) is the direct 
+output of processing Hi-C fastq files. It stores information about putative 
+proximity contacts identified by digestion/religation, in the lossless, human-readable, 
+indexable format: the `.pairs` format. 
+
+::: {.callout-important}
+### What is a .pairs file?
+A `.pairs` file is organized in a `header` followed by a `body`: 
+
+- `header`: starts with `#`
+  * Required entries
+    * First line: `## pairs format v1.0`
+    * `#columns`: column contents and ordering 
+    (e.g. `#columns: readID chr1 pos1 chr2 pos2 strand1 strand2 <column_name> <column_name> ...`)
+    * `#chromsize`: chromosome names and their size in bp, one chromosome per line, 
+    in the same order that defines ordering between mates (e.g. `#chromsize: chr1 230218`). 
+    Chromosome order is actually defined by this header, not by the order of pairs listed in the `body`!
+  * Optional entries with reserved header keys (`sorted`, `shape`, `command`, `genome_assembly`)
+    * `#sorted`: to indicate the sorting mechanism 
+    (e.g. `#sorted: chr1-chr2-pos1-pos2`, `#sorted: chr1-pos1`, `#sorted: none`)
+    * `#shape`: to specify whether the matrix is stored as upper triangle or 
+    lower triangle (`#shape: upper triangle`, `#shape: lower triangle`)
+    * `#command`: to specify any command, e.g. the command used to generate 
+    the pairs file (`#command: bam2pairs mysample.bam mysample`)
+    * `#genome_assembly`: to specify the genome assembly 
+    (e.g. `#genome_assembly: hg38`)
+- `body`: tab-separated columns
+  * 7 reserved (4 of them required) columns: 
+    * `readID, chr1, pos1, chr2, pos2, strand1, strand2`
+    * Columns 2-5 (`chr1, pos1, chr2, pos2`) are required and cannot have missing values
+    * For column 1, 6 & 7: missing values are annotated with a single-character dummy (`.`)
+  * 2 extra reserved, optional column **names**: 
+    * `frag1`, `frag2`: restriction enzyme fragment index used by `Juicer`
+  * Any number of optional columns can be added
+
+```{filename='sample.pairs'}
+## pairs format v1.0
+#sorted: chr1-chr2-pos1-pos2
+#shape: upper triangle
+#genome_assembly: hg38
+#chromsize: chr1 249250621
+#chromsize: chr2 243199373
+#chromsize: chr3 198022430
+...
+#columns: readID chr1 pos1 chr2 pos2 strand1 strand2
+EAS139:136:FC706VJ:2:2104:23462:197393 chr1 10000 chr1 20000 + +
+EAS139:136:FC706VJ:2:8762:23765:128766 chr1 50000 chr1 70000 + +
+EAS139:136:FC706VJ:2:2342:15343:9863 chr1 60000 chr2 10000 + +
+EAS139:136:FC706VJ:2:1286:25:275154 chr1 30000 chr3 40000 + -
+```
+:::
+
+More information about the conventions related to this text file are provided by 
+the [4DN consortium](https://github.com/4dn-dcic/pairix/blob/master/pairs_format_specification.md), 
+which originally formalized the specifications of this file format. 
+
+### Binned contact matrix files
+
+#### Binning pairs into a matrix
+
+The action of "binning" a `.pairs` file into a contact matrix consists in (1) *discretizing* a genome reference 
+into genomic *bins*, (2) attributing bins for each pair's extremity and (3) computing the interaction frequency
+between any pair of genomic bins, i.e. the "contact matrix".
+
+For instance, here is a dummy `.pairs` file with a total of 5 pairs: 
+
+```{filename='dummy.pairs'}
+## pairs format v1.0
+#sorted: chr1-chr2-pos1-pos2
+#columns: readID chr1 pos1 chr2 pos2 strand1 strand2
+#chromsize: chr1 389
+. chr1 162 chr1 172 . . 
+. chr1 180 chr1 192 . . 
+. chr1 183 chr1 254 . .
+. chr1 221 chr1 273 . . 
+. chr1 254 chr1 298 . . 
+```
+
+Note that this genome reference is made of a single chromosome (`chr1`), very short (length of `389`). 
+By binning this chromosome in 100bp-wide bins (`100` bp is the *`resolution`*), one would optain the following four `bins`: 
+
+```{filename='bins.bed'}
+<chr>  <pos> <bin>
+chr1   1     100
+chr1   101   200
+chr1   201   300
+chr1   301   389
+```
+
+Each pair extremity can be changed to an integer indicating the position of the `bin` it falls in, e.g. for the left-hand extremity of the pairs file printed hereinabove (`bin1`): 
+
+```
+<chr1>  <pos1>  ->  <bin1>
+chr1    162     ->  2
+chr1    180     ->  2
+chr1    183     ->  2
+chr1    221     ->  3
+chr1    254     ->  3
+```
+
+Similarly for the right-hand extremity of the pairs file (`bin2`): 
+
+```
+<chr2>  <pos2>  ->  <bin2>
+chr1    172     ->  chr1 2
+chr1    192     ->  chr1 2
+chr1    254     ->  chr1 3
+chr1    273     ->  chr1 3
+chr1    298     ->  chr1 3
+```
+
+By pasting side-to-side the left-hand and right-hand extremities of each pair, the `.pairs` file can be turned into something like: 
+
+```
+<bin1> <bin2>
+2      2
+2      2
+2      3
+3      3
+3      3
+```
+
+And if we now count the number of each `<bin1> <bin2>` combinaison, adding a third `<count>` column, we end up with a `count.matrix` text file: 
+
+```{filename='count.matrix'}
+<bin1> <bin2>  <count>
+2      2       2
+2      3       1
+3      3       2
+```
+
+This `count.matrix` file lists a total of 5 pairs, and in which bin each extremity of each pair is contained. 
+Thus, a count matrix is a lossy file format, as it "rounds up" the position of each pair's extremity to the 
+genomic bin containing it. 
+
+This "i-j-x" 3-column format, in which `i-j` relate to a pair of "coordinates" 
+indices (or a pair of genomic bin indices) in a matrix, and `x` relates to 
+a score associated with the pair of indices, is generally called a "COO sparse matrix".  
+
+In this context, the `regions.bed` acts as a secondary "dictionary" 
+describing the nature of `i` and `j` indices, i.e. the location of genomic bins. 
+
+#### Plain-text matrices: HiC-Pro style
+
+The HiC-Pro pipeline (@Servant2015Dec) outputs 2 text files: a `regions.bed` file and a `count.matrix` file. 
+They are generated by the exact process explained hereinabove. 
+
+Together, these two files can describe the interaction frequency between any pair of 
+genomic loci. They are non-binarized text files, and as such are tchnically human-readable. 
+However, it is relatively hard to get a grasp of these files compared to a plain `.pairs` file, 
+as informations regarding genomic bins and interaction frequencies are stored in separate files. 
+Moreover, because they are non-binarized, these files often end up using a large disk space and cannot be
+easily indexed. This prevents random access to the data stored in these files. 
+
+`.(m)cool` and `.hic` file formats are two standards adressing these limitations. 
 
 #### `.(m)cool` matrices
 
-XXX
+The `.cool` format has been formally defined in @Abdennur2020Jan and is a particular 
+type of `HDF5` (`Hierarchical Data Format`) file. In layman's terms, it is an 
+indexed archive file storing rectangular tables called: 
+
+- `bins`: containing the same information than the `regions.bed` file;
+- `pixels`: containing the same information than the `count.matrix` (each "`pixel`" is a pair of 2 `bins` and has one or several associated `score`s);
+- `chroms`: summarizing the order and length of the chromosomes present in a Hi-C contact matrix;
+- `indexes`: allowing `random access`, i.e. parsing of only a subset of the data without having to read through the entire set of data. 
+
+A single `.pairs` file binned at different resolutions can still be savec into a single, multi-resolution `.mcool` file. 
+`.mcool` essentially consists of nested `.cool` files. 
+
+Importantly, as an `HDF5`-based format, `.cool` files are binarized, indexed and highly-compressed. 
+Moreover, parsing `.cool` files is possible using `HDF` standard APIs. 
+
+#### `.hic` matrices
+
+The `.hic` format is another type of binarized, indexed and highly-compressed file (@Durand2016Jul). It can store virtually the same information than a `.cool` file. However, parsing `.hic` files is not as straightforward as `.cool` files, as it does not 
+rely on a generic file standard. Still, the `straw` library has been implemented in several computing languages 
+to facilitate parsing of `.hic` files (@Durand2016Jul). 
 
 ## References {-}
 

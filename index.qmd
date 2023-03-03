@@ -1,13 +1,15 @@
 # Welcome {-}
 
-```{r echo=FALSE}
+```{r}
+#| echo: false
+source("_common.R")
 .gh_url <- file.path('https://github.com', rmarkdown::metadata[['github-repo']])
 ```
 
 `r rebook::openingDetails(Copyright='J. Serizay', Source=.gh_url)`
 
 This is the landing page of the **"Orchestrating Hi-C analysis with Bioconductor"** 
-book. The primary aim of this book is to introduce the `R` user to Hi-C analysis. It 
+book. **The primary aim of this book is to introduce the `R` user to Hi-C analysis**. It 
 starts with key concepts important for the analysis of chromatin conformation capture and then 
 presents `Bioconductor` tools that can be leveraged to process, analyse, explore and visualize 
 Hi-C data. 
@@ -40,3 +42,86 @@ This book is divided in three parts:
 - [Chapter 8: Hi-C workflow: Distance-dependent interactions across yeast mutants](workflow-yeast.qmd)
 - [Chapter 9: Hi-C workflow: Chromosome compartment cohesion upon mitosis entry](workflow-chicken.qmd)
 - [Chapter 10: Hi-C interoperability notebook](interoperability.qmd)
+
+# Requirements {-}
+
+This books aims to demonstrate how to pre-process, parse and investigate Hi-C data in `R`. 
+For this reason, a significant portion of this book consists of executable R code chunks. 
+To be able to reproduce the examples demonstrated in this book and go further in the analysis of 
+*your **real** datasets*, you will need to rely on several dependencies. 
+
+- The most important dependency is `R` itself! Make sure you have `R >= 4.3`. You can check that by typing `version` in an R console. If you do not have `R >= 4.3` installed, we highly recommend to update your `R` version, as most extra dependencies 
+will require `R >= 4.3`. 
+
+- The following `R` code will set up most of the extra dependencies: 
+
+```{r eval = FALSE}
+BiocManager::install("HiCExperiment", ask = FALSE)
+BiocManager::install("HiCool", ask = FALSE)
+BiocManager::install("HiContacts", ask = FALSE)
+BiocManager::install("HiContactsData", ask = FALSE)
+BiocManager::install("fourDNData", ask = FALSE)
+BiocManager::install("DNAZooData", ask = FALSE)
+```
+
+For developers or advanced R users, there are two alternatives: 
+
+- You can directly install `devel` versions of these packages along with their dependencies: 
+
+```{r eval = FALSE}
+install.packages("pak", repos = "https://r-lib.github.io/p/pak/devel/")
+pak::pkg_install("js2264/HiCExperiment", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
+pak::pkg_install("js2264/HiCool", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
+pak::pkg_install("js2264/HiContacts", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
+pak::pkg_install("js2264/HiContactsData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
+pak::pkg_install("js2264/fourDNData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
+pak::pkg_install("js2264/DNAZooData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
+```
+
+- Alternatively, if you have `docker` installed, the easiest approach would be to run the following command in a `shell` terminal:
+
+```{sh eval = FALSE}
+docker run -it ghcr.io/js2264/ohca:latest R
+```
+
+This will fetch a `docker` image with the latest development versions of the 
+aformentioned packages pre-installed, and initate an interactive R session. 
+
+# Reproducibility {-}
+
+## Building book {-}
+
+The OHCA book has been rendered with R thanks to a number of packages, including but not only: 
+
+- `devtools`
+- `quarto`
+- `rebook`
+
+To build this book locally, you can run: 
+
+```{sh eval = FALSE, filename="bash"}
+git clone git@github.com:js2264/OHCA.git && cd OHCA
+quarto render
+```
+
+::: {.callout-warning icon='false'}
+All dependencies listed above will be required!
+:::
+
+In addition, the actual book rendering is done by GitHub Actions, and the 
+rendered static website is hosted by GitHub Pages. 
+
+## Session info {-}
+
+```{r echo = FALSE, warnings = FALSE, messages = FALSE}
+library("HiCExperiment")
+library("HiCool")
+library("HiContacts")
+library("HiContactsData")
+library("fourDNData")
+library("DNAZooData")
+```
+
+```{r echo = FALSE}
+sessioninfo::session_info()
+```
