@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 1&nbsp; Hi-C principles</title>
+<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 1&nbsp; Hi-C pre-processing steps</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -18,6 +18,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
@@ -82,7 +145,7 @@ div.csl-indent {
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span>
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C pre-processing steps</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -120,7 +183,7 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./principles.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span></a>
+  <a href="./principles.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C pre-processing steps</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -205,11 +268,18 @@ div.csl-indent {
   </ul>
 </li>
   <li>
-<a href="#in-silico-representation-of-hi-c-data" id="toc-in-silico-representation-of-hi-c-data" class="nav-link" data-scroll-target="#in-silico-representation-of-hi-c-data"><span class="toc-section-number">1.2</span>  <em>In silico</em> representation of Hi-C data</a>
+<a href="#pre-processing-hi-c-data" id="toc-pre-processing-hi-c-data" class="nav-link" data-scroll-target="#pre-processing-hi-c-data"><span class="toc-section-number">1.2</span>  Pre-processing Hi-C data</a>
   <ul class="collapse">
-<li><a href="#processing-workflow" id="toc-processing-workflow" class="nav-link" data-scroll-target="#processing-workflow"><span class="toc-section-number">1.2.1</span>  Processing workflow</a></li>
-  <li><a href="#pairs" id="toc-pairs" class="nav-link" data-scroll-target="#pairs"><span class="toc-section-number">1.2.2</span>  Pairs</a></li>
-  <li><a href="#binned-contact-matrices" id="toc-binned-contact-matrices" class="nav-link" data-scroll-target="#binned-contact-matrices"><span class="toc-section-number">1.2.3</span>  Binned contact matrices</a></li>
+<li><a href="#processing-pipelines" id="toc-processing-pipelines" class="nav-link" data-scroll-target="#processing-pipelines"><span class="toc-section-number">1.2.1</span>  Processing pipelines</a></li>
+  <li><a href="#hicstuff" id="toc-hicstuff" class="nav-link" data-scroll-target="#hicstuff"><span class="toc-section-number">1.2.2</span>  hicstuff</a></li>
+  <li><a href="#hicool-hicstuff-within-r" id="toc-hicool-hicstuff-within-r" class="nav-link" data-scroll-target="#hicool-hicstuff-within-r"><span class="toc-section-number">1.2.3</span>  HiCool: hicstuff within R</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#hi-c-file-formats" id="toc-hi-c-file-formats" class="nav-link" data-scroll-target="#hi-c-file-formats"><span class="toc-section-number">1.3</span>  Hi-C file formats</a>
+  <ul class="collapse">
+<li><a href="#pairs-files" id="toc-pairs-files" class="nav-link" data-scroll-target="#pairs-files"><span class="toc-section-number">1.3.1</span>  Pairs files</a></li>
+  <li><a href="#binned-contact-matrix-files" id="toc-binned-contact-matrix-files" class="nav-link" data-scroll-target="#binned-contact-matrix-files"><span class="toc-section-number">1.3.2</span>  Binned contact matrix files</a></li>
   </ul>
 </li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
@@ -218,7 +288,7 @@ div.csl-indent {
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span>
+<span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C pre-processing steps</span>
 </h1>
 </div>
 
@@ -235,14 +305,17 @@ div.csl-indent {
 </header><div class="cell">
 
 </div>
-<div class="callout-note callout callout-style-simple">
-<div class="callout-body d-flex">
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-body-container">
-<p>This section introduces the reader to general Hi-C experimental and computational considerations.</p>
+<div class="callout-caption-container flex-fill">
+Aims
 </div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This section introduces the reader to general Hi-C experimental and computational steps to perform the pre-processing of Hi-C. This encompasses read alignment, pairs generation and filtering and pairs binning into a contact matrix file.</p>
 </div>
 </div>
 <section id="experimental-considerations" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="experimental-considerations">
@@ -255,24 +328,11 @@ In Hi-C, chromatin is crosslinked within intact nuclei and enzymatically digeste
 </section><section id="c-variants" class="level3" data-number="1.1.2"><h3 data-number="1.1.2" class="anchored" data-anchor-id="c-variants">
 <span class="header-section-number">1.1.2</span> C variants</h3>
 <p>A number of C variants have been proposed since the publication of the original 3C method (reviewed by <span class="citation" data-cites="J.O.2017Jan">J. O. et al. (<a href="#ref-J.O.2017Jan" role="doc-biblioref">2017</a>)</span>), the main ones being Capture-C and ChIA-PET (see procedure below).</p>
-<p>XXX</p>
-<p>Capture-C is useful to quantify interactions between a set of regulatory elements of interest. ChIA-PET, on the other hand, can identify interactions mediated by a specific protein of interest.</p>
+<p><img src="images/20230221172531.png" class="img-fluid"></p>
+<p>Capture-C is useful to quantify interactions between a set of regulatory elements of interest. ChIA-PET, on the other hand, can identify interactions mediated by a specific protein of interest. Finally, an increasing number of Hi-C approaches rely on long-read sequencing (e.g. <span class="citation" data-cites="Deshpande2022Oct">Deshpande et al. (<a href="#ref-Deshpande2022Oct" role="doc-biblioref">2022</a>)</span>, <span class="citation" data-cites="Tavares-Cadete2020Dec">Tavares-Cadete et al. (<a href="#ref-Tavares-Cadete2020Dec" role="doc-biblioref">2020</a>)</span>) to identify clusters of 3D contacts.</p>
 </section><section id="sequencing" class="level3" data-number="1.1.3"><h3 data-number="1.1.3" class="anchored" data-anchor-id="sequencing">
 <span class="header-section-number">1.1.3</span> Sequencing</h3>
 <p>Hi-C libraries are traditionally sequenced with short-read technology, and are by essence paired-end libraries. For this reason, the end result of the experimental side of the Hi-C consists of two fastq files, each one containing sequences for one extremity of the DNA fragments purified during Hi-C. These are the two files we need to move on to the computational side of Hi-C.</p>
-<div class="callout-tip callout callout-style-simple callout-captioned">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-caption-container flex-fill">
-Why do we do Hi-C?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>XXX</p>
-</div>
-</div>
 <div class="callout-important callout callout-style-simple callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -307,33 +367,475 @@ GCTGTTGTTGTTGTTGTATTTGCA
 <p>These two reads are the first listed in their respective file. Notice how they bear the same name (first line): they form a pair. The second line corresponds to the sequence read by the sequencer, the third line is a single <code>+</code> separator, and the last line indicates the per-base sequencing quality following a nebulous cypher.</p>
 </div>
 </div>
-</section></section><section id="in-silico-representation-of-hi-c-data" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="in-silico-representation-of-hi-c-data">
-<span class="header-section-number">1.2</span> <em>In silico</em> representation of Hi-C data</h2>
-<section id="processing-workflow" class="level3" data-number="1.2.1"><h3 data-number="1.2.1" class="anchored" data-anchor-id="processing-workflow">
-<span class="header-section-number">1.2.1</span> Processing workflow</h3>
-<p>XXX</p>
-</section><section id="pairs" class="level3" data-number="1.2.2"><h3 data-number="1.2.2" class="anchored" data-anchor-id="pairs">
-<span class="header-section-number">1.2.2</span> Pairs</h3>
-<p>XXX</p>
-</section><section id="binned-contact-matrices" class="level3" data-number="1.2.3"><h3 data-number="1.2.3" class="anchored" data-anchor-id="binned-contact-matrices">
-<span class="header-section-number">1.2.3</span> Binned contact matrices</h3>
-<p>XXX</p>
-<section id="hic-matrices" class="level4" data-number="1.2.3.1"><h4 data-number="1.2.3.1" class="anchored" data-anchor-id="hic-matrices">
-<span class="header-section-number">1.2.3.1</span> <code>.hic</code> matrices</h4>
-<p>XXX</p>
-</section><section id="mcool-matrices" class="level4" data-number="1.2.3.2"><h4 data-number="1.2.3.2" class="anchored" data-anchor-id="mcool-matrices">
-<span class="header-section-number">1.2.3.2</span> <code>.(m)cool</code> matrices</h4>
-<p>XXX</p>
+</section></section><section id="pre-processing-hi-c-data" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="pre-processing-hi-c-data">
+<span class="header-section-number">1.2</span> Pre-processing Hi-C data</h2>
+<section id="processing-pipelines" class="level3" data-number="1.2.1"><h3 data-number="1.2.1" class="anchored" data-anchor-id="processing-pipelines">
+<span class="header-section-number">1.2.1</span> Processing pipelines</h3>
+<p>Several pipelines have been developed to process Hi-C data. A few of them stand out from the crowd:</p>
+<ul>
+<li>
+<code>nf-distiller</code>: a combination of an aligner + <code>pairtools</code> + <code>cooler</code>
+</li>
+<li>
+<code>HiC-pro</code> (<span class="citation" data-cites="Servant2015Dec">Servant et al. (<a href="#ref-Servant2015Dec" role="doc-biblioref">2015</a>)</span>)</li>
+<li>
+<code>Juicer</code> (<span class="citation" data-cites="Durand2016Jul">Durand et al. (<a href="#ref-Durand2016Jul" role="doc-biblioref">2016</a>)</span>)</li>
+</ul>
+<p>Fundamentally, the main steps performed by these pipelines are:</p>
+<ol type="1">
+<li>Separate read mapping</li>
+<li>Pairs parsing</li>
+<li>Pairs sorting</li>
+<li>Pairs filtering</li>
+<li>Pairs binning into a contact matrix</li>
+<li>Normalization of contact matrix and multi-resolution matrix generation</li>
+</ol>
+<p><img src="images/20230303125432.png" class="img-fluid"></p>
+<p>In practice, a minimal workflow to pre-process Hi-C data is the following (adapted from <span class="citation" data-cites="Open2C2023Jan">Open2C et al. (<a href="#ref-Open2C2023Jan" role="doc-biblioref">2023</a>)</span>):</p>
+<div class="cell" data-hash="principles_cache/html/unnamed-chunk-2_4b66937693f577e12bb6a5b4f0c5a8e4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Note these fields have to be replaced by appropriate variables: </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;index&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;input.R1.fq.gz&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;input.R2.fq.gz&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;chromsizes.txt&gt;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;prefix&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="ex">bwa</span> mem2 <span class="at">-SP5M</span> <span class="op">&lt;</span>index<span class="op">&gt;</span> <span class="op">&lt;</span>input.R1.fq.gz<span class="op">&gt;</span> <span class="op">&lt;</span>input.R2.fq.gz<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="ex">pairtools</span> parse <span class="at">-c</span> <span class="op">&lt;</span>chromsizes.txt<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="ex">pairtools</span> sort <span class="dt">\</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="ex">pairtools</span> dedup <span class="dt">\</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">|</span> <span class="ex">cooler</span> cload pairs <span class="at">-c1</span> 2 <span class="at">-p1</span> 3 <span class="at">-c2</span> 4 <span class="at">-p2</span> 5 <span class="op">&lt;</span>chromsizes.txt<span class="op">&gt;</span>:10000 <span class="at">-</span> <span class="op">&lt;</span>prefix<span class="op">&gt;</span>.cool</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="ex">cooler</span> zoomify <span class="at">--balance</span> <span class="at">--nproc</span> 32 <span class="at">--resolutions</span> 5000N <span class="at">--out</span> <span class="op">&lt;</span>prefix<span class="op">&gt;</span>.mcool <span class="op">&lt;</span>prefix<span class="op">&gt;</span>.cool</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-note callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>For larger genomes (&gt; 1Gb) with more than few tens of M of reads per fastq (e.g.&nbsp;&gt; 100M), we recommend pre-processing data on an HPC cluster. Aligners, pairs procesing and matrix binning can greatly benefit from parallelization over multiple CPUs (<span class="citation" data-cites="Open2C2023Jan">Open2C et al. (<a href="#ref-Open2C2023Jan" role="doc-biblioref">2023</a>)</span>)).<br>
+To scale <strong>up</strong> data pre-processing, we recommend to rely on an efficient read mapper such as <code>bwa</code>, followed by pairs parsing, sorting and deduplication with <code>pairtools</code> and binning with <code>cooler</code>.</p>
+</div>
+</div>
+</div>
+</section><section id="hicstuff" class="level3" data-number="1.2.2"><h3 data-number="1.2.2" class="anchored" data-anchor-id="hicstuff">
+<span class="header-section-number">1.2.2</span> hicstuff</h3>
+<p><code>hicstuff</code> is an integrated workflow to process Hi-C data. Some advantages compared to solutions mentioned above are its simplicity, flexibilty and lightweight. For shallow sequencing or Hi-C on smaller genomes, it efficiently parses fastq reads and processes data into binned contact matrices with a single terminal command.</p>
+<p><code>hicstuff</code> provides both a command-line interface (<code>CLI</code>) and a python <code>API</code> to process fastq reads into a binned contact matrix. A processing pipeline can be launched using the standard command <code>pipeline</code> as follows:</p>
+<div class="cell" data-hash="principles_cache/html/unnamed-chunk-3_45b5f39a507bf2cfbd82c7092e7a593d">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Note these fields have to be replaced by appropriate variables: </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;hicstuff-options&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;genome.fa&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;input.R1.fq.gz&gt;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">##    &lt;input.R2.fq.gz&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">hicstuff</span> pipeline <span class="dt">\</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>   <span class="op">&lt;</span>hicstuff-options<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>   <span class="at">--genome</span> <span class="op">&lt;</span>genome.fa<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>   <span class="op">&lt;</span>input.R1.fq.gz<span class="op">&gt;</span> <span class="dt">\</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>   <span class="op">&lt;</span>input.R2.fq.gz<span class="op">&gt;</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>hicstuff</code> documentation website is available <a href="https://hicstuff.readthedocs.io/en/latest/">here: https://hicstuff.readthedocs.io/</a> to read more about available options and interal processing steps.</p>
+</section><section id="hicool-hicstuff-within-r" class="level3" data-number="1.2.3"><h3 data-number="1.2.3" class="anchored" data-anchor-id="hicool-hicstuff-within-r">
+<span class="header-section-number">1.2.3</span> HiCool: hicstuff within R</h3>
+<p><code>hicstuff</code> is available as a standalone (<code>conda install -c bioconda hicstuff</code> it!). It is also shipped in an R package: <code>HiCool</code>. Thus, <code>HiCool</code> can process fastq files from within an R console.</p>
+<p>To demonstrate this, we first fetch example <code>.fastq</code> files:</p>
+<div class="cell" data-hash="principles_cache/html/fastqfiles_7733f3d8c145d18b510860f6987ea00b">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: ExperimentHub</span></span>
+<span><span class="co">##  Loading required package: BiocGenerics</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'BiocGenerics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      IQR, mad, sd, var, xtabs</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      anyDuplicated, aperm, append, as.data.frame, basename, cbind,</span></span>
+<span><span class="co">##      colnames, dirname, do.call, duplicated, eval, evalq, Filter,</span></span>
+<span><span class="co">##      Find, get, grep, grepl, intersect, is.unsorted, lapply, Map,</span></span>
+<span><span class="co">##      mapply, match, mget, order, paste, pmax, pmax.int, pmin,</span></span>
+<span><span class="co">##      pmin.int, Position, rank, rbind, Reduce, rownames, sapply,</span></span>
+<span><span class="co">##      setdiff, sort, table, tapply, union, unique, unsplit, which.max,</span></span>
+<span><span class="co">##      which.min</span></span>
+<span><span class="co">##  Loading required package: AnnotationHub</span></span>
+<span><span class="co">##  Loading required package: BiocFileCache</span></span>
+<span><span class="co">##  Loading required package: dbplyr</span></span>
+<span><span class="va">r1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="st">'yeast_wt'</span>, format <span class="op">=</span> <span class="st">'fastq_R1'</span><span class="op">)</span></span>
+<span><span class="co">##  snapshotDate(): 2023-02-28</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">r2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="st">'yeast_wt'</span>, format <span class="op">=</span> <span class="st">'fastq_R2'</span><span class="op">)</span></span>
+<span><span class="co">##  snapshotDate(): 2023-02-28</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We then load the <code>HiCool</code> library and execute the eponymous <code>HiCool</code> function.</p>
+<div class="cell" data-hash="principles_cache/html/hicool_run_8bc0d2cfc8992e210468d638e6eb4fe8">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCool">HiCool</a></span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: HiCExperiment</span></span>
+<span><span class="va">hcf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCool/man/HiCool.html">HiCool</a></span><span class="op">(</span></span>
+<span>    <span class="va">r1</span>, </span>
+<span>    <span class="va">r2</span>, </span>
+<span>    restriction <span class="op">=</span> <span class="st">'DpnII,HinfI'</span>, </span>
+<span>    resolutions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4000</span>, <span class="fl">8000</span>, <span class="fl">16000</span><span class="op">)</span>, </span>
+<span>    genome <span class="op">=</span> <span class="st">'R64-1-1'</span>, </span>
+<span>    output <span class="op">=</span> <span class="st">'./HiCool/'</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">##  HiCool :: Fetching bowtie genome index files from AWS iGenomes S3 bucket...</span></span>
+<span><span class="co">##  HiCool :: Recovering bowtie2 genome index from AWS iGenomes...</span></span>
+<span><span class="co">##  + '/root/.cache/R/basilisk/1.11.2/0/bin/conda' 'create' '--yes' '--prefix' '/root/.cache/R/basilisk/1.11.2/HiCool/0.99.4/env' 'python=3.7.12' '--quiet' '-c' 'conda-forge' '-c' 'bioconda'</span></span>
+<span><span class="co">##  + '/root/.cache/R/basilisk/1.11.2/0/bin/conda' 'install' '--yes' '--prefix' '/root/.cache/R/basilisk/1.11.2/HiCool/0.99.4/env' 'python=3.7.12'</span></span>
+<span><span class="co">##  + '/root/.cache/R/basilisk/1.11.2/0/bin/conda' 'install' '--yes' '--prefix' '/root/.cache/R/basilisk/1.11.2/HiCool/0.99.4/env' '-c' 'conda-forge' '-c' 'bioconda' 'python=3.7.12' 'python=3.7.12' 'bowtie2=2.5.0' 'samtools=1.16.1' 'hicstuff=3.1.5' 'chromosight=1.6.3' 'cooler=0.9.1'</span></span>
+<span><span class="co">##  HiCool :: Initiating processing of fastq files [tmp folder: /tmp/Rtmpk9dYKw/WL4DIE]...</span></span>
+<span><span class="co">##  HiCool :: Mapping fastq files...</span></span>
+<span><span class="co">##  HiCool :: Removing unwanted chromosomes...</span></span>
+<span><span class="co">##  HiCool :: Parsing pairs into .cool file...</span></span>
+<span><span class="co">##  HiCool :: Generating multi-resolution .mcool file...</span></span>
+<span><span class="co">##  HiCool :: Balancing .mcool file...</span></span>
+<span><span class="co">##  HiCool :: Tidying up everything for you...</span></span>
+<span><span class="co">##  HiCool :: .fastq to .mcool processing done!</span></span>
+<span><span class="co">##  HiCool :: Check ./HiCool/folder to find the generated files</span></span>
+<span><span class="co">##  HiCool :: Generating HiCool report. This might take a while.</span></span>
+<span><span class="co">##  HiCool :: Report generated and available @ /opt/OHCA/HiCool/476c44f39e_7833^mapped-R64-1-1^WL4DIE.html</span></span>
+<span><span class="co">##  HiCool :: All processing successfully achieved. Congrats!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-tip callout callout-style-simple no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+HiCool arguments
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Several arguments can be passed to <code>HiCool</code> and some are worth mentioning them:<br>
+- <code>restriction</code>: (default: <code>"DpnII,HinfI"</code>)<br>
+- <code>resolutions</code>: (default: <code>NULL</code>, automatically inferring resolutions based on genome size)<br>
+- <code>iterative</code>: (default: <code>TRUE</code>)<br>
+- <code>filter</code>: (default: <code>TRUE</code>)<br>
+- <code>balancing_args</code>: (default: <code>" --cis-only --min-nnz 3 --mad-max 7 "</code>)<br>
+- <code>threads</code>: (default: <code>1L</code>)</p>
+</div>
+</div>
+<p>Other <code>HiCool</code> arguments can be listed by checking <code>HiCool</code> documentation in R: <code><a href="https://rdrr.io/pkg/HiCool/man/HiCool.html">?HiCool::HiCool</a></code>.</p>
+<p>Once the processing is finished, <code>HiCool</code> function returns a <code>CoolFile</code> object.</p>
+<div class="cell" data-hash="principles_cache/html/hcf_acbfd1ad06ef9ab7384714545ebe5589">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hcf</span></span>
+<span><span class="co">##  CoolFile object</span></span>
+<span><span class="co">##  .mcool file: ./HiCool//matrices/476c44f39e_7833^mapped-R64-1-1^WL4DIE.mcool </span></span>
+<span><span class="co">##  resolution: 4000 </span></span>
+<span><span class="co">##  pairs file: ./HiCool//pairs/476c44f39e_7833^mapped-R64-1-1^WL4DIE.pairs </span></span>
+<span><span class="co">##  metadata(3): log args stats</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A <code>CoolFile</code> object establishes a connection with a disk-stored <code>.(m)cool</code> file. Several “slots” (i.e.&nbsp;pieces of information) are attached to a <code>CoolFile</code> object:</p>
+<ul>
+<li>The path to the disk-stored contact matrix;</li>
+<li>The active resolution (by default, the finest resolution available in a multi-resolution contact matrix);</li>
+<li>Optionally, the path to a matching <code>pairs</code> file (see below);</li>
+<li>Some metadata.</li>
+</ul>
+<p>Slots of a <code>CoolFile</code> object can be accessed as follow:</p>
+<div class="cell" data-hash="principles_cache/html/slots_939b447276d8b8a06d263b3564097db6">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">resolution</a></span><span class="op">(</span><span class="va">hcf</span><span class="op">)</span></span>
+<span><span class="co">##  [1] 4000</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">hcf</span><span class="op">)</span></span>
+<span><span class="co">##  [1] "./HiCool//pairs/476c44f39e_7833^mapped-R64-1-1^WL4DIE.pairs"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hcf</span><span class="op">)</span></span>
+<span><span class="co">##  $log</span></span>
+<span><span class="co">##  [1] "./HiCool//logs/476c44f39e_7833^mapped-R64-1-1^WL4DIE.log"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args</span></span>
+<span><span class="co">##  $args$r1</span></span>
+<span><span class="co">##  [1] "/root/.cache/R/ExperimentHub/476c44f39e_7833"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$r2</span></span>
+<span><span class="co">##  [1] "/root/.cache/R/ExperimentHub/47688ec8dc_7834"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$genome</span></span>
+<span><span class="co">##  [1] "/tmp/Rtmpk9dYKw/R64-1-1"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$resolutions</span></span>
+<span><span class="co">##  [1] "4000"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$resolutions</span></span>
+<span><span class="co">##  [1] "8000"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$resolutions</span></span>
+<span><span class="co">##  [1] "16000"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$restriction</span></span>
+<span><span class="co">##  [1] "DpnII,HinfI"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$iterative</span></span>
+<span><span class="co">##  [1] TRUE</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$balancing_args</span></span>
+<span><span class="co">##  [1] " --min-nnz 10 --mad-max 5 "</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$threads</span></span>
+<span><span class="co">##  [1] 1</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$output</span></span>
+<span><span class="co">##  [1] "./HiCool/"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$exclude_chr</span></span>
+<span><span class="co">##  [1] "Mito|chrM|MT"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$keep_bam</span></span>
+<span><span class="co">##  [1] FALSE</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$scratch</span></span>
+<span><span class="co">##  [1] "/tmp/Rtmpk9dYKw"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $args$wd</span></span>
+<span><span class="co">##  [1] "/opt/OHCA"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $stats</span></span>
+<span><span class="co">##  $stats$nFragments</span></span>
+<span><span class="co">##  [1] 1e+05</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $stats$nPairs</span></span>
+<span><span class="co">##  [1] 73993</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $stats$nDangling</span></span>
+<span><span class="co">##  [1] 10027</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $stats$nSelf</span></span>
+<span><span class="co">##  [1] 2205</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $stats$nDumped</span></span>
+<span><span class="co">##  [1] 83</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $stats$nFiltered</span></span>
+<span><span class="co">##  [1] 61678</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $stats$nDups</span></span>
+<span><span class="co">##  [1] 719</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $stats$nUnique</span></span>
+<span><span class="co">##  [1] 60959</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $stats$threshold_uncut</span></span>
+<span><span class="co">##  [1] 7</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $stats$threshold_self</span></span>
+<span><span class="co">##  [1] 7</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In the next chapter, we will see how to import data from a <code>.cool</code> file or other contact matrix formats.<br>
+In the meantime, we will present the file formats for the processed, disk-stored files.</p>
+</section></section><section id="hi-c-file-formats" class="level2" data-number="1.3"><h2 data-number="1.3" class="anchored" data-anchor-id="hi-c-file-formats">
+<span class="header-section-number">1.3</span> Hi-C file formats</h2>
+<p>Two main output files are typically generated during Hi-C data pre-processing:</p>
+<ul>
+<li>Pairs files</li>
+<li>Binned contact matrix files</li>
+</ul>
+<p>We will now describe the structure of these different types of files.</p>
+<section id="pairs-files" class="level3" data-number="1.3.1"><h3 data-number="1.3.1" class="anchored" data-anchor-id="pairs-files">
+<span class="header-section-number">1.3.1</span> Pairs files</h3>
+<p>A “pairs” file (optionally, but generally filtered and sorted) is the direct output of processing Hi-C fastq files. It stores information about putative proximity contacts identified by digestion/religation, in the lossless, human-readable, indexable format: the <code>.pairs</code> format.</p>
+<div class="callout-important callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+What is a .pairs file?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <code>.pairs</code> file is organized in a <code>header</code> followed by a <code>body</code>:</p>
+<ul>
+<li>
+<code>header</code>: starts with <code>#</code>
+<ul>
+<li>Required entries
+<ul>
+<li>First line: <code>## pairs format v1.0</code>
+</li>
+<li>
+<code>#columns</code>: column contents and ordering (e.g.&nbsp;<code>#columns: readID chr1 pos1 chr2 pos2 strand1 strand2 &lt;column_name&gt; &lt;column_name&gt; ...</code>)</li>
+<li>
+<code>#chromsize</code>: chromosome names and their size in bp, one chromosome per line, in the same order that defines ordering between mates (e.g.&nbsp;<code>#chromsize: chr1 230218</code>). Chromosome order is actually defined by this header, not by the order of pairs listed in the <code>body</code>!</li>
+</ul>
+</li>
+<li>Optional entries with reserved header keys (<code>sorted</code>, <code>shape</code>, <code>command</code>, <code>genome_assembly</code>)
+<ul>
+<li>
+<code>#sorted</code>: to indicate the sorting mechanism (e.g.&nbsp;<code>#sorted: chr1-chr2-pos1-pos2</code>, <code>#sorted: chr1-pos1</code>, <code>#sorted: none</code>)</li>
+<li>
+<code>#shape</code>: to specify whether the matrix is stored as upper triangle or lower triangle (<code>#shape: upper triangle</code>, <code>#shape: lower triangle</code>)</li>
+<li>
+<code>#command</code>: to specify any command, e.g.&nbsp;the command used to generate the pairs file (<code>#command: bam2pairs mysample.bam mysample</code>)</li>
+<li>
+<code>#genome_assembly</code>: to specify the genome assembly (e.g.&nbsp;<code>#genome_assembly: hg38</code>)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<code>body</code>: tab-separated columns
+<ul>
+<li>7 reserved (4 of them required) columns:
+<ul>
+<li><code>readID, chr1, pos1, chr2, pos2, strand1, strand2</code></li>
+<li>Columns 2-5 (<code>chr1, pos1, chr2, pos2</code>) are required and cannot have missing values</li>
+<li>For column 1, 6 &amp; 7: missing values are annotated with a single-character dummy (<code>.</code>)</li>
+</ul>
+</li>
+<li>2 extra reserved, optional column <strong>names</strong>:
+<ul>
+<li>
+<code>frag1</code>, <code>frag2</code>: restriction enzyme fragment index used by <code>Juicer</code>
+</li>
+</ul>
+</li>
+<li>Any number of optional columns can be added</li>
+</ul>
+</li>
+</ul>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>sample.pairs</strong></pre>
+</div>
+<pre><code>## pairs format v1.0
+#sorted: chr1-chr2-pos1-pos2
+#shape: upper triangle
+#genome_assembly: hg38
+#chromsize: chr1 249250621
+#chromsize: chr2 243199373
+#chromsize: chr3 198022430
+...
+#columns: readID chr1 pos1 chr2 pos2 strand1 strand2
+EAS139:136:FC706VJ:2:2104:23462:197393 chr1 10000 chr1 20000 + +
+EAS139:136:FC706VJ:2:8762:23765:128766 chr1 50000 chr1 70000 + +
+EAS139:136:FC706VJ:2:2342:15343:9863 chr1 60000 chr2 10000 + +
+EAS139:136:FC706VJ:2:1286:25:275154 chr1 30000 chr3 40000 + -</code></pre>
+</div>
+</div>
+</div>
+<p>More information about the conventions related to this text file are provided by the <a href="https://github.com/4dn-dcic/pairix/blob/master/pairs_format_specification.md">4DN consortium</a>, which originally formalized the specifications of this file format.</p>
+</section><section id="binned-contact-matrix-files" class="level3" data-number="1.3.2"><h3 data-number="1.3.2" class="anchored" data-anchor-id="binned-contact-matrix-files">
+<span class="header-section-number">1.3.2</span> Binned contact matrix files</h3>
+<section id="binning-pairs-into-a-matrix" class="level4" data-number="1.3.2.1"><h4 data-number="1.3.2.1" class="anchored" data-anchor-id="binning-pairs-into-a-matrix">
+<span class="header-section-number">1.3.2.1</span> Binning pairs into a matrix</h4>
+<p>The action of “binning” a <code>.pairs</code> file into a contact matrix consists in (1) <em>discretizing</em> a genome reference into genomic <em>bins</em>, (2) attributing bins for each pair’s extremity and (3) computing the interaction frequency between any pair of genomic bins, i.e.&nbsp;the “contact matrix”.</p>
+<p>For instance, here is a dummy <code>.pairs</code> file with a total of 5 pairs:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>dummy.pairs</strong></pre>
+</div>
+<pre><code>## pairs format v1.0
+#sorted: chr1-chr2-pos1-pos2
+#columns: readID chr1 pos1 chr2 pos2 strand1 strand2
+#chromsize: chr1 389
+. chr1 162 chr1 172 . . 
+. chr1 180 chr1 192 . . 
+. chr1 183 chr1 254 . .
+. chr1 221 chr1 273 . . 
+. chr1 254 chr1 298 . . </code></pre>
+</div>
+<p>Note that this genome reference is made of a single chromosome (<code>chr1</code>), very short (length of <code>389</code>). By binning this chromosome in 100bp-wide bins (<code>100</code> bp is the <em><code>resolution</code></em>), one would optain the following four <code>bins</code>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bins.bed</strong></pre>
+</div>
+<pre><code>&lt;chr&gt;  &lt;pos&gt; &lt;bin&gt;
+chr1   1     100
+chr1   101   200
+chr1   201   300
+chr1   301   389</code></pre>
+</div>
+<p>Each pair extremity can be changed to an integer indicating the position of the <code>bin</code> it falls in, e.g.&nbsp;for the left-hand extremity of the pairs file printed hereinabove (<code>bin1</code>):</p>
+<pre><code>&lt;chr1&gt;  &lt;pos1&gt;  -&gt;  &lt;bin1&gt;
+chr1    162     -&gt;  2
+chr1    180     -&gt;  2
+chr1    183     -&gt;  2
+chr1    221     -&gt;  3
+chr1    254     -&gt;  3</code></pre>
+<p>Similarly for the right-hand extremity of the pairs file (<code>bin2</code>):</p>
+<pre><code>&lt;chr2&gt;  &lt;pos2&gt;  -&gt;  &lt;bin2&gt;
+chr1    172     -&gt;  chr1 2
+chr1    192     -&gt;  chr1 2
+chr1    254     -&gt;  chr1 3
+chr1    273     -&gt;  chr1 3
+chr1    298     -&gt;  chr1 3</code></pre>
+<p>By pasting side-to-side the left-hand and right-hand extremities of each pair, the <code>.pairs</code> file can be turned into something like:</p>
+<pre><code>&lt;bin1&gt; &lt;bin2&gt;
+2      2
+2      2
+2      3
+3      3
+3      3</code></pre>
+<p>And if we now count the number of each <code>&lt;bin1&gt; &lt;bin2&gt;</code> combinaison, adding a third <code>&lt;count&gt;</code> column, we end up with a <code>count.matrix</code> text file:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>count.matrix</strong></pre>
+</div>
+<pre><code>&lt;bin1&gt; &lt;bin2&gt;  &lt;count&gt;
+2      2       2
+2      3       1
+3      3       2</code></pre>
+</div>
+<p>This <code>count.matrix</code> file lists a total of 5 pairs, and in which bin each extremity of each pair is contained. Thus, a count matrix is a lossy file format, as it “rounds up” the position of each pair’s extremity to the genomic bin containing it.</p>
+<p>This “i-j-x” 3-column format, in which <code>i-j</code> relate to a pair of “coordinates” indices (or a pair of genomic bin indices) in a matrix, and <code>x</code> relates to a score associated with the pair of indices, is generally called a “COO sparse matrix”.</p>
+<p>In this context, the <code>regions.bed</code> acts as a secondary “dictionary” describing the nature of <code>i</code> and <code>j</code> indices, i.e.&nbsp;the location of genomic bins.</p>
+</section><section id="plain-text-matrices-hic-pro-style" class="level4" data-number="1.3.2.2"><h4 data-number="1.3.2.2" class="anchored" data-anchor-id="plain-text-matrices-hic-pro-style">
+<span class="header-section-number">1.3.2.2</span> Plain-text matrices: HiC-Pro style</h4>
+<p>The HiC-Pro pipeline (<span class="citation" data-cites="Servant2015Dec">Servant et al. (<a href="#ref-Servant2015Dec" role="doc-biblioref">2015</a>)</span>) outputs 2 text files: a <code>regions.bed</code> file and a <code>count.matrix</code> file. They are generated by the exact process explained hereinabove.</p>
+<p>Together, these two files can describe the interaction frequency between any pair of genomic loci. They are non-binarized text files, and as such are tchnically human-readable. However, it is relatively hard to get a grasp of these files compared to a plain <code>.pairs</code> file, as informations regarding genomic bins and interaction frequencies are stored in separate files. Moreover, because they are non-binarized, these files often end up using a large disk space and cannot be easily indexed. This prevents random access to the data stored in these files.</p>
+<p><code>.(m)cool</code> and <code>.hic</code> file formats are two standards adressing these limitations.</p>
+</section><section id="mcool-matrices" class="level4" data-number="1.3.2.3"><h4 data-number="1.3.2.3" class="anchored" data-anchor-id="mcool-matrices">
+<span class="header-section-number">1.3.2.3</span> <code>.(m)cool</code> matrices</h4>
+<p>The <code>.cool</code> format has been formally defined in <span class="citation" data-cites="Abdennur2020Jan">Abdennur and Mirny (<a href="#ref-Abdennur2020Jan" role="doc-biblioref">2020</a>)</span> and is a particular type of <code>HDF5</code> (<code>Hierarchical Data Format</code>) file. In layman’s terms, it is an indexed archive file storing rectangular tables called:</p>
+<ul>
+<li>
+<code>bins</code>: containing the same information than the <code>regions.bed</code> file;</li>
+<li>
+<code>pixels</code>: containing the same information than the <code>count.matrix</code> (each “<code>pixel</code>” is a pair of 2 <code>bins</code> and has one or several associated <code>score</code>s);</li>
+<li>
+<code>chroms</code>: summarizing the order and length of the chromosomes present in a Hi-C contact matrix;</li>
+<li>
+<code>indexes</code>: allowing <code>random access</code>, i.e.&nbsp;parsing of only a subset of the data without having to read through the entire set of data.</li>
+</ul>
+<p>A single <code>.pairs</code> file binned at different resolutions can still be savec into a single, multi-resolution <code>.mcool</code> file. <code>.mcool</code> essentially consists of nested <code>.cool</code> files.</p>
+<p>Importantly, as an <code>HDF5</code>-based format, <code>.cool</code> files are binarized, indexed and highly-compressed. Moreover, parsing <code>.cool</code> files is possible using <code>HDF</code> standard APIs.</p>
+</section><section id="hic-matrices" class="level4" data-number="1.3.2.4"><h4 data-number="1.3.2.4" class="anchored" data-anchor-id="hic-matrices">
+<span class="header-section-number">1.3.2.4</span> <code>.hic</code> matrices</h4>
+<p>The <code>.hic</code> format is another type of binarized, indexed and highly-compressed file (<span class="citation" data-cites="Durand2016Jul">Durand et al. (<a href="#ref-Durand2016Jul" role="doc-biblioref">2016</a>)</span>). It can store virtually the same information than a <code>.cool</code> file. However, parsing <code>.hic</code> files is not as straightforward as <code>.cool</code> files, as it does not rely on a generic file standard. Still, the <code>straw</code> library has been implemented in several computing languages to facilitate parsing of <code>.hic</code> files (<span class="citation" data-cites="Durand2016Jul">Durand et al. (<a href="#ref-Durand2016Jul" role="doc-biblioref">2016</a>)</span>).</p>
 </section></section></section><section id="references" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-Abdennur2020Jan" class="csl-entry" role="doc-biblioentry">
+Abdennur, Nezar, and Leonid A. Mirny. 2020. <span>“<span class="nocase">Cooler: scalable storage for Hi-C data and other genomically labeled arrays</span>.”</span> <em>Bioinformatics</em> 36 (1): 311–16. <a href="https://doi.org/10.1093/bioinformatics/btz540">https://doi.org/10.1093/bioinformatics/btz540</a>.
+</div>
 <div id="ref-Dekker2002Feb" class="csl-entry" role="doc-biblioentry">
 Dekker, Job, Karsten Rippe, Martijn Dekker, and Nancy Kleckner. 2002. <span>“<span>Capturing Chromosome Conformation</span>.”</span> <em>Science</em> 295 (5558): 1306–11. <a href="https://doi.org/10.1126/science.1067799">https://doi.org/10.1126/science.1067799</a>.
+</div>
+<div id="ref-Deshpande2022Oct" class="csl-entry" role="doc-biblioentry">
+Deshpande, Aditya S., Netha Ulahannan, Matthew Pendleton, Xiaoguang Dai, Lynn Ly, Julie M. Behr, Stefan Schwenk, et al. 2022. <span>“<span class="nocase">Identifying synergistic high-order 3D chromatin conformations from genome-scale nanopore concatemer sequencing</span>.”</span> <em>Nat. Biotechnol.</em> 40 (October): 1488–99. <a href="https://doi.org/10.1038/s41587-022-01289-z">https://doi.org/10.1038/s41587-022-01289-z</a>.
+</div>
+<div id="ref-Durand2016Jul" class="csl-entry" role="doc-biblioentry">
+Durand, Neva C., Muhammad S. Shamim, Ido Machol, Suhas S. P. Rao, Miriam H. Huntley, Eric S. Lander, and Erez Lieberman Aiden. 2016. <span>“<span class="nocase">Juicer provides a one-click system for analyzing loop-resolution Hi-C experiments</span>.”</span> <em>Cell Systems</em> 3 (1): 95. <a href="https://doi.org/10.1016/j.cels.2016.07.002">https://doi.org/10.1016/j.cels.2016.07.002</a>.
 </div>
 <div id="ref-J.O.2017Jan" class="csl-entry" role="doc-biblioentry">
 J. O., Davies, Oudelaar A. M., Higgs D. R., and Hughes J. R. 2017. <span>“<span class="nocase">How best to identify chromosomal interactions: a comparison of approaches.</span>”</span> <em>Nat. Methods</em> 14 (2): 125–34. <a href="https://doi.org/10.1038/nmeth.4146">https://doi.org/10.1038/nmeth.4146</a>.
 </div>
 <div id="ref-Lieberman-Aiden2009Oct" class="csl-entry" role="doc-biblioentry">
 Lieberman-Aiden, Erez, Nynke L. van Berkum, Louise Williams, Maxim Imakaev, Tobias Ragoczy, Agnes Telling, Ido Amit, et al. 2009. <span>“<span class="nocase">Comprehensive mapping of long range interactions reveals folding principles of the human genome</span>.”</span> <em>Science (New York, N.Y.)</em> 326 (5950): 289. <a href="https://doi.org/10.1126/science.1181369">https://doi.org/10.1126/science.1181369</a>.
+</div>
+<div id="ref-Open2C2023Jan" class="csl-entry" role="doc-biblioentry">
+Open2C, Nezar Abdennur, Geoffrey Fudenberg, Ilya M. Flyamer, Aleksandra A. Galitsyna, Anton Goloborodko, Maxim Imakaev, and Sergey V. Venev. 2023. <span>“<span class="nocase">Pairtools: from sequencing data to chromosome contacts</span>.”</span> <em>bioRxiv</em>, February, 2023.02.13.528389. <a href="https://doi.org/10.1101/2023.02.13.528389">https://doi.org/10.1101/2023.02.13.528389</a>.
+</div>
+<div id="ref-Servant2015Dec" class="csl-entry" role="doc-biblioentry">
+Servant, Nicolas, Nelle Varoquaux, Bryan R. Lajoie, Eric Viara, Chong-Jian Chen, Jean-Philippe Vert, Edith Heard, Job Dekker, and Emmanuel Barillot. 2015. <span>“<span class="nocase">HiC-Pro: an optimized and flexible pipeline for Hi-C data processing</span>.”</span> <em>Genome Biol.</em> 16 (1): 1–11. <a href="https://doi.org/10.1186/s13059-015-0831-x">https://doi.org/10.1186/s13059-015-0831-x</a>.
+</div>
+<div id="ref-Tavares-Cadete2020Dec" class="csl-entry" role="doc-biblioentry">
+Tavares-Cadete, Filipe, Davood Norouzi, Bastiaan Dekker, Yu Liu, and Job Dekker. 2020. <span>“<span class="nocase">Multi-contact 3C reveals that the human genome during interphase is largely not entangled</span>.”</span> <em>Nat. Struct. Mol. Biol.</em> 27 (December): 1105–14. <a href="https://doi.org/10.1038/s41594-020-0506-5">https://doi.org/10.1038/s41594-020-0506-5</a>.
 </div>
 </div>
 

@@ -81,6 +81,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -164,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./principles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span></a>
+  <a href="./principles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C pre-processing steps</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -242,7 +261,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul>
 <li><a href="#granges-class" id="toc-granges-class" class="nav-link active" data-scroll-target="#granges-class"><span class="toc-section-number">2.1</span>  <code>GRanges</code> class</a></li>
   <li><a href="#ginteractions-class" id="toc-ginteractions-class" class="nav-link" data-scroll-target="#ginteractions-class"><span class="toc-section-number">2.2</span>  <code>GInteractions</code> class</a></li>
-  <li><a href="#hicexperiment-class" id="toc-hicexperiment-class" class="nav-link" data-scroll-target="#hicexperiment-class"><span class="toc-section-number">2.3</span>  <code>HiCExperiment</code> class</a></li>
+  <li><a href="#contactfile-class" id="toc-contactfile-class" class="nav-link" data-scroll-target="#contactfile-class"><span class="toc-section-number">2.3</span>  <code>ContactFile</code> class</a></li>
+  <li><a href="#hicexperiment-class" id="toc-hicexperiment-class" class="nav-link" data-scroll-target="#hicexperiment-class"><span class="toc-section-number">2.4</span>  <code>HiCExperiment</code> class</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/data-representation.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -265,43 +286,134 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header><div class="cell">
 
 </div>
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Aims
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This notebook introduces the four main classes offered by <code>Bioconductor</code> which support Hi-C analysis, describes their structure and how to interact with them:<br>
+- <code>GRanges</code>;<br>
+- <code>GInteractions</code>;<br>
+- <code>ContactFile</code>;<br>
+- <code>HiCExperiment</code></p>
+</div>
+</div>
 <section id="granges-class" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="granges-class">
 <span class="header-section-number">2.1</span> <code>GRanges</code> class</h2>
+<p><code>GRanges</code> is a shorthand for <code>GenomicRanges</code>, a core class in <code>Bioconductor</code>. The data structure has been published in the fundamental 2015 publication by <code>Bioconductor</code> (<span class="citation" data-cites="Huber2015Feb">Huber et al. (<a href="#ref-Huber2015Feb" role="doc-biblioref">2015</a>)</span>).</p>
+<p><code>GenomicRanges</code> objects aim to provide a natural description of genomic intervals and are incredibly versatile.</p>
 </section><section id="ginteractions-class" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="ginteractions-class">
 <span class="header-section-number">2.2</span> <code>GInteractions</code> class</h2>
-</section><section id="hicexperiment-class" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="hicexperiment-class">
-<span class="header-section-number">2.3</span> <code>HiCExperiment</code> class</h2>
-<div class="cell" data-hash="data-representation_cache/html/yeast_norm_dac22c9a1c139dfa3d3da8db0961fc37">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
-<span><span class="va">contacts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/data.html">contacts_yeast</a></span><span class="op">(</span>full <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>##  snapshotDate(): 2023-02-14</code></pre>
+</section><section id="contactfile-class" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="contactfile-class">
+<span class="header-section-number">2.3</span> <code>ContactFile</code> class</h2>
+<p>Contact matrices can be in three different formats (see <a href="./principles.html#binned-contact-matrix-files">previous chapter</a>):</p>
+<ul>
+<li>
+<code>.(m)cool</code> matrix (multi-scores, multi-resolution, indexed)</li>
+<li>
+<code>.hic</code> matrix (multi-scores, multi-resolution, indexed)</li>
+<li>HiC-pro derived matrix (single-score, single-resolution, non-indexed)</li>
+</ul>
+<p>Example contact matrix files can be obtained using <code>HiContactsData</code> function.</p>
+<div class="cell" data-hash="data-representation_cache/html/unnamed-chunk-2_2bb8ffaf7dddb37f6cfa116bfb578886">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: ExperimentHub</span></span>
+<span><span class="co">##  Loading required package: BiocGenerics</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'BiocGenerics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      IQR, mad, sd, var, xtabs</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      anyDuplicated, aperm, append, as.data.frame, basename, cbind,</span></span>
+<span><span class="co">##      colnames, dirname, do.call, duplicated, eval, evalq, Filter,</span></span>
+<span><span class="co">##      Find, get, grep, grepl, intersect, is.unsorted, lapply, Map,</span></span>
+<span><span class="co">##      mapply, match, mget, order, paste, pmax, pmax.int, pmin,</span></span>
+<span><span class="co">##      pmin.int, Position, rank, rbind, Reduce, rownames, sapply,</span></span>
+<span><span class="co">##      setdiff, sort, table, tapply, union, unique, unsplit, which.max,</span></span>
+<span><span class="co">##      which.min</span></span>
+<span><span class="co">##  Loading required package: AnnotationHub</span></span>
+<span><span class="co">##  Loading required package: BiocFileCache</span></span>
+<span><span class="co">##  Loading required package: dbplyr</span></span>
+<span><span class="va">coolf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'mcool'</span><span class="op">)</span></span>
+<span><span class="co">##  snapshotDate(): 2023-02-28</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">hicf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'hic'</span><span class="op">)</span></span>
+<span><span class="co">##  snapshotDate(): 2023-02-28</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">hicpromatrixf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'hicpro_matrix'</span><span class="op">)</span></span>
+<span><span class="co">##  snapshotDate(): 2023-02-28</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">hicproregionsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'hicpro_bed'</span><span class="op">)</span></span>
+<span><span class="co">##  snapshotDate(): 2023-02-28</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</code></pre>
+<p>A connection to each of these files can then be created in R using the matching function.</p>
+<div class="cell" data-hash="data-representation_cache/html/unnamed-chunk-3_6d1c7fbc6c3f225501ba5be52a34d0f3">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
+<span><span class="co">##  CoolFile object</span></span>
+<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/166d57352244_7752 </span></span>
+<span><span class="co">##  resolution: 1000 </span></span>
+<span><span class="co">##  pairs file: </span></span>
+<span><span class="co">##  metadata(0):</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/HicFile-class.html">HicFile</a></span><span class="op">(</span><span class="va">hicf</span><span class="op">)</span></span>
+<span><span class="co">##  HicFile object</span></span>
+<span><span class="co">##  .hic file: /root/.cache/R/ExperimentHub/166d454d52d7_7836 </span></span>
+<span><span class="co">##  resolution: 1000 </span></span>
+<span><span class="co">##  pairs file: </span></span>
+<span><span class="co">##  metadata(0):</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/HicproFile-class.html">HicproFile</a></span><span class="op">(</span><span class="va">hicpromatrixf</span>, <span class="va">hicproregionsf</span><span class="op">)</span></span>
+<span><span class="co">##  HicproFile object</span></span>
+<span><span class="co">##  HiC-Pro files:</span></span>
+<span><span class="co">##    $ matrix:   /root/.cache/R/ExperimentHub/166d7f88bfd4_7837 </span></span>
+<span><span class="co">##    $ regions:  /root/.cache/R/ExperimentHub/166d3d45ec3d_7838 </span></span>
+<span><span class="co">##  resolution: 1000 </span></span>
+<span><span class="co">##  pairs file: </span></span>
+<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>##  downloading 1 resources</code></pre>
+</section><section id="hicexperiment-class" class="level2" data-number="2.4"><h2 data-number="2.4" class="anchored" data-anchor-id="hicexperiment-class">
+<span class="header-section-number">2.4</span> <code>HiCExperiment</code> class</h2>
+<div class="cell" data-hash="data-representation_cache/html/yeast_norm_8588ef5b630d6842873d9ac244af35ae">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/data.html">contacts_yeast</a></span><span class="op">(</span>full <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">##  snapshotDate(): 2023-02-28</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">hic</span></span>
+<span><span class="co">##  `HiCExperiment` object with 8,757,906 contacts over 763 regions </span></span>
+<span><span class="co">##  -------</span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166d57352244_7752" </span></span>
+<span><span class="co">##  focus: "whole genome" </span></span>
+<span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
+<span><span class="co">##  active resolution: 16000 </span></span>
+<span><span class="co">##  interactions: 267709 </span></span>
+<span><span class="co">##  scores(2): count balanced </span></span>
+<span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) centromeres(16) </span></span>
+<span><span class="co">##  pairsFile: N/A </span></span>
+<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>##  retrieving 1 resource</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>##  loading from cache</code></pre>
-</div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">contacts</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>##  `HiCExperiment` object with 68,003,145 contacts over 763 regions 
-##  -------
-##  fileName: "/root/.cache/R/ExperimentHub/7033ffae72_7752" 
-##  focus: "whole genome" 
-##  resolutions(5): 1000 2000 4000 8000 16000
-##  active resolution: 16000 
-##  interactions: 267709 
-##  scores(2): count balanced 
-##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) centromeres(16) 
-##  pairsFile: N/A 
-##  metadata(0):</code></pre>
+</section><section id="references" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-Huber2015Feb" class="csl-entry" role="doc-biblioentry">
+Huber, Wolfgang, Vincent J. Carey, Robert Gentleman, Simon Anders, Marc Carlson, Benilton S. Carvalho, Hector Corrada Bravo, et al. 2015. <span>“<span class="nocase">Orchestrating high-throughput genomic analysis with Bioconductor</span>.”</span> <em>Nat. Methods</em> 12 (2): 115–21. <a href="https://doi.org/10.1038/nmeth.3252">https://doi.org/10.1038/nmeth.3252</a>.
 </div>
 </div>
 
@@ -440,7 +552,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./principles.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C pre-processing steps</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

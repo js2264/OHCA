@@ -164,7 +164,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./principles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C principles</span></a>
+  <a href="./principles.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C pre-processing steps</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -269,7 +269,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>To illustrate advanced Hi-C analysis, we will use a Hi-C map generated in a yeast mutant, which contains segments of <code>Mycoides mycoides</code> chromosome translocated within the chromosome XVI.</p>
 <section id="distance-laws" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="distance-laws">
 <span class="header-section-number">6.1</span> Distance law(s)</h2>
-<div class="cell" data-hash="interactions-centric_cache/html/import_a298a0fac6b2538dfd3b00eda69564b5">
+<div class="cell" data-hash="interactions-centric_cache/html/import_80240d98aa9767b5c42b574ff2b576b1">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContacts">HiContacts</a></span><span class="op">)</span></span>
@@ -286,7 +286,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="va">synthChr_zoomed</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">synthChr_cf</span>, focus <span class="op">=</span> <span class="st">'chrXVI-Mmmyco_inv870kb'</span>, resolution <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can compute a P(s) per chromosome for this sample using the <code>distanceLaw</code> function.</p>
-<div class="cell" data-hash="interactions-centric_cache/html/ps_c5b4758c96f9d7f58dea4197d0528fec">
+<div class="cell" data-hash="interactions-centric_cache/html/ps_9a864cf48d1a3354bc19d6c079c08831">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">### ----- Distance law</span></span>
 <span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/Ps.html">distanceLaw</a></span><span class="op">(</span><span class="va">synthChr</span>, by_chr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span>  </span>
 <span>    <span class="fu">mutate</span><span class="op">(</span>type <span class="op">=</span> <span class="fu">case_when</span><span class="op">(</span><span class="va">chr</span> <span class="op">==</span> <span class="st">'chrXVI-Mmmyco_inv870kb'</span> <span class="op">~</span> <span class="st">'XVI-Myco'</span>, <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">'WT'</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -302,7 +302,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section><section id="scalograms" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="scalograms">
 <span class="header-section-number">6.2</span> Scalograms</h2>
-<div class="cell" data-hash="interactions-centric_cache/html/unnamed-chunk-2_f8e3c600cfd4393ad40f15f8ba87ed0c">
+<div class="cell" data-hash="interactions-centric_cache/html/unnamed-chunk-2_425a20e5384ea4bb94faa9cc746e35fe">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">### ----- scalograms</span></span>
 <span><span class="va">scalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/scalogram.html">scalogram</a></span><span class="op">(</span><span class="va">synthChr</span><span class="op">)</span> </span>
 <span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">synthChr</span><span class="op">[</span><span class="st">'chrXVI-Mmmyco_inv870kb'</span><span class="op">]</span>, use.scores <span class="op">=</span> <span class="st">'autocorrelated'</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.8</span>, <span class="fl">0.8</span><span class="op">)</span>, scale <span class="op">=</span> <span class="st">'linear'</span>, cmap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/palettes.html">bwrColors</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -313,7 +313,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </section><section id="cistrans-ratios" class="level2" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="cistrans-ratios">
 <span class="header-section-number">6.3</span> Cis/trans ratios</h2>
-<div class="cell" data-hash="interactions-centric_cache/html/unnamed-chunk-3_28139994fa42fcf8bb599ce4bb642cc4">
+<div class="cell" data-hash="interactions-centric_cache/html/unnamed-chunk-3_1af98a36d99b419a1b223c5d9a0e0cdb">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">### ----- cis/trans ratios</span></span>
 <span><span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/cisTransRatio.html">cisTransRatio</a></span><span class="op">(</span><span class="va">synthChr</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">chr</span> <span class="op">!=</span> <span class="st">'chrXII'</span><span class="op">)</span></span>
 <span><span class="va">p7</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">ct</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">chr</span>, y <span class="op">=</span> <span class="va">trans_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -325,7 +325,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section><section id="virtual-4c-profiles" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="virtual-4c-profiles">
 <span class="header-section-number">6.4</span> Virtual 4C profiles</h2>
 <p>Using the mammalian NPCs dataset as an example, we can also generate virtual 4C profiles.</p>
-<div class="cell" data-hash="interactions-centric_cache/html/NPCs_v4c_68f0a33cad0d9d8d6a0eee67cb0d7890">
+<div class="cell" data-hash="interactions-centric_cache/html/NPCs_v4c_7bf44df2cacd3bc9c5f64ecac7e31227">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">### ----- virtual 4c (NPCs)</span></span>
 <span><span class="va">v4C_loop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/virtual4C.html">virtual4C</a></span><span class="op">(</span><span class="va">npcs_narrow</span>, viewpoint <span class="op">=</span> <span class="fu">GRanges</span><span class="op">(</span><span class="st">'chr3:100965000-100975000'</span><span class="op">)</span>, use.scores <span class="op">=</span> <span class="st">'balanced'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu">plyranges</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span></span>
