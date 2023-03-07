@@ -2,17 +2,24 @@
 bibliography: bibliography.bib
 ---
 
-# Representation of genomic data in R
+# Hi-C data structures in R
 
 ```{r}
 #| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
 source("_common.R")
+library(ggplot2)
+library(GenomicRanges)
+library(InteractionSet)
+library(HiCExperiment)
 ```
 
 ::: {.callout-note}
 ## Aims
-This notebook introduces the four main classes offered by `Bioconductor` which 
-support Hi-C analysis, describes their structure and how to interact with them:  
+This notebook introduces the four main classes offered by `Bioconductor` 
+leveraged to perform Hi-C analysis, describes their structure and how to interact with them:  
 - `GRanges`;  
 - `GInteractions`;  
 - `ContactFile`;  
@@ -21,23 +28,594 @@ support Hi-C analysis, describes their structure and how to interact with them:
 
 ## `GRanges` class
 
+### `GRanges` fundamentals 
+
 `GRanges` is a shorthand for `GenomicRanges`, a core class in `Bioconductor`. 
-The data structure has been published in the fundamental 2015 publication by `Bioconductor` (@Huber2015Feb). 
+The data structure has been published in the fundamental 2015 publication by 
+`Bioconductor` (@Huber2015Feb). 
+
+The easiest way to generate a `GRanges` object is to coerce it from a vector of 
+genomic coordinates in the UCSC format (e.g. `"chr2:2004-4853"`):
+
+```{r}
+library(GenomicRanges)
+gr <- GRanges(c(
+    "chr2:2004-7853:+", 
+    "chr4:4482-9873:-", 
+    "chr5:1943-4203:+", 
+    "chr5:4103-5004:+"  
+))
+gr
+```
+
+A single `GRanges` object can contain one or several **"ranges"**, or genomic intervals. 
+To navigate between these ranges, `GRanges` can be subset using the standard `R` single bracket notation `[`: 
+
+```{r}
+gr[1]
+gr[1:3]
+```
 
 `GenomicRanges` objects aim to provide a natural description of genomic 
-intervals and are incredibly versatile. 
+intervals (ranges) and are incredibly versatile. They extend the 
+`data.frame` object and have four required pieces of information: 
+
+- seqnames (i.e. chromosome names) (accessible with `seqnames()`)
+- start (accessible with `start()`)
+- end (accessible with `end()`)
+- strand (accessible with `strand()`)
+
+```{r}
+seqnames(gr)
+start(gr)
+end(gr)
+strand(gr)
+```
+
+Here is a graphical representation of a `GRanges` object, taken from 
+[`Bioconductor` course material](https://www.bioconductor.org/help/course-materials/2015/UseBioconductorFeb2015/): 
+
+![](images/20230306102639.png)
+
+We will now delve into the detailed structure and operability of `GRanges` objects. 
+
+### `GRanges` metadata
+
+An important aspect of `GRanges` objects is that each entry (range) can have 
+extra optional metadata. This metadata is stored in a rectangular 
+`DataFrame`. Each column can contain a different type of information, 
+e.g. a `numerical` vector, a `factor`, a list, ...  
+
+One can directly access this `DataFrame` using the `mcols()` function, 
+and individual columns of metadata using the `$` notation: 
+
+```{r}
+mcols(gr)
+mcols(gr)$count <- c(1, 2, 3, 4)
+mcols(gr)$GC <- c(0.45, 0.43, 0.44, 0.42)
+mcols(gr)$annotation <- factor(c(NA, 'promoter', 'enhancer', 'centormere'))
+mcols(gr)$extended.info <- c(
+    list(c(NA)), 
+    list(c(date = 2023, source = 'manual')), 
+    list(c(date = 2021, source = 'manual')), 
+    list(c(date = 2019, source = 'homology'))
+)
+mcols(gr)
+```
+
+When metadata columns are defined for a `GRanges` object, they are pasted next 
+to the minimal 4 required `GRanges` fields, separated by a `|` character. 
+
+```{r}
+gr
+```
+
+### Genomic arithmetics on individual `GRanges` objects
+
+A `GRanges` object primarily describes a set of genomic ranges (*it is in the name!*). 
+Useful genomic-oriented methods have been implemented to investigate individual 
+`GRanges` object from a genomic perspective.   
+
+#### Intra-range methods 
+
+Standard genomic arithmetics are possible with `GRanges`, e.g. 
+shifting ranges, resizing, trimming, ... 
+These methods are referred to as "intra-range" methods 
+as they work *"one-region-at-a-time"*. 
+
+::: {.callout-note icon='false'}
+Note how each range of the input `GRanges` object is modified independently from the 
+other ranges in the following code chunks.
+:::
+
+- Computing the width of each genomic range:
+
+```{r}
+width(gr) 
+```
+
+- Shifting each genomic range in a `GRanges` object by a certain number of bases: 
+
+```{r}
+## Shift all genomic ranges towards the "right" (downstream in `+` strand), by 1000bp:
+gr
+shift(gr, 1000)
+## Shift all genomic ranges towards the "left" (upstream in `+` strand), by 1000bp:
+shift(gr, -1000)
+```
+
+- Narrowing each genomic range in a `GRanges` object by a certain number of bases: 
+
+```{r}
+## Extract 21st-40th subrange for each range in `gr`:
+gr
+narrow(gr, start = 21, end = 40)
+width(narrow(gr, start = 21, end = 40))
+```
+
+- Resizing each genomic range in a `GRanges` object to a certain number of bases: 
+
+```{r}
+## Resize `gr` entries to 100, fixed at the start of each range:
+resize(gr, 100, fix = "start")
+## Resize `gr` entries to 100, fixed at the start of each range, disregarding strand information:
+resize(gr, 100, fix = "start", ignore.strand = TRUE)
+## Resize `gr` entries to 1 bp, fixed at the center of each range:
+resize(gr, 1, fix = "center")
+```
+
+- Extracting flanking coordinates for each entry in `gr`:
+
+```{r}
+gr
+## Extract 100bp UPSTREAM of each genomic range, according to range strandness:
+flank(gr, 100, start = TRUE)
+## Extract 1bp DOWNSTREAM of each genomic range, according to range strandness:
+flank(gr, 1, start = FALSE)
+```
+
+Note how here again, strand information is crucial and correctly leveraged 
+to extract "upstream" or "downstream" flanking regions in agreement with 
+genomic range orientation.
+
+::: {.callout-warning}
+## Going further
+To fully grasp how to operate `GRanges` objects, we highly recommend reading the 
+detailed documentation for this class by typing `?GenomicRanges` and 
+`?GenomicRanges::``intra-range-methods`` `.
+:::
+
+#### Inter-range methods {#inter-range}
+
+Compared to "intra-range" methods described above, **inter-range** methods 
+involve comparisons *between* ranges **in a single** GRanges object.
+
+::: {.callout-note icon='false'}
+Note how compared to previous section, the result of each function described below 
+depends on the entire set of ranges in the input `GRanges` object.
+:::
+
+- Computing the "inverse" genomic ranges, i.e. ranges in-between the input ranges:
+
+```{r}
+gaps(gr)
+```
+
+::: {.callout-tip icon='false'}
+Note how chromosome lengths are handled when looking for "inverse" genomic ranges. 
+Here, we have not specified the length of each chromosome, hence the chromosomes 
+are assumed to end at the largest location on each chromosome. We'll ignore this detail for now.
+:::
+
+- For each entry in a `GRanges`, finding the index of the preceding/following/nearest genomic range:
+
+```{r}
+precede(gr)
+follow(gr)
+nearest(gr)
+```
+
+- Computing a coverage over a genome, optionally indicated a "score" column from metadata: 
+
+```{r}
+coverage(gr, weight = 'GC')
+```
+
+::: {.callout-warning}
+## Going further
+To fully grasp how to operate `GRanges` objects, we highly recommend reading the 
+detailed documentation for this class by typing `?GenomicRanges::``inter-range-methods`` `. 
+:::
+
+### Comparing multiple `GRanges` objects
+
+Genomic analysis typically requires intersection of two sets of genomic ranges, 
+e.g. to find which ranges from one set overlap with those from another set.  
+
+In the next examples, we will use two `GRanges`: 
+
+- `peaks` represents dummy 8 ChIP-seq peaks 
+
+```{r}
+peaks <- GRanges(c(
+    'chr1:320-418',
+    'chr1:512-567',
+    'chr1:843-892',
+    'chr1:1221-1317', 
+    'chr1:1329-1372', 
+    'chr1:1852-1909', 
+    'chr1:2489-2532', 
+    'chr1:2746-2790'
+))
+peaks
+```
+
+- `TSSs` represents dummy 3 gene promoters (± 10bp around the TSS)
+
+```{r}
+genes <- GRanges(c(
+    'chr1:358-1292:+',
+    'chr1:1324-2343:+', 
+    'chr1:2732-2751:+'
+))
+TSSs <- resize(genes, width = 1, fix = 'start') |> resize(width = 20, fix = 'center')
+TSSs
+```
+
+Let's see how they overlap by plotting them: 
+
+```{r}
+library(ggplot2)
+peaks$type <- 'peaks'
+TSSs$type <- 'TSSs'
+p <- ggplot() + 
+    ggbio::geom_rect(c(peaks, TSSs), aes(fill = type), facets = type~.) + 
+    ggbio::theme_alignment() + 
+    coord_fixed(ratio = 300)
+```
+
+#### Finding overlaps between two `GRanges` sets
+
+> Finding overlaps between a query and a subject
+
+In our case, we want to identify which ChIP-seq peaks overlap with a TSS: 
+the query is the set of peaks and the subject is the set of TSSs. 
+
+`findOverlaps` returns a `Hits` object listing which `query` ranges overlap with which `subject` ranges. 
+
+```{r}
+ov <- findOverlaps(query = peaks, subject = TSSs)
+ov
+```
+
+The `Hits` output clearly describes what overlaps with what: 
+
+- The query (peak) `#1` overlaps with subject (TSS) `#1`
+- The query (peak) `#5` overlaps with subject (TSS) `#2`
+
+::: {.callout-note icon='false'}
+Because no other query index or subject index is listed in the `ov` output, 
+it means that none of the remaining indices overlap with the other. 
+:::
+
+> Subsetting by overlaps between a query and a subject
+
+To directly **subset** ranges from `query` overlapping with ranges from a 
+`subject` (e.g. to only keep *peaks* overlapping a *TSS*), we can use the 
+`subsetByOverlaps` function. 
+
+```{r}
+subsetByOverlaps(peaks, TSSs)
+```
+
+::: {.callout-note icon='false'}
+The output of `subsetByOverlaps` is a subset of the original `GRanges` object
+provided as a `query`, with retained ranges being unmodified. 
+:::
+
+> Counting overlaps between a query and a subject
+
+Finally, the `countOverlaps` is used to count, for each range in a `query`, how 
+many ranges in the `subject` it overlaps with. 
+
+```{r}
+countOverlaps(query = peaks, subject = TSSs)
+```
+
+::: {.callout-note icon='false'}
+Note that which `GRanges` goes in `query` or `subject` is crucial! Counting 
+**for each peak, the number of TSSs it overlaps with** is very different from 
+**for each TSS, how many peaks it overlaps with**. 
+
+In our case example, it would also be informative to count how many peaks overlap 
+with each TSS, so we'd need to swap `query` and `subject`: 
+
+```{r}
+countOverlaps(query = TSSs, subject = peaks)
+```
+
+We can add these counts to the original `query` object: 
+
+```{r}
+TSSs$n_peaks <- countOverlaps(query = TSSs, subject = peaks)
+TSSs
+```
+:::
+
+> `%over%`, `%within%`, `%outside%` : handy operators
+
+Handy operators exist that return logical vectors (same length as the `query`). 
+They essentially are short-hands for specific `findOverlaps()` cases. 
+
+- `<query> %over% <subject>`: 
+
+```{r}
+peaks %over% TSSs
+peaks[peaks %over% TSSs]
+```
+
+- `<query> %within% <subject>`: 
+
+```{r}
+peaks %within% TSSs
+TSSs %within% peaks
+```
+
+- `<query> %outside% <subject>`: 
+
+```{r}
+peaks %outside% TSSs
+```
+
+::: {.callout-warning}
+## Going further
+To fully grasp how to find overlaps between `GRanges` objects, we highly recommend reading the 
+detailed documentation by typing `?IRanges::``findOverlaps-methods`` `.
+:::
+
+#### Find nearest range from a subject for each range in a query
+
+`*Overlaps` methods are not always enough to match a `query` to a `subject`. 
+For instance, some peaks in the `query` might be very near to some TSSs in 
+the `subject`, but not quite overlapping. 
+
+```{r}
+peaks[8]
+TSSs[3]
+```
+
+> nearest
+
+Rather than finding the *overlapping* range in a `subject` for each range in a `query`, 
+we can find the `nearest` range. 
+
+For each range in the `query`, this returns the *index* of the range in the `subject` 
+to which the `query` is the nearest. 
+
+```{r}
+nearest(peaks, TSSs)
+TSSs[nearest(peaks, TSSs)]
+```
+
+> distance
+
+Alternatively, one can simply ask to calculate the `distanceToNearest` between 
+ranges in a `query` and ranges in a `subject`. 
+
+```{r}
+distanceToNearest(peaks, TSSs)
+peaks$distance_to_nearest_TSS <- mcols(distanceToNearest(peaks, TSSs))$distance
+```
+
+Note how close from a TSS the 8th peak was. It could be worth considering this 
+as an overlap!
 
 ## `GInteractions` class
 
+`GRanges` describe genomic ranges and hence are of general use to study 1D genome organization. 
+To study chromatin interactions, we need a way to link pairs of `GRanges`. This is exactly what 
+the `GInteractions` class does. This data structure has been published in the 
+2016 paper by `Lun et al.` (@Lun2016May). 
+
+### Building a `GInteractions` object from scratch
+
+Let's first define two parallel `GRanges` objects (i.e. two `GRanges` of same length). 
+Each `GRanges` will contain 5 ranges. 
+
+```{r}
+gr_first <- GRanges(c(
+    'chr1:1-100', 
+    'chr1:1001-2000', 
+    'chr1:5001-6000', 
+    'chr1:8001-9000', 
+    'chr1:7001-8000'  
+))
+gr_second <- GRanges(c(
+    'chr1:1-100', 
+    'chr1:3001-4000', 
+    'chr1:8001-9000', 
+    'chr1:7001-8000', 
+    'chr2:13000-14000'  
+))
+```
+
+Because these two `GRanges` objects are of same length (5), one can "bind" them 
+together by using the `Pairs`function. This effectively associate with entry from 
+one `GRanges` to the entry aligned in the other `GRanges` objetc. 
+Each pair represents a set of two anchors of a single interaction.
+
+```{r}
+pairs <- Pairs(gr_first, gr_second)
+pairs
+```
+
+Finally, such `Pairs` object can be coerced into a set of genomic interactions 
+(`GInteractions`): 
+
+```{r}
+library(InteractionSet)
+gi <- makeGInteractionsFromGRangesPairs(pairs)
+gi
+```
+
+The way `GInteractions` objects are printed in an R console mimmics that of 
+`GRanges, but pairs two "ends" (a.k.a. *anchors*) of an interaction together, 
+each end being represented as a separate `GRanges` range. 
+
+::: {.callout-note icon='false'}
+- Note that it is possible to have interactions joining two identical anchors. 
+
+```{r}
+gi[1]
+```
+
+- It is also technically possible (though not advised) to have interactions for which the "first" end is located after the "second" end along the chromosome. 
+
+```{r}
+gi[4]
+```
+
+- Finally, it is possible to define inter-chromosomal interactions (a.k.a. trans interactions).
+
+```{r}
+gi[5]
+```
+:::
+
+### `GInteractions` specific slots
+
+Compared to `GRanges`, extra slots are available for `GInteractions` objects, e.g.
+`anchors` and `regions`. 
+
+#### Anchors
+
+"Anchors" of a single genomic interaction refer to the two ends of this interaction. 
+These anchors can be extracted from a `GInteractions` object using the `anchors()` function. 
+This outputs a list of two `GRanges`, the first corresponding to the "left" end of interactions 
+(when printed to the console) and the second corresponding to the "right" end of interactions 
+(when printed to the console). 
+
+```{r}
+## This extracts the two sets of anchors ("first" and "second") from a GInteractions object
+anchors(gi)
+## We can query for the "first" or "second" set of anchors directly
+anchors(gi, "first")
+anchors(gi, "second")
+```
+
+#### Regions
+
+"Regions" of a *set* of interactions refer to the universe of unique 
+anchors represented in a set of interactions. Therefore, the length 
+of the `regions` can only be equal to or strickly lower than twice the 
+length of `anchors`.  
+
+The `regions` function returns the regions associated with a `GInteractions` 
+object, stored as a `GRanges` object. 
+
+```{r}
+regions(gi)
+length(regions(gi))
+length(anchors(gi, "first"))
+```
+
+### `GInteractions` methods
+
+`GInteractions` behave as an extension of `GRanges`. For this reason, many methods 
+that work with `GRanges` will work seamlessy with `GInteractions`. 
+
+#### Metadata 
+
+One can add metadata columns directly to a `GInteractions` object. 
+
+```{r}
+mcols(gi)
+mcols(gi) <- data.frame(
+    idx = seq(1, length(gi)),
+    type = c("cis", "cis", "cis", "trans", "cis"),
+    freq = runif(length(gi))
+)
+gi
+gi$freq
+```
+
+Importantly, metadata columns can also be directly added to **regions** of a 
+`GInteractions` object, since these `regions` are a `GRanges` object themselves! 
+
+```{r}
+regions(gi)
+regions(gi)$binID <- seq_along(regions(gi))
+regions(gi)$type <- c("P", "P", "P", "E", "E", "P", "P")
+regions(gi)
+```
+
+#### Sorting `GInteractions` 
+
+The `sort` function works seamlessly with `GInteractions` objects. It sorts the 
+interactions using a similar approach to that performed by `pairtools sort ...` for disk-stored `.pairs`
+files, sorting on the "first" anchor first, then for interactions with the same 
+"first" anchors, sorting on the "second" anchor. 
+
+```{r}
+gi
+sort(gi)
+```
+
+#### Swapping `GInteractions` anchors
+
+For an individual interaction contained in a `GInteractions` object, the "first" and 
+"second" anchors themselves can be sorted as well. This is called "pairs swapping", 
+and it is performed similarly to `pairtools flip ...` for disk-stored `.pairs`
+files. This ensures that interactions, when represented as a contact matrix, 
+generate an upper-triangular matrix. 
+
+```{r}
+gi
+swapAnchors(gi)
+```
+
+::: {.callout-warning icon='false'}
+Note that "sorting" and "swapping" a `GInteractions` object are two 
+**entirely different actions**: 
+
+- "sorting" reorganizes all *rows* (interactions);
+- "swapping" *anchors* reorganizes *"first" and "second" anchors* for each interaction independently.
+:::
+
+#### `GInteractions` overlap methods
+
+```{r}
+gi %over% GRanges('chr1:50-60')
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## `ContactFile` class
 
-Contact matrices can be in three different formats (see [previous chapter](principles.qmd#binned-contact-matrix-files)): 
+Hi-C contacts can be in four different formats (see [previous chapter](principles.qmd#binned-contact-matrix-files)): 
 
 - `.(m)cool` matrix (multi-scores, multi-resolution, indexed)
 - `.hic` matrix (multi-scores, multi-resolution, indexed)
 - HiC-pro derived matrix (single-score, single-resolution, non-indexed)
+- Unbinned, Hi-C contacts can be stored in `.pairs` files
 
-Example contact matrix files can be obtained using `HiContactsData` function. 
+Example contact files can be downloaded using `HiContactsData` function. 
 
 ```{r}
 library(HiContactsData)
@@ -45,20 +623,72 @@ coolf <- HiContactsData('yeast_wt', 'mcool')
 hicf <- HiContactsData('yeast_wt', 'hic')
 hicpromatrixf <- HiContactsData('yeast_wt', 'hicpro_matrix')
 hicproregionsf <- HiContactsData('yeast_wt', 'hicpro_bed')
+pairsf <- HiContactsData('yeast_wt', 'pairs.gz')
 ```
 
-A connection to each of these files can then be created in R using the matching function. 
+A `ContactFile` object establishes a connection with a disk-stored Hi-C file 
+(e.g. a `.cool` file, or a `.pairs` file, ...). 
+
+`ContactFile`s come in four different flavors:  
+
+- `CoolFile`: connection to a `.(m)cool` file
+- `HicFile`: connection to a `.hic` file
+- `HicproFile`: connection to output files generated by HiC-Pro 
+- `PairsFile`: connection to a `.pairs` file
+
+To create each flavor of `ContactFile`, one can use the corresponding function: 
 
 ```{r}
 library(HiCExperiment)
+## This creates a connection to a `.(m)cool` file (path stored in `coolf`)
 CoolFile(coolf)
+## This creates a connection to a `.hic` file (path stored in `hicf`)
 HicFile(hicf)
+## This creates a connection to output files from HiC-Pro
 HicproFile(hicpromatrixf, hicproregionsf)
+## This creates a connection to a pairs file
+PairsFile(pairsf)
 ```
+
+Several "slots" (i.e. pieces of information) are attached to a `ContactFile` object: 
+
+- The path to the disk-stored contact matrix;
+- The active resolution (by default, the finest resolution available in a multi-resolution contact matrix);
+- Optionally, the path to a matching `pairs` file (see below);
+- Some metadata.
+
+Slots of a `CoolFile` object can be accessed as follow: 
+
+```{r slots}
+hic <- CoolFile(coolf)
+resolution(hic)
+pairsFile(hic)
+metadata(hic)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## `HiCExperiment` class
 
-```{r yeast_norm}
+```{r hce}
 hic <- contacts_yeast(full = TRUE)
 hic
 ```
