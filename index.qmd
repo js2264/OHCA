@@ -18,11 +18,11 @@ Hi-C data.
 This project is currently under active development. Several sections of this book may not be accurate, as the packages introduced in this book are still maturing. 
 :::
 
-# Introduction {-}
+# Table of contents {-}
 
 This book is divided in three parts:  
 
-**Part I: Fundamentals concepts**
+**Part I: Introduction to Hi-C analysis**
 
 - [Chapter 1: General principles and Hi-C data pre-processing](principles.qmd)
 - [Chapter 2: The different `R` classes implemented to analyse Hi-C](data-representation.qmd)
@@ -37,10 +37,10 @@ This book is divided in three parts:
 - [Chapter 7: Finding topological features from a Hi-C contact matrix](topological-features.qmd)
 
 
-**Part III: Advanced Hi-C topics**
+**Part III: Hi-C analysis workflows**
 
-- [Chapter 8: Hi-C workflow: Distance-dependent interactions across yeast mutants](workflow-yeast.qmd)
-- [Chapter 9: Hi-C workflow: Chromosome compartment cohesion upon mitosis entry](workflow-chicken.qmd)
+- [Chapter 8: Distance-dependent interactions across yeast mutants](workflow-yeast.qmd)
+- [Chapter 9: Chromosome compartment cohesion upon mitosis entry](workflow-chicken.qmd)
 - [Chapter 10: Hi-C interoperability notebook](interoperability.qmd)
 
 # Requirements {-}
