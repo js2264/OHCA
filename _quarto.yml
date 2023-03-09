@@ -46,5 +46,20 @@ format:
     author-meta: "Jacques Serizay"
     callout-appearance: simple
     highlight-style: atom-one-dark
+  pdf:
+    documentclass: scrbook
+    papersize: a4
+    toc: true
+    toc-title: Contents
+    number-sections: true
+    colorlinks: true
+    default-image-extension: pdf
+    theme:
+      - yeti
+      - OHCA.scss
+    code-link: true
+    author-meta: "Jacques Serizay"
+    callout-appearance: simple
+    highlight-style: atom-one-dark
 
 editor: visual
