@@ -1,11 +1,11 @@
 /*-- scss:defaults --*/
 
-$primary: #480F1F !default;
+// $primary: #480F1F !default;
 
 /*-- scss:rules --*/
 
 .sidebar-title {
-  color: #480F1F;
+  // color: #480F1F;
 }
 
 img.quarto-cover-image {
@@ -18,13 +18,13 @@ img.quarto-cover-image {
 body.floating .page-columns {
     display: grid;
     gap: 0;
-    grid-template-columns: [screen-start] 1.5em [screen-start-inset] 5fr [page-start] minmax(25px, 50px) [page-start-inset] minmax(50px, 150px) [body-start-outset] minmax(25px, 50px) [body-start] 1.5em [body-content-start] minmax(500px, calc( 900px - 3em )) [body-content-end] 1.5em [body-end] minmax(25px, 50px) [body-end-outset] minmax(50px, 150px) [page-end-inset] minmax(25px, 50px) [page-end] 5fr [screen-end-inset] 1.5em [screen-end];
+    grid-template-columns: [screen-start] 1.5em [screen-start-inset] 5fr [page-start] minmax(25px, 50px) [page-start-inset] minmax(50px, 150px) [body-start-outset] minmax(25px, 50px) [body-start] 1.5em [body-content-start] minmax(500px, calc( 1000px - 3em )) [body-content-end] 1.5em [body-end] minmax(25px, 50px) [body-end-outset] minmax(50px, 150px) [page-end-inset] minmax(25px, 50px) [page-end] 5fr [screen-end-inset] 1.5em [screen-end];
 }}
 
 /* Left navbar ------------------------------------------------------ */
 
 div.sidebar-item-container .active, div.sidebar-item-container .show>.nav-link, div.sidebar-item-container .sidebar-link>code {
-  color: #480f1f;
+  // color: #480f1f;
   font-weight: 800;
 }
 
@@ -32,15 +32,20 @@ div.sidebar-item-container .active, div.sidebar-item-container .show>.nav-link, 
 
 
 .sidebar nav[role=doc-toc] ul>li>a.active, .sidebar nav[role=doc-toc] ul>li>ul>li>a.active {
-  border-left: 4px solid #480f1f;
-  color: #480f1f !important;
+  // border-left: 4px solid #480f1f;
+  border-left: 4px solid;
+  // color: #480f1f !important;
+  font-weight: 800;
+}
+
+#toc-title+ ul > li > .nav-link {
   font-weight: 800;
 }
 
 /* Headings ------------------------------------------------------ */
 
 h2 {
-  margin-top: 2rem;
+  margin-top: 3rem;
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
@@ -60,15 +65,15 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5 {
 
 /* Code ------------------------------------------------ */
 
-code {
-  color: #373a3c;
+// code {
+//   color: #373a3c;
 
-}
+// }
 
-code a:any-link {
-  text-decoration: underline;
-  text-decoration-color: #ccc;
-}
+// code a:any-link {
+//   text-decoration: underline;
+//   text-decoration-color: #ccc;
+// }
 
 .cell-output-stdout code , .code-with-filename code , .cell-output-stderr code {
   background-image: linear-gradient(160deg,#f8f8f8 0,#f1f1f1 100%);

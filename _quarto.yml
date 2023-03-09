@@ -40,10 +40,11 @@ format:
   html:
     default-image-extension: pdf
     theme:
-      - cosmo
+      - yeti
       - OHCA.scss
     code-link: true
     author-meta: "Jacques Serizay"
     callout-appearance: simple
+    highlight-style: atom-one-dark
 
 editor: visual
