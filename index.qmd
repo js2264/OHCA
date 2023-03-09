@@ -26,7 +26,7 @@ This book is divided in three parts:
 
 - [Chapter 1: General principles and Hi-C data pre-processing](principles.qmd)
 - [Chapter 2: The different `R` classes implemented to analyse Hi-C](data-representation.qmd)
-- [Chapter 3: Parsing and manipulating Hi-C data in R](parsing.qmd)
+- [Chapter 3: Manipulating Hi-C data in R](parsing.qmd)
 - [Chapter 4: Hi-C data visualization](visualization.qmd)
 
 

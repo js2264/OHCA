@@ -6,15 +6,18 @@ source("_common.R")
 ```
 
 ::: {.callout-important}
-### Aims
+## Aims
+This chapter illustrates how to: 
+
 - Compute P(s) of several samples and compare them 
 - Compute distance-adjusted correlation between Hi-C datasets with `HiCRep`
 - Perform differential interaction analysis between Hi-C datasets with `multiHiCcompare`
 :::
 
 ::: {.callout-important}
-### Datasets
+## Datasets
 We leverage seven yeast datasets in this notebook. They are all available from SRA: 
+
 - SRR8769554: WT yeast strain, G1 phase (rep1)
 - SRR10687276: WT yeast strain, G1 phase (rep12)
 - SRR8769549: WT yeast strain, G2/M phase (rep1)
@@ -28,7 +31,14 @@ We leverage seven yeast datasets in this notebook. They are all available from S
 
 The easiest for this is to directly fetch files from SRA from their FTP server. We can do so using the base `download.file` function. 
 
+::: {.callout-note icon='false'}
+The next two code chunks illustrate how to do download and process Hi-C reads from SRA, but 
+they are not actually executed when rendering this website as it would take a 
+significant amount of time. 
+:::
+
 ```{r eval = FALSE}
+# !! This code is not actually executed !!
 dir.create('data')
 download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/004/SRR8769554/SRR8769554_1.fastq.gz", "data/WT_G1_WT_rep1_R1.fastq.gz")
 download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/004/SRR8769554/SRR8769554_2.fastq.gz", "data/WT_G1_WT_rep1_R2.fastq.gz")
@@ -51,6 +61,7 @@ download.file("ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/005/SRR8769555/SRR87695
 We will map each pair of fastqs on the yeast genome reference (`R64-1-1`) using `HiCool`. 
 
 ```{r eval = FALSE}
+# !! This code is not actually executed !!
 library(HiCool)
 samples <- c(
     'WT_G1_rep1', 

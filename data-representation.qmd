@@ -14,25 +14,38 @@ library(ggplot2)
 library(GenomicRanges)
 library(InteractionSet)
 library(HiCExperiment)
+library(HiContactsData)
+coolf <- HiContactsData('yeast_wt', 'mcool')
+hicf <- HiContactsData('yeast_wt', 'hic')
+hicpromatrixf <- HiContactsData('yeast_wt', 'hicpro_matrix')
+hicproregionsf <- HiContactsData('yeast_wt', 'hicpro_bed')
+pairsf <- HiContactsData('yeast_wt', 'pairs.gz')
+hic <- contacts_yeast(full = TRUE)
 ```
 
 ::: {.callout-note}
 ## Aims
-This notebook introduces the four main classes offered by `Bioconductor` 
+This chapter introduces the four main classes offered by `Bioconductor` 
 leveraged to perform Hi-C analysis, describes their structure and how to interact with them:  
-- `GRanges`;  
-- `GInteractions`;  
-- `ContactFile`;  
-- `HiCExperiment`  
+
+- `GRanges` (jump to [the section](#granges-class))  
+- `GInteractions` (jump to [the section](#ginteractions-class))  
+- `ContactFile` (jump to [the section](#contactfile-class))  
+- `HiCExperiment` (jump to [the section](#hicexperiment-class))  
+:::
+
+::: {.callout-tip}
+Directly jump to the [last section of this chapter](#visual-summary-of-the-hicexperiment-data-structure) 
+to get a visual representation of these data structures. 
 :::
 
 ## `GRanges` class
 
-### `GRanges` fundamentals 
-
 `GRanges` is a shorthand for `GenomicRanges`, a core class in `Bioconductor`. 
 The data structure has been published in the fundamental 2015 publication by 
 `Bioconductor` (@Huber2015Feb). 
+
+### `GRanges` fundamentals 
 
 The easiest way to generate a `GRanges` object is to coerce it from a vector of 
 genomic coordinates in the UCSC format (e.g. `"chr2:2004-4853"`):
@@ -53,6 +66,7 @@ To navigate between these ranges, `GRanges` can be subset using the standard `R`
 
 ```{r}
 gr[1]
+
 gr[1:3]
 ```
 
@@ -67,8 +81,11 @@ intervals (ranges) and are incredibly versatile. They extend the
 
 ```{r}
 seqnames(gr)
+
 start(gr)
+
 end(gr)
+
 strand(gr)
 ```
 
@@ -91,9 +108,8 @@ and individual columns of metadata using the `$` notation:
 
 ```{r}
 mcols(gr)
-mcols(gr)$count <- c(1, 2, 3, 4)
 mcols(gr)$GC <- c(0.45, 0.43, 0.44, 0.42)
-mcols(gr)$annotation <- factor(c(NA, 'promoter', 'enhancer', 'centormere'))
+mcols(gr)$annotation <- factor(c(NA, 'promoter', 'enhancer', 'centromere'))
 mcols(gr)$extended.info <- c(
     list(c(NA)), 
     list(c(date = 2023, source = 'manual')), 
@@ -137,30 +153,38 @@ width(gr)
 - Shifting each genomic range in a `GRanges` object by a certain number of bases: 
 
 ```{r}
-## Shift all genomic ranges towards the "right" (downstream in `+` strand), by 1000bp:
 gr
+
+# ----- Shift all genomic ranges towards the "right" (downstream in `+` strand), by 1000bp:
 shift(gr, 1000)
-## Shift all genomic ranges towards the "left" (upstream in `+` strand), by 1000bp:
+
+# ----- Shift all genomic ranges towards the "left" (upstream in `+` strand), by 1000bp:
 shift(gr, -1000)
 ```
 
 - Narrowing each genomic range in a `GRanges` object by a certain number of bases: 
 
 ```{r}
-## Extract 21st-40th subrange for each range in `gr`:
 gr
+
+# ----- Extract 21st-40th subrange for each range in `gr`:
 narrow(gr, start = 21, end = 40)
+
 width(narrow(gr, start = 21, end = 40))
 ```
 
 - Resizing each genomic range in a `GRanges` object to a certain number of bases: 
 
 ```{r}
-## Resize `gr` entries to 100, fixed at the start of each range:
+gr
+
+# ----- Resize `gr` entries to 100, fixed at the start of each range:
 resize(gr, 100, fix = "start")
-## Resize `gr` entries to 100, fixed at the start of each range, disregarding strand information:
+
+# ----- Resize `gr` entries to 100, fixed at the start of each range, disregarding strand information:
 resize(gr, 100, fix = "start", ignore.strand = TRUE)
-## Resize `gr` entries to 1 bp, fixed at the center of each range:
+
+# ----- Resize `gr` entries to 1 bp, fixed at the center of each range:
 resize(gr, 1, fix = "center")
 ```
 
@@ -168,9 +192,11 @@ resize(gr, 1, fix = "center")
 
 ```{r}
 gr
-## Extract 100bp UPSTREAM of each genomic range, according to range strandness:
+
+# ----- Extract 100bp UPSTREAM of each genomic range, according to range strandness:
 flank(gr, 100, start = TRUE)
-## Extract 1bp DOWNSTREAM of each genomic range, according to range strandness:
+
+# ----- Extract 1bp DOWNSTREAM of each genomic range, according to range strandness:
 flank(gr, 1, start = FALSE)
 ```
 
@@ -178,11 +204,23 @@ Note how here again, strand information is crucial and correctly leveraged
 to extract "upstream" or "downstream" flanking regions in agreement with 
 genomic range orientation.
 
+- Several arithmetics operators can also directly work with `GRanges`: 
+
+```{r}
+gr
+
+gr + 100 # ----- Extend each side of the `GRanges` by a given number of bases
+
+gr - 200 # ----- Shrink each side of the `GRanges` by a given number of bases 
+
+gr * 1000 # ----- Zoom in by a given factor (effectively decreasing the `GRanges` width by the same factor)
+```
+
 ::: {.callout-warning}
 ## Going further
 To fully grasp how to operate `GRanges` objects, we highly recommend reading the 
 detailed documentation for this class by typing `?GenomicRanges` and 
-`?GenomicRanges::``intra-range-methods`` `.
+`?GenomicRanges::\`intra-range-methods\``.
 :::
 
 #### Inter-range methods {#inter-range}
@@ -211,7 +249,9 @@ are assumed to end at the largest location on each chromosome. We'll ignore this
 
 ```{r}
 precede(gr)
+
 follow(gr)
+
 nearest(gr)
 ```
 
@@ -224,7 +264,7 @@ coverage(gr, weight = 'GC')
 ::: {.callout-warning}
 ## Going further
 To fully grasp how to operate `GRanges` objects, we highly recommend reading the 
-detailed documentation for this class by typing `?GenomicRanges::``inter-range-methods`` `. 
+detailed documentation for this class by typing `?GenomicRanges::`inter-range-methods``. 
 :::
 
 ### Comparing multiple `GRanges` objects
@@ -258,7 +298,7 @@ genes <- GRanges(c(
     'chr1:1324-2343:+', 
     'chr1:2732-2751:+'
 ))
-TSSs <- resize(genes, width = 1, fix = 'start') |> resize(width = 20, fix = 'center')
+TSSs <- resize(genes, width = 1, fix = 'start') + 10
 TSSs
 ```
 
@@ -268,7 +308,7 @@ Let's see how they overlap by plotting them:
 library(ggplot2)
 peaks$type <- 'peaks'
 TSSs$type <- 'TSSs'
-p <- ggplot() + 
+ggplot() + 
     ggbio::geom_rect(c(peaks, TSSs), aes(fill = type), facets = type~.) + 
     ggbio::theme_alignment() + 
     coord_fixed(ratio = 300)
@@ -351,13 +391,15 @@ They essentially are short-hands for specific `findOverlaps()` cases.
 
 ```{r}
 peaks %over% TSSs
-peaks[peaks %over% TSSs]
+
+peaks[peaks %over% TSSs] # ----- Equivalent to `subsetByOverlaps(peaks, TSSs)`
 ```
 
 - `<query> %within% <subject>`: 
 
 ```{r}
 peaks %within% TSSs
+
 TSSs %within% peaks
 ```
 
@@ -370,7 +412,7 @@ peaks %outside% TSSs
 ::: {.callout-warning}
 ## Going further
 To fully grasp how to find overlaps between `GRanges` objects, we highly recommend reading the 
-detailed documentation by typing `?IRanges::``findOverlaps-methods`` `.
+detailed documentation by typing `?IRanges::`findOverlaps-methods``.
 :::
 
 #### Find nearest range from a subject for each range in a query
@@ -381,6 +423,7 @@ the `subject`, but not quite overlapping.
 
 ```{r}
 peaks[8]
+
 TSSs[3]
 ```
 
@@ -394,6 +437,7 @@ to which the `query` is the nearest.
 
 ```{r}
 nearest(peaks, TSSs)
+
 TSSs[nearest(peaks, TSSs)]
 ```
 
@@ -404,6 +448,7 @@ ranges in a `query` and ranges in a `subject`.
 
 ```{r}
 distanceToNearest(peaks, TSSs)
+
 peaks$distance_to_nearest_TSS <- mcols(distanceToNearest(peaks, TSSs))$distance
 ```
 
@@ -414,8 +459,11 @@ as an overlap!
 
 `GRanges` describe genomic ranges and hence are of general use to study 1D genome organization. 
 To study chromatin interactions, we need a way to link pairs of `GRanges`. This is exactly what 
-the `GInteractions` class does. This data structure has been published in the 
+the `GInteractions` class does. This data structure is defined in the 
+`InteractionSet` package and has been published in the 
 2016 paper by `Lun et al.` (@Lun2016May). 
+
+![](images/20230309114047.png)
 
 ### Building a `GInteractions` object from scratch
 
@@ -459,10 +507,11 @@ gi
 ```
 
 The way `GInteractions` objects are printed in an R console mimmics that of 
-`GRanges, but pairs two "ends" (a.k.a. *anchors*) of an interaction together, 
+`GRanges`, but pairs two "ends" (a.k.a. *anchors*) of an interaction together, 
 each end being represented as a separate `GRanges` range. 
 
 ::: {.callout-note icon='false'}
+## Notes
 - Note that it is possible to have interactions joining two identical anchors. 
 
 ```{r}
@@ -496,10 +545,12 @@ This outputs a list of two `GRanges`, the first corresponding to the "left" end 
 (when printed to the console). 
 
 ```{r}
-## This extracts the two sets of anchors ("first" and "second") from a GInteractions object
+# ----- This extracts the two sets of anchors ("first" and "second") from a GInteractions object
 anchors(gi)
-## We can query for the "first" or "second" set of anchors directly
+
+# ----- We can query for the "first" or "second" set of anchors directly
 anchors(gi, "first")
+
 anchors(gi, "second")
 ```
 
@@ -515,7 +566,9 @@ object, stored as a `GRanges` object.
 
 ```{r}
 regions(gi)
+
 length(regions(gi))
+
 length(anchors(gi, "first"))
 ```
 
@@ -532,11 +585,11 @@ One can add metadata columns directly to a `GInteractions` object.
 mcols(gi)
 mcols(gi) <- data.frame(
     idx = seq(1, length(gi)),
-    type = c("cis", "cis", "cis", "trans", "cis"),
-    freq = runif(length(gi))
+    type = c("cis", "cis", "cis", "trans", "cis")
 )
 gi
-gi$freq
+
+gi$type
 ```
 
 Importantly, metadata columns can also be directly added to **regions** of a 
@@ -558,6 +611,7 @@ files, sorting on the "first" anchor first, then for interactions with the same
 
 ```{r}
 gi
+
 sort(gi)
 ```
 
@@ -571,6 +625,7 @@ generate an upper-triangular matrix.
 
 ```{r}
 gi
+
 swapAnchors(gi)
 ```
 
@@ -582,51 +637,176 @@ Note that "sorting" and "swapping" a `GInteractions` object are two
 - "swapping" *anchors* reorganizes *"first" and "second" anchors* for each interaction independently.
 :::
 
-#### `GInteractions` overlap methods
+#### `GInteractions` distance method
+
+"Distance", when applied to genomic interactions, typically refers to the 
+genomic distance between the two anchors of a single interaction. For 
+`GInteractions`, this is computed using the `pairdist` function.
 
 ```{r}
-gi %over% GRanges('chr1:50-60')
+gi
+
+pairdist(gi)
 ```
 
+Note that for "trans" inter-chromosomal interactions, i.e. interactions with anchors on 
+different chromosomes, the notion of genomic distance is meaningless and for 
+this reason, `pairdist` returns a `NA` value. 
 
+::: {.callout-tip icon='false'}
+## Advanced `pairdist` arguments
+The `type` argument can be tweaked to specify which type of "distance" should 
+be computed:  
 
+- `mid`: The distance between the midpoints of the two regions
+          (rounded down to the nearest integer) is returned (Default).
+- `gap`: The length of the gap between the closest points of the
+          two regions is computed - negative lengths are returned for
+          overlapping regions, indicating the length of the overlap.
+- `span`: The distance between the furthermost points of the two
+          regions is computed.
+- `diag`: The difference between the anchor indices is returned.
+          This corresponds to a diagonal on the interaction space when
+          bins are used in the 'regions' slot of 'x'.
+:::
 
+#### `GInteractions` overlap methods
 
+"Overlaps" for genomic interactions could be computed in different contexts: 
 
+- Case 1: Overlap between any of the two anchors of an interaction with a genomic range
+- Case 2: Overlap between anchors of an interaction with anchors of another interaction
+- Case 3: Spanning of the interaction "accross" a genomic range
 
+> Case 1: Overlap between any of the two anchors of an interaction with a genomic range
 
+This is the default behavior of `findOverlaps` when providing a `GInteractions`
+object as `query` and a `GRanges` as a `subject`. 
 
+```{r}
+gr <- GRanges(c("chr1:7501-7600", "chr1:8501-8600"))
+findOverlaps(query = gi, subject = gr)
 
+countOverlaps(gi, gr)
 
+subsetByOverlaps(gi, gr)
 
+```
 
+Here again, the order matters! 
 
+```{r}
+countOverlaps(gr, gi)
+```
 
+And again, the `%over%` operator can be used here: 
 
+```{r}
+gi %over% gr
 
+gi[gi %over% gr] # ----- Equivalent to `subsetByOverlaps(gi, gr)`
+```
 
+> Case 2: Overlap between anchors of an interaction with anchors of another interaction
+
+This slightly different scenario involves overlapping two sets of interactions, 
+to see whether any interaction in `Set-1` has its two anchors overlapping 
+anchors from an interaction in `Set-2`. 
+
+```{r}
+gi2 <- GInteractions(
+    GRanges("chr1:1081-1090"), 
+    GRanges("chr1:3401-3501")
+)
+gi %over% gi2
+```
+
+Note that both anchors of an interaction from a `query` have to overlap to a 
+pair of anchors of a single interaction from a `subject` with this method!
+
+```{r}
+gi3 <- GInteractions(
+    GRanges("chr1:1-1000"), 
+    GRanges("chr1:3401-3501")
+)
+gi %over% gi3
+```
+
+> Case 3 : Spanning of the interaction "accross" a genomic range
+
+This requires a bit of wrangling, to mimmic an overlap between two `GRanges` objects: 
+
+```{r}
+gi <- swapAnchors(gi) # ----- Make sure anchors are correctly sorted
+gi <- sort(gi) # ----- Make sure interactions are correctly sorted
+gi <- gi[!is.na(pairdist(gi))] # ----- Remove interchromosomal interactions
+spanning_gi <- GRanges(
+    seqnames = seqnames(anchors(gi)[[1]]), 
+    ranges = IRanges(
+        start(anchors(gi)[[1]]), 
+        end(anchors(gi)[[2]])
+    )
+)
+spanning_gi 
+
+spanning_gi %over% gr
+```
+
+::: {.callout-warning}
+## Going further
+A detailed manual of overlap methods available for `GInteractions` object can 
+be read by typing `?`Interaction-overlaps`` in R.
+:::
 
 ## `ContactFile` class
 
-Hi-C contacts can be in four different formats (see [previous chapter](principles.qmd#binned-contact-matrix-files)): 
+Hi-C contacts can be stored in four different formats 
+(see [previous chapter](principles.qmd#binned-contact-matrix-files)): 
 
-- `.(m)cool` matrix (multi-scores, multi-resolution, indexed)
-- `.hic` matrix (multi-scores, multi-resolution, indexed)
-- HiC-pro derived matrix (single-score, single-resolution, non-indexed)
+- As a `.(m)cool` matrix (multi-scores, multi-resolution, indexed)
+- As a `.hic` matrix (multi-scores, multi-resolution, indexed)
+- As a HiC-pro derived matrix (single-score, single-resolution, non-indexed)
 - Unbinned, Hi-C contacts can be stored in `.pairs` files
+
+### Accessing example Hi-C files 
 
 Example contact files can be downloaded using `HiContactsData` function. 
 
-```{r}
+```{r eval = FALSE}
 library(HiContactsData)
 coolf <- HiContactsData('yeast_wt', 'mcool')
+```
+
+This fetches files from the cloud, download them locally and returns the path of 
+the local file. 
+
+```{r}
+coolf
+```
+
+Similarly, example files are available for other file formats: 
+
+```{r eval = FALSE}
 hicf <- HiContactsData('yeast_wt', 'hic')
 hicpromatrixf <- HiContactsData('yeast_wt', 'hicpro_matrix')
 hicproregionsf <- HiContactsData('yeast_wt', 'hicpro_bed')
 pairsf <- HiContactsData('yeast_wt', 'pairs.gz')
 ```
 
-A `ContactFile` object establishes a connection with a disk-stored Hi-C file 
+We can even check the content of some of these files to make sure they are 
+actually what they are: 
+
+```{r}
+# ---- HiC-Pro generates a tab-separated `regions.bed` file
+readLines(hicproregionsf, 25)
+
+# ---- Pairs are also tab-separated 
+readLines(pairsf, 25)
+```
+
+### `ContactFile` fundamentals
+
+A `ContactFile` object **establishes a connection with a disk-stored Hi-C file** 
 (e.g. a `.cool` file, or a `.pairs` file, ...). 
 
 `ContactFile`s come in four different flavors:  
@@ -640,15 +820,21 @@ To create each flavor of `ContactFile`, one can use the corresponding function:
 
 ```{r}
 library(HiCExperiment)
-## This creates a connection to a `.(m)cool` file (path stored in `coolf`)
+
+# ----- This creates a connection to a `.(m)cool` file (path stored in `coolf`)
 CoolFile(coolf)
-## This creates a connection to a `.hic` file (path stored in `hicf`)
+
+# ----- This creates a connection to a `.hic` file (path stored in `hicf`)
 HicFile(hicf)
-## This creates a connection to output files from HiC-Pro
+
+# ----- This creates a connection to output files from HiC-Pro
 HicproFile(hicpromatrixf, hicproregionsf)
-## This creates a connection to a pairs file
+
+# ----- This creates a connection to a pairs file
 PairsFile(pairsf)
 ```
+
+### `ContactFile` slots
 
 Several "slots" (i.e. pieces of information) are attached to a `ContactFile` object: 
 
@@ -660,38 +846,355 @@ Several "slots" (i.e. pieces of information) are attached to a `ContactFile` obj
 Slots of a `CoolFile` object can be accessed as follow: 
 
 ```{r slots}
-hic <- CoolFile(coolf)
-resolution(hic)
-pairsFile(hic)
-metadata(hic)
+cf <- CoolFile(coolf)
+cf
+
+resolution(cf)
+
+pairsFile(cf)
+
+metadata(cf)
 ```
 
+::: {.callout-warning icon='false'}
+Remember: `ContactFile` objects are only **connections** to a disk-stored HiC file. 
+Although metadata is available, they do not contain actual data!
+:::
 
+### `ContactFile` methods 
 
+Two useful methods are available for `ContactFile`s: 
 
+- `availableResolutions` checks which resolutions are available in a `ContactFile`.
 
+```{r}
+availableResolutions(cf)
+```
 
+- `availableChromosomes` checks which chromosomes are available in a `ContactFile`, along with their length.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+```{r}
+availableChromosomes(cf)
+```
 
 ## `HiCExperiment` class
 
-```{r hce}
-hic <- contacts_yeast(full = TRUE)
+Based on the previous sections, we have different Bioconductor classes 
+relevant for Hi-C: 
+
+- `GInteractions` which can be used to represent genomic interactions in R
+- `ContactFile`s which can be used to establish a connection with disk-stored Hi-C files
+
+`HiCExperiment` objects are created when *parsing* a `ContactFile` in R. 
+The `HiCExperiment` class reads a `ContactFile` in memory and store genomic 
+interactions as `GInteractions`. 
+
+### Creating a `HiCExperiment` object
+
+#### `import`ing a `ContactFile` 
+
+In practice, to create a `HiCExperiment` object from a `ContactFile`, 
+one can use the `import` method. 
+
+::: {.callout-important}
+- Creating a `HiCExperiment` object means ***importing data from a Hi-C matrix*** (e.g. 
+from a `ContactFile`) in memory in R.  
+- Creating a `HiCExperiment` object from large disk-stored contact matrices 
+can potentially take a long time. 
+:::
+
+```{r}
+cf <- CoolFile(coolf)
+hic <- import(cf)
 hic
 ```
+
+Printing a `HiCExperiment` to the console will not reveal the actual data 
+stored in the object (it would most likely crash your R session!). 
+Instead, it gives a summary of the data stored in the object: 
+
+- The `fileName`, i.e. the path to the disk-stored data file 
+- The `focus`, i.e. the genomic location for which data has been imported (in the example above, `"whole genome"` implies that all the data has been imported in R)
+- `resolutions` available in the disk-stored data file (this will be identical to `availableResolutions(cf)`)
+- `active resolution` indicates at which resolution the data is currently imported
+- `interactions` refers to the actual `GInteractions` imported in R and "hidden" (for now!) in the `HiCExperiment` object
+- `scores` refer to different interaction frequency estimates. These can be raw
+`count`s, `balanced` (if the contact matrix has been previously normalized), or 
+whatever score the end-user whant to attribute to each interaction 
+(e.g. ratio of counts between two Hi-C maps, ...)
+- `topologicalFeatures` is a `list` of `GRanges` or `GInteractions` objects
+to describe important topological features. 
+- `pairsFile` is a pointer to an optional disk-stored `.pairs` file from which 
+the contact matrix has been created. This is often useful to estimate some Hi-C metrics. 
+- `metadata` is a `list` to further describe the experiment. 
+
+::: {.callout-tip collapse="true"}
+## `HiCExperiment` slots 👇
+These pieces of information are called `slots`. They can be directly accessed 
+using `getter` functions, bearing the same name than the slot. 
+
+```{r}
+fileName(hic)
+
+focus(hic)
+
+resolutions(hic)
+
+resolution(hic)
+
+interactions(hic)
+
+scores(hic)
+
+topologicalFeatures(hic)
+
+pairsFile(hic)
+
+metadata(hic)
+```
+:::
+
+::: {.callout-note icon='false'}
+## Notes
+
+`import` also works for other types of `ContactFile` (`HicFile`, 
+`HicproFile`, `PairsFile`), e.g. 
+
+- For `HicFile` and `HicproFile`, `import` will return a `HiCExperiment` as well: 
+
+```{r}
+hf <- HicFile(hicf)
+hic <- import(hf)
+hic
+```
+
+- For `PairsFile`, the returned object is a representation of Hi-C "pairs" in 
+R, i.e. `GInteractions`
+
+```{r}
+pf <- PairsFile(pairsf)
+pairs <- import(pf)
+pairs
+```
+:::
+
+#### Customizing the `import`
+
+To reduce the `import` to only parse the data that is relevant to the study,
+two arguments can be passed to `import`, along with a `ContactFile`. 
+
+::: {.callout-tip}
+- `focus`: This can be used to **only parse data for a specific genomic location**.
+- `resolution`: This can be used to choose which resolution to parse the contact matrix at. 
+:::
+
+- Import interactions within a single chromosome:
+
+```{r}
+hic <- import(cf, focus = 'II', resolution = 2000)
+
+regions(hic) # ---- `regions()` work on `HiCExperiment` the same way than on `GInteractions`
+
+table(seqnames(regions(hic)))
+
+anchors(hic) # ---- `anchors()` work on `HiCExperiment` the same way than on `GInteractions`
+```
+
+- Import interactions within a segment of a chromosome:
+
+```{r}
+hic <- import(cf, focus = 'II:40000-60000', resolution = 1000)
+
+regions(hic) 
+
+anchors(hic)
+```
+
+- Import interactions between two chromosomes:
+
+```{r}
+hic2 <- import(cf, focus = 'II|XV', resolution = 4000)
+
+regions(hic2)
+
+anchors(hic2)
+```
+
+- Import interactions between segments of two chromosomes:
+
+```{r}
+hic3 <- import(cf, focus = 'III:10000-40000|XV:10000-40000', resolution = 2000)
+
+regions(hic3)
+
+anchors(hic3)
+```
+
+### Interacting with `HiCExperiment` data
+
+- An `HiCExperiment` object allows parsing of a disk-stored contact matrix.
+- An `HiCExperiment` object operates by wrapping together (1) a `ContactFile` 
+(i.e. a connection to a disk-stored data file) and (2) a `GInteractions` 
+generated by parsing the data file.  
+
+::: {.callout-note icon='false'}
+Because genomic interactions are actually stored as `GInteractions`, `regions` 
+and `anchors` work on `HiCExperiment` objects just as they work with 
+`GInteractions`!
+:::
+
+#### Regions and anchors 
+
+```{r}
+regions(hic)
+
+anchors(hic)
+```
+
+#### Interactions
+
+The imported genomic interactions are available using the `interactions` function
+and are returned as a `GInteractions` object. 
+
+```{r}
+interactions(hic)
+```
+
+Note that in the `hic` object, we only have `11` interactions stored. This is 
+because the `focus` is rather specific: it focuses on the interactions between 
+small segments of `III` and `XV` chromosomes. 
+
+#### Scores
+
+Of course, what the end-user would be looking for is the **frequency** for each 
+genomic interaction. Such frequency scores are available using the `scores` function. 
+`scores` returns a list with a number of different types of scores. 
+
+```{r}
+scores(hic)
+
+scores(hic, "count")
+
+scores(hic, "balanced")
+```
+
+If extra scores have to be added (e.g. to describe the "expected" interaction 
+frequency for each interaction stored in the `HiCExperiment` object), it can be 
+done using the `scores()<-` function: 
+
+```{r}
+scores(hic, "random") <- runif(length(hic))
+
+scores(hic)
+
+scores(hic, "random")
+```
+
+::: {.callout-important}
+Calling `interactions(hic)` returns a `GInteractions` with `scores` already 
+stored in extra columns. This short-hand allows one to dynamically check `scores` 
+directly from the `interactions` output.
+
+```{r}
+interactions(hic)
+
+interactions(hic)$random
+```
+:::
+
+#### topologicalFeatures
+
+In Hi-C studies, "topological features" refer to genomic structures identified 
+(usually from a Hi-C map, but not necessarily). For instance, one may want to 
+study known structural loops anchored at CTCF sites, or interactions around 
+or over centromeres, or simply specific genomic "viewpoints". 
+
+`HiCExperiment` objects can store `topologicalFeatures` to facilitate this analysis. 
+By default, four empty `topologicalFeatures` are stored in a list: 
+
+- `compartments`
+- `borders`
+- `loops`
+- `viewpoints`
+
+The end-user can create additional `topologicalFeatures` or modify the existing 
+ones using the `topologicalFeatures()<-` function. 
+
+```{r}
+topologicalFeatures(hic, 'CTCF') <- GRanges(c(
+    "II:340-352", 
+    "II:3520-3532", 
+    "II:7980-7992"
+))
+topologicalFeatures(hic, 'CTCF')
+
+topologicalFeatures(hic, 'loops') <- GInteractions(
+    topologicalFeatures(hic, 'CTCF')[rep(1:3, each = 3)],
+    topologicalFeatures(hic, 'CTCF')[rep(1:3, 3)]
+)
+topologicalFeatures(hic, 'loops')
+
+hic
+```
+
+#### pairsFile
+
+As a contact matrix is typically obtained from binning a `.pairs` file, 
+it is often the case that the matching `.pairs` file is available to then end-user. 
+A `PairsFile` can thus be created and associated to the corresponding 
+`HiCExperiment` object. This allows more accurate estimation of contact 
+distribution, e.g. when calculating distance-dependent genomic interaction 
+frequency. 
+
+```{r}
+pairsFile(hic) <- pairsf
+hic
+```
+
+### Transforming `HiCExperiment` objects
+
+Convenient "coercing" functions exists to transform data stored as a `HiCExperiment`
+into another class. 
+
+- `as("GInteractions")`: virtually the same than `interactions`
+
+```{r}
+interactions(hic)
+
+as(hic, "GInteractions")
+```
+
+- `as.matrix()`: allows to coerce the `HiCExperiment` into a `sparse` or `dense` 
+matrix (using the `sparse` logical argument, `TRUE` by default) and choosing specific `scores` 
+of interest (using the `use.scores` argument, `"balanced"` by default). 
+
+```{r}
+as.matrix(hic) |> class()
+
+as.matrix(hic) |> dim()
+
+as.matrix(hic, use.scores = "balanced")[1:5, 1:5]
+
+as.matrix(hic, use.scores = "count")[1:5, 1:5]
+
+as.matrix(hic, use.scores = "count", sparse = FALSE)[1:5, 1:5]
+```
+
+- `as.data.frame()`: simply coercing `interactions` into a rectangular data frame
+
+```{r}
+as.data.frame(hic) |> head()
+```
+
+::: {.callout-warning}
+These coercing methods only operate on `interactions` and `scores`, 
+and discard all other information, e.g. available `resolutions`, 
+associated `metadata`, `pairsFile` or `topologicalFeatures`. 
+:::
+
+## Visual summary of the `HiCExperiment` data structure
+
+![](images/20230309114202.png)
 
 ## References {-}
 

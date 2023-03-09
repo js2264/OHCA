@@ -6,12 +6,18 @@ bibliography: bibliography.bib
 
 ```{r}
 #| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
 source("_common.R")
+library(HiContactsData)
+r1 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R1')
+r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
 ```
 
 ::: {.callout-note}
 ## Aims
-This section introduces the reader to general Hi-C experimental and computational steps to perform the pre-processing of Hi-C. This encompasses read alignment, pairs generation and filtering and pairs binning into a contact matrix file. 
+This chapter introduces the reader to general Hi-C experimental and computational steps to perform the pre-processing of Hi-C. This encompasses read alignment, pairs generation and filtering and pairs binning into a contact matrix file. 
 :::
 
 ## Experimental considerations
@@ -161,7 +167,7 @@ directly within an R console.
 
 To demonstrate this, we first fetch example `.fastq` files: 
 
-```{r fastqfiles}
+```{r fastqfiles, eval = FALSE}
 library(HiContactsData)
 r1 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R1')
 r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')

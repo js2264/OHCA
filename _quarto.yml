@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 book:
-  title: "OHCA: Orchestrating Hi-C analysis with Bioconductor"
+  title: "Orchestrating Hi-C analysis with Bioconductor"
   reader-mode: false
   page-footer:
     left: |
@@ -13,8 +13,8 @@ book:
       This book was built with <a href="https://quarto.org/">Quarto</a>.
   cover-image: cover.jpg
   favicon: cover.jpg
-  site-url: https://github.com/js2264.OHCA/
-  repo-url: https://github.com/js2264.OHCA/
+  site-url: https://js2264.github.io/OHCA/
+  repo-url: https://github.com/js2264/OHCA/
   repo-branch: main
   repo-actions: [edit, issue]
   chapters:

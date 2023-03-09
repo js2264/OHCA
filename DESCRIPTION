@@ -22,6 +22,7 @@ Depends:
 Imports:
     hicrep,
     multiHiCcompare,
+    ggbio,
     cowplot,
     fs,
     rebook,
