@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>OHCA: Orchestrating Hi-C analysis with Bioconductor</title>
+<title>Orchestrating Hi-C analysis with Bioconductor</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -124,7 +124,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">OHCA: Orchestrating Hi-C analysis with Bioconductor</h1>
+      <h1 class="quarto-secondary-nav-title">Orchestrating Hi-C analysis with Bioconductor</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -133,9 +133,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">OHCA: Orchestrating Hi-C analysis with Bioconductor</a> 
+      <a href="./">Orchestrating Hi-C analysis with Bioconductor</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/js2264.OHCA/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/js2264/OHCA/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
 </div>
     </div>
       </div>
@@ -166,12 +166,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data-representation.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Representation of genomic data in R</span></a>
+  <a href="./data-representation.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Hi-C data structures in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./parsing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parsing and manipulating Hi-C data in R</span></a>
+  <a href="./parsing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulating Hi-C data in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -238,7 +238,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
 <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a></li>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#table-of-contents" id="toc-table-of-contents" class="nav-link" data-scroll-target="#table-of-contents">Table of contents</a></li>
   <li><a href="#requirements" id="toc-requirements" class="nav-link" data-scroll-target="#requirements">Requirements</a></li>
   <li>
 <a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a>
@@ -247,11 +247,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
   </ul>
 </li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/OHCA/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title d-none d-lg-block">OHCA: Orchestrating Hi-C analysis with Bioconductor</h1>
+<h1 class="title d-none d-lg-block">Orchestrating Hi-C analysis with Bioconductor</h1>
 </div>
 
 
@@ -265,11 +265,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
 
 </header>
-<section id="welcome" class="level1 unnumbered"><h1 class="unnumbered">Welcome</h1><p><img src="cover.jpg" title="OHCA: Orchestrating Hi-C analysis with Bioconductor" class="quarto-cover-image img-fluid"></p>
+<section id="welcome" class="level1 unnumbered"><h1 class="unnumbered">Welcome</h1><p><img src="cover.jpg" title="Orchestrating Hi-C analysis with Bioconductor" class="quarto-cover-image img-fluid"></p>
 <div class="cell">
 
 </div>
-<p><strong>Authors:</strong> Jacques Serizay [aut, cre]<br><strong>Version:</strong> 0.98.1<br><strong>Modified:</strong> 2023-02-13<br><strong>Compiled:</strong> 2023-03-03<br><strong>Environment:</strong> R Under development (unstable) (2023-02-09 r83797), Bioconductor 3.17<br><strong>License:</strong> MIT + file LICENSE<br><strong>Copyright:</strong> J. Serizay</p>
+<p><strong>Authors:</strong> Jacques Serizay [aut, cre]<br><strong>Version:</strong> 0.98.1<br><strong>Modified:</strong> 2023-02-13<br><strong>Compiled:</strong> 2023-03-09<br><strong>Environment:</strong> R Under development (unstable) (2023-02-09 r83797), Bioconductor 3.17<br><strong>License:</strong> MIT + file LICENSE<br><strong>Copyright:</strong> J. Serizay</p>
 <p>This is the landing page of the <strong>“Orchestrating Hi-C analysis with Bioconductor”</strong> book. <strong>The primary aim of this book is to introduce the <code>R</code> user to Hi-C analysis</strong>. It starts with key concepts important for the analysis of chromatin conformation capture and then presents <code>Bioconductor</code> tools that can be leveraged to process, analyse, explore and visualize Hi-C data.</p>
 <div class="callout-caution callout callout-style-simple">
 <div class="callout-body d-flex">
@@ -281,13 +281,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-</section><section id="introduction" class="level1 unnumbered"><h1 class="unnumbered">Introduction</h1>
+</section><section id="table-of-contents" class="level1 unnumbered"><h1 class="unnumbered">Table of contents</h1>
 <p>This book is divided in three parts:</p>
-<p><strong>Part I: Fundamentals concepts</strong></p>
+<p><strong>Part I: Introduction to Hi-C analysis</strong></p>
 <ul>
 <li><a href="./principles.html">Chapter 1: General principles and Hi-C data pre-processing</a></li>
 <li><a href="./data-representation.html">Chapter 2: The different <code>R</code> classes implemented to analyse Hi-C</a></li>
-<li><a href="./parsing.html">Chapter 3: Parsing and manipulating Hi-C data in R</a></li>
+<li><a href="./parsing.html">Chapter 3: Manipulating Hi-C data in R</a></li>
 <li><a href="./visualization.html">Chapter 4: Hi-C data visualization</a></li>
 </ul>
 <p><strong>Part II: In-depth Hi-C analysis</strong></p>
@@ -296,10 +296,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./interactions-centric.html">Chapter 6: Interactions-centric analysis</a></li>
 <li><a href="./topological-features.html">Chapter 7: Finding topological features from a Hi-C contact matrix</a></li>
 </ul>
-<p><strong>Part III: Advanced Hi-C topics</strong></p>
+<p><strong>Part III: Hi-C analysis workflows</strong></p>
 <ul>
-<li><a href="./workflow-yeast.html">Chapter 8: Hi-C workflow: Distance-dependent interactions across yeast mutants</a></li>
-<li><a href="./workflow-chicken.html">Chapter 9: Hi-C workflow: Chromosome compartment cohesion upon mitosis entry</a></li>
+<li><a href="./workflow-yeast.html">Chapter 8: Distance-dependent interactions across yeast mutants</a></li>
+<li><a href="./workflow-chicken.html">Chapter 9: Chromosome compartment cohesion upon mitosis entry</a></li>
 <li><a href="./interoperability.html">Chapter 10: Hi-C interoperability notebook</a></li>
 </ul></section><section id="requirements" class="level1 unnumbered"><h1 class="unnumbered">Requirements</h1>
 <p>This books aims to demonstrate how to pre-process, parse and investigate Hi-C data in <code>R</code>. For this reason, a significant portion of this book consists of executable R code chunks. To be able to reproduce the examples demonstrated in this book and go further in the analysis of <em>your <strong>real</strong> datasets</em>, you will need to rely on several dependencies.</p>
@@ -405,7 +405,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   collate  en_US.UTF-8
 ##   ctype    en_US.UTF-8
 ##   tz       Etc/UTC
-##   date     2023-03-03
+##   date     2023-03-09
 ##   pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
 ##  
 ##  ─ Packages ────────────────────────────────────────────────────────────────
@@ -443,7 +443,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   DelayedArray             0.25.0    2022-11-01 [1] Bioconductor
 ##   digest                   0.6.31    2022-12-11 [1] CRAN (R 4.3.0)
 ##   dir.expiry               1.7.0     2022-11-01 [1] Bioconductor
-##   DNAZooData             * 0.99.0    2023-03-03 [1] Github (js2264/DNAZooData@a112059)
+##   DNAZooData             * 0.99.0    2023-03-09 [1] Github (js2264/DNAZooData@a112059)
 ##   dplyr                    1.1.0     2023-01-29 [1] CRAN (R 4.3.0)
 ##   ellipsis                 0.3.2     2021-04-29 [1] CRAN (R 4.3.0)
 ##   evaluate                 0.20      2023-01-17 [1] CRAN (R 4.3.0)
@@ -451,7 +451,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   fansi                    1.0.4     2023-01-22 [1] CRAN (R 4.3.0)
 ##   fastmap                  1.1.0     2021-01-25 [1] CRAN (R 4.3.0)
 ##   filelock                 1.0.2     2018-10-05 [1] CRAN (R 4.3.0)
-##   fourDNData             * 0.99.3    2023-03-03 [1] Github (js2264/fourDNData@386d05f)
+##   fourDNData             * 0.99.3    2023-03-09 [1] Github (js2264/fourDNData@386d05f)
 ##   generics                 0.1.3     2022-07-05 [1] CRAN (R 4.3.0)
 ##   GenomeInfoDb             1.35.15   2023-02-02 [1] Bioconductor
 ##   GenomeInfoDbData         1.2.9     2023-02-16 [1] Bioconductor
@@ -462,10 +462,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   glue                     1.6.2     2022-02-24 [1] CRAN (R 4.3.0)
 ##   graph                    1.77.2    2023-02-24 [1] Bioconductor
 ##   gtable                   0.3.1     2022-09-01 [1] CRAN (R 4.3.0)
-##   HiCExperiment          * 0.99.10   2023-03-03 [1] Github (js2264/HiCExperiment@6ff5c58)
-##   HiContacts             * 1.1.1     2023-03-03 [1] Github (js2264/HiContacts@ccee17c)
-##   HiContactsData         * 1.1.9     2023-03-03 [1] Github (js2264/HiContactsData@275fab4)
-##   HiCool                 * 0.99.4    2023-03-03 [1] Github (js2264/HiCool@de2331b)
+##   HiCExperiment          * 0.99.11   2023-03-09 [1] Github (js2264/HiCExperiment@b4055e8)
+##   HiContacts             * 1.1.1     2023-03-09 [1] Github (js2264/HiContacts@ccee17c)
+##   HiContactsData         * 1.1.9     2023-03-09 [1] Github (js2264/HiContactsData@275fab4)
+##   HiCool                 * 0.99.4    2023-03-09 [1] Github (js2264/HiCool@de2331b)
 ##   htmltools                0.5.4     2022-12-07 [1] CRAN (R 4.3.0)
 ##   htmlwidgets              1.6.1     2023-01-07 [1] CRAN (R 4.3.0)
 ##   httpuv                   1.6.9     2023-02-14 [1] CRAN (R 4.3.0)

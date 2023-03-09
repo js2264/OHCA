@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>OHCA: Orchestrating Hi-C analysis with Bioconductor - 8&nbsp; Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</title>
+<title>Orchestrating Hi-C analysis with Bioconductor - 8&nbsp; Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -136,9 +136,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">OHCA: Orchestrating Hi-C analysis with Bioconductor</a> 
+      <a href="./">Orchestrating Hi-C analysis with Bioconductor</a> 
         <div class="sidebar-tools-main">
-    <a href="https://github.com/js2264.OHCA/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="https://github.com/js2264/OHCA/" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
 </div>
     </div>
       </div>
@@ -169,12 +169,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./data-representation.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Representation of genomic data in R</span></a>
+  <a href="./data-representation.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Hi-C data structures in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./parsing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Parsing and manipulating Hi-C data in R</span></a>
+  <a href="./parsing.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulating Hi-C data in R</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -246,7 +246,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#compute-ps-per-replicate-and-plot-it" id="toc-compute-ps-per-replicate-and-plot-it" class="nav-link" data-scroll-target="#compute-ps-per-replicate-and-plot-it"><span class="toc-section-number">8.4</span>  Compute P(s) per replicate and plot it</a></li>
   <li><a href="#correlation-between-replicates-with-hicrep" id="toc-correlation-between-replicates-with-hicrep" class="nav-link" data-scroll-target="#correlation-between-replicates-with-hicrep"><span class="toc-section-number">8.5</span>  Correlation between replicates with <code>hicrep</code></a></li>
   <li><a href="#differential-interaction-di-analysis-with-multihiccompare" id="toc-differential-interaction-di-analysis-with-multihiccompare" class="nav-link" data-scroll-target="#differential-interaction-di-analysis-with-multihiccompare"><span class="toc-section-number">8.6</span>  Differential interaction (DI) analysis with <code>multiHiCcompare</code></a></li>
-  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264.OHCA/edit/main/workflow-yeast.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264.OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/OHCA/edit/main/workflow-yeast.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
@@ -278,6 +278,7 @@ Aims
 </div>
 </div>
 <div class="callout-body-container callout-body">
+<p>This chapter illustrates how to:</p>
 <ul>
 <li>Compute P(s) of several samples and compare them</li>
 <li>Compute distance-adjusted correlation between Hi-C datasets with <code>HiCRep</code>
@@ -297,14 +298,34 @@ Datasets
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>We leverage seven yeast datasets in this notebook. They are all available from SRA: - SRR8769554: WT yeast strain, G1 phase (rep1) - SRR10687276: WT yeast strain, G1 phase (rep12) - SRR8769549: WT yeast strain, G2/M phase (rep1) - SRR10687281: WT yeast strain, G2/M phase (rep12) - SRR8769551: <em>wpl1</em> mutant yeast strain, G2/M phase (rep1) - SRR10687278: <em>wpl1</em> mutant yeast strain, G2/M phase (rep2) - SRR8769555: <em>wpl1/eco1</em> mutant yeast strain, G2/M phase</p>
+<p>We leverage seven yeast datasets in this notebook. They are all available from SRA:</p>
+<ul>
+<li>SRR8769554: WT yeast strain, G1 phase (rep1)</li>
+<li>SRR10687276: WT yeast strain, G1 phase (rep12)</li>
+<li>SRR8769549: WT yeast strain, G2/M phase (rep1)</li>
+<li>SRR10687281: WT yeast strain, G2/M phase (rep12)</li>
+<li>SRR8769551: <em>wpl1</em> mutant yeast strain, G2/M phase (rep1)</li>
+<li>SRR10687278: <em>wpl1</em> mutant yeast strain, G2/M phase (rep2)</li>
+<li>SRR8769555: <em>wpl1/eco1</em> mutant yeast strain, G2/M phase</li>
+</ul>
 </div>
 </div>
 <section id="recovering-data-from-sra" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="recovering-data-from-sra">
 <span class="header-section-number">8.1</span> Recovering data from SRA</h2>
 <p>The easiest for this is to directly fetch files from SRA from their FTP server. We can do so using the base <code>download.file</code> function.</p>
-<div class="cell" data-hash="workflow-yeast_cache/html/unnamed-chunk-2_14429be06576347bb1957421df5f7606">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="st">'data'</span><span class="op">)</span></span>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>The next two code chunks illustrate how to do download and process Hi-C reads from SRA, but they are not actually executed when rendering this website as it would take a significant amount of time.</p>
+</div>
+</div>
+</div>
+<div class="cell" data-hash="workflow-yeast_cache/html/unnamed-chunk-2_988e1372b704e7bdb09468f36821fc02">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># !! This code is not actually executed !!</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="st">'data'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/004/SRR8769554/SRR8769554_1.fastq.gz"</span>, <span class="st">"data/WT_G1_WT_rep1_R1.fastq.gz"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/004/SRR8769554/SRR8769554_2.fastq.gz"</span>, <span class="st">"data/WT_G1_WT_rep1_R2.fastq.gz"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR106/076/SRR10687276/SRR10687276_1.fastq.gz"</span>, <span class="st">"data/WT_G1_WT_rep2_R1.fastq.gz"</span><span class="op">)</span></span>
@@ -323,8 +344,9 @@ Datasets
 </section><section id="processing-reads-with-hicool" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="processing-reads-with-hicool">
 <span class="header-section-number">8.2</span> Processing reads with HiCool</h2>
 <p>We will map each pair of fastqs on the yeast genome reference (<code>R64-1-1</code>) using <code>HiCool</code>.</p>
-<div class="cell" data-hash="workflow-yeast_cache/html/unnamed-chunk-3_327b232f4f9dfe0ffa918444b400df31">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCool">HiCool</a></span><span class="op">)</span></span>
+<div class="cell" data-hash="workflow-yeast_cache/html/unnamed-chunk-3_9925f232a342118063ef090a7ff07ab1">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># !! This code is not actually executed !!</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCool">HiCool</a></span><span class="op">)</span></span>
 <span><span class="va">samples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">'WT_G1_rep1'</span>, </span>
 <span>    <span class="st">'WT_G1_rep2'</span>, </span>

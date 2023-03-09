@@ -1,1 +1,1 @@
-Sitemap: https://github.com/js2264.OHCA/sitemap.xml
+Sitemap: https://js2264.github.io/OHCA/sitemap.xml
