@@ -63,17 +63,48 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5 {
   font-weight: normal;
 }
 
+/* Underlining links ------------------------------------ */
+
+
+.citation a, .footnote-ref {
+  text-decoration: underline;
+}
+
+
+
 /* Code ------------------------------------------------ */
 
-// code {
-//   color: #373a3c;
+// Text color of `backticked` words
+code {
+  color: #008CBA;
+}
 
-// }
+// Background color of `backticked` words
+p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
+    background-color: #008cba0f;
+    /* padding: 0.2em; */
+}
 
-// code a:any-link {
-//   text-decoration: underline;
-//   text-decoration-color: #ccc;
-// }
+// background color of chunks of code *WITH A SPECIFIED LANGUAGE*
+div.sourceCode {
+  background-color: rgba(0, 170, 227, 0.025);
+  border: none;
+}
+
+pre.sourceCode {
+  border: none;
+  font-size: .875em;
+  overflow: visible !important;
+  padding: 0em;
+}
+
+pre code {
+  background-color: transparent;
+  font-size: inherit;
+  color: inherit;
+  word-break: normal;
+  border: 1px solid rgb(0 0 0 / 65%);
+}
 
 .cell-output-stdout code , .code-with-filename code , .cell-output-stderr code {
   background-image: linear-gradient(160deg,#f8f8f8 0,#f1f1f1 100%);

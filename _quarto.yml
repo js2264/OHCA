@@ -35,6 +35,7 @@ book:
         - workflow-yeast.qmd
         - workflow-chicken.qmd
         - interoperability.qmd
+        - disseminating.qmd
 
 format:
   html:
@@ -45,7 +46,7 @@ format:
     code-link: true
     author-meta: "Jacques Serizay"
     callout-appearance: simple
-    highlight-style: atom-one-dark
+    highlight-style: atom-one-dark.theme
   pdf:
     documentclass: scrbook
     papersize: a4
@@ -60,6 +61,6 @@ format:
     code-link: true
     author-meta: "Jacques Serizay"
     callout-appearance: simple
-    highlight-style: atom-one-dark
+    highlight-style: atom-one-dark.theme
 
 editor: visual

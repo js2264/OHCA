@@ -3,7 +3,7 @@ RCMD := Rscript -e
 .PHONY: render
 render: ## Render OHCA book
 	@echo "📖 Rendering OHCA book"
-	quarto render
+	quarto render --to html
 
 .PHONY: serve
 serve: ## serve local static site
@@ -12,7 +12,7 @@ serve: ## serve local static site
 .PHONY: render-serve
 render-serve: ## Test rendering locally
 	@echo "📖 Rendering OHCA book locally"
-	quarto render
+	quarto render --to html
 	$(RCMD) 'servr::httd("docs", port = 4444)'
 
 .PHONY: install
