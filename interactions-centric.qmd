@@ -98,3 +98,15 @@ p8 <- plot4C(c(v4C_loop, v4C_TAD, v4C_loop2), ggplot2::aes(x = center, y = score
     ggplot2::coord_cartesian(ylim = c(0, 0.03))
 p8
 ```
+
+
+## References {-}
+
+::: {#refs}
+:::
+
+## Session info {-}
+
+```{r echo = FALSE}
+sessioninfo::session_info()
+```

@@ -413,3 +413,9 @@ to facilitate parsing of `.hic` files (@Durand2016Jul).
 
 ::: {#refs}
 :::
+
+## Session info {-}
+
+```{r echo = FALSE}
+sessioninfo::session_info()
+```

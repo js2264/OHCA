@@ -178,3 +178,14 @@ p_mammals_2 <- cowplot::plot_grid(
 p_mammals_2
 ```
 
+
+## References {-}
+
+::: {#refs}
+:::
+
+## Session info {-}
+
+```{r echo = FALSE}
+sessioninfo::session_info()
+```

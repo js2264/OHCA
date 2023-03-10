@@ -29,3 +29,16 @@ source("_common.R")
 
 ## HiCDOC
 
+
+
+
+## References {-}
+
+::: {#refs}
+:::
+
+## Session info {-}
+
+```{r echo = FALSE}
+sessioninfo::session_info()
+```

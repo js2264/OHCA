@@ -5,15 +5,29 @@
 source("_common.R")
 ```
 
-## Visualizing Hi-C maps
+## Visualizing Hi-C contact maps
 
-### Single maps 
+Visualizing Hi-C contact maps is often a necessary step in exploratory data 
+analysis. A Hi-C contact map is usually displayed as a heatmap, in which: 
 
-### Side-by-side maps 
+- Each axis represents a section of the genome of interest (either a segment of a chromosome, or 
+several chromosomes, ...).
+- The color code aims to represent "interaction frequency", which can be expressed 
+in "raw" counts or normalized (balanced). 
+- Other metrics can also be displayed in Hi-C heatmaps, e.g. ratios of interaction 
+frequency between two Hi-C experiments, p-values of differential interaction analysis, ... 
+- Axes are often identical, representing interactions constrained within a single genomic
+window, a.k.a. **on-diagonal** matrices. 
+- However, axes *can* be different: this is the case when **off-diagonal** matrices 
+are displayed. 
 
-### Horizontal maps 
+### Single map
 
-### Aggregated Hi-C maps
+### Horizontal map
+
+### Side-by-side maps
+
+### Aggregated Hi-C map
 
 ## Hi-C maps customization options
 
@@ -23,9 +37,13 @@ source("_common.R")
 
 ### Choosing scale
 
-## Extra Hi-C map visualization tools 
+## References {-}
 
-### Saddle plots
+::: {#refs}
+:::
 
-### Montages
+## Session info {-}
 
+```{r echo = FALSE}
+sessioninfo::session_info()
+```

@@ -2,7 +2,18 @@
 
 ```{r}
 #| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
 source("_common.R")
+library(ggplot2)
+library(purrr)
+library(GenomicRanges)
+library(InteractionSet)
+library(HiCExperiment)
+library(HiContactsData)
+library(hicrep)
+library(multiHiCcompare)
 ```
 
 ::: {.callout-important}
@@ -303,3 +314,14 @@ ggsave('figures/yeast/plot_yeasts-logFC-vs-distance_XI.pdf', width = 12, height 
 
 
 
+
+## References {-}
+
+::: {#refs}
+:::
+
+## Session info {-}
+
+```{r echo = FALSE}
+sessioninfo::session_info()
+```

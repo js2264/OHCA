@@ -20,7 +20,13 @@ hicf <- HiContactsData('yeast_wt', 'hic')
 hicpromatrixf <- HiContactsData('yeast_wt', 'hicpro_matrix')
 hicproregionsf <- HiContactsData('yeast_wt', 'hicpro_bed')
 pairsf <- HiContactsData('yeast_wt', 'pairs.gz')
-hic <- contacts_yeast(full = TRUE)
+yeast_hic <- contacts_yeast(full = TRUE)
+pairsFile(yeast_hic) <- pairsf
+metadata(yeast_hic) <- list(
+    ID = "SRR13994279", 
+    org = "S288c", 
+    date = "2019"
+)
 ```
 
 ::: {.callout-note}
@@ -74,10 +80,10 @@ gr[1:3]
 intervals (ranges) and are incredibly versatile. They extend the 
 `data.frame` object and have four required pieces of information: 
 
-- seqnames (i.e. chromosome names) (accessible with `seqnames()`)
-- start (accessible with `start()`)
-- end (accessible with `end()`)
-- strand (accessible with `strand()`)
+- `seqnames` (i.e. chromosome names) (accessible with `seqnames()`)
+- `start` (accessible with `start()`)
+- `end` (accessible with `end()`)
+- `strand` (accessible with `strand()`)
 
 ```{r}
 seqnames(gr)
@@ -316,7 +322,7 @@ ggplot() +
 
 #### Finding overlaps between two `GRanges` sets
 
-> Finding overlaps between a query and a subject
+- Finding overlaps between a query and a subject
 
 In our case, we want to identify which ChIP-seq peaks overlap with a TSS: 
 the query is the set of peaks and the subject is the set of TSSs. 
@@ -338,7 +344,7 @@ Because no other query index or subject index is listed in the `ov` output,
 it means that none of the remaining indices overlap with the other. 
 :::
 
-> Subsetting by overlaps between a query and a subject
+- Subsetting by overlaps between a query and a subject
 
 To directly **subset** ranges from `query` overlapping with ranges from a 
 `subject` (e.g. to only keep *peaks* overlapping a *TSS*), we can use the 
@@ -353,7 +359,7 @@ The output of `subsetByOverlaps` is a subset of the original `GRanges` object
 provided as a `query`, with retained ranges being unmodified. 
 :::
 
-> Counting overlaps between a query and a subject
+- Counting overlaps between a query and a subject
 
 Finally, the `countOverlaps` is used to count, for each range in a `query`, how 
 many ranges in the `subject` it overlaps with. 
@@ -382,12 +388,12 @@ TSSs
 ```
 :::
 
-> `%over%`, `%within%`, `%outside%` : handy operators
+- `%over%`, `%within%`, `%outside%` : handy operators
 
 Handy operators exist that return logical vectors (same length as the `query`). 
 They essentially are short-hands for specific `findOverlaps()` cases. 
 
-- `<query> %over% <subject>`: 
+`<query> %over% <subject>`: 
 
 ```{r}
 peaks %over% TSSs
@@ -395,7 +401,7 @@ peaks %over% TSSs
 peaks[peaks %over% TSSs] # ----- Equivalent to `subsetByOverlaps(peaks, TSSs)`
 ```
 
-- `<query> %within% <subject>`: 
+`<query> %within% <subject>`: 
 
 ```{r}
 peaks %within% TSSs
@@ -403,7 +409,7 @@ peaks %within% TSSs
 TSSs %within% peaks
 ```
 
-- `<query> %outside% <subject>`: 
+`<query> %outside% <subject>`: 
 
 ```{r}
 peaks %outside% TSSs
@@ -506,7 +512,7 @@ gi <- makeGInteractionsFromGRangesPairs(pairs)
 gi
 ```
 
-The way `GInteractions` objects are printed in an R console mimmics that of 
+The way `GInteractions` objects are printed in an R console mimics that of 
 `GRanges`, but pairs two "ends" (a.k.a. *anchors*) of an interaction together, 
 each end being represented as a separate `GRanges` range. 
 
@@ -558,7 +564,7 @@ anchors(gi, "second")
 
 "Regions" of a *set* of interactions refer to the universe of unique 
 anchors represented in a set of interactions. Therefore, the length 
-of the `regions` can only be equal to or strickly lower than twice the 
+of the `regions` can only be equal to or strictly lower than twice the 
 length of `anchors`.  
 
 The `regions` function returns the regions associated with a `GInteractions` 
@@ -575,7 +581,7 @@ length(anchors(gi, "first"))
 ### `GInteractions` methods
 
 `GInteractions` behave as an extension of `GRanges`. For this reason, many methods 
-that work with `GRanges` will work seamlessy with `GInteractions`. 
+that work with `GRanges` will work seamlessly with `GInteractions`. 
 
 #### Metadata 
 
@@ -676,7 +682,7 @@ be computed:
 
 - Case 1: Overlap between any of the two anchors of an interaction with a genomic range
 - Case 2: Overlap between anchors of an interaction with anchors of another interaction
-- Case 3: Spanning of the interaction "accross" a genomic range
+- Case 3: Spanning of the interaction "across" a genomic range
 
 > Case 1: Overlap between any of the two anchors of an interaction with a genomic range
 
@@ -734,12 +740,12 @@ gi %over% gi3
 
 > Case 3 : Spanning of the interaction "accross" a genomic range
 
-This requires a bit of wrangling, to mimmic an overlap between two `GRanges` objects: 
+This requires a bit of wrangling, to mimic an overlap between two `GRanges` objects: 
 
 ```{r}
 gi <- swapAnchors(gi) # ----- Make sure anchors are correctly sorted
 gi <- sort(gi) # ----- Make sure interactions are correctly sorted
-gi <- gi[!is.na(pairdist(gi))] # ----- Remove interchromosomal interactions
+gi <- gi[!is.na(pairdist(gi))] # ----- Remove inter-chromosomal interactions
 spanning_gi <- GRanges(
     seqnames = seqnames(anchors(gi)[[1]]), 
     ranges = IRanges(
@@ -807,7 +813,8 @@ readLines(pairsf, 25)
 ### `ContactFile` fundamentals
 
 A `ContactFile` object **establishes a connection with a disk-stored Hi-C file** 
-(e.g. a `.cool` file, or a `.pairs` file, ...). 
+(e.g. a `.cool` file, or a `.pairs` file, ...). `ContactFile` classes are 
+defined in the `HiCExperiment` package.
 
 `ContactFile`s come in four different flavors:  
 
@@ -887,7 +894,8 @@ relevant for Hi-C:
 
 `HiCExperiment` objects are created when *parsing* a `ContactFile` in R. 
 The `HiCExperiment` class reads a `ContactFile` in memory and store genomic 
-interactions as `GInteractions`. 
+interactions as `GInteractions`. The `HiCExperiment` class is, quite obviously,  
+defined in the `HiCExperiment` package.
 
 ### Creating a `HiCExperiment` object
 
@@ -920,7 +928,7 @@ Instead, it gives a summary of the data stored in the object:
 - `interactions` refers to the actual `GInteractions` imported in R and "hidden" (for now!) in the `HiCExperiment` object
 - `scores` refer to different interaction frequency estimates. These can be raw
 `count`s, `balanced` (if the contact matrix has been previously normalized), or 
-whatever score the end-user whant to attribute to each interaction 
+whatever score the end-user want to attribute to each interaction 
 (e.g. ratio of counts between two Hi-C maps, ...)
 - `topologicalFeatures` is a `list` of `GRanges` or `GInteractions` objects
 to describe important topological features. 
@@ -984,8 +992,9 @@ To reduce the `import` to only parse the data that is relevant to the study,
 two arguments can be passed to `import`, along with a `ContactFile`. 
 
 ::: {.callout-tip}
+## Key `import` arguments:
 - `focus`: This can be used to **only parse data for a specific genomic location**.
-- `resolution`: This can be used to choose which resolution to parse the contact matrix at. 
+- `resolution`: This can be used to choose which resolution to parse the contact matrix at (this is ignored if the `ContactFile` is not multi-resolution, e.g. `.cool` or HiC-Pro generated matrices)
 :::
 
 - Import interactions within a single chromosome:
@@ -1037,32 +1046,71 @@ anchors(hic3)
 (i.e. a connection to a disk-stored data file) and (2) a `GInteractions` 
 generated by parsing the data file.  
 
-::: {.callout-note icon='false'}
+We will use the `yeast_hic` `HiCExperiment` object to demonstrate how to 
+parse information from a `HiCExperiment` object. 
+
+```{r eval = FALSE}
+yeast_hic <- contacts_yeast()
+yeast_hic
+```
+
+```{r echo = FALSE}
+yeast_hic
+```
+
+#### Interactions
+
+The imported genomic interactions can be **directly exposed** using the 
+`interactions` function and are returned as a `GInteractions` object. 
+
+```{r}
+interactions(yeast_hic)
+```
+
+::: {.callout-note}
 Because genomic interactions are actually stored as `GInteractions`, `regions` 
 and `anchors` work on `HiCExperiment` objects just as they work with 
 `GInteractions`!
 :::
 
-#### Regions and anchors 
-
 ```{r}
-regions(hic)
+regions(yeast_hic)
 
-anchors(hic)
+anchors(yeast_hic)
 ```
 
-#### Interactions
+#### Bins and seqinfo
 
-The imported genomic interactions are available using the `interactions` function
-and are returned as a `GInteractions` object. 
+Additional useful information can be recovered from a `HiCExperiment` object. 
+This includes: 
+
+- The `seqinfo` of the `HiCExperiment`: 
 
 ```{r}
-interactions(hic)
+seqinfo(yeast_hic)
 ```
 
-Note that in the `hic` object, we only have `11` interactions stored. This is 
-because the `focus` is rather specific: it focuses on the interactions between 
-small segments of `III` and `XV` chromosomes. 
+This lists the different chromosomes available to parse along with their length. 
+
+- The `bins` of the `HiCExperiment`: 
+
+```{r}
+bins(yeast_hic)
+```
+
+::: {.callout-warning}
+## Difference between `bins` and `regions`
+`bins` are **not** equivalent to `regions` of an `HiCExperiment`. 
+
+- `bins` refer to all the possible `regions` of a `HiCExperiment`. For instance, 
+for a `HiCExperiment` with a total genome size of `1,000,000` and a resolution of 
+`2000`, `bins` will always return a `GRanges` object with `500` ranges. 
+- `regions`, on the opposite, refer to the union of `anchors` of all the 
+`interactions` imported in a `HiCExperiment` object. 
+
+Thus, all the `regions` will necessarily be a subset of the `HiCExperiment` `bins`, 
+or equal to `bins` if no focus has been specified when importing a `ContactFile`. 
+:::
 
 #### Scores
 
@@ -1071,23 +1119,11 @@ genomic interaction. Such frequency scores are available using the `scores` func
 `scores` returns a list with a number of different types of scores. 
 
 ```{r}
-scores(hic)
+scores(yeast_hic)
 
-scores(hic, "count")
+scores(yeast_hic, "count")
 
-scores(hic, "balanced")
-```
-
-If extra scores have to be added (e.g. to describe the "expected" interaction 
-frequency for each interaction stored in the `HiCExperiment` object), it can be 
-done using the `scores()<-` function: 
-
-```{r}
-scores(hic, "random") <- runif(length(hic))
-
-scores(hic)
-
-scores(hic, "random")
+scores(yeast_hic, "balanced")
 ```
 
 ::: {.callout-important}
@@ -1096,9 +1132,9 @@ stored in extra columns. This short-hand allows one to dynamically check `scores
 directly from the `interactions` output.
 
 ```{r}
-interactions(hic)
+interactions(yeast_hic)
 
-interactions(hic)$random
+interactions(yeast_hic)$count
 ```
 :::
 
@@ -1117,24 +1153,13 @@ By default, four empty `topologicalFeatures` are stored in a list:
 - `loops`
 - `viewpoints`
 
-The end-user can create additional `topologicalFeatures` or modify the existing 
-ones using the `topologicalFeatures()<-` function. 
+Additional `topologicalFeatures` can be added to this list (read 
+[next chapter](parsing.html) for more detail). 
 
 ```{r}
-topologicalFeatures(hic, 'CTCF') <- GRanges(c(
-    "II:340-352", 
-    "II:3520-3532", 
-    "II:7980-7992"
-))
-topologicalFeatures(hic, 'CTCF')
+topologicalFeatures(yeast_hic)
 
-topologicalFeatures(hic, 'loops') <- GInteractions(
-    topologicalFeatures(hic, 'CTCF')[rep(1:3, each = 3)],
-    topologicalFeatures(hic, 'CTCF')[rep(1:3, 3)]
-)
-topologicalFeatures(hic, 'loops')
-
-hic
+topologicalFeatures(yeast_hic, 'centromeres')
 ```
 
 #### pairsFile
@@ -1147,49 +1172,23 @@ distribution, e.g. when calculating distance-dependent genomic interaction
 frequency. 
 
 ```{r}
-pairsFile(hic) <- pairsf
-hic
+pairsFile(yeast_hic)
+
+readLines(pairsFile(yeast_hic), 25)
 ```
 
-### Transforming `HiCExperiment` objects
-
-Convenient "coercing" functions exists to transform data stored as a `HiCExperiment`
-into another class. 
-
-- `as("GInteractions")`: virtually the same than `interactions`
+::: {.callout-important}
+## Importing a `PairsFile`
+The `.pairs` file linked to a `HiCExperiment` object can itself be imported in 
+a `GInteractions` object: 
 
 ```{r}
-interactions(hic)
-
-as(hic, "GInteractions")
+import(pairsFile(yeast_hic), format = 'pairs')
 ```
 
-- `as.matrix()`: allows to coerce the `HiCExperiment` into a `sparse` or `dense` 
-matrix (using the `sparse` logical argument, `TRUE` by default) and choosing specific `scores` 
-of interest (using the `use.scores` argument, `"balanced"` by default). 
-
-```{r}
-as.matrix(hic) |> class()
-
-as.matrix(hic) |> dim()
-
-as.matrix(hic, use.scores = "balanced")[1:5, 1:5]
-
-as.matrix(hic, use.scores = "count")[1:5, 1:5]
-
-as.matrix(hic, use.scores = "count", sparse = FALSE)[1:5, 1:5]
-```
-
-- `as.data.frame()`: simply coercing `interactions` into a rectangular data frame
-
-```{r}
-as.data.frame(hic) |> head()
-```
-
-::: {.callout-warning}
-These coercing methods only operate on `interactions` and `scores`, 
-and discard all other information, e.g. available `resolutions`, 
-associated `metadata`, `pairsFile` or `topologicalFeatures`. 
+Note that these `GInteractions` are **not** binned, contrary to `interactions` 
+extracted from a `HiCExperiment`. Anchors of the interactions listed in the  
+`GInteractions` imported from a disk-stored `.pairs` file are all of width `1`. 
 :::
 
 ## Visual summary of the `HiCExperiment` data structure
@@ -1200,3 +1199,9 @@ associated `metadata`, `pairsFile` or `topologicalFeatures`.
 
 ::: {#refs}
 :::
+
+## Session info {-}
+
+```{r echo = FALSE}
+sessioninfo::session_info()
+```

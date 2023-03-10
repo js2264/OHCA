@@ -1,0 +1,40 @@
+---
+bibliography: bibliography.bib
+---
+
+# Access to public Hi-C data portals
+
+```{r}
+#| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
+source("_common.R")
+library(ggplot2)
+library(GenomicRanges)
+library(InteractionSet)
+library(HiCExperiment)
+library(HiContactsData)
+library(fourDNData)
+library(DNAZooData)
+coolf <- HiContactsData('yeast_wt', 'mcool')
+pairsf <- HiContactsData('yeast_wt', 'pairs.gz')
+```
+
+::: {.callout-note}
+## Aims
+:::
+
+
+
+
+## References {-}
+
+::: {#refs}
+:::
+
+## Session info {-}
+
+```{r echo = FALSE}
+sessioninfo::session_info()
+```
