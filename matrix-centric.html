@@ -81,6 +81,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -232,6 +251,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
+  </div>
+</li>
       </ul>
 </li>
     </ul>
@@ -247,6 +271,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#playing-with-mammalian-data" id="toc-playing-with-mammalian-data" class="nav-link" data-scroll-target="#playing-with-mammalian-data"><span class="toc-section-number">5.1.2</span>  Playing with mammalian data</a></li>
   </ul>
 </li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/OHCA/edit/main/matrix-centric.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -523,14 +549,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>contacts</span>
 <span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a><span class="do">##  `HiCExperiment` object with 471,364 contacts over 814 regions </span></span>
 <span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a><span class="do">##  -------</span></span>
-<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="do">##  fileName: "/root/.cache/R/ExperimentHub/166e52c52bc8_7752" </span></span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="do">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
 <span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a><span class="do">##  focus: "II" </span></span>
 <span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a><span class="do">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a><span class="do">##  active resolution: 1000 </span></span>
 <span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a><span class="do">##  interactions: 74360 </span></span>
 <span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a><span class="do">##  scores(3): count balanced ICE </span></span>
 <span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a><span class="do">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
-<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a><span class="do">##  pairsFile: /root/.cache/R/ExperimentHub/166e15d67219_7753 </span></span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a><span class="do">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
 <span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a><span class="do">##  metadata(0):</span></span>
 <span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a>cowplot<span class="sc">::</span><span class="fu">plot_grid</span>(</span>
 <span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plotMatrix</span>(contacts, <span class="at">use.scores =</span> <span class="st">'count'</span>, <span class="at">scale =</span> <span class="st">'log10'</span>),</span>
@@ -559,14 +585,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="va">eco1</span></span>
 <span><span class="co">##  `HiCExperiment` object with 19,136,736 contacts over 12,079 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/1c6c2a7ee2ed_7754" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/21ab5feb5467_7754" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
 <span><span class="co">##  interactions: 6474816 </span></span>
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/1c6c163099c6_7755 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/21ab5e13fca7_7755 </span></span>
 <span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now that we have these two <code>HiCExperiment</code> objects, we can:</p>
@@ -703,7 +729,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="va">aggr_borders</span></span>
 <span><span class="co">##  `AggrHiCExperiment` object over 810 targets </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e52c52bc8_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
 <span><span class="co">##  focus: 810 targets </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
@@ -711,7 +737,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="co">##  scores(4): count balanced expected detrended </span></span>
 <span><span class="co">##  slices(4): count balanced expected detrended </span></span>
 <span><span class="co">##  topologicalFeatures: targets(810) compartments(0) borders(814) loops(162) viewpoints(0) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e15d67219_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
 <span><span class="co">##  metadata(0):</span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span></span>
 <span>    <span class="fu">plotMatrix</span><span class="op">(</span></span>
@@ -789,9 +815,150 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span><span class="op">)</span></span>
 <span><span class="va">p_mammals_2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section></section><section id="references" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" role="doc-bibliography">
+
+</div>
+</section><section id="session-info" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="session-info">Session info</h2>
+<div class="cell" data-hash="matrix-centric_cache/html/unnamed-chunk-2_bfe5632de11386215b539a9131073c8a">
+<pre><code>##  ─ Session info ────────────────────────────────────────────────────────────
+##   setting  value
+##   version  R Under development (unstable) (2023-02-09 r83797)
+##   os       Ubuntu 22.04.1 LTS
+##   system   x86_64, linux-gnu
+##   ui       X11
+##   language (EN)
+##   collate  en_US.UTF-8
+##   ctype    en_US.UTF-8
+##   tz       Etc/UTC
+##   date     2023-03-10
+##   pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
+##  
+##  ─ Packages ────────────────────────────────────────────────────────────────
+##   package                * version   date (UTC) lib source
+##   AnnotationDbi            1.61.0    2022-11-01 [1] Bioconductor
+##   AnnotationHub          * 3.7.1     2023-02-06 [1] Bioconductor
+##   assertthat               0.2.1     2019-03-21 [1] CRAN (R 4.3.0)
+##   beeswarm                 0.4.0     2021-06-01 [1] CRAN (R 4.3.0)
+##   Biobase                * 2.59.0    2022-11-01 [1] Bioconductor
+##   BiocFileCache          * 2.7.1     2022-12-09 [1] Bioconductor
+##   BiocGenerics           * 0.45.0    2022-11-01 [1] Bioconductor
+##   BiocIO                   1.9.2     2023-01-19 [1] Bioconductor
+##   BiocManager              1.30.19   2022-10-25 [1] CRAN (R 4.3.0)
+##   BiocParallel             1.33.9    2022-12-23 [1] Bioconductor
+##   BiocVersion              3.17.1    2022-11-04 [1] Bioconductor
+##   Biostrings               2.67.0    2022-11-01 [1] Bioconductor
+##   bit                      4.0.5     2022-11-15 [1] CRAN (R 4.3.0)
+##   bit64                    4.0.5     2020-08-30 [1] CRAN (R 4.3.0)
+##   bitops                   1.0-7     2021-04-24 [1] CRAN (R 4.3.0)
+##   blob                     1.2.3     2022-04-10 [1] CRAN (R 4.3.0)
+##   cachem                   1.0.6     2021-08-19 [1] CRAN (R 4.3.0)
+##   Cairo                    1.6-0     2022-07-05 [1] CRAN (R 4.3.0)
+##   cli                      3.6.0     2023-01-09 [1] CRAN (R 4.3.0)
+##   codetools                0.2-19    2023-02-01 [2] CRAN (R 4.3.0)
+##   colorspace               2.1-0     2023-01-23 [1] CRAN (R 4.3.0)
+##   cowplot                  1.1.1     2020-12-30 [1] CRAN (R 4.3.0)
+##   crayon                   1.5.2     2022-09-29 [1] CRAN (R 4.3.0)
+##   curl                     5.0.0     2023-01-12 [1] CRAN (R 4.3.0)
+##   DBI                      1.1.3     2022-06-18 [1] CRAN (R 4.3.0)
+##   dbplyr                 * 2.3.0     2023-01-16 [1] CRAN (R 4.3.0)
+##   DelayedArray             0.25.0    2022-11-01 [1] Bioconductor
+##   digest                   0.6.31    2022-12-11 [1] CRAN (R 4.3.0)
+##   dplyr                    1.1.0     2023-01-29 [1] CRAN (R 4.3.0)
+##   ellipsis                 0.3.2     2021-04-29 [1] CRAN (R 4.3.0)
+##   evaluate                 0.20      2023-01-17 [1] CRAN (R 4.3.0)
+##   ExperimentHub          * 2.7.0     2022-11-01 [1] Bioconductor
+##   fansi                    1.0.4     2023-01-22 [1] CRAN (R 4.3.0)
+##   farver                   2.1.1     2022-07-06 [1] CRAN (R 4.3.0)
+##   fastmap                  1.1.0     2021-01-25 [1] CRAN (R 4.3.0)
+##   filelock                 1.0.2     2018-10-05 [1] CRAN (R 4.3.0)
+##   generics                 0.1.3     2022-07-05 [1] CRAN (R 4.3.0)
+##   GenomeInfoDb           * 1.35.15   2023-02-02 [1] Bioconductor
+##   GenomeInfoDbData         1.2.9     2023-02-16 [1] Bioconductor
+##   GenomicAlignments        1.35.0    2022-11-01 [1] Bioconductor
+##   GenomicRanges          * 1.51.4    2022-12-15 [1] Bioconductor
+##   ggbeeswarm               0.7.1     2022-12-16 [1] CRAN (R 4.3.0)
+##   ggplot2                  3.4.1     2023-02-10 [1] CRAN (R 4.3.0)
+##   ggrastr                  1.0.1     2021-12-08 [1] CRAN (R 4.3.0)
+##   glue                     1.6.2     2022-02-24 [1] CRAN (R 4.3.0)
+##   gtable                   0.3.1     2022-09-01 [1] CRAN (R 4.3.0)
+##   HiCExperiment          * 0.99.11   2023-03-10 [1] Github (js2264/HiCExperiment@a20c55f)
+##   HiContacts             * 1.1.1     2023-03-10 [1] Github (js2264/HiContacts@ccee17c)
+##   HiContactsData         * 1.1.9     2023-03-10 [1] Github (js2264/HiContactsData@275fab4)
+##   htmltools                0.5.4     2022-12-07 [1] CRAN (R 4.3.0)
+##   htmlwidgets              1.6.1     2023-01-07 [1] CRAN (R 4.3.0)
+##   httpuv                   1.6.9     2023-02-14 [1] CRAN (R 4.3.0)
+##   httr                     1.4.4     2022-08-17 [1] CRAN (R 4.3.0)
+##   InteractionSet         * 1.27.0    2022-11-01 [1] Bioconductor
+##   interactiveDisplayBase   1.37.0    2022-11-01 [1] Bioconductor
+##   IRanges                * 2.33.0    2022-11-01 [1] Bioconductor
+##   jsonlite                 1.8.4     2022-12-06 [1] CRAN (R 4.3.0)
+##   KEGGREST                 1.39.0    2022-11-01 [1] Bioconductor
+##   knitr                    1.42      2023-01-25 [1] CRAN (R 4.3.0)
+##   labeling                 0.4.2     2020-10-20 [1] CRAN (R 4.3.0)
+##   later                    1.3.0     2021-08-18 [1] CRAN (R 4.3.0)
+##   lattice                  0.20-45   2021-09-22 [2] CRAN (R 4.3.0)
+##   lifecycle                1.0.3     2022-10-07 [1] CRAN (R 4.3.0)
+##   magrittr                 2.0.3     2022-03-30 [1] CRAN (R 4.3.0)
+##   Matrix                   1.5-3     2022-11-11 [2] CRAN (R 4.3.0)
+##   MatrixGenerics         * 1.11.0    2022-11-01 [1] Bioconductor
+##   matrixStats            * 0.63.0    2022-11-18 [1] CRAN (R 4.3.0)
+##   memoise                  2.0.1     2021-11-26 [1] CRAN (R 4.3.0)
+##   mime                     0.12      2021-09-28 [1] CRAN (R 4.3.0)
+##   munsell                  0.5.0     2018-06-12 [1] CRAN (R 4.3.0)
+##   pillar                   1.8.1     2022-08-19 [1] CRAN (R 4.3.0)
+##   pkgconfig                2.0.3     2019-09-22 [1] CRAN (R 4.3.0)
+##   png                      0.1-8     2022-11-29 [1] CRAN (R 4.3.0)
+##   promises                 1.2.0.1   2021-02-11 [1] CRAN (R 4.3.0)
+##   purrr                    1.0.1     2023-01-10 [1] CRAN (R 4.3.0)
+##   R6                       2.5.1     2021-08-19 [1] CRAN (R 4.3.0)
+##   rappdirs                 0.3.3     2021-01-31 [1] CRAN (R 4.3.0)
+##   Rcpp                     1.0.10    2023-01-22 [1] CRAN (R 4.3.0)
+##   RCurl                    1.98-1.10 2023-01-27 [1] CRAN (R 4.3.0)
+##   restfulr                 0.0.15    2022-06-16 [1] CRAN (R 4.3.0)
+##   rhdf5                    2.43.0    2022-11-01 [1] Bioconductor
+##   rhdf5filters             1.11.0    2022-11-01 [1] Bioconductor
+##   Rhdf5lib                 1.21.0    2022-11-01 [1] Bioconductor
+##   rjson                    0.2.21    2022-01-09 [1] CRAN (R 4.3.0)
+##   rlang                    1.0.6     2022-09-24 [1] CRAN (R 4.3.0)
+##   rmarkdown                2.20      2023-01-19 [1] CRAN (R 4.3.0)
+##   Rsamtools                2.15.1    2022-12-30 [1] Bioconductor
+##   RSpectra                 0.16-1    2022-04-24 [1] CRAN (R 4.3.0)
+##   RSQLite                  2.2.20    2022-12-22 [1] CRAN (R 4.3.0)
+##   rtracklayer            * 1.59.1    2022-12-27 [1] Bioconductor
+##   S4Vectors              * 0.37.3    2022-12-07 [1] Bioconductor
+##   scales                   1.2.1     2022-08-20 [1] CRAN (R 4.3.0)
+##   sessioninfo              1.2.2     2021-12-06 [1] CRAN (R 4.3.0)
+##   shiny                    1.7.4     2022-12-15 [1] CRAN (R 4.3.0)
+##   strawr                   0.0.9     2021-09-13 [1] CRAN (R 4.3.0)
+##   stringi                  1.7.12    2023-01-11 [1] CRAN (R 4.3.0)
+##   stringr                  1.5.0     2022-12-02 [1] CRAN (R 4.3.0)
+##   SummarizedExperiment   * 1.29.1    2022-11-04 [1] Bioconductor
+##   terra                    1.7-18    2023-03-06 [1] CRAN (R 4.3.0)
+##   tibble                   3.1.8     2022-07-22 [1] CRAN (R 4.3.0)
+##   tidyr                    1.3.0     2023-01-24 [1] CRAN (R 4.3.0)
+##   tidyselect               1.2.0     2022-10-10 [1] CRAN (R 4.3.0)
+##   tzdb                     0.3.0     2022-03-28 [1] CRAN (R 4.3.0)
+##   utf8                     1.2.3     2023-01-31 [1] CRAN (R 4.3.0)
+##   vctrs                    0.5.2     2023-01-23 [1] CRAN (R 4.3.0)
+##   vipor                    0.4.5     2017-03-22 [1] CRAN (R 4.3.0)
+##   vroom                    1.6.1     2023-01-22 [1] CRAN (R 4.3.0)
+##   withr                    2.5.0     2022-03-03 [1] CRAN (R 4.3.0)
+##   xfun                     0.37      2023-01-31 [1] CRAN (R 4.3.0)
+##   XML                      3.99-0.13 2022-12-04 [1] CRAN (R 4.3.0)
+##   xtable                   1.8-4     2019-04-21 [1] CRAN (R 4.3.0)
+##   XVector                  0.39.0    2022-11-01 [1] Bioconductor
+##   yaml                     2.3.7     2023-01-23 [1] CRAN (R 4.3.0)
+##   zlibbioc                 1.45.0    2022-11-01 [1] Bioconductor
+##  
+##   [1] /usr/local/lib/R/site-library
+##   [2] /usr/local/lib/R/library
+##  
+##  ───────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

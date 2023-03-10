@@ -2,46 +2,50 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://js2264.github.io/OHCA/index.html</loc>
-    <lastmod>2023-03-09T12:00:30.904Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.680Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/principles.html</loc>
-    <lastmod>2023-03-09T12:00:30.904Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.684Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/data-representation.html</loc>
-    <lastmod>2023-03-09T12:00:30.920Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.824Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/parsing.html</loc>
-    <lastmod>2023-03-09T12:00:30.924Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.832Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/visualization.html</loc>
-    <lastmod>2023-03-09T12:00:30.924Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.836Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/matrix-centric.html</loc>
-    <lastmod>2023-03-09T12:00:30.928Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.840Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/interactions-centric.html</loc>
-    <lastmod>2023-03-09T12:00:30.932Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.840Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/topological-features.html</loc>
-    <lastmod>2023-03-09T12:00:30.932Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.840Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/workflow-yeast.html</loc>
-    <lastmod>2023-03-09T12:00:30.936Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.844Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/workflow-chicken.html</loc>
-    <lastmod>2023-03-09T12:00:30.936Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.848Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/interoperability.html</loc>
-    <lastmod>2023-03-09T12:00:30.936Z</lastmod>
+    <lastmod>2023-03-10T18:51:53.848Z</lastmod>
+  </url>
+  <url>
+    <loc>https://js2264.github.io/OHCA/disseminating.html</loc>
+    <lastmod>2023-03-10T18:51:53.848Z</lastmod>
   </url>
 </urlset>

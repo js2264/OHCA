@@ -81,6 +81,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -232,6 +251,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
+  </div>
+</li>
       </ul>
 </li>
     </ul>
@@ -246,6 +270,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#compute-ps-per-replicate-and-plot-it" id="toc-compute-ps-per-replicate-and-plot-it" class="nav-link" data-scroll-target="#compute-ps-per-replicate-and-plot-it"><span class="toc-section-number">8.4</span>  Compute P(s) per replicate and plot it</a></li>
   <li><a href="#correlation-between-replicates-with-hicrep" id="toc-correlation-between-replicates-with-hicrep" class="nav-link" data-scroll-target="#correlation-between-replicates-with-hicrep"><span class="toc-section-number">8.5</span>  Correlation between replicates with <code>hicrep</code></a></li>
   <li><a href="#differential-interaction-di-analysis-with-multihiccompare" id="toc-differential-interaction-di-analysis-with-multihiccompare" class="nav-link" data-scroll-target="#differential-interaction-di-analysis-with-multihiccompare"><span class="toc-section-number">8.6</span>  Differential interaction (DI) analysis with <code>multiHiCcompare</code></a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/OHCA/edit/main/workflow-yeast.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
@@ -542,6 +568,161 @@ Note that since matrices were imported after <code>HiCool</code> processing with
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">plotMatrix</span><span class="op">(</span><span class="va">gis</span>, <span class="st">'logFC'</span>, scale <span class="op">=</span> <span class="st">'linear'</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, cmap <span class="op">=</span> <span class="fu">bgrColors</span><span class="op">(</span><span class="op">)</span>, rasterize <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">p_hiccompare</span> <span class="op">&lt;-</span> <span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">'figures/yeast/plot_yeasts-logFC-vs-distance_XI.pdf'</span>, width <span class="op">=</span> <span class="fl">12</span>, height <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="references" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
+<div id="refs" role="doc-bibliography">
+
+</div>
+</section><section id="session-info" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="session-info">Session info</h2>
+<div class="cell" data-hash="workflow-yeast_cache/html/unnamed-chunk-15_221dcc76fea1da38a8c545fe46aaaadc">
+<pre><code>##  ─ Session info ────────────────────────────────────────────────────────────
+##   setting  value
+##   version  R Under development (unstable) (2023-02-09 r83797)
+##   os       Ubuntu 22.04.1 LTS
+##   system   x86_64, linux-gnu
+##   ui       X11
+##   language (EN)
+##   collate  en_US.UTF-8
+##   ctype    en_US.UTF-8
+##   tz       Etc/UTC
+##   date     2023-03-10
+##   pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
+##  
+##  ─ Packages ────────────────────────────────────────────────────────────────
+##   package                * version   date (UTC) lib source
+##   aggregation              1.0.1     2018-01-25 [1] CRAN (R 4.3.0)
+##   AnnotationDbi            1.61.0    2022-11-01 [1] Bioconductor
+##   AnnotationHub          * 3.7.1     2023-02-06 [1] Bioconductor
+##   assertthat               0.2.1     2019-03-21 [1] CRAN (R 4.3.0)
+##   Biobase                * 2.59.0    2022-11-01 [1] Bioconductor
+##   BiocFileCache          * 2.7.1     2022-12-09 [1] Bioconductor
+##   BiocGenerics           * 0.45.0    2022-11-01 [1] Bioconductor
+##   BiocIO                   1.9.2     2023-01-19 [1] Bioconductor
+##   BiocManager              1.30.19   2022-10-25 [1] CRAN (R 4.3.0)
+##   BiocParallel             1.33.9    2022-12-23 [1] Bioconductor
+##   BiocVersion              3.17.1    2022-11-04 [1] Bioconductor
+##   Biostrings               2.67.0    2022-11-01 [1] Bioconductor
+##   bit                      4.0.5     2022-11-15 [1] CRAN (R 4.3.0)
+##   bit64                    4.0.5     2020-08-30 [1] CRAN (R 4.3.0)
+##   bitops                   1.0-7     2021-04-24 [1] CRAN (R 4.3.0)
+##   blob                     1.2.3     2022-04-10 [1] CRAN (R 4.3.0)
+##   cachem                   1.0.6     2021-08-19 [1] CRAN (R 4.3.0)
+##   calibrate                1.7.7     2020-06-19 [1] CRAN (R 4.3.0)
+##   CGHbase                  1.59.0    2022-11-01 [1] Bioconductor
+##   CGHcall                  2.61.0    2022-11-01 [1] Bioconductor
+##   cli                      3.6.0     2023-01-09 [1] CRAN (R 4.3.0)
+##   codetools                0.2-19    2023-02-01 [2] CRAN (R 4.3.0)
+##   colorspace               2.1-0     2023-01-23 [1] CRAN (R 4.3.0)
+##   crayon                   1.5.2     2022-09-29 [1] CRAN (R 4.3.0)
+##   curl                     5.0.0     2023-01-12 [1] CRAN (R 4.3.0)
+##   data.table               1.14.6    2022-11-16 [1] CRAN (R 4.3.0)
+##   DBI                      1.1.3     2022-06-18 [1] CRAN (R 4.3.0)
+##   dbplyr                 * 2.3.0     2023-01-16 [1] CRAN (R 4.3.0)
+##   DelayedArray             0.25.0    2022-11-01 [1] Bioconductor
+##   digest                   0.6.31    2022-12-11 [1] CRAN (R 4.3.0)
+##   DNAcopy                  1.73.0    2022-11-01 [1] Bioconductor
+##   dplyr                    1.1.0     2023-01-29 [1] CRAN (R 4.3.0)
+##   edgeR                    3.41.6    2023-03-01 [1] Bioconductor
+##   ellipsis                 0.3.2     2021-04-29 [1] CRAN (R 4.3.0)
+##   evaluate                 0.20      2023-01-17 [1] CRAN (R 4.3.0)
+##   ExperimentHub          * 2.7.0     2022-11-01 [1] Bioconductor
+##   fansi                    1.0.4     2023-01-22 [1] CRAN (R 4.3.0)
+##   fastmap                  1.1.0     2021-01-25 [1] CRAN (R 4.3.0)
+##   filelock                 1.0.2     2018-10-05 [1] CRAN (R 4.3.0)
+##   future                   1.32.0    2023-03-07 [1] CRAN (R 4.3.0)
+##   future.apply             1.10.0    2022-11-05 [1] CRAN (R 4.3.0)
+##   generics                 0.1.3     2022-07-05 [1] CRAN (R 4.3.0)
+##   GenomeInfoDb           * 1.35.15   2023-02-02 [1] Bioconductor
+##   GenomeInfoDbData         1.2.9     2023-02-16 [1] Bioconductor
+##   GenomicRanges          * 1.51.4    2022-12-15 [1] Bioconductor
+##   ggplot2                * 3.4.1     2023-02-10 [1] CRAN (R 4.3.0)
+##   globals                  0.16.2    2022-11-21 [1] CRAN (R 4.3.0)
+##   glue                     1.6.2     2022-02-24 [1] CRAN (R 4.3.0)
+##   gridExtra                2.3       2017-09-09 [1] CRAN (R 4.3.0)
+##   gtable                   0.3.1     2022-09-01 [1] CRAN (R 4.3.0)
+##   gtools                   3.9.4     2022-11-27 [1] CRAN (R 4.3.0)
+##   HiCcompare               1.21.0    2022-11-01 [1] Bioconductor
+##   HiCExperiment          * 0.99.11   2023-03-10 [1] Github (js2264/HiCExperiment@a20c55f)
+##   HiContactsData         * 1.1.9     2023-03-10 [1] Github (js2264/HiContactsData@275fab4)
+##   hicrep                 * 1.12.2    2023-03-10 [1] Github (TaoYang-dev/hicrep@e485dfa)
+##   htmltools                0.5.4     2022-12-07 [1] CRAN (R 4.3.0)
+##   htmlwidgets              1.6.1     2023-01-07 [1] CRAN (R 4.3.0)
+##   httpuv                   1.6.9     2023-02-14 [1] CRAN (R 4.3.0)
+##   httr                     1.4.4     2022-08-17 [1] CRAN (R 4.3.0)
+##   impute                   1.73.0    2022-11-01 [1] Bioconductor
+##   InteractionSet         * 1.27.0    2022-11-01 [1] Bioconductor
+##   interactiveDisplayBase   1.37.0    2022-11-01 [1] Bioconductor
+##   IRanges                * 2.33.0    2022-11-01 [1] Bioconductor
+##   jsonlite                 1.8.4     2022-12-06 [1] CRAN (R 4.3.0)
+##   KEGGREST                 1.39.0    2022-11-01 [1] Bioconductor
+##   KernSmooth               2.23-20   2021-05-03 [2] CRAN (R 4.3.0)
+##   knitr                    1.42      2023-01-25 [1] CRAN (R 4.3.0)
+##   later                    1.3.0     2021-08-18 [1] CRAN (R 4.3.0)
+##   lattice                  0.20-45   2021-09-22 [2] CRAN (R 4.3.0)
+##   lifecycle                1.0.3     2022-10-07 [1] CRAN (R 4.3.0)
+##   limma                    3.55.5    2023-02-28 [1] Bioconductor
+##   listenv                  0.9.0     2022-12-16 [1] CRAN (R 4.3.0)
+##   locfit                   1.5-9.7   2023-01-02 [1] CRAN (R 4.3.0)
+##   magrittr                 2.0.3     2022-03-30 [1] CRAN (R 4.3.0)
+##   marray                   1.77.0    2022-11-01 [1] Bioconductor
+##   MASS                     7.3-58.2  2023-01-23 [2] CRAN (R 4.3.0)
+##   Matrix                   1.5-3     2022-11-11 [2] CRAN (R 4.3.0)
+##   MatrixGenerics         * 1.11.0    2022-11-01 [1] Bioconductor
+##   matrixStats            * 0.63.0    2022-11-18 [1] CRAN (R 4.3.0)
+##   memoise                  2.0.1     2021-11-26 [1] CRAN (R 4.3.0)
+##   mgcv                     1.8-41    2022-10-21 [2] CRAN (R 4.3.0)
+##   mime                     0.12      2021-09-28 [1] CRAN (R 4.3.0)
+##   multiHiCcompare        * 1.17.0    2022-11-01 [1] Bioconductor
+##   munsell                  0.5.0     2018-06-12 [1] CRAN (R 4.3.0)
+##   nlme                     3.1-162   2023-01-31 [2] CRAN (R 4.3.0)
+##   parallelly               1.34.0    2023-01-13 [1] CRAN (R 4.3.0)
+##   pbapply                  1.7-0     2023-01-13 [1] CRAN (R 4.3.0)
+##   pheatmap                 1.0.12    2019-01-04 [1] CRAN (R 4.3.0)
+##   pillar                   1.8.1     2022-08-19 [1] CRAN (R 4.3.0)
+##   pkgconfig                2.0.3     2019-09-22 [1] CRAN (R 4.3.0)
+##   png                      0.1-8     2022-11-29 [1] CRAN (R 4.3.0)
+##   promises                 1.2.0.1   2021-02-11 [1] CRAN (R 4.3.0)
+##   purrr                  * 1.0.1     2023-01-10 [1] CRAN (R 4.3.0)
+##   QDNAseq                  1.35.0    2022-11-01 [1] Bioconductor
+##   qqman                    0.1.8     2021-04-19 [1] CRAN (R 4.3.0)
+##   R.methodsS3              1.8.2     2022-06-13 [1] CRAN (R 4.3.0)
+##   R.oo                     1.25.0    2022-06-12 [1] CRAN (R 4.3.0)
+##   R.utils                  2.12.2    2022-11-11 [1] CRAN (R 4.3.0)
+##   R6                       2.5.1     2021-08-19 [1] CRAN (R 4.3.0)
+##   rappdirs                 0.3.3     2021-01-31 [1] CRAN (R 4.3.0)
+##   RColorBrewer             1.1-3     2022-04-03 [1] CRAN (R 4.3.0)
+##   Rcpp                     1.0.10    2023-01-22 [1] CRAN (R 4.3.0)
+##   RCurl                    1.98-1.10 2023-01-27 [1] CRAN (R 4.3.0)
+##   rhdf5                    2.43.0    2022-11-01 [1] Bioconductor
+##   rhdf5filters             1.11.0    2022-11-01 [1] Bioconductor
+##   Rhdf5lib                 1.21.0    2022-11-01 [1] Bioconductor
+##   rlang                    1.0.6     2022-09-24 [1] CRAN (R 4.3.0)
+##   rmarkdown                2.20      2023-01-19 [1] CRAN (R 4.3.0)
+##   Rsamtools                2.15.1    2022-12-30 [1] Bioconductor
+##   RSQLite                  2.2.20    2022-12-22 [1] CRAN (R 4.3.0)
+##   S4Vectors              * 0.37.3    2022-12-07 [1] Bioconductor
+##   scales                   1.2.1     2022-08-20 [1] CRAN (R 4.3.0)
+##   sessioninfo              1.2.2     2021-12-06 [1] CRAN (R 4.3.0)
+##   shiny                    1.7.4     2022-12-15 [1] CRAN (R 4.3.0)
+##   strawr                   0.0.9     2021-09-13 [1] CRAN (R 4.3.0)
+##   SummarizedExperiment   * 1.29.1    2022-11-04 [1] Bioconductor
+##   tibble                   3.1.8     2022-07-22 [1] CRAN (R 4.3.0)
+##   tidyselect               1.2.0     2022-10-10 [1] CRAN (R 4.3.0)
+##   tzdb                     0.3.0     2022-03-28 [1] CRAN (R 4.3.0)
+##   utf8                     1.2.3     2023-01-31 [1] CRAN (R 4.3.0)
+##   vctrs                    0.5.2     2023-01-23 [1] CRAN (R 4.3.0)
+##   vroom                    1.6.1     2023-01-22 [1] CRAN (R 4.3.0)
+##   withr                    2.5.0     2022-03-03 [1] CRAN (R 4.3.0)
+##   xfun                     0.37      2023-01-31 [1] CRAN (R 4.3.0)
+##   xtable                   1.8-4     2019-04-21 [1] CRAN (R 4.3.0)
+##   XVector                  0.39.0    2022-11-01 [1] Bioconductor
+##   yaml                     2.3.7     2023-01-23 [1] CRAN (R 4.3.0)
+##   zlibbioc                 1.45.0    2022-11-01 [1] Bioconductor
+##  
+##   [1] /usr/local/lib/R/site-library
+##   [2] /usr/local/lib/R/library
+##  
+##  ───────────────────────────────────────────────────────────────────────────</code></pre>
 </div>
 
 
