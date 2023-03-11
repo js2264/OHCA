@@ -2,50 +2,50 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://js2264.github.io/OHCA/index.html</loc>
-    <lastmod>2023-03-10T18:51:53.680Z</lastmod>
+    <lastmod>2023-03-11T17:27:30.382Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/principles.html</loc>
-    <lastmod>2023-03-10T18:51:53.684Z</lastmod>
+    <lastmod>2023-03-11T17:27:30.382Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/data-representation.html</loc>
-    <lastmod>2023-03-10T18:51:53.824Z</lastmod>
+    <lastmod>2023-03-11T17:27:30.538Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/parsing.html</loc>
-    <lastmod>2023-03-10T18:51:53.832Z</lastmod>
+    <lastmod>2023-03-11T17:27:30.546Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/visualization.html</loc>
-    <lastmod>2023-03-10T18:51:53.836Z</lastmod>
+    <lastmod>2023-03-11T17:27:30.550Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/matrix-centric.html</loc>
-    <lastmod>2023-03-10T18:51:53.840Z</lastmod>
+    <lastmod>2023-03-11T17:27:30.554Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/interactions-centric.html</loc>
-    <lastmod>2023-03-10T18:51:53.840Z</lastmod>
+    <lastmod>2023-03-11T17:27:30.558Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/topological-features.html</loc>
-    <lastmod>2023-03-10T18:51:53.840Z</lastmod>
-  </url>
-  <url>
-    <loc>https://js2264.github.io/OHCA/workflow-yeast.html</loc>
-    <lastmod>2023-03-10T18:51:53.844Z</lastmod>
-  </url>
-  <url>
-    <loc>https://js2264.github.io/OHCA/workflow-chicken.html</loc>
-    <lastmod>2023-03-10T18:51:53.848Z</lastmod>
-  </url>
-  <url>
-    <loc>https://js2264.github.io/OHCA/interoperability.html</loc>
-    <lastmod>2023-03-10T18:51:53.848Z</lastmod>
+    <lastmod>2023-03-11T17:27:30.558Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/OHCA/disseminating.html</loc>
-    <lastmod>2023-03-10T18:51:53.848Z</lastmod>
+    <lastmod>2023-03-11T17:27:30.558Z</lastmod>
+  </url>
+  <url>
+    <loc>https://js2264.github.io/OHCA/workflow-yeast.html</loc>
+    <lastmod>2023-03-11T17:27:30.562Z</lastmod>
+  </url>
+  <url>
+    <loc>https://js2264.github.io/OHCA/workflow-chicken.html</loc>
+    <lastmod>2023-03-11T17:27:30.562Z</lastmod>
+  </url>
+  <url>
+    <loc>https://js2264.github.io/OHCA/interoperability.html</loc>
+    <lastmod>2023-03-11T17:27:30.562Z</lastmod>
   </url>
 </urlset>

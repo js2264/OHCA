@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>Orchestrating Hi-C analysis with Bioconductor - 10&nbsp; Interoperability with other Hi-C packages</title>
+<title>Orchestrating Hi-C analysis with Bioconductor - 11&nbsp; Interoperability with other Hi-C packages</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -46,7 +46,6 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./disseminating.html" rel="next">
 <link href="./workflow-chicken.html" rel="prev">
 <link href="./cover.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
@@ -82,7 +81,7 @@ div.csl-indent {
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span>
+<span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -175,22 +174,22 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
+  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
+  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./interoperability.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
+  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
+  <a href="./interoperability.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
       </ul>
@@ -202,17 +201,17 @@ div.csl-indent {
    
   <ul>
 <li>
-<a href="#basic-interoperability-with-bioconductor" id="toc-basic-interoperability-with-bioconductor" class="nav-link active" data-scroll-target="#basic-interoperability-with-bioconductor"><span class="toc-section-number">10.1</span>  Basic interoperability with Bioconductor</a>
+<a href="#basic-interoperability-with-bioconductor" id="toc-basic-interoperability-with-bioconductor" class="nav-link active" data-scroll-target="#basic-interoperability-with-bioconductor"><span class="toc-section-number">11.1</span>  Basic interoperability with Bioconductor</a>
   <ul class="collapse">
-<li><a href="#add-topological-features" id="toc-add-topological-features" class="nav-link" data-scroll-target="#add-topological-features"><span class="toc-section-number">10.1.1</span>  Add topological features</a></li>
-  <li><a href="#align-tracks-from-.bw-files" id="toc-align-tracks-from-.bw-files" class="nav-link" data-scroll-target="#align-tracks-from-.bw-files"><span class="toc-section-number">10.1.2</span>  Align tracks from <code>.bw</code> files</a></li>
+<li><a href="#add-topological-features" id="toc-add-topological-features" class="nav-link" data-scroll-target="#add-topological-features"><span class="toc-section-number">11.1.1</span>  Add topological features</a></li>
+  <li><a href="#align-tracks-from-.bw-files" id="toc-align-tracks-from-.bw-files" class="nav-link" data-scroll-target="#align-tracks-from-.bw-files"><span class="toc-section-number">11.1.2</span>  Align tracks from <code>.bw</code> files</a></li>
   </ul>
 </li>
-  <li><a href="#hicrep" id="toc-hicrep" class="nav-link" data-scroll-target="#hicrep"><span class="toc-section-number">10.2</span>  HiCrep</a></li>
-  <li><a href="#multihiccompare" id="toc-multihiccompare" class="nav-link" data-scroll-target="#multihiccompare"><span class="toc-section-number">10.3</span>  multiHiCcompare</a></li>
-  <li><a href="#topdom" id="toc-topdom" class="nav-link" data-scroll-target="#topdom"><span class="toc-section-number">10.4</span>  TopDom</a></li>
-  <li><a href="#gothic" id="toc-gothic" class="nav-link" data-scroll-target="#gothic"><span class="toc-section-number">10.5</span>  GOTHiC</a></li>
-  <li><a href="#hicdoc" id="toc-hicdoc" class="nav-link" data-scroll-target="#hicdoc"><span class="toc-section-number">10.6</span>  HiCDOC</a></li>
+  <li><a href="#hicrep" id="toc-hicrep" class="nav-link" data-scroll-target="#hicrep"><span class="toc-section-number">11.2</span>  HiCrep</a></li>
+  <li><a href="#multihiccompare" id="toc-multihiccompare" class="nav-link" data-scroll-target="#multihiccompare"><span class="toc-section-number">11.3</span>  multiHiCcompare</a></li>
+  <li><a href="#topdom" id="toc-topdom" class="nav-link" data-scroll-target="#topdom"><span class="toc-section-number">11.4</span>  TopDom</a></li>
+  <li><a href="#gothic" id="toc-gothic" class="nav-link" data-scroll-target="#gothic"><span class="toc-section-number">11.5</span>  GOTHiC</a></li>
+  <li><a href="#hicdoc" id="toc-hicdoc" class="nav-link" data-scroll-target="#hicdoc"><span class="toc-section-number">11.6</span>  HiCDOC</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/OHCA/edit/main/interoperability.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -220,7 +219,7 @@ div.csl-indent {
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span>
+<span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span>
 </h1>
 </div>
 
@@ -237,28 +236,28 @@ div.csl-indent {
 </header><div class="cell">
 
 </div>
-<section id="basic-interoperability-with-bioconductor" class="level2" data-number="10.1"><h2 data-number="10.1" class="anchored" data-anchor-id="basic-interoperability-with-bioconductor">
-<span class="header-section-number">10.1</span> Basic interoperability with Bioconductor</h2>
-<section id="add-topological-features" class="level3" data-number="10.1.1"><h3 data-number="10.1.1" class="anchored" data-anchor-id="add-topological-features">
-<span class="header-section-number">10.1.1</span> Add topological features</h3>
+<section id="basic-interoperability-with-bioconductor" class="level2" data-number="11.1"><h2 data-number="11.1" class="anchored" data-anchor-id="basic-interoperability-with-bioconductor">
+<span class="header-section-number">11.1</span> Basic interoperability with Bioconductor</h2>
+<section id="add-topological-features" class="level3" data-number="11.1.1"><h3 data-number="11.1.1" class="anchored" data-anchor-id="add-topological-features">
+<span class="header-section-number">11.1.1</span> Add topological features</h3>
 <div class="cell" data-hash="interoperability_cache/html/unnamed-chunk-2_d0c7a0bf2fd58497b36aac425b36efa1">
 
 </div>
-</section><section id="align-tracks-from-.bw-files" class="level3" data-number="10.1.2"><h3 data-number="10.1.2" class="anchored" data-anchor-id="align-tracks-from-.bw-files">
-<span class="header-section-number">10.1.2</span> Align tracks from <code>.bw</code> files</h3>
+</section><section id="align-tracks-from-.bw-files" class="level3" data-number="11.1.2"><h3 data-number="11.1.2" class="anchored" data-anchor-id="align-tracks-from-.bw-files">
+<span class="header-section-number">11.1.2</span> Align tracks from <code>.bw</code> files</h3>
 <div class="cell" data-hash="interoperability_cache/html/unnamed-chunk-3_8066fe65be078592ea8da2e7d779b5aa">
 
 </div>
-</section></section><section id="hicrep" class="level2" data-number="10.2"><h2 data-number="10.2" class="anchored" data-anchor-id="hicrep">
-<span class="header-section-number">10.2</span> HiCrep</h2>
-</section><section id="multihiccompare" class="level2" data-number="10.3"><h2 data-number="10.3" class="anchored" data-anchor-id="multihiccompare">
-<span class="header-section-number">10.3</span> multiHiCcompare</h2>
-</section><section id="topdom" class="level2" data-number="10.4"><h2 data-number="10.4" class="anchored" data-anchor-id="topdom">
-<span class="header-section-number">10.4</span> TopDom</h2>
-</section><section id="gothic" class="level2" data-number="10.5"><h2 data-number="10.5" class="anchored" data-anchor-id="gothic">
-<span class="header-section-number">10.5</span> GOTHiC</h2>
-</section><section id="hicdoc" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="hicdoc">
-<span class="header-section-number">10.6</span> HiCDOC</h2>
+</section></section><section id="hicrep" class="level2" data-number="11.2"><h2 data-number="11.2" class="anchored" data-anchor-id="hicrep">
+<span class="header-section-number">11.2</span> HiCrep</h2>
+</section><section id="multihiccompare" class="level2" data-number="11.3"><h2 data-number="11.3" class="anchored" data-anchor-id="multihiccompare">
+<span class="header-section-number">11.3</span> multiHiCcompare</h2>
+</section><section id="topdom" class="level2" data-number="11.4"><h2 data-number="11.4" class="anchored" data-anchor-id="topdom">
+<span class="header-section-number">11.4</span> TopDom</h2>
+</section><section id="gothic" class="level2" data-number="11.5"><h2 data-number="11.5" class="anchored" data-anchor-id="gothic">
+<span class="header-section-number">11.5</span> GOTHiC</h2>
+</section><section id="hicdoc" class="level2" data-number="11.6"><h2 data-number="11.6" class="anchored" data-anchor-id="hicdoc">
+<span class="header-section-number">11.6</span> HiCDOC</h2>
 </section><section id="references" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 <div id="refs" role="doc-bibliography">
 
@@ -275,7 +274,7 @@ div.csl-indent {
 ##   collate  en_US.UTF-8
 ##   ctype    en_US.UTF-8
 ##   tz       Etc/UTC
-##   date     2023-03-10
+##   date     2023-03-11
 ##   pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
 ##  
 ##  ─ Packages ────────────────────────────────────────────────────────────────
@@ -454,13 +453,10 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./workflow-chicken.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./disseminating.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->

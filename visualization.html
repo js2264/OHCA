@@ -18,6 +18,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
@@ -175,22 +238,22 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
+  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
+  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
+  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
+  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
       </ul>
@@ -207,15 +270,22 @@ div.csl-indent {
 <li><a href="#single-map" id="toc-single-map" class="nav-link" data-scroll-target="#single-map"><span class="toc-section-number">4.1.1</span>  Single map</a></li>
   <li><a href="#horizontal-map" id="toc-horizontal-map" class="nav-link" data-scroll-target="#horizontal-map"><span class="toc-section-number">4.1.2</span>  Horizontal map</a></li>
   <li><a href="#side-by-side-maps" id="toc-side-by-side-maps" class="nav-link" data-scroll-target="#side-by-side-maps"><span class="toc-section-number">4.1.3</span>  Side-by-side maps</a></li>
-  <li><a href="#aggregated-hi-c-map" id="toc-aggregated-hi-c-map" class="nav-link" data-scroll-target="#aggregated-hi-c-map"><span class="toc-section-number">4.1.4</span>  Aggregated Hi-C map</a></li>
+  <li><a href="#plotting-multiple-chromosomes" id="toc-plotting-multiple-chromosomes" class="nav-link" data-scroll-target="#plotting-multiple-chromosomes"><span class="toc-section-number">4.1.4</span>  Plotting multiple chromosomes</a></li>
   </ul>
 </li>
   <li>
 <a href="#hi-c-maps-customization-options" id="toc-hi-c-maps-customization-options" class="nav-link" data-scroll-target="#hi-c-maps-customization-options"><span class="toc-section-number">4.2</span>  Hi-C maps customization options</a>
   <ul class="collapse">
 <li><a href="#choosing-scores" id="toc-choosing-scores" class="nav-link" data-scroll-target="#choosing-scores"><span class="toc-section-number">4.2.1</span>  Choosing scores</a></li>
-  <li><a href="#choosing-color-map" id="toc-choosing-color-map" class="nav-link" data-scroll-target="#choosing-color-map"><span class="toc-section-number">4.2.2</span>  Choosing color map</a></li>
-  <li><a href="#choosing-scale" id="toc-choosing-scale" class="nav-link" data-scroll-target="#choosing-scale"><span class="toc-section-number">4.2.3</span>  Choosing scale</a></li>
+  <li><a href="#choosing-scale" id="toc-choosing-scale" class="nav-link" data-scroll-target="#choosing-scale"><span class="toc-section-number">4.2.2</span>  Choosing scale</a></li>
+  <li><a href="#choosing-color-map" id="toc-choosing-color-map" class="nav-link" data-scroll-target="#choosing-color-map"><span class="toc-section-number">4.2.3</span>  Choosing color map</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#advanced-visualization" id="toc-advanced-visualization" class="nav-link" data-scroll-target="#advanced-visualization"><span class="toc-section-number">4.3</span>  Advanced visualization</a>
+  <ul class="collapse">
+<li><a href="#overlaying-topological-features" id="toc-overlaying-topological-features" class="nav-link" data-scroll-target="#overlaying-topological-features"><span class="toc-section-number">4.3.1</span>  Overlaying topological features</a></li>
+  <li><a href="#aggregated-hi-c-maps" id="toc-aggregated-hi-c-maps" class="nav-link" data-scroll-target="#aggregated-hi-c-maps"><span class="toc-section-number">4.3.2</span>  Aggregated Hi-C maps</a></li>
   </ul>
 </li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
@@ -242,6 +312,48 @@ div.csl-indent {
 </header><div class="cell">
 
 </div>
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Aims
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This chapter focuses on the various visualization tools offered by <code>HiContacts</code> to plot <code>HiCExperiment</code> contact matrices in R.</p>
+</div>
+</div>
+<p>To demonstrate how to visualize a <code>HiCExperiment</code> contact matrix, we will create an <code>HiCExperiment</code> object from an example <code>.cool</code> file provided in the <code>HiContactsData</code> package.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-2_3e88f7975dffc8f1ccb93229d470fb17">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># ---- This downloads an example `.mcool` file and caches it locally </span></span>
+<span><span class="va">coolf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'mcool'</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># ---- This creates a connection to the disk-stored `.mcool` file</span></span>
+<span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
+<span><span class="va">cf</span></span>
+<span></span>
+<span><span class="co"># ---- This imports contacts from the chromosome `V` at resolution `2000`</span></span>
+<span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'V'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-3_d19f4f1a35a239a328b2358f48315286">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
+<span><span class="co">##  `HiCExperiment` object with 303,545 contacts over 289 regions </span></span>
+<span><span class="co">##  -------</span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
+<span><span class="co">##  focus: "V" </span></span>
+<span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
+<span><span class="co">##  active resolution: 2000 </span></span>
+<span><span class="co">##  interactions: 20177 </span></span>
+<span><span class="co">##  scores(2): count balanced </span></span>
+<span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) centromeres(16) </span></span>
+<span><span class="co">##  pairsFile: N/A </span></span>
+<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <section id="visualizing-hi-c-contact-maps" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="visualizing-hi-c-contact-maps">
 <span class="header-section-number">4.1</span> Visualizing Hi-C contact maps</h2>
 <p>Visualizing Hi-C contact maps is often a necessary step in exploratory data analysis. A Hi-C contact map is usually displayed as a heatmap, in which:</p>
@@ -254,26 +366,253 @@ div.csl-indent {
 </ul>
 <section id="single-map" class="level3" data-number="4.1.1"><h3 data-number="4.1.1" class="anchored" data-anchor-id="single-map">
 <span class="header-section-number">4.1.1</span> Single map</h3>
+<p>Simple visualization of disk-stored Hi-C contact matrices can be done by:</p>
+<ol type="1">
+<li>Importing the interactions over the genomic location of interest into a <code>HiCExperiment</code> object;</li>
+<li>Using <code>plotMatrix</code> function provided by <code>HiContacts</code> to generate a plot.</li>
+</ol>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-4_dd1c4d4fa95653085af4ea6b8194fc15">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContacts">HiContacts</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout-note callout callout-style-simple no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A caption summarizing the plotting parameters is added below the heatmap. This can be removed with <code>caption = FALSE</code>.</p>
+</div>
+</div>
 </section><section id="horizontal-map" class="level3" data-number="4.1.2"><h3 data-number="4.1.2" class="anchored" data-anchor-id="horizontal-map">
 <span class="header-section-number">4.1.2</span> Horizontal map</h3>
+<p>Hi-C maps are sometimes visualized in a “horizontal” style, where a square <strong>on-diagonal</strong> heatmap is tilted by 45˚ and truncated to only show interactions up to a certain distance from the main diagonal.</p>
+<p>When a <code>maxDistance</code> argument is provided to <code>plotMatrix</code>, it automatically generates a horizontal-style heatmap.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-5_96593fcd7653770ee7cda6b2fda50bbb">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">hic</span>, maxDistance <span class="op">=</span> <span class="fl">200000</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section><section id="side-by-side-maps" class="level3" data-number="4.1.3"><h3 data-number="4.1.3" class="anchored" data-anchor-id="side-by-side-maps">
 <span class="header-section-number">4.1.3</span> Side-by-side maps</h3>
-</section><section id="aggregated-hi-c-map" class="level3" data-number="4.1.4"><h3 data-number="4.1.4" class="anchored" data-anchor-id="aggregated-hi-c-map">
-<span class="header-section-number">4.1.4</span> Aggregated Hi-C map</h3>
+<p>Sometimes, one may want to visually plot 2 Hi-C samples side by side to compare the interaction landscapes over the same genomic locus. This can be done by adding a second <code>HiCExperiment</code> (imported with the same <code>focus</code>) with the <code>compare.to</code> argument.</p>
+<p>Here, we are importing a second <code>.mcool</code> file corresponding to a Hi-C experiment performed in a <em>eco1</em> yeast mutant:</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-6_56de8bee8363113f38a9915a00300ffb">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_eco1'</span>, <span class="st">'mcool'</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>    focus <span class="op">=</span> <span class="st">'V'</span>, </span>
+<span>    resolution <span class="op">=</span> <span class="fl">2000</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We then plot the 2 matrices side by side. The first will be displayed in the top right corner and the second (provided with <code>compare.to</code>) will be in the bottom left corner.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-7_6b3f123dd98de0156a61a6c66ae3eb0d">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">hic</span>, compare.to <span class="op">=</span> <span class="va">hic2</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section><section id="plotting-multiple-chromosomes" class="level3" data-number="4.1.4"><h3 data-number="4.1.4" class="anchored" data-anchor-id="plotting-multiple-chromosomes">
+<span class="header-section-number">4.1.4</span> Plotting multiple chromosomes</h3>
+<p>Interactions from multiple chromosomes can be visualized in a Hi-C heatmap. One needs to (1) first parse the entire contact matrix in <code>R</code>, (2) then subset interactions over chromosomes of interest with <code>[</code> and (3) use <code>plotMatrix</code> to generate the multi-chromosome plot.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-8_d34464cdf59c8d129d145ea370abc044">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">full_hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, resolution <span class="op">=</span> <span class="fl">4000</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">full_hic</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic_subset</span> <span class="op">&lt;-</span> <span class="va">full_hic</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"II"</span>, <span class="st">"III"</span>, <span class="st">"IV"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">hic_subset</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section></section><section id="hi-c-maps-customization-options" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="hi-c-maps-customization-options">
 <span class="header-section-number">4.2</span> Hi-C maps customization options</h2>
+<p>A number of customization options are available for the <code>plotMatrix</code> function. The next subsections focus on how to:</p>
+<ul>
+<li>Pick the <code>scores</code> of interest to represent in a Hi-C heatmap;</li>
+<li>Change the numeric scale and boundaries;</li>
+<li>Change the color map;</li>
+<li>Extra customization options</li>
+</ul>
 <section id="choosing-scores" class="level3" data-number="4.2.1"><h3 data-number="4.2.1" class="anchored" data-anchor-id="choosing-scores">
 <span class="header-section-number">4.2.1</span> Choosing scores</h3>
-</section><section id="choosing-color-map" class="level3" data-number="4.2.2"><h3 data-number="4.2.2" class="anchored" data-anchor-id="choosing-color-map">
-<span class="header-section-number">4.2.2</span> Choosing color map</h3>
-</section><section id="choosing-scale" class="level3" data-number="4.2.3"><h3 data-number="4.2.3" class="anchored" data-anchor-id="choosing-scale">
-<span class="header-section-number">4.2.3</span> Choosing scale</h3>
+<p>By default, <code>plotMatrix</code> will attempt to plot <code>balanced</code> (coverage normalized) Hi-C matrices. However, extra scores may be associated with interactions in a <code>HiCExperiment</code> object (more on this in the <a href="./matrix-centric.html">next chapter</a>)</p>
+<p>For instance, we can plot the <code>count</code> scores, which are un-normalized raw contact counts directly obtained when binning a <code>.pairs</code> file:</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-9_2c9a6ae29e5abd47ae67aaf605899ba3">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">hic</span>, use.scores <span class="op">=</span> <span class="st">'count'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section><section id="choosing-scale" class="level3" data-number="4.2.2"><h3 data-number="4.2.2" class="anchored" data-anchor-id="choosing-scale">
+<span class="header-section-number">4.2.2</span> Choosing scale</h3>
+<p>The color scale is automatically adjusted to range from the minimum to the maximum <code>scores</code> of the <code>HiCExperiment</code> being plotted. This can be adjusted using the <code>limits</code> argument.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-10_e47249adeff0b62003752e647f9b39aa">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">hic</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3.5</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section><section id="choosing-color-map" class="level3" data-number="4.2.3"><h3 data-number="4.2.3" class="anchored" data-anchor-id="choosing-color-map">
+<span class="header-section-number">4.2.3</span> Choosing color map</h3>
+<p><code><a href="https://rdrr.io/pkg/HiContacts/man/palettes.html">?HiContacts::palettes</a></code> returns a list of available color maps to use with <code>plotMatrix</code>. Any custom color map can also be used by manually specifying a vector of colors.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-11_6f0bd5b6d01afe00e27d01d9ddedba51">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ----- `afmhotr` color map is shipped in the `HiContacts` package</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/palettes.html">afmhotrColors</a></span><span class="op">(</span><span class="op">)</span> </span>
+<span><span class="co">##  [1] "#ffffff" "#f8f5c3" "#f4ee8d" "#f6be35" "#ee7d32" "#c44228" "#821d19"</span></span>
+<span><span class="co">##  [8] "#381211" "#050606"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span></span>
+<span>    <span class="va">hic</span>, </span>
+<span>    use.scores <span class="op">=</span> <span class="st">'balanced'</span>,</span>
+<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>    cmap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/palettes.html">afmhotrColors</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section></section><section id="advanced-visualization" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="advanced-visualization">
+<span class="header-section-number">4.3</span> Advanced visualization</h2>
+<section id="overlaying-topological-features" class="level3" data-number="4.3.1"><h3 data-number="4.3.1" class="anchored" data-anchor-id="overlaying-topological-features">
+<span class="header-section-number">4.3.1</span> Overlaying topological features</h3>
+<p>Topological features (e.g.&nbsp;chromatin loops, domain borders, A/B compartments, e.g.&nbsp;…) are often displayed over a Hi-C heatmap.</p>
+<p>To illustrate how to do this, let’s import pre-computed chromatin loops in <code>R</code>. These loops have been identified using <code>chromosight</code> (<span class="citation" data-cites="Matthey-Doret2020Nov">@Matthey-Doret2020Nov</span>) on the contact matrix which we imported interactions from.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-12_97761bfea694a5a11f9769d948e9c003">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rtracklayer</span><span class="op">)</span></span>
+<span><span class="va">loops</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>, <span class="st">'S288C-loops.bedpe'</span>, package <span class="op">=</span> <span class="st">'HiCExperiment'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu">makeGInteractionsFromGRangesPairs</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">loops</span></span>
+<span><span class="co">##  GInteractions object with 162 interactions and 0 metadata columns:</span></span>
+<span><span class="co">##          seqnames1       ranges1     seqnames2       ranges2</span></span>
+<span><span class="co">##              &lt;Rle&gt;     &lt;IRanges&gt;         &lt;Rle&gt;     &lt;IRanges&gt;</span></span>
+<span><span class="co">##      [1]         I     3001-4000 ---         I   29001-30000</span></span>
+<span><span class="co">##      [2]         I   29001-30000 ---         I   50001-51000</span></span>
+<span><span class="co">##      [3]         I   95001-96000 ---         I 128001-129000</span></span>
+<span><span class="co">##      [4]         I 133001-134000 ---         I 157001-158000</span></span>
+<span><span class="co">##      [5]        II     8001-9000 ---        II   46001-47000</span></span>
+<span><span class="co">##      ...       ...           ... ...       ...           ...</span></span>
+<span><span class="co">##    [158]       XVI 773001-774000 ---       XVI 803001-804000</span></span>
+<span><span class="co">##    [159]       XVI 834001-835000 ---       XVI 859001-860000</span></span>
+<span><span class="co">##    [160]       XVI 860001-861000 ---       XVI 884001-885000</span></span>
+<span><span class="co">##    [161]       XVI 901001-902000 ---       XVI 940001-941000</span></span>
+<span><span class="co">##    [162]       XVI 917001-918000 ---       XVI 939001-940000</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    regions: 316 ranges and 0 metadata columns</span></span>
+<span><span class="co">##    seqinfo: 16 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Similarly, borders have also been mapped with <code>chromosight</code>. We can also import them in <code>R</code>.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-13_6895cfcc94fee6776b759a7076c8c5a5">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">borders</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>, <span class="st">'S288C-borders.bed'</span>, package <span class="op">=</span> <span class="st">'HiCExperiment'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">borders</span></span>
+<span><span class="co">##  GRanges object with 814 ranges and 0 metadata columns:</span></span>
+<span><span class="co">##          seqnames        ranges strand</span></span>
+<span><span class="co">##             &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt;</span></span>
+<span><span class="co">##      [1]        I   73001-74000      *</span></span>
+<span><span class="co">##      [2]        I 108001-109000      *</span></span>
+<span><span class="co">##      [3]        I 181001-182000      *</span></span>
+<span><span class="co">##      [4]       II   90001-91000      *</span></span>
+<span><span class="co">##      [5]       II 119001-120000      *</span></span>
+<span><span class="co">##      ...      ...           ...    ...</span></span>
+<span><span class="co">##    [810]      XVI 777001-778000      *</span></span>
+<span><span class="co">##    [811]      XVI 796001-797000      *</span></span>
+<span><span class="co">##    [812]      XVI 811001-812000      *</span></span>
+<span><span class="co">##    [813]      XVI 890001-891000      *</span></span>
+<span><span class="co">##    [814]      XVI 933001-934000      *</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 16 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Chromatin loops are stored in <code>GInteractions</code> while borders are <code>GRanges</code>. The former will be displayed as <strong>off-diagonal circles</strong> and the later as <strong>on-diagonal diamonds</strong> on the Hi-C heatmap.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-14_8d2b0efddd864452db3c858f57a69486">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">hic</span>, loops <span class="op">=</span> <span class="va">loops</span>, borders <span class="op">=</span> <span class="va">borders</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section><section id="aggregated-hi-c-maps" class="level3" data-number="4.3.2"><h3 data-number="4.3.2" class="anchored" data-anchor-id="aggregated-hi-c-maps">
+<span class="header-section-number">4.3.2</span> Aggregated Hi-C maps</h3>
+<p>Finally, Hi-C map “snippets” (i.e.&nbsp;extracts) are often aggregated together to show an average signal. This analysis is sometimes referred to as APA (Aggregated Plot Analysis).</p>
+<p>Aggregated Hi-C maps can be computed over a collection of <code>targets</code> using the <code>aggregate</code> function. These targets can be <code>GRanges</code> (to extract on-diagonal snippets) or <code>GInteractions</code> (to extract off-diagonal snippets). The <code>flankingBins</code> specifies how many matrix bins should be extracted on each side of the <code>targets</code> of interest.</p>
+<p>Here, we compute the aggregated Hi-C snippets of ± 15kb around each chromatin loop listed in <code>loops</code>.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-15_a19f9361e175276a5b8820b0d78bfb8d">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">aggr_loops</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html">aggregate</a></span><span class="op">(</span><span class="va">hic</span>, targets <span class="op">=</span> <span class="va">loops</span>, flankingBins <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
+<span><span class="co">##  Going through preflight checklist...</span></span>
+<span><span class="co">##  Parsing the entire contact matrice as a sparse matrix...</span></span>
+<span><span class="co">##  Modeling distance decay...</span></span>
+<span><span class="co">##  Filtering for contacts within provided targets...</span></span>
+<span><span class="va">aggr_loops</span></span>
+<span><span class="co">##  `AggrHiCExperiment` object over 148 targets </span></span>
+<span><span class="co">##  -------</span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
+<span><span class="co">##  focus: 148 targets </span></span>
+<span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
+<span><span class="co">##  active resolution: 1000 </span></span>
+<span><span class="co">##  interactions: 961 </span></span>
+<span><span class="co">##  scores(4): count balanced expected detrended </span></span>
+<span><span class="co">##  slices(4): count balanced expected detrended </span></span>
+<span><span class="co">##  topologicalFeatures: targets(148) compartments(0) borders(0) loops(0) viewpoints(0) centromeres(16) </span></span>
+<span><span class="co">##  pairsFile: N/A </span></span>
+<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>aggregate</code> generates a <code>AggrHiCExperiment</code> object, a flavor of <code>HiCExperiment</code> class of objects.</p>
+<ul>
+<li>
+<code>AggrHiCExperiment</code> objects have an extra <code>slices</code> slot. This stores a list of <code>array</code>s, one per <code>scores</code>. Each <code>array</code> is of 3 dimensions, <code>x</code> and <code>y</code> representing the heatmap axes, and <code>z</code> representing the index of the <code>target</code>.</li>
+<li>
+<code>AggrHiCExperiment</code> objects also have a mandatory <code>topologicalFeatures</code> element named <code>targets</code>, storing the genomic loci provided in <code>aggregate</code>.</li>
+</ul>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-16_54cea15c60632ab5cab224486d6283e3">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">slices</a></span><span class="op">(</span><span class="va">aggr_loops</span><span class="op">)</span></span>
+<span><span class="co">##  List of length 4</span></span>
+<span><span class="co">##  names(4): count balanced expected detrended</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">slices</a></span><span class="op">(</span><span class="va">aggr_loops</span>, <span class="st">'count'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">##  [1]  31  31 148</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">aggr_loops</span>, <span class="st">'targets'</span><span class="op">)</span></span>
+<span><span class="co">##  Pairs object with 148 pairs and 0 metadata columns:</span></span>
+<span><span class="co">##                      first            second</span></span>
+<span><span class="co">##                  &lt;GRanges&gt;         &lt;GRanges&gt;</span></span>
+<span><span class="co">##      [1]     I:14501-44500     I:35501-65500</span></span>
+<span><span class="co">##      [2]    I:80501-110500   I:113501-143500</span></span>
+<span><span class="co">##      [3]   I:118501-148500   I:142501-172500</span></span>
+<span><span class="co">##      [4]    II:33501-63500    II:63501-93500</span></span>
+<span><span class="co">##      [5]  II:134501-164500  II:159501-189500</span></span>
+<span><span class="co">##      ...               ...               ...</span></span>
+<span><span class="co">##    [144] XVI:586501-616500 XVI:606501-636500</span></span>
+<span><span class="co">##    [145] XVI:733501-763500 XVI:754501-784500</span></span>
+<span><span class="co">##    [146] XVI:758501-788500 XVI:788501-818500</span></span>
+<span><span class="co">##    [147] XVI:819501-849500 XVI:844501-874500</span></span>
+<span><span class="co">##    [148] XVI:845501-875500 XVI:869501-899500</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The resulting <code>AggrHiCExperiment</code> can be plotted using the same <code>plotMatrix</code> function with the arguments described above.</p>
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-17_0ec9282dd064ca0010b4feec1793a9da">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span></span>
+<span>    <span class="va">aggr_loops</span>, </span>
+<span>    use.scores <span class="op">=</span> <span class="st">'detrended'</span>, </span>
+<span>    scale <span class="op">=</span> <span class="st">'linear'</span>, </span>
+<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, </span>
+<span>    cmap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/palettes.html">bgrColors</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section></section><section id="references" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
 <div id="refs" role="doc-bibliography">
 
 </div>
 </section><section id="session-info" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="session-info">Session info</h2>
-<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-2_dbb811d3597f9acbbf25e16be9af0b9f">
+<div class="cell" data-hash="visualization_cache/html/unnamed-chunk-18_4631423f6d0fa89c6f540d3a90fb22eb">
 <pre><code>##  ─ Session info ────────────────────────────────────────────────────────────
 ##   setting  value
 ##   version  R Under development (unstable) (2023-02-09 r83797)
@@ -284,42 +623,123 @@ div.csl-indent {
 ##   collate  en_US.UTF-8
 ##   ctype    en_US.UTF-8
 ##   tz       Etc/UTC
-##   date     2023-03-10
+##   date     2023-03-11
 ##   pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
 ##  
 ##  ─ Packages ────────────────────────────────────────────────────────────────
-##   package     * version date (UTC) lib source
-##   cli           3.6.0   2023-01-09 [1] CRAN (R 4.3.0)
-##   colorspace    2.1-0   2023-01-23 [1] CRAN (R 4.3.0)
-##   digest        0.6.31  2022-12-11 [1] CRAN (R 4.3.0)
-##   dplyr         1.1.0   2023-01-29 [1] CRAN (R 4.3.0)
-##   evaluate      0.20    2023-01-17 [1] CRAN (R 4.3.0)
-##   fansi         1.0.4   2023-01-22 [1] CRAN (R 4.3.0)
-##   fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.3.0)
-##   generics      0.1.3   2022-07-05 [1] CRAN (R 4.3.0)
-##   ggplot2       3.4.1   2023-02-10 [1] CRAN (R 4.3.0)
-##   glue          1.6.2   2022-02-24 [1] CRAN (R 4.3.0)
-##   gtable        0.3.1   2022-09-01 [1] CRAN (R 4.3.0)
-##   htmltools     0.5.4   2022-12-07 [1] CRAN (R 4.3.0)
-##   htmlwidgets   1.6.1   2023-01-07 [1] CRAN (R 4.3.0)
-##   jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.3.0)
-##   knitr         1.42    2023-01-25 [1] CRAN (R 4.3.0)
-##   lifecycle     1.0.3   2022-10-07 [1] CRAN (R 4.3.0)
-##   magrittr      2.0.3   2022-03-30 [1] CRAN (R 4.3.0)
-##   munsell       0.5.0   2018-06-12 [1] CRAN (R 4.3.0)
-##   pillar        1.8.1   2022-08-19 [1] CRAN (R 4.3.0)
-##   pkgconfig     2.0.3   2019-09-22 [1] CRAN (R 4.3.0)
-##   R6            2.5.1   2021-08-19 [1] CRAN (R 4.3.0)
-##   rlang         1.0.6   2022-09-24 [1] CRAN (R 4.3.0)
-##   rmarkdown     2.20    2023-01-19 [1] CRAN (R 4.3.0)
-##   scales        1.2.1   2022-08-20 [1] CRAN (R 4.3.0)
-##   sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.3.0)
-##   tibble        3.1.8   2022-07-22 [1] CRAN (R 4.3.0)
-##   tidyselect    1.2.0   2022-10-10 [1] CRAN (R 4.3.0)
-##   utf8          1.2.3   2023-01-31 [1] CRAN (R 4.3.0)
-##   vctrs         0.5.2   2023-01-23 [1] CRAN (R 4.3.0)
-##   xfun          0.37    2023-01-31 [1] CRAN (R 4.3.0)
-##   yaml          2.3.7   2023-01-23 [1] CRAN (R 4.3.0)
+##   package                * version   date (UTC) lib source
+##   AnnotationDbi            1.61.0    2022-11-01 [1] Bioconductor
+##   AnnotationHub          * 3.7.1     2023-02-06 [1] Bioconductor
+##   assertthat               0.2.1     2019-03-21 [1] CRAN (R 4.3.0)
+##   beeswarm                 0.4.0     2021-06-01 [1] CRAN (R 4.3.0)
+##   Biobase                * 2.59.0    2022-11-01 [1] Bioconductor
+##   BiocFileCache          * 2.7.1     2022-12-09 [1] Bioconductor
+##   BiocGenerics           * 0.45.0    2022-11-01 [1] Bioconductor
+##   BiocIO                   1.9.2     2023-01-19 [1] Bioconductor
+##   BiocManager              1.30.19   2022-10-25 [1] CRAN (R 4.3.0)
+##   BiocParallel             1.33.9    2022-12-23 [1] Bioconductor
+##   BiocVersion              3.17.1    2022-11-04 [1] Bioconductor
+##   Biostrings               2.67.0    2022-11-01 [1] Bioconductor
+##   bit                      4.0.5     2022-11-15 [1] CRAN (R 4.3.0)
+##   bit64                    4.0.5     2020-08-30 [1] CRAN (R 4.3.0)
+##   bitops                   1.0-7     2021-04-24 [1] CRAN (R 4.3.0)
+##   blob                     1.2.3     2022-04-10 [1] CRAN (R 4.3.0)
+##   cachem                   1.0.6     2021-08-19 [1] CRAN (R 4.3.0)
+##   Cairo                    1.6-0     2022-07-05 [1] CRAN (R 4.3.0)
+##   cli                      3.6.0     2023-01-09 [1] CRAN (R 4.3.0)
+##   codetools                0.2-19    2023-02-01 [2] CRAN (R 4.3.0)
+##   colorspace               2.1-0     2023-01-23 [1] CRAN (R 4.3.0)
+##   crayon                   1.5.2     2022-09-29 [1] CRAN (R 4.3.0)
+##   curl                     5.0.0     2023-01-12 [1] CRAN (R 4.3.0)
+##   DBI                      1.1.3     2022-06-18 [1] CRAN (R 4.3.0)
+##   dbplyr                 * 2.3.0     2023-01-16 [1] CRAN (R 4.3.0)
+##   DelayedArray             0.25.0    2022-11-01 [1] Bioconductor
+##   digest                   0.6.31    2022-12-11 [1] CRAN (R 4.3.0)
+##   dplyr                    1.1.0     2023-01-29 [1] CRAN (R 4.3.0)
+##   ellipsis                 0.3.2     2021-04-29 [1] CRAN (R 4.3.0)
+##   evaluate                 0.20      2023-01-17 [1] CRAN (R 4.3.0)
+##   ExperimentHub          * 2.7.0     2022-11-01 [1] Bioconductor
+##   fansi                    1.0.4     2023-01-22 [1] CRAN (R 4.3.0)
+##   farver                   2.1.1     2022-07-06 [1] CRAN (R 4.3.0)
+##   fastmap                  1.1.0     2021-01-25 [1] CRAN (R 4.3.0)
+##   filelock                 1.0.2     2018-10-05 [1] CRAN (R 4.3.0)
+##   generics                 0.1.3     2022-07-05 [1] CRAN (R 4.3.0)
+##   GenomeInfoDb           * 1.35.15   2023-02-02 [1] Bioconductor
+##   GenomeInfoDbData         1.2.9     2023-02-16 [1] Bioconductor
+##   GenomicAlignments        1.35.0    2022-11-01 [1] Bioconductor
+##   GenomicRanges          * 1.51.4    2022-12-15 [1] Bioconductor
+##   ggbeeswarm               0.7.1     2022-12-16 [1] CRAN (R 4.3.0)
+##   ggplot2                * 3.4.1     2023-02-10 [1] CRAN (R 4.3.0)
+##   ggrastr                  1.0.1     2021-12-08 [1] CRAN (R 4.3.0)
+##   glue                     1.6.2     2022-02-24 [1] CRAN (R 4.3.0)
+##   gtable                   0.3.1     2022-09-01 [1] CRAN (R 4.3.0)
+##   HiCExperiment          * 0.99.11   2023-03-11 [1] Github (js2264/HiCExperiment@a20c55f)
+##   HiContacts             * 1.1.1     2023-03-11 [1] Github (js2264/HiContacts@ccee17c)
+##   HiContactsData         * 1.1.9     2023-03-11 [1] Github (js2264/HiContactsData@275fab4)
+##   htmltools                0.5.4     2022-12-07 [1] CRAN (R 4.3.0)
+##   htmlwidgets              1.6.1     2023-01-07 [1] CRAN (R 4.3.0)
+##   httpuv                   1.6.9     2023-02-14 [1] CRAN (R 4.3.0)
+##   httr                     1.4.4     2022-08-17 [1] CRAN (R 4.3.0)
+##   InteractionSet         * 1.27.0    2022-11-01 [1] Bioconductor
+##   interactiveDisplayBase   1.37.0    2022-11-01 [1] Bioconductor
+##   IRanges                * 2.33.0    2022-11-01 [1] Bioconductor
+##   jsonlite                 1.8.4     2022-12-06 [1] CRAN (R 4.3.0)
+##   KEGGREST                 1.39.0    2022-11-01 [1] Bioconductor
+##   knitr                    1.42      2023-01-25 [1] CRAN (R 4.3.0)
+##   labeling                 0.4.2     2020-10-20 [1] CRAN (R 4.3.0)
+##   later                    1.3.0     2021-08-18 [1] CRAN (R 4.3.0)
+##   lattice                  0.20-45   2021-09-22 [2] CRAN (R 4.3.0)
+##   lifecycle                1.0.3     2022-10-07 [1] CRAN (R 4.3.0)
+##   magrittr                 2.0.3     2022-03-30 [1] CRAN (R 4.3.0)
+##   Matrix                   1.5-3     2022-11-11 [2] CRAN (R 4.3.0)
+##   MatrixGenerics         * 1.11.0    2022-11-01 [1] Bioconductor
+##   matrixStats            * 0.63.0    2022-11-18 [1] CRAN (R 4.3.0)
+##   memoise                  2.0.1     2021-11-26 [1] CRAN (R 4.3.0)
+##   mime                     0.12      2021-09-28 [1] CRAN (R 4.3.0)
+##   munsell                  0.5.0     2018-06-12 [1] CRAN (R 4.3.0)
+##   pillar                   1.8.1     2022-08-19 [1] CRAN (R 4.3.0)
+##   pkgconfig                2.0.3     2019-09-22 [1] CRAN (R 4.3.0)
+##   png                      0.1-8     2022-11-29 [1] CRAN (R 4.3.0)
+##   promises                 1.2.0.1   2021-02-11 [1] CRAN (R 4.3.0)
+##   purrr                    1.0.1     2023-01-10 [1] CRAN (R 4.3.0)
+##   R6                       2.5.1     2021-08-19 [1] CRAN (R 4.3.0)
+##   rappdirs                 0.3.3     2021-01-31 [1] CRAN (R 4.3.0)
+##   Rcpp                     1.0.10    2023-01-22 [1] CRAN (R 4.3.0)
+##   RCurl                    1.98-1.10 2023-01-27 [1] CRAN (R 4.3.0)
+##   restfulr                 0.0.15    2022-06-16 [1] CRAN (R 4.3.0)
+##   rhdf5                    2.43.0    2022-11-01 [1] Bioconductor
+##   rhdf5filters             1.11.0    2022-11-01 [1] Bioconductor
+##   Rhdf5lib                 1.21.0    2022-11-01 [1] Bioconductor
+##   rjson                    0.2.21    2022-01-09 [1] CRAN (R 4.3.0)
+##   rlang                    1.0.6     2022-09-24 [1] CRAN (R 4.3.0)
+##   rmarkdown                2.20      2023-01-19 [1] CRAN (R 4.3.0)
+##   Rsamtools                2.15.1    2022-12-30 [1] Bioconductor
+##   RSpectra                 0.16-1    2022-04-24 [1] CRAN (R 4.3.0)
+##   RSQLite                  2.2.20    2022-12-22 [1] CRAN (R 4.3.0)
+##   rtracklayer            * 1.59.1    2022-12-27 [1] Bioconductor
+##   S4Vectors              * 0.37.3    2022-12-07 [1] Bioconductor
+##   scales                   1.2.1     2022-08-20 [1] CRAN (R 4.3.0)
+##   sessioninfo              1.2.2     2021-12-06 [1] CRAN (R 4.3.0)
+##   shiny                    1.7.4     2022-12-15 [1] CRAN (R 4.3.0)
+##   strawr                   0.0.9     2021-09-13 [1] CRAN (R 4.3.0)
+##   stringi                  1.7.12    2023-01-11 [1] CRAN (R 4.3.0)
+##   stringr                  1.5.0     2022-12-02 [1] CRAN (R 4.3.0)
+##   SummarizedExperiment   * 1.29.1    2022-11-04 [1] Bioconductor
+##   tibble                   3.1.8     2022-07-22 [1] CRAN (R 4.3.0)
+##   tidyr                    1.3.0     2023-01-24 [1] CRAN (R 4.3.0)
+##   tidyselect               1.2.0     2022-10-10 [1] CRAN (R 4.3.0)
+##   tzdb                     0.3.0     2022-03-28 [1] CRAN (R 4.3.0)
+##   utf8                     1.2.3     2023-01-31 [1] CRAN (R 4.3.0)
+##   vctrs                    0.5.2     2023-01-23 [1] CRAN (R 4.3.0)
+##   vipor                    0.4.5     2017-03-22 [1] CRAN (R 4.3.0)
+##   vroom                    1.6.1     2023-01-22 [1] CRAN (R 4.3.0)
+##   withr                    2.5.0     2022-03-03 [1] CRAN (R 4.3.0)
+##   xfun                     0.37      2023-01-31 [1] CRAN (R 4.3.0)
+##   XML                      3.99-0.13 2022-12-04 [1] CRAN (R 4.3.0)
+##   xtable                   1.8-4     2019-04-21 [1] CRAN (R 4.3.0)
+##   XVector                  0.39.0    2022-11-01 [1] Bioconductor
+##   yaml                     2.3.7     2023-01-23 [1] CRAN (R 4.3.0)
+##   zlibbioc                 1.45.0    2022-11-01 [1] Bioconductor
 ##  
 ##   [1] /usr/local/lib/R/site-library
 ##   [2] /usr/local/lib/R/library

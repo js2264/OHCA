@@ -5,7 +5,7 @@
 <meta name="generator" content="quarto-1.2.269">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Jacques Serizay">
-<title>Orchestrating Hi-C analysis with Bioconductor - 8&nbsp; Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</title>
+<title>Orchestrating Hi-C analysis with Bioconductor - 9&nbsp; Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -110,7 +110,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./workflow-chicken.html" rel="next">
-<link href="./topological-features.html" rel="prev">
+<link href="./disseminating.html" rel="prev">
 <link href="./cover.jpg" rel="icon" type="image/jpeg">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -145,7 +145,7 @@ div.csl-indent {
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
       <h1 class="quarto-secondary-nav-title">
-<span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span>
+<span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span>
 </h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
@@ -238,22 +238,22 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
+  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
+  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
+  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
+  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
       </ul>
@@ -264,12 +264,12 @@ div.csl-indent {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#recovering-data-from-sra" id="toc-recovering-data-from-sra" class="nav-link active" data-scroll-target="#recovering-data-from-sra"><span class="toc-section-number">8.1</span>  Recovering data from SRA</a></li>
-  <li><a href="#processing-reads-with-hicool" id="toc-processing-reads-with-hicool" class="nav-link" data-scroll-target="#processing-reads-with-hicool"><span class="toc-section-number">8.2</span>  Processing reads with HiCool</a></li>
-  <li><a href="#plotting-chromosome-wide-matrices-of-merged-replicates" id="toc-plotting-chromosome-wide-matrices-of-merged-replicates" class="nav-link" data-scroll-target="#plotting-chromosome-wide-matrices-of-merged-replicates"><span class="toc-section-number">8.3</span>  Plotting chromosome-wide matrices of merged replicates</a></li>
-  <li><a href="#compute-ps-per-replicate-and-plot-it" id="toc-compute-ps-per-replicate-and-plot-it" class="nav-link" data-scroll-target="#compute-ps-per-replicate-and-plot-it"><span class="toc-section-number">8.4</span>  Compute P(s) per replicate and plot it</a></li>
-  <li><a href="#correlation-between-replicates-with-hicrep" id="toc-correlation-between-replicates-with-hicrep" class="nav-link" data-scroll-target="#correlation-between-replicates-with-hicrep"><span class="toc-section-number">8.5</span>  Correlation between replicates with <code>hicrep</code></a></li>
-  <li><a href="#differential-interaction-di-analysis-with-multihiccompare" id="toc-differential-interaction-di-analysis-with-multihiccompare" class="nav-link" data-scroll-target="#differential-interaction-di-analysis-with-multihiccompare"><span class="toc-section-number">8.6</span>  Differential interaction (DI) analysis with <code>multiHiCcompare</code></a></li>
+<li><a href="#recovering-data-from-sra" id="toc-recovering-data-from-sra" class="nav-link active" data-scroll-target="#recovering-data-from-sra"><span class="toc-section-number">9.1</span>  Recovering data from SRA</a></li>
+  <li><a href="#processing-reads-with-hicool" id="toc-processing-reads-with-hicool" class="nav-link" data-scroll-target="#processing-reads-with-hicool"><span class="toc-section-number">9.2</span>  Processing reads with HiCool</a></li>
+  <li><a href="#plotting-chromosome-wide-matrices-of-merged-replicates" id="toc-plotting-chromosome-wide-matrices-of-merged-replicates" class="nav-link" data-scroll-target="#plotting-chromosome-wide-matrices-of-merged-replicates"><span class="toc-section-number">9.3</span>  Plotting chromosome-wide matrices of merged replicates</a></li>
+  <li><a href="#compute-ps-per-replicate-and-plot-it" id="toc-compute-ps-per-replicate-and-plot-it" class="nav-link" data-scroll-target="#compute-ps-per-replicate-and-plot-it"><span class="toc-section-number">9.4</span>  Compute P(s) per replicate and plot it</a></li>
+  <li><a href="#correlation-between-replicates-with-hicrep" id="toc-correlation-between-replicates-with-hicrep" class="nav-link" data-scroll-target="#correlation-between-replicates-with-hicrep"><span class="toc-section-number">9.5</span>  Correlation between replicates with <code>hicrep</code></a></li>
+  <li><a href="#differential-interaction-di-analysis-with-multihiccompare" id="toc-differential-interaction-di-analysis-with-multihiccompare" class="nav-link" data-scroll-target="#differential-interaction-di-analysis-with-multihiccompare"><span class="toc-section-number">9.6</span>  Differential interaction (DI) analysis with <code>multiHiCcompare</code></a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
   </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/OHCA/edit/main/workflow-yeast.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/OHCA/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -277,7 +277,7 @@ div.csl-indent {
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title d-none d-lg-block">
-<span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span>
+<span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span>
 </h1>
 </div>
 
@@ -336,8 +336,8 @@ Datasets
 </ul>
 </div>
 </div>
-<section id="recovering-data-from-sra" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="recovering-data-from-sra">
-<span class="header-section-number">8.1</span> Recovering data from SRA</h2>
+<section id="recovering-data-from-sra" class="level2" data-number="9.1"><h2 data-number="9.1" class="anchored" data-anchor-id="recovering-data-from-sra">
+<span class="header-section-number">9.1</span> Recovering data from SRA</h2>
 <p>The easiest for this is to directly fetch files from SRA from their FTP server. We can do so using the base <code>download.file</code> function.</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
@@ -367,8 +367,8 @@ Datasets
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/005/SRR8769555/SRR8769555_1.fastq.gz"</span>, <span class="st">"data/wpl1eco1_G2M_R1.fastq.gz"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/005/SRR8769555/SRR8769555_2.fastq.gz"</span>, <span class="st">"data/wpl1eco1_G2M_R2.fastq.gz"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="processing-reads-with-hicool" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="processing-reads-with-hicool">
-<span class="header-section-number">8.2</span> Processing reads with HiCool</h2>
+</section><section id="processing-reads-with-hicool" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="processing-reads-with-hicool">
+<span class="header-section-number">9.2</span> Processing reads with HiCool</h2>
 <p>We will map each pair of fastqs on the yeast genome reference (<code>R64-1-1</code>) using <code>HiCool</code>.</p>
 <div class="cell" data-hash="workflow-yeast_cache/html/unnamed-chunk-3_9925f232a342118063ef090a7ff07ab1">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># !! This code is not actually executed !!</span></span>
@@ -416,8 +416,8 @@ Datasets
 <span><span class="va">hics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">cfs</span>, <span class="va">import</span><span class="op">)</span></span>
 <span><span class="va">hics</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="plotting-chromosome-wide-matrices-of-merged-replicates" class="level2" data-number="8.3"><h2 data-number="8.3" class="anchored" data-anchor-id="plotting-chromosome-wide-matrices-of-merged-replicates">
-<span class="header-section-number">8.3</span> Plotting chromosome-wide matrices of merged replicates</h2>
+</section><section id="plotting-chromosome-wide-matrices-of-merged-replicates" class="level2" data-number="9.3"><h2 data-number="9.3" class="anchored" data-anchor-id="plotting-chromosome-wide-matrices-of-merged-replicates">
+<span class="header-section-number">9.3</span> Plotting chromosome-wide matrices of merged replicates</h2>
 <p>We can merge replicates with the <code>merge</code> function, and <code>map</code> the <code>plotMatrix</code> function over the resulting list of <code>HiCExperiment</code>s.</p>
 <div class="cell" data-hash="workflow-yeast_cache/html/unnamed-chunk-7_cb26eb0fb6ea399bc1e6c53993a57386">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">chr</span> <span class="op">&lt;-</span> <span class="st">'X'</span></span>
@@ -436,8 +436,8 @@ Datasets
 <span><span class="va">p_maps</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can already note that long-range contacts seem to increase in frequency, in G2/M vs G1, in <em>wpl1</em> vs WT and in <em>wpl1/eco1</em> vs <em>wpl1</em>.</p>
-</section><section id="compute-ps-per-replicate-and-plot-it" class="level2" data-number="8.4"><h2 data-number="8.4" class="anchored" data-anchor-id="compute-ps-per-replicate-and-plot-it">
-<span class="header-section-number">8.4</span> Compute P(s) per replicate and plot it</h2>
+</section><section id="compute-ps-per-replicate-and-plot-it" class="level2" data-number="9.4"><h2 data-number="9.4" class="anchored" data-anchor-id="compute-ps-per-replicate-and-plot-it">
+<span class="header-section-number">9.4</span> Compute P(s) per replicate and plot it</h2>
 <p>Still using the <code>map</code> function, we can compute average P(s) for each replicate.<br>
 Note that since matrices were imported after <code>HiCool</code> processing with the <code>importHiCoolFolder</code>, the associated <code>.pairs</code> file has been automatically added to each <code>HiCExperiment</code> object. Computation of the P(s) will take a bit more time, as millions of pairs have to be imported in memory, but it will be accurate at the base resolution, rather than bin resolution from matrices.</p>
 <p>The computed P(s) is stored for each sample as a <code>tibble</code>.</p>
@@ -454,8 +454,8 @@ Note that since matrices were imported after <code>HiCool</code> processing with
 <span><span class="va">p_ps</span></span>
 <span><span class="va">p_slope</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="correlation-between-replicates-with-hicrep" class="level2" data-number="8.5"><h2 data-number="8.5" class="anchored" data-anchor-id="correlation-between-replicates-with-hicrep">
-<span class="header-section-number">8.5</span> Correlation between replicates with <code>hicrep</code>
+</section><section id="correlation-between-replicates-with-hicrep" class="level2" data-number="9.5"><h2 data-number="9.5" class="anchored" data-anchor-id="correlation-between-replicates-with-hicrep">
+<span class="header-section-number">9.5</span> Correlation between replicates with <code>hicrep</code>
 </h2>
 <p><code>hicrep</code> is a popular package to compute stratum-adjusted correlations between Hi-C datasets. “Stratum” refers to the distance from the main diagonal: with increase distance from the main diagonal, interactions of the DNA polymer are bound to decrease. <code>hicrep</code> computes a “per-stratum” correlation score and computes a weighted average correlation for entire chromosomes.</p>
 <p>We can check the documentation for <code>hicrep</code> main function, <code>get.scc</code>. This tells us that <code>mat1</code> and <code>mat2</code> n*n intrachromosomal contact maps should be provided. Fortunately, <code>HiCExperiment</code> objects can easily be coerced into actual dense matrices. Make sure to use the <code>count</code> scores, which are required by <code>hicrep</code>.</p>
@@ -526,8 +526,8 @@ Note that since matrices were imported after <code>HiCool</code> processing with
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Stratum (genomic distance)"</span>, y <span class="op">=</span> <span class="st">'Stratum-corrected correlation'</span><span class="op">)</span></span>
 <span><span class="va">p_distances</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="differential-interaction-di-analysis-with-multihiccompare" class="level2" data-number="8.6"><h2 data-number="8.6" class="anchored" data-anchor-id="differential-interaction-di-analysis-with-multihiccompare">
-<span class="header-section-number">8.6</span> Differential interaction (DI) analysis with <code>multiHiCcompare</code>
+</section><section id="differential-interaction-di-analysis-with-multihiccompare" class="level2" data-number="9.6"><h2 data-number="9.6" class="anchored" data-anchor-id="differential-interaction-di-analysis-with-multihiccompare">
+<span class="header-section-number">9.6</span> Differential interaction (DI) analysis with <code>multiHiCcompare</code>
 </h2>
 <p>We will focus on the chr. <code>XI</code> and identify differentially interacting (DI) loci between WT and <em>wpl1</em> mutant in G2/M.</p>
 <div class="cell" data-hash="workflow-yeast_cache/html/unnamed-chunk-14_f579d456ba6f0764d6ed1f6a67a490cf">
@@ -585,7 +585,7 @@ Note that since matrices were imported after <code>HiCool</code> processing with
 ##   collate  en_US.UTF-8
 ##   ctype    en_US.UTF-8
 ##   tz       Etc/UTC
-##   date     2023-03-10
+##   date     2023-03-11
 ##   pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
 ##  
 ##  ─ Packages ────────────────────────────────────────────────────────────────
@@ -642,9 +642,9 @@ Note that since matrices were imported after <code>HiCool</code> processing with
 ##   gtable                   0.3.1     2022-09-01 [1] CRAN (R 4.3.0)
 ##   gtools                   3.9.4     2022-11-27 [1] CRAN (R 4.3.0)
 ##   HiCcompare               1.21.0    2022-11-01 [1] Bioconductor
-##   HiCExperiment          * 0.99.11   2023-03-10 [1] Github (js2264/HiCExperiment@a20c55f)
-##   HiContactsData         * 1.1.9     2023-03-10 [1] Github (js2264/HiContactsData@275fab4)
-##   hicrep                 * 1.12.2    2023-03-10 [1] Github (TaoYang-dev/hicrep@e485dfa)
+##   HiCExperiment          * 0.99.11   2023-03-11 [1] Github (js2264/HiCExperiment@a20c55f)
+##   HiContactsData         * 1.1.9     2023-03-11 [1] Github (js2264/HiContactsData@275fab4)
+##   hicrep                 * 1.12.2    2023-03-11 [1] Github (TaoYang-dev/hicrep@e485dfa)
 ##   htmltools                0.5.4     2022-12-07 [1] CRAN (R 4.3.0)
 ##   htmlwidgets              1.6.1     2023-01-07 [1] CRAN (R 4.3.0)
 ##   httpuv                   1.6.9     2023-02-14 [1] CRAN (R 4.3.0)
@@ -859,13 +859,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="./topological-features.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span></span>
+      <a href="./disseminating.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./workflow-chicken.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

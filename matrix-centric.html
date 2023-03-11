@@ -238,22 +238,22 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
+  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
+  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
+  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
+  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
       </ul>
@@ -549,14 +549,14 @@ div.csl-indent {
 <span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>contacts</span>
 <span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a><span class="do">##  `HiCExperiment` object with 471,364 contacts over 814 regions </span></span>
 <span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a><span class="do">##  -------</span></span>
-<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="do">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="do">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a><span class="do">##  focus: "II" </span></span>
 <span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a><span class="do">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a><span class="do">##  active resolution: 1000 </span></span>
 <span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a><span class="do">##  interactions: 74360 </span></span>
 <span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a><span class="do">##  scores(3): count balanced ICE </span></span>
 <span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a><span class="do">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
-<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a><span class="do">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a><span class="do">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a><span class="do">##  metadata(0):</span></span>
 <span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a>cowplot<span class="sc">::</span><span class="fu">plot_grid</span>(</span>
 <span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plotMatrix</span>(contacts, <span class="at">use.scores =</span> <span class="st">'count'</span>, <span class="at">scale =</span> <span class="st">'log10'</span>),</span>
@@ -571,8 +571,6 @@ div.csl-indent {
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mcf</span> <span class="op">&lt;-</span> <span class="fu">HiContactsData</span><span class="op">(</span><span class="st">'yeast_eco1'</span>, <span class="st">'mcool'</span><span class="op">)</span></span>
 <span><span class="co">##  snapshotDate(): 2023-02-28</span></span>
 <span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
-<span><span class="co">##  downloading 1 resources</span></span>
-<span><span class="co">##  retrieving 1 resource</span></span>
 <span><span class="co">##  loading from cache</span></span>
 <span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu">HiContactsData</span><span class="op">(</span><span class="st">'yeast_eco1'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span>
 <span><span class="co">##  snapshotDate(): 2023-02-28</span></span>
@@ -585,14 +583,14 @@ div.csl-indent {
 <span><span class="va">eco1</span></span>
 <span><span class="co">##  `HiCExperiment` object with 19,136,736 contacts over 12,079 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/21ab5feb5467_7754" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/2186727167b6_7754" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
 <span><span class="co">##  interactions: 6474816 </span></span>
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/21ab5e13fca7_7755 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/21c66491c3c9_7755 </span></span>
 <span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now that we have these two <code>HiCExperiment</code> objects, we can:</p>
@@ -729,7 +727,7 @@ div.csl-indent {
 <span><span class="va">aggr_borders</span></span>
 <span><span class="co">##  `AggrHiCExperiment` object over 810 targets </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: 810 targets </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
@@ -737,7 +735,7 @@ div.csl-indent {
 <span><span class="co">##  scores(4): count balanced expected detrended </span></span>
 <span><span class="co">##  slices(4): count balanced expected detrended </span></span>
 <span><span class="co">##  topologicalFeatures: targets(810) compartments(0) borders(814) loops(162) viewpoints(0) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(0):</span></span>
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span></span>
 <span>    <span class="fu">plotMatrix</span><span class="op">(</span></span>
@@ -831,7 +829,7 @@ div.csl-indent {
 ##   collate  en_US.UTF-8
 ##   ctype    en_US.UTF-8
 ##   tz       Etc/UTC
-##   date     2023-03-10
+##   date     2023-03-11
 ##   pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
 ##  
 ##  ─ Packages ────────────────────────────────────────────────────────────────
@@ -882,9 +880,9 @@ div.csl-indent {
 ##   ggrastr                  1.0.1     2021-12-08 [1] CRAN (R 4.3.0)
 ##   glue                     1.6.2     2022-02-24 [1] CRAN (R 4.3.0)
 ##   gtable                   0.3.1     2022-09-01 [1] CRAN (R 4.3.0)
-##   HiCExperiment          * 0.99.11   2023-03-10 [1] Github (js2264/HiCExperiment@a20c55f)
-##   HiContacts             * 1.1.1     2023-03-10 [1] Github (js2264/HiContacts@ccee17c)
-##   HiContactsData         * 1.1.9     2023-03-10 [1] Github (js2264/HiContactsData@275fab4)
+##   HiCExperiment          * 0.99.11   2023-03-11 [1] Github (js2264/HiCExperiment@a20c55f)
+##   HiContacts             * 1.1.1     2023-03-11 [1] Github (js2264/HiContacts@ccee17c)
+##   HiContactsData         * 1.1.9     2023-03-11 [1] Github (js2264/HiContactsData@275fab4)
 ##   htmltools                0.5.4     2022-12-07 [1] CRAN (R 4.3.0)
 ##   htmlwidgets              1.6.1     2023-01-07 [1] CRAN (R 4.3.0)
 ##   httpuv                   1.6.9     2023-02-14 [1] CRAN (R 4.3.0)

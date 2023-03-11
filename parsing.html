@@ -238,22 +238,22 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
+  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
+  <a href="./workflow-yeast.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
+  <a href="./workflow-chicken.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./disseminating.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Access to public Hi-C data portals</span></a>
+  <a href="./interoperability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Interoperability with other Hi-C packages</span></a>
   </div>
 </li>
       </ul>
@@ -274,8 +274,8 @@ div.csl-indent {
   <li>
 <a href="#subsetting-a-contact-matrix" id="toc-subsetting-a-contact-matrix" class="nav-link" data-scroll-target="#subsetting-a-contact-matrix"><span class="toc-section-number">3.2</span>  Subsetting a contact matrix</a>
   <ul class="collapse">
-<li><a href="#disk-stored-subsetting-while-importing-with-focus" id="toc-disk-stored-subsetting-while-importing-with-focus" class="nav-link" data-scroll-target="#disk-stored-subsetting-while-importing-with-focus"><span class="toc-section-number">3.2.1</span>  Disk-stored subsetting <strong>while</strong> importing with <code>focus</code></a></li>
-  <li><a href="#in-memory-subsetting-after-importing" id="toc-in-memory-subsetting-after-importing" class="nav-link" data-scroll-target="#in-memory-subsetting-after-importing"><span class="toc-section-number">3.2.2</span>  In-memory subsetting <strong>after</strong> importing</a></li>
+<li><a href="#disk-stored-subsetting-before-import-with-focus" id="toc-disk-stored-subsetting-before-import-with-focus" class="nav-link" data-scroll-target="#disk-stored-subsetting-before-import-with-focus"><span class="toc-section-number">3.2.1</span>  Disk-stored subsetting <strong>before</strong> import with <code>focus</code></a></li>
+  <li><a href="#in-memory-subsetting-after-import" id="toc-in-memory-subsetting-after-import" class="nav-link" data-scroll-target="#in-memory-subsetting-after-import"><span class="toc-section-number">3.2.2</span>  In-memory subsetting <strong>after</strong> import</a></li>
   <li><a href="#zooming-on-a-hicexperiment" id="toc-zooming-on-a-hicexperiment" class="nav-link" data-scroll-target="#zooming-on-a-hicexperiment"><span class="toc-section-number">3.2.3</span>  Zooming on a <code>HiCExperiment</code></a></li>
   </ul>
 </li>
@@ -370,7 +370,7 @@ Recap on <code>HiCExperiment</code> objects 👇
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 10,801 contacts over 11 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:10,000-50,000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 4000 </span></span>
@@ -434,7 +434,7 @@ Recap on <code>HiCExperiment</code> objects 👇
 <span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
 <span><span class="va">cf</span></span>
 <span><span class="co">##  CoolFile object</span></span>
-<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/166c547377ec_7752 </span></span>
+<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/166e53a8eb57_7752 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -444,7 +444,7 @@ Recap on <code>HiCExperiment</code> objects 👇
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -567,7 +567,7 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -611,14 +611,14 @@ Note
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 18513 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="metadata" class="level4" data-number="3.1.2.4"><h4 data-number="3.1.2.4" class="anchored" data-anchor-id="metadata">
@@ -635,7 +635,7 @@ Note
 <span><span class="co">##  [1] "HiCExperiment created from an example .mcool file from `HiContactsData`"</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  $date</span></span>
-<span><span class="co">##  [1] "Fri Mar 10 18:48:05 2023"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  [1] "Sat Mar 11 17:21:26 2023"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section></section><section id="subsetting-a-contact-matrix" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="subsetting-a-contact-matrix">
 <span class="header-section-number">3.2</span> Subsetting a contact matrix</h2>
@@ -689,8 +689,8 @@ TL;DR
 </ul>
 </div>
 </div>
-<section id="disk-stored-subsetting-while-importing-with-focus" class="level3" data-number="3.2.1"><h3 data-number="3.2.1" class="anchored" data-anchor-id="disk-stored-subsetting-while-importing-with-focus">
-<span class="header-section-number">3.2.1</span> Disk-stored subsetting <strong>while</strong> importing with <code>focus</code>
+<section id="disk-stored-subsetting-before-import-with-focus" class="level3" data-number="3.2.1"><h3 data-number="3.2.1" class="anchored" data-anchor-id="disk-stored-subsetting-before-import-with-focus">
+<span class="header-section-number">3.2.1</span> Disk-stored subsetting <strong>before</strong> import with <code>focus</code>
 </h3>
 <section id="importcontactfile-focus-..." class="level4" data-number="3.2.1.1"><h4 data-number="3.2.1.1" class="anchored" data-anchor-id="importcontactfile-focus-...">
 <span class="header-section-number">3.2.1.1</span> <code>import(&lt;ContactFile&gt;, focus = "...")</code>
@@ -704,7 +704,7 @@ TL;DR
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-800000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 301,018 contacts over 250 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-800,000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -721,7 +721,7 @@ TL;DR
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-400000|II:600001-700000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 402 contacts over 100 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300001-400000|II:600001-700000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -738,7 +738,7 @@ TL;DR
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 471,364 contacts over 407 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -755,7 +755,7 @@ TL;DR
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II|III'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 9,092 contacts over 566 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II|III" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -772,7 +772,7 @@ TL;DR
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-800000|V:1-500000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 7,147 contacts over 500 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300001-800000|V:1-500000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -791,14 +791,14 @@ TL;DR
 <span><span class="va">hic</span> </span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 18513 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span>
 <span></span>
 <span><span class="co"># --- Note how these fields are erased upon parsing of the original </span></span>
@@ -806,7 +806,7 @@ TL;DR
 <span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'III'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 151,990 contacts over 159 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "III" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -821,18 +821,18 @@ TL;DR
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">refocus</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'III'</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 151,990 contacts over 159 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "III" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 8090 </span></span>
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section></section><section id="in-memory-subsetting-after-importing" class="level3" data-number="3.2.2"><h3 data-number="3.2.2" class="anchored" data-anchor-id="in-memory-subsetting-after-importing">
-<span class="header-section-number">3.2.2</span> In-memory subsetting <strong>after</strong> importing</h3>
+</section></section><section id="in-memory-subsetting-after-import" class="level3" data-number="3.2.2"><h3 data-number="3.2.2" class="anchored" data-anchor-id="in-memory-subsetting-after-import">
+<span class="header-section-number">3.2.2</span> In-memory subsetting <strong>after</strong> import</h3>
 <p>While specifying a <code>focus</code> <strong>when</strong> importing a dataset in R (<code>"Subset first, then parse"</code>) is generally the recommended approach, it may sometimes be desirable to import a full dataset from disk and perform in-memory subsetting of the <code>HiCExperiment</code> object (<code>"Parse first, then subset"</code>). <strong>This is for example necessary when the end user aims to investigate subsets of interactions across a large number of different areas of a contact matrix.</strong></p>
 <p>Several strategies are possible to allow in-memory subsetting of pre-imported data.</p>
 <section id="subsetbyoverlapshicexperiment-granges" class="level4" data-number="3.2.2.1"><h4 data-number="3.2.2.1" class="anchored" data-anchor-id="subsetbyoverlapshicexperiment-granges">
@@ -844,14 +844,14 @@ TL;DR
 <span><span class="fu">subsetByOverlaps</span><span class="op">(</span><span class="va">hic</span>, <span class="va">telomere</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 1,040 contacts over 8 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:800,000-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 19 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="hicexperiment..." class="level4" data-number="3.2.2.2"><h4 data-number="3.2.2.2" class="anchored" data-anchor-id="hicexperiment...">
@@ -866,14 +866,14 @@ TL;DR
 <span><span class="va">hic</span><span class="op">[</span><span class="st">"II:800000-813184"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 1,040 contacts over 8 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:800,000-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 19 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
@@ -883,14 +883,14 @@ TL;DR
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:300000-320000|II:800000-813184"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 3 contacts over 18 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300000-320000|II:800000-813184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 3 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
@@ -900,14 +900,14 @@ TL;DR
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 18513 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
@@ -917,14 +917,14 @@ TL;DR
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II|III"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 0 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:1-813184|III:1-316620" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 0 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
@@ -934,14 +934,14 @@ TL;DR
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'II'</span>, <span class="st">'III'</span>, <span class="st">'IV'</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II, III, IV" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 18513 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout-note callout callout-style-simple callout-captioned">
@@ -969,40 +969,40 @@ Note
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 18513 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">4000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 129 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 4000 </span></span>
 <span><span class="co">##  interactions: 6800 </span></span>
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 514 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166c547377ec_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/166e53a8eb57_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
 <span><span class="co">##  interactions: 44363 </span></span>
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166c2dce45fa_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/166e71ab30b5_7753 </span></span>
 <span><span class="co">##  metadata(2): info date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout-note callout callout-style-simple callout-captioned">
@@ -1156,7 +1156,7 @@ Note
 ##   collate  en_US.UTF-8
 ##   ctype    en_US.UTF-8
 ##   tz       Etc/UTC
-##   date     2023-03-10
+##   date     2023-03-11
 ##   pandoc   2.19.2 @ /usr/local/bin/ (via rmarkdown)
 ##  
 ##  ─ Packages ────────────────────────────────────────────────────────────────
@@ -1200,8 +1200,8 @@ Note
 ##   ggplot2                * 3.4.1     2023-02-10 [1] CRAN (R 4.3.0)
 ##   glue                     1.6.2     2022-02-24 [1] CRAN (R 4.3.0)
 ##   gtable                   0.3.1     2022-09-01 [1] CRAN (R 4.3.0)
-##   HiCExperiment          * 0.99.11   2023-03-10 [1] Github (js2264/HiCExperiment@a20c55f)
-##   HiContactsData         * 1.1.9     2023-03-10 [1] Github (js2264/HiContactsData@275fab4)
+##   HiCExperiment          * 0.99.11   2023-03-11 [1] Github (js2264/HiCExperiment@a20c55f)
+##   HiContactsData         * 1.1.9     2023-03-11 [1] Github (js2264/HiContactsData@275fab4)
 ##   htmltools                0.5.4     2022-12-07 [1] CRAN (R 4.3.0)
 ##   htmlwidgets              1.6.1     2023-01-07 [1] CRAN (R 4.3.0)
 ##   httpuv                   1.6.9     2023-02-14 [1] CRAN (R 4.3.0)
