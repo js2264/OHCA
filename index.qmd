@@ -39,10 +39,10 @@ This book is divided in three parts:
 
 **Part III: Hi-C analysis workflows**
 
-- [Chapter 8: Distance-dependent interactions across yeast mutants](workflow-yeast.qmd)
-- [Chapter 9: Chromosome compartment cohesion upon mitosis entry](workflow-chicken.qmd)
-- [Chapter 10: Hi-C interoperability notebook](interoperability.qmd)
-- [Chapter 11: Access to public Hi-C data portals](disseminating.qmd)
+- [Chapter 8: Access to public Hi-C data portals](disseminating.qmd)
+- [Chapter 9: Distance-dependent interactions across yeast mutants](workflow-yeast.qmd)
+- [Chapter 10: Chromosome compartment cohesion upon mitosis entry](workflow-chicken.qmd)
+- [Chapter 11: Hi-C interoperability notebook](interoperability.qmd)
 
 # Requirements {-}
 

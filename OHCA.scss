@@ -87,7 +87,8 @@ p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
 
 // background color of chunks of code *WITH A SPECIFIED LANGUAGE*
 div.sourceCode {
-  background-color: rgba(0, 170, 227, 0.025);
+  // background-color: rgba(0, 170, 227, 0.025);
+  background-color: #f1f1f1;
   border: none;
 }
 
@@ -95,7 +96,6 @@ pre.sourceCode {
   border: none;
   font-size: .875em;
   overflow: visible !important;
-  padding: 0em;
 }
 
 pre code {
@@ -103,7 +103,7 @@ pre code {
   font-size: inherit;
   color: inherit;
   word-break: normal;
-  border: 1px solid rgb(0 0 0 / 65%);
+  // border: 1px solid rgb(0 0 0 / 65%);
 }
 
 .cell-output-stdout code , .code-with-filename code , .cell-output-stderr code {

@@ -2,7 +2,56 @@
 
 ```{r}
 #| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
 source("_common.R")
+library(ggplot2)
+library(GenomicRanges)
+library(InteractionSet)
+library(HiCExperiment)
+library(HiContactsData)
+library(HiContacts)
+library(rtracklayer)
+coolf <- HiContactsData('yeast_wt', 'mcool')
+cf <- CoolFile(coolf)
+hic <- import(cf, focus = 'V', resolution = 2000)
+data(centros_yeast)
+topologicalFeatures(hic, 'centromeres') <- centros_yeast
+hic2 <- import(
+    CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
+    focus = 'V', 
+    resolution = 2000
+)
+```
+
+::: {.callout-note}
+## Aims
+This chapter focuses on the various visualization tools offered by `HiContacts`
+to plot `HiCExperiment` contact matrices in R. 
+:::
+
+To demonstrate how to visualize a `HiCExperiment` contact matrix, we will create 
+an `HiCExperiment` object from an example `.cool` file provided 
+in the `HiContactsData` package. 
+
+```{r eval = FALSE}
+library(HiCExperiment)
+library(HiContactsData)
+
+# ---- This downloads an example `.mcool` file and caches it locally 
+coolf <- HiContactsData('yeast_wt', 'mcool')
+
+# ---- This creates a connection to the disk-stored `.mcool` file
+cf <- CoolFile(coolf)
+cf
+
+# ---- This imports contacts from the chromosome `V` at resolution `2000`
+hic <- import(cf, focus = 'V', resolution = 2000)
+```
+
+```{r}
+hic
 ```
 
 ## Visualizing Hi-C contact maps
@@ -10,8 +59,7 @@ source("_common.R")
 Visualizing Hi-C contact maps is often a necessary step in exploratory data 
 analysis. A Hi-C contact map is usually displayed as a heatmap, in which: 
 
-- Each axis represents a section of the genome of interest (either a segment of a chromosome, or 
-several chromosomes, ...).
+- Each axis represents a section of the genome of interest (either a segment of a chromosome, or several chromosomes, ...).
 - The color code aims to represent "interaction frequency", which can be expressed 
 in "raw" counts or normalized (balanced). 
 - Other metrics can also be displayed in Hi-C heatmaps, e.g. ratios of interaction 
@@ -23,19 +71,210 @@ are displayed.
 
 ### Single map
 
+Simple visualization of disk-stored Hi-C contact matrices can be done by: 
+
+1. Importing the interactions over the genomic location of interest into a `HiCExperiment` object;
+2. Using `plotMatrix` function provided by `HiContacts` to generate a plot.
+
+```{r}
+library(HiContacts)
+plotMatrix(hic)
+```
+
+::: {.callout-note icon='false'}
+## Note
+A caption summarizing the plotting parameters is added below the heatmap. This 
+can be removed with `caption = FALSE`. 
+:::
+
 ### Horizontal map
+
+Hi-C maps are sometimes visualized in a "horizontal" style, where 
+a square **on-diagonal** heatmap is tilted by 45˚ and truncated to only show 
+interactions up to a certain distance from the main diagonal. 
+
+When a `maxDistance` argument is provided to `plotMatrix`, it automatically
+generates a horizontal-style heatmap. 
+
+```{r}
+plotMatrix(hic, maxDistance = 200000)
+```
 
 ### Side-by-side maps
 
-### Aggregated Hi-C map
+Sometimes, one may want to visually plot 2 Hi-C samples side by side to compare
+the interaction landscapes over the same genomic locus. This can be done by 
+adding a second `HiCExperiment` (imported with the same 
+`focus`) with the `compare.to` argument. 
+
+Here, we are importing a second `.mcool` file corresponding to a Hi-C experiment 
+performed in a *eco1* yeast mutant: 
+
+```{r eval = FALSE}
+hic2 <- import(
+    CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
+    focus = 'V', 
+    resolution = 2000
+)
+```
+
+We then plot the 2 matrices side by side. The first will be displayed in the 
+top right corner and the second (provided with `compare.to`) will be in the
+bottom left corner. 
+
+```{r}
+plotMatrix(hic, compare.to = hic2)
+```
+
+### Plotting multiple chromosomes
+
+Interactions from multiple chromosomes can be visualized in a Hi-C heatmap. 
+One needs to (1) first parse the entire contact matrix in `R`, (2) then subset
+interactions over chromosomes of interest with `[` and (3) use `plotMatrix` to 
+generate the multi-chromosome plot. 
+
+```{r}
+full_hic <- import(cf, resolution = 4000)
+plotMatrix(full_hic)
+hic_subset <- full_hic[c("II", "III", "IV")]
+plotMatrix(hic_subset)
+```
 
 ## Hi-C maps customization options
 
+A number of customization options are available for the `plotMatrix` function. 
+The next subsections focus on how to: 
+
+- Pick the `scores` of interest to represent in a Hi-C heatmap;
+- Change the numeric scale and boundaries;
+- Change the color map;
+- Extra customization options
+
 ### Choosing scores
+
+By default, `plotMatrix` will attempt to plot `balanced` (coverage normalized) 
+Hi-C matrices. However, extra scores may be associated with interactions in a 
+`HiCExperiment` object (more on this in the [next chapter](matrix-centric.qmd))
+
+For instance, we can plot the `count` scores, which are un-normalized raw 
+contact counts directly obtained when binning a `.pairs` file: 
+
+```{r}
+plotMatrix(hic, use.scores = 'count')
+```
+
+### Choosing scale
+
+The color scale is automatically adjusted to range from the minimum to the 
+maximum `scores` of the `HiCExperiment` being plotted. This can be adjusted 
+using the `limits` argument. 
+
+```{r}
+plotMatrix(hic, limits = c(-3.5, -1))
+```
 
 ### Choosing color map
 
-### Choosing scale
+`?HiContacts::palettes` returns a list of available color maps to use 
+with `plotMatrix`. Any custom color map can also be used by manually 
+specifying a vector of colors. 
+
+```{r}
+# ----- `afmhotr` color map is shipped in the `HiContacts` package
+afmhotrColors() 
+plotMatrix(
+    hic, 
+    use.scores = 'balanced',
+    limits = c(-4, -1),
+    cmap = afmhotrColors()
+)
+```
+
+## Advanced visualization 
+
+### Overlaying topological features 
+
+Topological features (e.g. chromatin loops, domain borders, A/B compartments, 
+e.g. ...) are often displayed over a Hi-C heatmap. 
+
+To illustrate how to do this, let's import pre-computed chromatin loops in `R`. 
+These loops have been identified using `chromosight` 
+(@Matthey-Doret2020Nov) on the contact matrix 
+which we imported interactions from. 
+
+```{r}
+library(rtracklayer)
+loops <- system.file('extdata', 'S288C-loops.bedpe', package = 'HiCExperiment') |> 
+    import() |> 
+    makeGInteractionsFromGRangesPairs()
+loops
+```
+
+Similarly, borders have also been mapped with `chromosight`. We can also 
+import them in `R`. 
+
+```{r}
+borders <- system.file('extdata', 'S288C-borders.bed', package = 'HiCExperiment') |> 
+    import()
+borders
+```
+
+Chromatin loops are stored in `GInteractions` while borders are `GRanges`. The 
+former will be displayed as **off-diagonal circles** and the later as 
+**on-diagonal diamonds** on the Hi-C heatmap. 
+
+```{r}
+plotMatrix(hic, loops = loops, borders = borders)
+```
+
+### Aggregated Hi-C maps
+
+Finally, Hi-C map "snippets" (i.e. extracts) are often aggregated together to 
+show an average signal. This analysis is sometimes referred to as APA (Aggregated
+Plot Analysis). 
+
+Aggregated Hi-C maps can be computed over a collection of `targets` using 
+the `aggregate` function. These targets can be `GRanges` (to extract on-diagonal snippets) or `GInteractions` 
+(to extract off-diagonal snippets). The `flankingBins` specifies how many 
+matrix bins should be extracted on each side of the `targets` of interest. 
+
+Here, we compute the aggregated Hi-C snippets of ± 15kb around each chromatin loop 
+listed in `loops`. 
+
+```{r}
+hic <- zoom(hic, 1000)
+aggr_loops <- aggregate(hic, targets = loops, flankingBins = 15)
+aggr_loops
+```
+
+`aggregate` generates a `AggrHiCExperiment` object, a flavor of `HiCExperiment` 
+class of objects. 
+
+- `AggrHiCExperiment` objects have an extra `slices` slot. This 
+stores a list of `array`s, one per `scores`. Each `array` is of 3 dimensions, 
+`x` and `y` representing the heatmap axes, and `z` representing the index of the 
+`target`. 
+- `AggrHiCExperiment` objects also have a mandatory `topologicalFeatures` 
+element named `targets`, storing the genomic loci provided in `aggregate`. 
+
+```{r}
+slices(aggr_loops)
+dim(slices(aggr_loops, 'count'))
+topologicalFeatures(aggr_loops, 'targets')
+```
+
+The resulting `AggrHiCExperiment` can be plotted using the same `plotMatrix` 
+function with the arguments described above. 
+
+```{r}
+plotMatrix(
+    aggr_loops, 
+    use.scores = 'detrended', 
+    scale = 'linear', 
+    limits = c(-1, 1), 
+    cmap = bgrColors()
+)
+```
 
 ## References {-}
 

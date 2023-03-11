@@ -236,7 +236,7 @@ To study a subset of a Hi-C contact matrix, you can:
     2. with `HiCExperiment["..."]`
 :::
 
-### Disk-stored subsetting **while** importing with `focus`
+### Disk-stored subsetting **before** import with `focus`
 
 #### `import(<ContactFile>, focus = "...")`
 
@@ -303,7 +303,7 @@ import(cf, focus = 'III', resolution = 2000)
 refocus(hic, 'III')
 ```
 
-### In-memory subsetting **after** importing
+### In-memory subsetting **after** import
 
 While specifying a `focus` **when** importing a dataset in R 
 (`"Subset first, then parse"`) is generally the 

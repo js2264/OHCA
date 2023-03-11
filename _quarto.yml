@@ -32,10 +32,10 @@ book:
         - topological-features.qmd
     - part: "Advanced Hi-C topics"
       chapters:
+        - disseminating.qmd
         - workflow-yeast.qmd
         - workflow-chicken.qmd
         - interoperability.qmd
-        - disseminating.qmd
 
 format:
   html:
