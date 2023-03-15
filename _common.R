@@ -3,7 +3,8 @@ set.seed(1014)
 knitr::opts_chunk$set(
   comment = "## ",
   collapse = TRUE,
-  cache = TRUE
+  cache = TRUE, 
+  fig.align = "center"
 )
 
 options(

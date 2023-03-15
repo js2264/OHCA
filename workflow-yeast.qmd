@@ -42,7 +42,7 @@ We leverage seven yeast datasets in this notebook. They are all available from S
 
 The easiest for this is to directly fetch files from SRA from their FTP server. We can do so using the base `download.file` function. 
 
-::: {.callout-note icon='false'}
+::: {.callout-note}
 The next two code chunks illustrate how to do download and process Hi-C reads from SRA, but 
 they are not actually executed when rendering this website as it would take a 
 significant amount of time. 

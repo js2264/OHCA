@@ -74,14 +74,14 @@ are displayed.
 Simple visualization of disk-stored Hi-C contact matrices can be done by: 
 
 1. Importing the interactions over the genomic location of interest into a `HiCExperiment` object;
-2. Using `plotMatrix` function provided by `HiContacts` to generate a plot.
+2. Using `plotMatrix` function (provided by `HiContacts`) to generate a plot.
 
 ```{r}
 library(HiContacts)
 plotMatrix(hic)
 ```
 
-::: {.callout-note icon='false'}
+::: {.callout-note}
 ## Note
 A caption summarizing the plotting parameters is added below the heatmap. This 
 can be removed with `caption = FALSE`. 

@@ -41,6 +41,7 @@ leveraged to perform Hi-C analysis, describes their structure and how to interac
 :::
 
 ::: {.callout-tip}
+## TL;DR
 Directly jump to the [last section of this chapter](#visual-summary-of-the-hicexperiment-data-structure) 
 to get a visual representation of these data structures. 
 :::
@@ -145,16 +146,13 @@ shifting ranges, resizing, trimming, ...
 These methods are referred to as "intra-range" methods 
 as they work *"one-region-at-a-time"*. 
 
-::: {.callout-note icon='false'}
-Note how each range of the input `GRanges` object is modified independently from the 
+::: {.callout-note}
+## Note 
+- Each range of the input `GRanges` object is modified independently from the 
 other ranges in the following code chunks.
+- Intra-range operations are **endomorphisms**: they all take `GRanges` inputs 
+and always return `GRanges` objects. 
 :::
-
-- Computing the width of each genomic range:
-
-```{r}
-width(gr) 
-```
 
 - Shifting each genomic range in a `GRanges` object by a certain number of bases: 
 
@@ -234,8 +232,9 @@ detailed documentation for this class by typing `?GenomicRanges` and
 Compared to "intra-range" methods described above, **inter-range** methods 
 involve comparisons *between* ranges **in a single** GRanges object.
 
-::: {.callout-note icon='false'}
-Note how compared to previous section, the result of each function described below 
+::: {.callout-note}
+## Note 
+Compared to previous section, the result of each function described below 
 depends on the entire set of ranges in the input `GRanges` object.
 :::
 
@@ -244,12 +243,6 @@ depends on the entire set of ranges in the input `GRanges` object.
 ```{r}
 gaps(gr)
 ```
-
-::: {.callout-tip icon='false'}
-Note how chromosome lengths are handled when looking for "inverse" genomic ranges. 
-Here, we have not specified the length of each chromosome, hence the chromosomes 
-are assumed to end at the largest location on each chromosome. We'll ignore this detail for now.
-:::
 
 - For each entry in a `GRanges`, finding the index of the preceding/following/nearest genomic range:
 
@@ -339,9 +332,10 @@ The `Hits` output clearly describes what overlaps with what:
 - The query (peak) `#1` overlaps with subject (TSS) `#1`
 - The query (peak) `#5` overlaps with subject (TSS) `#2`
 
-::: {.callout-note icon='false'}
+::: {.callout-note}
+## Note 
 Because no other query index or subject index is listed in the `ov` output, 
-it means that none of the remaining indices overlap with the other. 
+none of the remaining ranges from `query` overlap with ranges from `subject`.
 :::
 
 - Subsetting by overlaps between a query and a subject
@@ -354,7 +348,8 @@ To directly **subset** ranges from `query` overlapping with ranges from a
 subsetByOverlaps(peaks, TSSs)
 ```
 
-::: {.callout-note icon='false'}
+::: {.callout-note}
+## Note 
 The output of `subsetByOverlaps` is a subset of the original `GRanges` object
 provided as a `query`, with retained ranges being unmodified. 
 :::
@@ -368,7 +363,8 @@ many ranges in the `subject` it overlaps with.
 countOverlaps(query = peaks, subject = TSSs)
 ```
 
-::: {.callout-note icon='false'}
+::: {.callout-note}
+## Note 
 Note that which `GRanges` goes in `query` or `subject` is crucial! Counting 
 **for each peak, the number of TSSs it overlaps with** is very different from 
 **for each TSS, how many peaks it overlaps with**. 
@@ -516,7 +512,7 @@ The way `GInteractions` objects are printed in an R console mimics that of
 `GRanges`, but pairs two "ends" (a.k.a. *anchors*) of an interaction together, 
 each end being represented as a separate `GRanges` range. 
 
-::: {.callout-note icon='false'}
+::: {.callout-note}
 ## Notes
 - Note that it is possible to have interactions joining two identical anchors. 
 
@@ -635,8 +631,9 @@ gi
 swapAnchors(gi)
 ```
 
-::: {.callout-warning icon='false'}
-Note that "sorting" and "swapping" a `GInteractions` object are two 
+::: {.callout-warning}
+##Note
+"Sorting" and "swapping" a `GInteractions` object are two 
 **entirely different actions**: 
 
 - "sorting" reorganizes all *rows* (interactions);
@@ -659,7 +656,7 @@ Note that for "trans" inter-chromosomal interactions, i.e. interactions with anc
 different chromosomes, the notion of genomic distance is meaningless and for 
 this reason, `pairdist` returns a `NA` value. 
 
-::: {.callout-tip icon='false'}
+::: {.callout-tip}
 ## Advanced `pairdist` arguments
 The `type` argument can be tweaked to specify which type of "distance" should 
 be computed:  
@@ -863,8 +860,9 @@ pairsFile(cf)
 metadata(cf)
 ```
 
-::: {.callout-warning icon='false'}
-Remember: `ContactFile` objects are only **connections** to a disk-stored HiC file. 
+::: {.callout-warning}
+## Important!
+`ContactFile` objects are only **connections** to a disk-stored HiC file. 
 Although metadata is available, they do not contain actual data!
 :::
 
@@ -905,6 +903,7 @@ In practice, to create a `HiCExperiment` object from a `ContactFile`,
 one can use the `import` method. 
 
 ::: {.callout-important}
+## Caution
 - Creating a `HiCExperiment` object means ***importing data from a Hi-C matrix*** (e.g. 
 from a `ContactFile`) in memory in R.  
 - Creating a `HiCExperiment` object from large disk-stored contact matrices 
@@ -962,7 +961,7 @@ metadata(hic)
 ```
 :::
 
-::: {.callout-note icon='false'}
+::: {.callout-note}
 ## Notes
 
 `import` also works for other types of `ContactFile` (`HicFile`, 
@@ -1051,10 +1050,9 @@ parse information from a `HiCExperiment` object.
 
 ```{r eval = FALSE}
 yeast_hic <- contacts_yeast()
-yeast_hic
 ```
 
-```{r echo = FALSE}
+```{r}
 yeast_hic
 ```
 
@@ -1068,6 +1066,7 @@ interactions(yeast_hic)
 ```
 
 ::: {.callout-note}
+## Note 
 Because genomic interactions are actually stored as `GInteractions`, `regions` 
 and `anchors` work on `HiCExperiment` objects just as they work with 
 `GInteractions`!
@@ -1119,14 +1118,15 @@ genomic interaction. Such frequency scores are available using the `scores` func
 `scores` returns a list with a number of different types of scores. 
 
 ```{r}
-scores(yeast_hic)
+head(scores(yeast_hic))
 
-scores(yeast_hic, "count")
+head(scores(yeast_hic, "count"))
 
-scores(yeast_hic, "balanced")
+head(scores(yeast_hic, "balanced"))
 ```
 
-::: {.callout-important}
+::: {.callout-tip}
+## Tip
 Calling `interactions(hic)` returns a `GInteractions` with `scores` already 
 stored in extra columns. This short-hand allows one to dynamically check `scores` 
 directly from the `interactions` output.
@@ -1192,6 +1192,12 @@ extracted from a `HiCExperiment`. Anchors of the interactions listed in the
 :::
 
 ## Visual summary of the `HiCExperiment` data structure
+
+The `HiCExperiment` data structure provided by the eponymous package 
+inherits methods from core `GInteractions` and `BiocFile` classes to provide 
+a flexible representation of Hi-C data in `R`. It allows random access-based
+queries to seamlessly import parts or all the data contained in 
+disk-stored Hi-C contact matrices in a variety of formats. 
 
 ![](images/20230309114202.png)
 

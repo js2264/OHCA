@@ -11,7 +11,7 @@ source("_common.R")
 This is the landing page of the **"Orchestrating Hi-C analysis with Bioconductor"** 
 book. **The primary aim of this book is to introduce the `R` user to Hi-C analysis**. It 
 starts with key concepts important for the analysis of chromatin conformation capture and then 
-presents `Bioconductor` tools that can be leveraged to process, analyse, explore and visualize 
+presents `Bioconductor` tools that can be leveraged to process, analyze, explore and visualize 
 Hi-C data. 
 
 ::: {.callout-caution}
@@ -25,7 +25,7 @@ This book is divided in three parts:
 **Part I: Introduction to Hi-C analysis**
 
 - [Chapter 1: General principles and Hi-C data pre-processing](principles.qmd)
-- [Chapter 2: The different R classes implemented to analyse Hi-C](data-representation.qmd)
+- [Chapter 2: The different R classes implemented to analyze Hi-C](data-representation.qmd)
 - [Chapter 3: Manipulating Hi-C data in R](parsing.qmd)
 - [Chapter 4: Hi-C data visualization](visualization.qmd)
 
@@ -105,7 +105,8 @@ git clone git@github.com:js2264/OHCA.git && cd OHCA
 quarto render
 ```
 
-::: {.callout-warning icon='false'}
+::: {.callout-warning}
+## Caution!
 All dependencies listed above will be required!
 :::
 

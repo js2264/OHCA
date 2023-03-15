@@ -2,182 +2,356 @@
 
 ```{r}
 #| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
 source("_common.R")
-```
-
-**Aim:** This notebook illustrates how to leverage `HiCExperiment` data structure 
-with `HiContacts` package to operate on Hi-C matrices. 
-
-## Data import and basic matrix arithmetics
-
-### Yeast data
-
-We will start by importing a WT `.mcool` file in R and perform normalization on 
-the imported matrix.
-
-```{r yeast_norm}
+library(ggplot2)
+library(GenomicRanges)
+library(InteractionSet)
 library(HiCExperiment)
 library(HiContactsData)
 library(HiContacts)
-mcf <- HiContactsData('yeast_wt', 'mcool')
-pf <- HiContactsData('yeast_wt', 'pairs.gz')
-cf <- CoolFile(mcf, resolution = 1000, pairsFile = pf)
-wt <- import(cf)
-contacts <- normalize(wt[c('II')], niters = 200)
-contacts
-cowplot::plot_grid(
-    plotMatrix(contacts, use.scores = 'count', scale = 'log10'),
-    plotMatrix(contacts, use.scores = 'ICE', scale = 'log10', limits = c(-4, -1))
-)
-```
-
-We can do the same for a Hi-C dataset generated in a eco1 mutant. 
-
-```{r yeast_merge}
-mcf <- HiContactsData('yeast_eco1', 'mcool')
-pf <- HiContactsData('yeast_eco1', 'pairs.gz')
-cf <- CoolFile(mcf, resolution = 1000, pairsFile = pf)
-eco1 <- import(cf)
-eco1
-```
-
-Now that we have these two `HiCExperiment` objects, we can: 
-
-1. `refocus` to change the field of view then
-2. `zoom` to change the resolution then
-3. `detrend` to calculate ovserved/expected fold-change and 
-4. `despeckle` to remove background noise by applying a smoothing kernel
-
-Them we can proceed to divide the contact matrix of the WT sample by the eco1 sample and plot each `HiCExperiment` matrix.
-
-```{r yeast_divide}
-wt_II <- wt |> 
-    refocus('II') |> 
-    zoom(2000) |> 
-    detrend() |> 
-    despeckle(use.scores = 'detrended')
-eco1_II <- eco1 |> 
-    refocus('II') |> 
-    zoom(2000) |> 
-    detrend() |> 
-    despeckle(use.scores = 'detrended')
-div_contacts <- divide(wt_II, by = eco1_II) 
-div_contacts
-p_div <- cowplot::plot_grid(
-    plotMatrix(wt_II, use.scores = 'count', scale = 'log10'), 
-    plotMatrix(eco1_II, use.scores = 'balanced', scale = 'log10', limits = c(-4, -1)), 
-    plotMatrix(wt_II, compare.to = eco1_II, use.scores = 'balanced', scale = 'log10', limits = c(-4, -1)), 
-    plotMatrix(div_contacts, use.scores = 'balanced.fc', scale = 'log2', limits = c(-1, 1), cmap = bwrColors())
-)
-p_div
-```
-
-Focusing on a narrower genomic region, it may be relevant to point out specific 
-topological features, such as focal loops ("dots" in the contact matrices) or 
-domain borders. We can do this by providing relevant arguments to the plotting function. 
-
-We can also `aggregate` Hi-C maps over a list of genomic coordinates, either on-diagonal (e.g. for border aggregated plots) or off-diagonal (e.g. for loop aggregated plots).
-
-```{r yeast_detrend}
 library(rtracklayer)
-library(InteractionSet)
-topologicalFeatures(wt_II, 'loops') <- system.file('extdata', 'S288C-loops.bedpe', package = 'HiCExperiment') |> 
+coolf <- HiContactsData('yeast_wt', 'mcool')
+cf <- CoolFile(coolf)
+hic <- import(cf, focus = 'II', resolution = 2000)
+data(centros_yeast)
+topologicalFeatures(hic, 'centromeres') <- centros_yeast
+hic2 <- import(
+    CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
+    focus = 'II', 
+    resolution = 2000
+)
+```
+
+::: {.callout-note}
+## Aims
+This chapter focuses on the various analytical tools offered by `HiContacts`
+to compute matrix-related metrics from a `HiCExperiment` object.
+:::
+
+In the first part of this book, we have seen how to query parts or all of the 
+data contained in Hi-C contact matrices using the `HiCExperiment` object 
+([Chapter 2](data-representation.qmd#hicexperiment-class)), how to 
+manipulate `HiCExperiment` objects ([Chapter 3](parsing.qmd)) and how to 
+visualize Hi-C contact matrices as heatmaps ([Chapter 4](visualization.qmd)). 
+
+The `HiContacts` package directly operates on `HiCExperiment` objects and
+extends its usability by providing a comprehensive toolkit to analyze Hi-C data, 
+focusing on four main topics:
+
+- Contact matrix-centric analyses (this chapter)
+- Interactions-centric analyses ([Chapter 6](interactions-centric.qmd))
+- Structural feature annotations ([Chapter 7](topological-features.qmd))
+- Hi-C visualization (see [previous chapter](visualization.qmd))
+
+**Matrix-centrix** analyses consider a `HiCExperiment` object from the 
+"matrix" perspective, in order to perform a range of matrix-based operations. 
+This encompasses: 
+
+- Computing observed/expected (O/E) map
+- Computing auto-correlation map
+- Smoothing out a contact map
+- Merging multiple Hi-C maps together
+- Comparing two Hi-C maps to each other
+
+::: {.callout-note}
+## Note
+- All the functions described in this chapter are **endomorphisms**: they 
+take `HiCExperiment` objects as input and return modified `HiCExperiment` 
+objects.
+- Internally, most of the functions presented in this chapter make a call to 
+`as.matrix(<HiCExperiment>)` to coerce it into a `matrix`. 
+:::
+
+To demonstrate `HiContacts` functionalities, we will create 
+an `HiCExperiment` object from an example `.cool` file provided 
+in the `HiContactsData` package. 
+
+```{r eval = FALSE}
+library(HiCExperiment)
+library(HiContactsData)
+
+# ---- This downloads an example `.mcool` file and caches it locally 
+coolf <- HiContactsData('yeast_wt', 'mcool')
+
+# ---- This creates a connection to the disk-stored `.mcool` file
+cf <- CoolFile(coolf)
+cf
+
+# ---- This imports contacts from the chromosome `V` at resolution `2000`
+hic <- import(cf, focus = 'V', resolution = 2000)
+```
+
+```{r}
+hic
+```
+
+## Operations in an individual matrix
+
+### Balancing a raw interaction count map
+
+Hi-C sequencing coverage is systematically affected by multiple confounding factors, e.g. 
+density of restriction sites, GC%, genome mappability, etc..  Overall, it 
+generally ends up not homogenous throughout the entire genome and this leads to 
+artifacts in un-normalized `count` matrices. 
+
+To correct for sequencing coverage heterogeneity of raw `count` maps, Hi-C 
+data can be normalized using matrix balancing approaches 
+(@Cournac2012Dec, @Imakaev2012Oct). This is generally done directly on the 
+disk-stored matrices using out-of-memory strategies (e.g. with 
+`cooler balance <.cool>`). However, if contact matrix files are imported 
+into a `HiCExperiment` object but no `balanced` scores are available, 
+in-memory balancing can be performed using the `normalize` function.
+
+```{r}
+normalized_hic <- normalize(hic)
+normalized_hic
+```
+
+::: {.callout-note}
+## Note
+The only change done to the `HiCExperiment` object by the `normalize` function is 
+the addition of a single extra `ICE` in `scores` list. The `interactions` 
+themselves are unmodified. 
+:::
+
+It is possible to plot the different `scores` of the resulting object to 
+visualize the newly computed `scores`. In this example, `ICE` scores 
+should be nearly identical to `balanced` scores, which were originally imported 
+from the disk-stored contact matrix. 
+
+:::{.column-page}
+```{r out.width = '100%', fig.asp = .33}
+patchwork::wrap_plots(
+    plotMatrix(normalized_hic, use.scores = 'count', caption = FALSE),
+    plotMatrix(normalized_hic, use.scores = 'balanced', caption = FALSE),
+    plotMatrix(normalized_hic, use.scores = 'ICE', caption = FALSE), 
+    nrow = 1
+)
+```
+:::
+
+### Computing observed/expected (O/E) map
+
+The most prominent feature of a balanced Hi-C matrix is the strong main diagonal. 
+This main diagonal is observed because interactions between immediate adjacent genomic 
+loci are more prone to happen than interactions spanning longer genomic distances. 
+This "expected" behavior is due to the polymer nature of the chromosomes being 
+studied, and can be locally estimated using the distance-dependent 
+interaction frequency (a.k.a. the "distance law", or P(s)). It can be used 
+to compute an `expected` matrix on interactions. 
+
+When it is desirable to "mask" this polymer behavior to emphasize topological 
+structures formed by chromosomes, one can divide a given balanced matrix 
+by its `expected` matrix, i.e. calculate the observed/expected (O/E) map. 
+This is sometimes called "detrending", as it 
+effectively removes the average polymer behavior from the balanced matrix. 
+
+The `detrend` function performs this operation on a given `HiCExperiment` object. 
+
+```{r}
+detrended_hic <- detrend(hic)
+detrended_hic
+```
+
+::: {.callout-note}
+## Note
+The only change done to the `HiCExperiment` object by the `detrend` function is 
+the addition of two extra `scores`: 
+
+1. `expected`
+2. `detrended`
+
+The `interactions` themselves are unmodified. 
+:::
+
+Topological features will be visually more prominent in the O/E `detrended` Hi-C map. 
+
+:::{.column-page}
+```{r out.width = '100%', fig.asp = .33}
+patchwork::wrap_plots(
+    plotMatrix(detrended_hic, use.scores = 'balanced', scale = 'log10', limits = c(-3.5, -1.2), caption = FALSE),
+    plotMatrix(detrended_hic, use.scores = 'expected', scale = 'log10', limits = c(-3.5, -1.2), caption = FALSE),
+    plotMatrix(detrended_hic, use.scores = 'detrended', scale = 'linear', limits = c(-1, 1), cmap = bwrColors(), caption = FALSE), 
+    nrow = 1
+)
+```
+:::
+
+::: {.callout-note}
+## Scale for `detrended` scores
+- `expected` scores are in `linear` scale and ± in the same amplitude than `balanced` scores;
+- `detrended` scores are in `log2` scale, in general approximately centered around 0. When plotting `detrended` scores, 
+`scale = linear` should be set to prevent the default `log10` scaling. 
+:::
+
+### Computing autocorrelated map 
+
+Correlation matrices are often calculated from balanced Hi-C matrices. 
+For instance, in genomes composed of eu- and heterochromatin, a correlation 
+matrix can be used to reveal a checkerboard pattern emphasizing the segregation 
+of chromatin into two A/B compartments (@Lieberman-Aiden2009Oct). 
+
+The `autocorrelate` function is used to compute a correlation matrix of a 
+`HiCExperiment` object. For each pair of interacting loci, the `autocorrelated` 
+score represents the correlation between their respective interaction profiles 
+with the rest of the genome. 
+
+```{r}
+autocorr_hic <- autocorrelate(hic)
+autocorr_hic
+```
+
+Since these metrics represent correlation scores, they range between `-1` and `1`. 
+Two loci with an `autocorrelated` score close to `-1` have anti-correlated 
+interaction profiles, while two loci with a `autocorrelated` score close to `1`
+are likely to interact with shared targets. 
+
+```{r}
+summary(scores(autocorr_hic, 'autocorrelated'))
+```
+
+Correlated and anti-correlated loci will be visually represented in the 
+`autocorrelated` Hi-C map in red and blue pixels, respectively. 
+
+::: {.callout-note}
+## Note
+Here we have illustrated how to compute an autocorrelation matrix from a 
+`HiCExperiment` object using the example **yeast** Hi-C experiment. 
+Bear in mind that this is unusual and not very useful, as yeast chromatin 
+is not segregated in two compartments but rather follows a Rabl 
+conformation (@Duan2010May). An example of autocorrelation map 
+from a vertebrate Hi-C experiment (for which chromatin is segregated in 
+A/B compartments) is shown in [Chapter 10](workflow-chicken.qmd).
+:::
+
+```{r}
+plotMatrix(
+    autocorr_hic, 
+    use.scores = 'autocorrelated', 
+    scale = 'linear', 
+    limits = c(-0.4, 0.4), 
+    cmap = bgrColors()
+)
+```
+
+::: {.callout-note}
+## Scale for `autocorrelated` scores
+- `autocorrelated` scores are in `linear` scale, in general approximately centered around 0. When plotting `autocorrelated` scores, 
+`scale = linear` should be set to prevent the default `log10` scaling. 
+- `limits` should be manually set to `c(-x, x)` (`0 < x <= 1`) to ensure 
+that the color range is effectively centered on `0`. 
+:::
+
+### Despeckling (smoothing out) a contact map
+
+Shallow-sequenced Hi-C libraries or matrices binned with an overly small bin 
+size sometimes produce “grainy” Hi-C maps with noisy backgrounds. A grainy 
+map may also be obtained when dividing two matrices, e.g. when 
+computing the O/E ratio with `detrend`. This is particularly true for 
+sparser long-range interactions. To overcome such limitations, `HiCExperiment` 
+objects can be "`despeckle`d" to smooth out focal speckles.  
+
+```{r}
+hic2 <- detrend(hic['II:400000-700000'])
+hic2 <- despeckle(hic2, use.scores = 'detrended', focal.size = 2)
+hic2
+```
+
+The added `<use.scores>.despeckled` scores correspond to scores averaged 
+using a window, whose width is provided with the `focal.size` argument. This 
+results in a smoother Hi-C heatmap, effectively removing the "speckles" 
+observed at longer range. 
+
+:::{.column-page}
+```{r out.width = '100%', fig.asp = .33}
+loops <- system.file('extdata', 'S288C-loops.bedpe', package = 'HiCExperiment') |> 
     import() |> 
     makeGInteractionsFromGRangesPairs()
-topologicalFeatures(wt_II, 'borders') <- system.file('extdata', 'S288C-borders.bed', package = 'HiCExperiment') |> 
+borders <- system.file('extdata', 'S288C-borders.bed', package = 'HiCExperiment') |> 
     import()
-contacts <- refocus(wt_II, 'II:400000-700000') |> 
-    zoom(1000) |>
-    detrend() |> 
-    despeckle(use.scores = 'detrended', focal.size = 2)
-aggr_loops <- aggregate(contacts, targets = topologicalFeatures(wt_II, 'loops'), flankingBins = 25)
-aggr_borders <- aggregate(contacts, targets = topologicalFeatures(wt_II, 'borders'), flankingBins = 15)
-aggr_borders
+patchwork::wrap_plots(
+    plotMatrix(hic2, caption = FALSE),
+    plotMatrix(hic2, use.scores = 'detrended', scale = 'linear', limits = c(-1, 1), caption = FALSE),
+    plotMatrix(
+        hic2, 
+        use.scores = 'detrended.despeckled', 
+        scale = 'linear', 
+        limits = c(-1, 1), 
+        caption = FALSE, 
+        loops = loops, 
+        borders = borders
+    ),
+    nrow = 1
+)
+```
+:::
+
+::: {.callout-note}
+## Scale for `despeckled` scores
+`despeckled` scores are in the same scale than the `scores` they were computed 
+from. 
+:::
+
+## Operations between multiple matrices
+
+### Merging maps
+
+Hi-C libraries are often sequenced in multiple rounds, for example when 
+high genome coverage is required. This results in multiple contact matrix 
+files being generated. The `merge` function can be used to bind 
+several `HiCExperiment` objects into a single one.
+
+The different `HiCExperiment` objects do not need to all have identical
+`regions`, as shown in the following example. 
+
+```{r}
+hic_sub1 <- subsetByOverlaps(hic, GRanges("II:100001-200000"))
+hic_sub2 <- subsetByOverlaps(hic, GRanges("II:300001-400000"))
+bound_hic <- merge(hic_sub1, hic_sub2)
+plotMatrix(bound_hic)
+```
+
+### Computing ratio between two maps
+
+Comparing two Hi-C maps can be useful to infer which genomic loci 
+are differentially interacting between experimental conditions. Comparing 
+two `HiCExperiment` objects can be done in `R` using the `divide` function. 
+
+For example, we can divide the *eco1* mutant Hi-C data by wild-type Hi-C 
+dataset using the `divide` function. 
+
+```{r eval = FALSE}
+hic2 <- import(
+    CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
+    focus = 'II', 
+    resolution = 2000
+)
+```
+
+```{r}
+div_contacts <- divide(hic2, by = hic) 
+div_contacts
+```
+
+We can visually compare wild-type and *eco1* maps side by side (left) and 
+their ratio map (right). This highlights the depletion of short-range and 
+increase of long-range interactions in the *eco1* dataset. 
+
+```{r out.width = '100%', fig.asp = .5}
 cowplot::plot_grid(
+    plotMatrix(hic2, compare.to = hic, limits = c(-4, -1)), 
     plotMatrix(
-        contacts, 
-        use.scores = 'balanced'
-    ),
-    plotMatrix(
-        contacts, 
-        use.scores = 'despeckled', 
-        loops = topologicalFeatures(wt_II, 'loops'), 
-        borders = topologicalFeatures(wt_II, 'borders'), 
-        scale = 'linear', 
-        limits = c(-1, 1), 
-        cmap = bwrColors()
-    ),
-    plotMatrix(
-        aggr_loops, 
-        use.scores = 'detrended', 
-        scale = 'linear', 
-        limits = c(-1, 1), 
-        cmap = rainbowColors()
-    ),
-    plotMatrix(
-        aggr_borders, 
-        use.scores = 'detrended', 
-        scale = 'linear', 
-        limits = c(-0.5, 0.5), 
+        div_contacts, 
+        use.scores = 'balanced.fc', 
+        scale = 'log2', 
+        limits = c(-1, 1),
         cmap = bwrColors()
     )
 )
 ```
-
-### Playing with mammalian data
-
-The same operations (i.e. detrending, despeckling, ,,,) are also possible on larger genomes. 
-On top of that, it is sometimes useful to `autocorrelate` the Hi-C matrix to highlight
-the compartments "plaid" pattern.
-
-Here, the `maxDistance` argument can be used to plot triangular horizontal matrices rather 
-than square matrices. 
-
-```{r NPCs, eval = FALSE}
-library(fourDNData)
-library(cowplot)
-## G0G1 neural progenitors cells  (FACS sorted, Sox1-GFP+), Bonev et al. 2017
-npcs_mcool <- fourDNData('4DNESJ9SIAV5', type = 'mcool')
-npcs_large <- import(npcs_mcool, focus = 'chr3:80000000-120000000', resolution = 250000) |> 
-    autocorrelate()
-npcs_narrow <- import(npcs_mcool, focus = 'chr3:100800000-102400000', resolution = 5000) |> 
-    detrend() |> 
-    despeckle(use.scores = 'detrended')
-p_mammals_1 <- plot_grid(
-    plotMatrix(npcs_large, use.scores = 'balanced', scale = 'log10', limits = c(-4, -1), maxDistance = 30000000), 
-    plotMatrix(npcs_large, use.scores = 'autocorrelated', scale = 'linear', limits = c(-1, 1), cmap = bgrColors(), maxDistance = 30000000), 
-    plotMatrix(npcs_narrow, use.scores = 'balanced', scale = 'log10', limits = c(-4, -2), maxDistance = 1200000), 
-    plotMatrix(npcs_narrow, use.scores = 'expected', scale = 'log10', limits = c(-4, -2), maxDistance = 1200000), 
-    plotMatrix(npcs_narrow, use.scores = 'detrended', scale = 'linear', limits = c(-1, 1), maxDistance = 1200000, cmap = rainbowColors()), 
-    plotMatrix(npcs_narrow, use.scores = 'despeckled', scale = 'linear', limits = c(-2, 2), maxDistance = 1200000, cmap = rainbowColors()), 
-    ncol = 1
-)
-p_mammals_1
-```
-
-Finally, `subsample`ing interactions from a Hi-C experiment can easily be 
-performed, and this is done proportionally with the distance-dependent 
-interaction frequency. Furthermore, if a Hi-C experiment has been binned to a small resolution, 
-it can be `coarsen`ed to any larger resolution. 
-
-```{r subsample, eval = FALSE}
-sub_npcs_0.5 <- subsample(npcs_narrow, 0.5)
-sub_npcs_0.1 <- subsample(npcs_narrow, 0.1) |> 
-    detrend()
-sub_npcs_0.1_rebinned <- coarsen(sub_npcs_0.1, 10000) |> 
-    detrend() 
-p_mammals_2 <- cowplot::plot_grid(
-    plotMatrix(npcs_narrow, use.scores = 'balanced', limits = c(-4, -2), maxDistance = 1200000), 
-    plotMatrix(sub_npcs_0.5, use.scores = 'balanced', limits = c(-4, -2), maxDistance = 1200000), 
-    plotMatrix(sub_npcs_0.1, use.scores = 'balanced', limits = c(-4, -2), maxDistance = 1200000), 
-    plotMatrix(sub_npcs_0.1, use.scores = 'detrended', scale = 'linear', limits = c(-1, 1), maxDistance = 1200000, cmap = rainbowColors()), 
-    plotMatrix(sub_npcs_0.1_rebinned, use.scores = 'balanced', maxDistance = 1200000), 
-    plotMatrix(sub_npcs_0.1_rebinned, use.scores = 'detrended', scale = 'linear', limits = c(-1, 1), maxDistance = 1200000, cmap = rainbowColors()), 
-    ncol = 1
-)
-p_mammals_2
-```
-
 
 ## References {-}
 
