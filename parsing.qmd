@@ -103,13 +103,13 @@ hic
 
 ### Immutable slots 
 
-`HiCExperiment` objects act as an interface exposing disk-stored data. 
+An `HiCExperiment` object acts as an interface exposing disk-stored data. 
 This implies that the `fileName` slot itself is immutable 
 (i.e. **cannot** be changed). This should be obvious, as a `HiCExperiment` 
 *has to* be associated with a disk-stored contact matrix to properly function
 (except in some advanced cases developed in next chapters).  
 
-For this reason, method to manually modify 
+For this reason, methods to manually modify 
 `interactions` and `resolutions` slots are **not** exposed in the 
 `HiCExperiment` package.  
 
@@ -118,6 +118,12 @@ A corollary of this is that the associated `regions` and `anchors` of an
 directly linked to `interactions`. 
 
 ### Mutable slots 
+
+That being said, `HiCExperiment` objects are flexible and can be partially modified 
+in memory without having to change/overwrite the original, disk-stored contact matrix.  
+
+Several `slots` can be modified in memory: 
+`slots`, `topologicalFeatures`, `pairsFile` and `metadata`.
 
 #### `scores`
 
@@ -210,31 +216,20 @@ metadata(hic)
 
 ## Subsetting a contact matrix
 
-::: {.callout-important}
-Two entirely different approaches are possible here: 
-
-1. `"Subset first, then parse"`: leverage random access to a **disk-stored** 
-contact matrix to **only parse interactions overlapping with a genomic locus 
-of interest**: this is achieved using the `focus` argument in `import`/`refocus` (see below).
-2. `"Parse first, then subset"`: Parse the **entire contact matrix** in memory, 
-and **subsequently** subset interactions overlapping with a genomic locus 
-of interest: this is achieved using `subsetByOverlaps` or the `[` operator 
-on an existing `HiCExperiment` (see below). 
-
-`"Subset first, then parse"` (approach 1) is generally more 
-efficient than `"Parse first, then subset"` (approach 2). 
-:::
-
 ::: {.callout-tip}
 ## TL;DR 
-To study a subset of a Hi-C contact matrix, you can:
+Two entirely different approaches are possible to subset of a Hi-C contact matrix:
 
-- `"Subset first, then parse"`: 
+- `"Subset first, then parse"`: leveraging random access to a **disk-stored** 
+contact matrix to **only parse interactions overlapping with a genomic locus 
+of interest**
 
     1. with `import(<ContactFile>, focus = "...")`
     2. with `refocus(<HiCExperiment>, focus = "...")`
 
-- `"Parse first, then subset"`: 
+- `"Parse first, then subset"`: parsing the **entire contact matrix** in memory, 
+and **subsequently** subset interactions overlapping with a genomic locus 
+of interest
 
     1. with `subsetByOverlaps(<HiCExperiment>, <GRanges>)`
     2. with `HiCExperiment["..."]`
