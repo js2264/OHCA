@@ -1,4 +1,4 @@
-name: Build docker (rendering book), push to Github container registry, and deploy book to GitHub Pages
+name: Docker image
 
 on:
   push:

@@ -15,12 +15,12 @@ library(HiContacts)
 library(rtracklayer)
 coolf <- HiContactsData('yeast_wt', 'mcool')
 cf <- CoolFile(coolf)
-hic <- import(cf, focus = 'II', resolution = 2000)
+hic <- import(cf, focus = 'V', resolution = 2000)
 data(centros_yeast)
 topologicalFeatures(hic, 'centromeres') <- centros_yeast
-hic2 <- import(
+hic_eco1 <- import(
     CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
-    focus = 'II', 
+    focus = 'V', 
     resolution = 2000
 )
 ```
@@ -255,7 +255,7 @@ sparser long-range interactions. To overcome such limitations, `HiCExperiment`
 objects can be "`despeckle`d" to smooth out focal speckles.  
 
 ```{r}
-hic2 <- detrend(hic['II:400000-700000'])
+hic2 <- detrend(hic['V:400000-700000'])
 hic2 <- despeckle(hic2, use.scores = 'detrended', focal.size = 2)
 hic2
 ```
@@ -324,15 +324,15 @@ For example, we can divide the *eco1* mutant Hi-C data by wild-type Hi-C
 dataset using the `divide` function. 
 
 ```{r eval = FALSE}
-hic2 <- import(
+hic_eco1 <- import(
     CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
-    focus = 'II', 
+    focus = 'V', 
     resolution = 2000
 )
 ```
 
 ```{r}
-div_contacts <- divide(hic2, by = hic) 
+div_contacts <- divide(hic_eco1, by = hic) 
 div_contacts
 ```
 
@@ -342,7 +342,7 @@ increase of long-range interactions in the *eco1* dataset.
 
 ```{r out.width = '100%', fig.asp = .5}
 cowplot::plot_grid(
-    plotMatrix(hic2, compare.to = hic, limits = c(-4, -1)), 
+    plotMatrix(hic_eco1, compare.to = hic, limits = c(-4, -1)), 
     plotMatrix(
         div_contacts, 
         use.scores = 'balanced.fc', 
