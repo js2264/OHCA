@@ -1134,7 +1134,7 @@ directly from the `interactions` output.
 ```{r}
 interactions(yeast_hic)
 
-interactions(yeast_hic)$count
+head(interactions(yeast_hic)$count)
 ```
 :::
 

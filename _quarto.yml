@@ -45,8 +45,17 @@ format:
       - OHCA.scss
     code-link: true
     author-meta: "Jacques Serizay"
-    callout-appearance: simple
     highlight-style: atom-one-dark.theme
+    citations-hover: true
+    toc: true
+    toc-float: 
+      collapsed: false
+    toc-depth: 3
+    website: 
+      sidebar: 
+        # style: "docked"
+        search: true
+        collapse-level: 5
   pdf:
     documentclass: scrbook
     papersize: a4

@@ -1,6 +1,6 @@
 /*-- scss:defaults --*/
 
-// $primary: #480F1F !default;
+$primary: #008CBA !default;
 
 /*-- scss:rules --*/
 
@@ -25,6 +25,11 @@ body.floating .page-columns {
 
 div.sidebar-item-container .active, div.sidebar-item-container .show>.nav-link, div.sidebar-item-container .sidebar-link>code {
   // color: #480f1f;
+  font-weight: 800;
+}
+
+.text-start {
+  text-align: left !important;
   font-weight: 800;
 }
 
@@ -65,14 +70,17 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5 {
 
 /* Underlining links ------------------------------------ */
 
-
 .citation a, .footnote-ref {
   text-decoration: underline;
 }
 
+/* Put a border around session info print ------------------------------------------------ */
 
+#session-info code, p+ pre code {
+  border: 1px solid black
+}
 
-/* Code ------------------------------------------------ */
+/* Code colors ------------------------------------------------------------------------- */
 
 // Text color of `backticked` words
 code {
@@ -80,9 +88,13 @@ code {
 }
 
 // Background color of `backticked` words
-p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
-    background-color: #008cba0f;
-    /* padding: 0.2em; */
+li code , .anchored code , p code , .flex-fill code {
+  border: 1px solid #008CBA;
+}
+
+// Border of `backticked` words
+kbd, samp {
+  border: 1px solid;
 }
 
 // background color of chunks of code *WITH A SPECIFIED LANGUAGE*

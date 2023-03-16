@@ -46,15 +46,28 @@ This book is divided in three parts:
 
 # Requirements {-}
 
+## General audience
+
 This books aims to demonstrate how to pre-process, parse and investigate Hi-C data in `R`. 
 For this reason, a significant portion of this book consists of executable R code chunks. 
 To be able to reproduce the examples demonstrated in this book and go further in the analysis of 
 *your **real** datasets*, you will need to rely on several dependencies. 
 
-- The most important dependency is `R` itself! Make sure you have `R >= 4.3`. You can check that by typing `version` in an R console. If you do not have `R >= 4.3` installed, we highly recommend to update your `R` version, as most extra dependencies 
+- The most important dependency is `R` itself! Make sure you have `R >= 4.3`. You can check that by typing `version` in an R console. If you do not have `R >= 4.3` installed, you will need to update your `R` version, as most extra dependencies 
 will require `R >= 4.3`. 
 
-- The following `R` code will set up most of the extra dependencies: 
+- `Bioconductor >= 3.17` is also required. You can check whether `Bioconductor` is available and its version in `R` by 
+typing `BiocManager::version()`. If you do not have `BiocManager` >= 3.17 installed, you will need to update it 
+as follows: 
+
+```{r eval = FALSE}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.17")
+```
+
+- You will also need important packages, which will be described in length in this book. 
+The following `R` code will set up most of the extra dependencies: 
 
 ```{r eval = FALSE}
 BiocManager::install("HiCExperiment", ask = FALSE)
@@ -64,6 +77,8 @@ BiocManager::install("HiContactsData", ask = FALSE)
 BiocManager::install("fourDNData", ask = FALSE)
 BiocManager::install("DNAZooData", ask = FALSE)
 ```
+
+## Developers 
 
 For developers or advanced R users, there are two alternatives: 
 
@@ -79,14 +94,16 @@ pak::pkg_install("js2264/fourDNData", ask = FALSE, dependencies = c("Depends", "
 pak::pkg_install("js2264/DNAZooData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
 ```
 
-- Alternatively, if you have `docker` installed, the easiest approach would be to run the following command in a `shell` terminal:
+## Docker image
+
+If you have `docker` installed, the easiest approach would be to run the following command in a `shell` terminal:
 
 ```{sh eval = FALSE}
 docker run -it ghcr.io/js2264/ohca:latest R
 ```
 
 This will fetch a `docker` image with the latest development versions of the 
-aformentioned packages pre-installed, and initate an interactive R session. 
+aforementioned packages pre-installed, and initiate an interactive R session. 
 
 # Reproducibility {-}
 

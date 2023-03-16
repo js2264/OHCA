@@ -15,12 +15,12 @@ library(HiContacts)
 library(rtracklayer)
 coolf <- HiContactsData('yeast_wt', 'mcool')
 cf <- CoolFile(coolf)
-hic <- import(cf, focus = 'V', resolution = 2000)
+hic <- import(cf, focus = 'II', resolution = 2000)
 data(centros_yeast)
 topologicalFeatures(hic, 'centromeres') <- centros_yeast
 hic_eco1 <- import(
     CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
-    focus = 'V', 
+    focus = 'II', 
     resolution = 2000
 )
 ```
@@ -65,6 +65,9 @@ objects.
 `as.matrix(<HiCExperiment>)` to coerce it into a `matrix`. 
 :::
 
+::: {.callout-tip collapse="true"}
+## Generating the example `hic` object 👇
+
 To demonstrate `HiContacts` functionalities, we will create 
 an `HiCExperiment` object from an example `.cool` file provided 
 in the `HiContactsData` package. 
@@ -80,13 +83,14 @@ coolf <- HiContactsData('yeast_wt', 'mcool')
 cf <- CoolFile(coolf)
 cf
 
-# ---- This imports contacts from the chromosome `V` at resolution `2000`
-hic <- import(cf, focus = 'V', resolution = 2000)
+# ---- This imports contacts from the chromosome `II` at resolution `2000`
+hic <- import(cf, focus = 'II', resolution = 2000)
 ```
 
 ```{r}
 hic
 ```
+:::
 
 ## Operations in an individual matrix
 
@@ -255,7 +259,7 @@ sparser long-range interactions. To overcome such limitations, `HiCExperiment`
 objects can be "`despeckle`d" to smooth out focal speckles.  
 
 ```{r}
-hic2 <- detrend(hic['V:400000-700000'])
+hic2 <- detrend(hic['II:400000-700000'])
 hic2 <- despeckle(hic2, use.scores = 'detrended', focal.size = 2)
 hic2
 ```
@@ -326,7 +330,7 @@ dataset using the `divide` function.
 ```{r eval = FALSE}
 hic_eco1 <- import(
     CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
-    focus = 'V', 
+    focus = 'II', 
     resolution = 2000
 )
 ```

@@ -31,6 +31,9 @@ This chapter focuses on the various visualization tools offered by `HiContacts`
 to plot `HiCExperiment` contact matrices in R. 
 :::
 
+::: {.callout-tip collapse="true"}
+## Generating the example `hic` object 👇
+
 To demonstrate how to visualize a `HiCExperiment` contact matrix, we will create 
 an `HiCExperiment` object from an example `.cool` file provided 
 in the `HiContactsData` package. 
@@ -53,6 +56,7 @@ hic <- import(cf, focus = 'V', resolution = 2000)
 ```{r}
 hic
 ```
+:::
 
 ## Visualizing Hi-C contact maps
 
@@ -199,7 +203,7 @@ e.g. ...) are often displayed over a Hi-C heatmap.
 
 To illustrate how to do this, let's import pre-computed chromatin loops in `R`. 
 These loops have been identified using `chromosight` 
-(@Matthey-Doret2020Nov) on the contact matrix 
+(@MattheyDoret2020Nov) on the contact matrix 
 which we imported interactions from. 
 
 ```{r}

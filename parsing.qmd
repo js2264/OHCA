@@ -61,6 +61,9 @@ interactions(hic)
 ```
 :::
 
+::: {.callout-tip collapse="true"}
+## Generating the example `hic` object 👇
+
 To demonstrate how to manipulate a `HiCExperiment` object, we will create 
 an `HiCExperiment` object from an example `.cool` file provided 
 in the `HiContactsData` package. 
@@ -80,6 +83,7 @@ cf
 hic <- import(cf, focus = 'II:300001-813184', resolution = 2000)
 hic
 ```
+:::
 
 ## Updating an `HiCExperiment` object
 
@@ -439,12 +443,6 @@ as.matrix(hic, use.scores = "count")[1:5, 1:5]
 # ----- If **expressly required**, one can coerce a HiCExperiment into a dense matrix
 as.matrix(hic, use.scores = "count", sparse = FALSE)[1:5, 1:5]
 ```
-
-::: {.callout-important}
-These coercing methods only operate on `interactions` and `scores`, 
-and discard all other information, e.g. available `resolutions`, 
-associated `metadata`, `pairsFile` or `topologicalFeatures`. 
-:::
 
 - `as.data.frame()`: simply coercing `interactions` into a rectangular data frame
 
