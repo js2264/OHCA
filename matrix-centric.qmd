@@ -46,8 +46,8 @@ focusing on four main topics:
 - Structural feature annotations ([Chapter 7](topological-features.qmd))
 - Hi-C visualization (see [previous chapter](visualization.qmd))
 
-**Matrix-centrix** analyses consider a `HiCExperiment` object from the 
-"matrix" perspective, in order to perform a range of matrix-based operations. 
+**Matrix-centric** analyses consider a `HiCExperiment` object from the 
+"matrix" perspective to perform a range of matrix-based operations. 
 This encompasses: 
 
 - Computing observed/expected (O/E) map

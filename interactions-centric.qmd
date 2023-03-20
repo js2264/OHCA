@@ -2,47 +2,189 @@
 
 ```{r}
 #| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
 source("_common.R")
-```
-
-To illustrate advanced Hi-C analysis, we will use a Hi-C map generated in 
-a yeast mutant, which contains segments of `Mycoides mycoides`
-chromosome translocated within the chromosome XVI. 
-
-## Distance law(s)
-
-```{r import, eval = FALSE}
+library(dplyr)
+library(ggplot2)
+library(GenomicRanges)
+library(InteractionSet)
 library(HiCExperiment)
 library(HiContactsData)
 library(HiContacts)
-synthChr_cf <- CoolFile(
-    'data/S288C_Mmyco-transloc.mcool', 
-    resolution = 8000, 
-    pairsFile = 'data/S288C_Mmyco-transloc.pairs'
+library(rtracklayer)
+coolf <- HiContactsData('yeast_wt', 'mcool')
+pairsf <- HiContactsData('yeast_wt', 'pairs.gz')
+pf <- PairsFile(pairsf)
+cf <- CoolFile(coolf)
+hic <- import(cf, focus = 'II', resolution = 2000)
+data(centros_yeast)
+topologicalFeatures(hic, 'centromeres') <- centros_yeast
+eco1_hic <- import(
+    CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
+    focus = 'II', 
+    resolution = 2000
 )
-availableChromosomes(synthChr_cf)
-synthChr <- import(synthChr_cf) |> 
-    detrend() |> 
-    despeckle(use.scores = 'detrended') |> 
-    autocorrelate(detrend = FALSE, ignore_ndiags = 4)
-synthChr_zoomed <- import(synthChr_cf, focus = 'chrXVI-Mmmyco_inv870kb', resolution = 1000) 
+eco1_pairsf <- HiContactsData('yeast_eco1', 'pairs.gz')
+eco1_pf <- PairsFile(eco1_pairsf)
 ```
 
-We can compute a P(s) per chromosome for this sample using the `distanceLaw` function.
+::: {.callout-note}
+## Aims
+This chapter focuses on the various analytical tools offered by `HiContacts`
+to compute interaction-related metrics from a `HiCExperiment` object.
+:::
 
-```{r ps, eval = FALSE}
-### ----- Distance law
-ps <- distanceLaw(synthChr, by_chr = TRUE) |>  
-    mutate(type = case_when(chr == 'chrXVI-Mmmyco_inv870kb' ~ 'XVI-Myco', TRUE ~ 'WT')) |> 
-    mutate(type = factor(type, c('WT', 'XVI-Myco')))
-p1 <- plotMatrix(synthChr[c('chrXIII', 'chrXIV', 'chrXV', 'chrXVI-Mmmyco_inv870kb')], limits = c(-4, -1), cmap = afmhotrColors())
-p2 <- plotPs(ps, ggplot2::aes(x = binned_distance, y = norm_p, group = chr, color = type)) + 
+**Interaction-centric** analyses consider a `HiCExperiment` object from the 
+"interactions" perspective to perform a range of operations on genomic interactions.  
+This encompasses: 
+
+- Computing the "distance law" (a.k.a. P(s)), i.e. the distance-dependent interaction frequency
+- Computing profiles of interactions between a locus of interest and the rest of the genome, (a.k.a. virtual 4C profiles)
+- Computing cis/trans interaction ratios
+- Computing distribution of distance-dependent interaction frequency along chromosomes, a.k.a. scalograms 
+
+::: {.callout-note}
+## Note
+- Contrary to functions presented in the previous chapter, the functions 
+described in this chapter are **not**: they 
+take `HiCExperiment` objects as input and generally return data frames rather 
+than modified `HiCExperiment` objects. 
+- Internally, most of the functions presented in this chapter make a call to 
+`interactions(<HiCExperiment>)` to coerce it into `GInteractions`. 
+:::
+
+::: {.callout-tip collapse="true"}
+## Generating the example `hic` object 👇
+
+To demonstrate `HiContacts` functionalities, we will create 
+an `HiCExperiment` object from an example `.cool` file provided 
+in the `HiContactsData` package. 
+
+```{r eval = FALSE}
+library(HiCExperiment)
+library(HiContactsData)
+
+# ---- This downloads example `.mcool` and `.pairs` files and caches them locally 
+coolf <- HiContactsData('yeast_wt', 'mcool')
+pairsf <- HiContactsData('yeast_wt', 'pairs.gz')
+
+# ---- This creates a connection to the disk-stored `.mcool` file
+cf <- CoolFile(coolf)
+cf
+
+# ---- This creates a connection to the disk-stored `.pairs` file
+pf <- PairsFile(pairsf)
+pf
+
+# ---- This imports contacts from the chromosome `II` at resolution `2000`
+hic <- import(cf, focus = 'II', resolution = 2000)
+```
+
+```{r}
+hic
+```
+:::
+
+## Distance law(s)
+
+### P(s) from a single `.pairs` file
+
+Distance laws are generally computed directly from `.pairs` files. This is 
+because the `.pairs` files are at 1-bp resolution whereas the contact matrices 
+(for example from `.cool` files) are binned at a minimum resolution. 
+
+An example `.pairs` file can be fetched from the `ExperimentHub` database
+using the `HiContactsData` package. 
+
+```{r eval = FALSE}
+library(HiCExperiment)
+library(HiContactsData)
+pairsf <- HiContactsData('yeast_wt', 'pairs.gz')
+pf <- PairsFile(pairsf)
+```
+
+```{r}
+pf
+```
+
+::: {.callout-note}
+## Reminder!
+`PairsFile` connections can be imported directly into a `GInteractions` object 
+with `import()`: 
+
+```{r}
+import(pf)
+```
+:::
+
+We can compute a P(s) per chromosome from this `.pairs` file using the `distanceLaw` function.
+
+```{r}
+library(HiContacts)
+ps <- distanceLaw(pf, by_chr = TRUE) 
+ps
+```
+
+::: {.callout-note icon='false'}
+## Note
+Because this is a toy dataset, contacts are only provided for the chromosome `II`. 
+
+```{r}
+table(ps$chr)
+```
+:::
+
+The `plotPs()` and `plotPsSlope()` functions are convenient `ggplot2`-based functions
+with pre-configured settings optimized for P(s) visualization.
+
+```{r}
+plotPs(ps, aes(x = binned_distance, y = norm_p))
+plotPsSlope(ps, ggplot2::aes(x = binned_distance, y = slope))
+```
+
+### P(s) for multiple `.pairs` files
+
+Let's first import a second example dataset. We'll import pairs identified in a 
+*eco1* yeast mutant. 
+
+```{r eval = FALSE}
+eco1_pairsf <- HiContactsData('yeast_eco1', 'pairs.gz')
+eco1_pf <- PairsFile(eco1_pairsf)
+```
+
+```{r}
+eco1_ps <- distanceLaw(eco1_pf, by_chr = TRUE) 
+eco1_ps
+```
+
+A little data wrangling can help plotting the distance laws for 2 different samples 
+in the same plot. 
+
+```{r}
+library(dplyr)
+merged_ps <- rbind(
+    ps |> mutate(sample = 'WT'), 
+    eco1_ps |> mutate(sample = 'eco1')
+)
+plotPs(merged_ps, aes(x = binned_distance, y = norm_p, color = sample)) + 
     scale_color_manual(values = c('#c6c6c6', '#ca0000'))
-p3 <- plotPsSlope(ps, ggplot2::aes(x = binned_distance, y = slope, group = chr, color = type)) + 
+plotPsSlope(merged_ps, ggplot2::aes(x = binned_distance, y = slope, color = sample)) + 
     scale_color_manual(values = c('#c6c6c6', '#ca0000'))
-p1
-p2
-p3
+```
+
+### P(s) from `HiCExperiment` objects
+
+Alternatively, distance laws can be computed from binned matrices directly by 
+providing `HiCExperiment` objects. For deeply sequenced datasets, this can be significantly faster 
+than when using original `.pairs` files, but the smoothness of the resulting 
+curves will be greatly impacted, notably at short distances. 
+
+```{r}
+ps_from_hic <- distanceLaw(hic, by_chr = TRUE) 
+plotPs(ps_from_hic, aes(x = binned_distance, y = norm_p))
+plotPsSlope(ps_from_hic, ggplot2::aes(x = binned_distance, y = slope))
 ```
 
 ## Scalograms
@@ -98,6 +240,9 @@ p8 <- plot4C(c(v4C_loop, v4C_TAD, v4C_loop2), ggplot2::aes(x = center, y = score
     ggplot2::coord_cartesian(ylim = c(0, 0.03))
 p8
 ```
+
+
+
 
 
 ## References {-}
