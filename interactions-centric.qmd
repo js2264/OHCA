@@ -140,7 +140,7 @@ table(ps$chr)
 The `plotPs()` and `plotPsSlope()` functions are convenient `ggplot2`-based functions
 with pre-configured settings optimized for P(s) visualization.
 
-```{r}
+```{r ps}
 plotPs(ps, aes(x = binned_distance, y = norm_p))
 plotPsSlope(ps, ggplot2::aes(x = binned_distance, y = slope))
 ```
@@ -227,30 +227,34 @@ organization and individualization.
 
 ## Virtual 4C profiles
 
+Interaction profile of a genomic locus of interest with its surrounding 
+environment or the rest of the genome is frequently generated. In some cases, this can 
+help in identifying and/or comparing regulatory or structural interactions. 
+
+For instance, we can compute the genome-wide virtual 4C profile of interactions 
+anchored at the centromere in chromosome `II` (located at ~ 238kb). 
+
 ```{r}
-# ### ----- virtual 4c (NPCs)
-# v4C_loop <- virtual4C(npcs_narrow, viewpoint = GRanges('chr3:100965000-100975000'), use.scores = 'balanced') |> 
-#     plyranges::mutate(
-#         score = score/sum(score),
-#         score = zoo::rollmean(score, k = 2, na.pad = TRUE, align = 'center'), 
-#         viewpoint = 'loop'
-#     )
-# v4C_TAD <- virtual4C(npcs_narrow, viewpoint = GRanges('chr3:101695000-101705000'), use.scores = 'balanced') |> 
-#     plyranges::mutate(
-#         score = score/sum(score),
-#         score = zoo::rollmean(score, k = 2, na.pad = TRUE, align = 'center'), 
-#         viewpoint = 'TAD'
-#     )
-# v4C_loop2 <- virtual4C(npcs_narrow, viewpoint = GRanges('chr3:102145000-102155000'), use.scores = 'balanced') |> 
-#     plyranges::mutate(
-#         score = score/sum(score),
-#         score = zoo::rollmean(score, k = 2, na.pad = TRUE, align = 'center'), 
-#         viewpoint = 'loop2'
-#     )
-# p8 <- plot4C(c(v4C_loop, v4C_TAD, v4C_loop2), ggplot2::aes(x = center, y = score, col = viewpoint, fill = viewpoint)) + 
-#     ggplot2::coord_cartesian(ylim = c(0, 0.03))
-# p8
+v4C <- virtual4C(full_hic, viewpoint = GRanges("II:230001-240000"))
+v4C
 ```
+
+`ggplot2` can be used to visualize the 4C-like profile over multiple chromosomes.
+
+:::{.column-page}
+```{r fig.asp = 0.7, out.width = '100%'}
+df <- as_tibble(v4C)
+ggplot(df, aes(x = center, y = score)) + 
+    geom_area(position = "identity", alpha = 0.5) + 
+    theme_bw() + 
+    labs(x = "Position", y = "Contacts with viewpoint") +
+    scale_x_continuous(labels = scales::unit_format(unit = "M", scale = 1e-06)) + 
+    facet_wrap(~seqnames, scales = 'free_y')
+```
+:::
+
+This clearly highlights trans interactions of the chromosome `II` centromere 
+with the centromeres from other chromosomes. 
 
 ## Scalograms
 
@@ -268,7 +272,8 @@ plotScalogram(scalo |> filter(chr == 'II'), ylim = c(1e3, 1e5))
 Several scalograms can be plotted together to compare distance-dependent 
 contact frequencies along a given chromosome in different samples. 
 
-```{r fig.asp = .4}
+:::{.column-page}
+```{r fig.asp = .4, out.width = '100%'}
 pairsFile(eco1_hic) <- eco1_pairsf
 eco1_scalo <- scalogram(eco1_hic) 
 merged_scalo <- rbind(
@@ -278,6 +283,10 @@ merged_scalo <- rbind(
 plotScalogram(merged_scalo |> filter(chr == 'II'), ylim = c(1e3, 1e5)) + 
     facet_grid(~sample)
 ```
+:::
+
+This example points out the overall longer interactions within the long 
+arm of the chromosome `II` in an `eco1` mutant. 
 
 ## References {-}
 
