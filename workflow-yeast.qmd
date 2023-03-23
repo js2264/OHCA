@@ -1,6 +1,4 @@
 ---
-filters:
-  - section-bibliographies
 reference-section-title: References
 bibliography: bibliography.bib
 ---
@@ -484,14 +482,3 @@ cowplot::plot_grid(
 ```
 
 ![](images/20230322102919.png)
-
-## References {-}
-
-::: {#refs}
-:::
-
-## Session info {-}
-
-```{r echo = FALSE}
-sessioninfo::session_info()
-```

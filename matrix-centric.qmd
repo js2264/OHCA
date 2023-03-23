@@ -1,3 +1,8 @@
+---
+reference-section-title: References
+bibliography: bibliography.bib
+---
+
 # Contact matrix-centric analysis
 
 ```{r}
@@ -355,15 +360,4 @@ cowplot::plot_grid(
         cmap = bwrColors()
     )
 )
-```
-
-## References {-}
-
-::: {#refs}
-:::
-
-## Session info {-}
-
-```{r echo = FALSE}
-sessioninfo::session_info()
 ```

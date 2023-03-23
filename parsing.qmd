@@ -1,3 +1,8 @@
+---
+reference-section-title: References
+bibliography: bibliography.bib
+---
+
 # Manipulating Hi-C data in R
 
 ```{r}
@@ -451,14 +456,3 @@ and discard all other information, e.g. regarding genomic `regions`,
 available `resolutions`, associated `metadata`, `pairsFile` or 
 `topologicalFeatures`. 
 :::
-
-## References {-}
-
-::: {#refs}
-:::
-
-## Session info {-}
-
-```{r echo = FALSE}
-sessioninfo::session_info()
-```

@@ -1,3 +1,8 @@
+---
+reference-section-title: References
+bibliography: bibliography.bib
+---
+
 # Hi-C data visualization
 
 ```{r}
@@ -278,15 +283,4 @@ plotMatrix(
     limits = c(-1, 1), 
     cmap = bgrColors()
 )
-```
-
-## References {-}
-
-::: {#refs}
-:::
-
-## Session info {-}
-
-```{r echo = FALSE}
-sessioninfo::session_info()
 ```

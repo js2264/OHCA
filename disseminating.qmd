@@ -1,6 +1,4 @@
 ---
-filters:
-  - section-bibliographies
 reference-section-title: References
 bibliography: bibliography.bib
 ---

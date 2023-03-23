@@ -1,3 +1,8 @@
+---
+reference-section-title: References
+bibliography: bibliography.bib
+---
+
 # Interactions-centric analysis
 
 ```{r}
@@ -128,7 +133,7 @@ ps <- distanceLaw(pf, by_chr = TRUE)
 ps
 ```
 
-::: {.callout-note icon='false'}
+::: {.callout-note}
 ## Note
 Because this is a toy dataset, contacts are only provided for the chromosome `II`. 
 
@@ -288,13 +293,3 @@ plotScalogram(merged_scalo |> filter(chr == 'II'), ylim = c(1e3, 1e5)) +
 This example points out the overall longer interactions within the long 
 arm of the chromosome `II` in an `eco1` mutant. 
 
-## References {-}
-
-::: {#refs}
-:::
-
-## Session info {-}
-
-```{r echo = FALSE}
-sessioninfo::session_info()
-```

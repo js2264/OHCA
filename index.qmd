@@ -1,3 +1,10 @@
+---
+filters:
+  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
+reference-section-title: References
+bibliography: bibliography.bib
+---
+
 # Welcome {-}
 
 ```{r}
@@ -42,7 +49,7 @@ This book is divided in three parts:
 - [Chapter 8: Access to public Hi-C data portals](disseminating.qmd)
 - [Chapter 9: Distance-dependent interactions across yeast mutants](workflow-yeast.qmd)
 - [Chapter 10: Chromosome compartment cohesion upon mitosis entry](workflow-chicken.qmd)
-- [Chapter 11: Hi-C interoperability notebook](interoperability.qmd)
+<!-- - [Chapter 11: Hi-C interoperability notebook](interoperability.qmd) -->
 
 # Requirements {-}
 
@@ -80,9 +87,8 @@ BiocManager::install("DNAZooData", ask = FALSE)
 
 ## Developers 
 
-For developers or advanced R users, there are two alternatives: 
-
-- You can directly install `devel` versions of these packages along with their dependencies: 
+For developers or advanced R users, the `devel` versions of these packages 
+can be installed along with their dependencies: 
 
 ```{r eval = FALSE}
 install.packages("pak", repos = "https://r-lib.github.io/p/pak/devel/")
@@ -109,7 +115,7 @@ aforementioned packages pre-installed, and initiate an interactive R session.
 
 ## Building book {-}
 
-The OHCA book has been rendered with R thanks to a number of packages, including but not only: 
+The OHCA book has been rendered in R thanks to a number of packages, including but not only: 
 
 - `devtools`
 - `quarto`
@@ -123,7 +129,6 @@ quarto render
 ```
 
 ::: {.callout-warning}
-## Caution!
 All dependencies listed above will be required!
 :::
 

@@ -1,28 +1,174 @@
-# Hi-C analysis workflow: Chromosome compartment cohesion upon mitosis entry
+---
+reference-section-title: References
+bibliography: bibliography.bib
+---
+
+# Workflow 2: Chromosome compartment cohesion upon mitosis entry
 
 ```{r}
 #| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
 source("_common.R")
+library(ggplot2)
+library(cowplot)
+library(purrr)
+library(HiCExperiment)
+library(HiContactsData)
+library(fourDNData)
 ```
 
-::: {.callout-important}
-### Aims
+::: {.callout-note}
+## Aims
+This chapter illustrates how to: 
+
+- Annotate compartments for a list of HiC experiments
+- Generate saddle plots for a list of HiC experiments
+- Quantify changes in interactions between compartments between different timepoints
 :::
 
 ::: {.callout-important}
-### Datasets
-We leverage five chicken datasets in this notebook. They are provided by the 4DN consortium: 
+## Datasets
+We leverage five chicken datasets in this notebook. They are all available from 
+the 4DN data portal using the `fourDNData` package. 
+
+- SRR8769554: chicken cell culture blocked in G2 
+- SRR10687276: chicken cell culture released from G2 block (5min)
+- SRR10687276: chicken cell culture released from G2 block (10min)
+- SRR10687276: chicken cell culture released from G2 block (15min)
+- SRR10687276: chicken cell culture released from G2 block (30min)
 :::
 
+## Importing data
 
+```{r eval = FALSE}
+library(fourDNData)
+library(BiocParallel)
+samples <- list(
+    '4DNES9LEZXN7' = 'G2 block', 
+    '4DNESNWWIFZU' = 'prophase (5m)', 
+    '4DNESGDXKM2I' = 'prophase (10m)', 
+    '4DNESIR416OW' = 'prometaphase (15m)', 
+    '4DNESS8PTK6F' = 'prometaphase (30m)' 
+)
+bpparam <- MulticoreParam(workers = 5, progressbar = TRUE)
+hics <- bplapply(names(samples), fourDNHiCExperiment, BPPARAM = bpparam)
+names(hics) <- samples
+```
 
-## References {-}
+## Plot whole chromosome matrices
 
-::: {#refs}
+```{r eval = FALSE}
+library(purrr)
+library(HiContacts)
+pl <- imap(hics, ~ .x['chr3'] |> 
+    zoom(100000) |> 
+    plotMatrix(use.scores = 'balanced', limits = c(-4, -1), caption = FALSE) + 
+    ggtitle(.y)
+)
+library(cowplot)
+plot_grid(plotlist = pl, nrow = 1)
+```
+
+:::{.column-page}
+![](images/20230322181000.png)
 :::
 
-## Session info {-}
+## Generate saddle plots
 
-```{r echo = FALSE}
-sessioninfo::session_info()
+```{r eval = FALSE}
+pl <- imap(hics, ~ plotSaddle(.x, nbins = 38, BPPARAM = bpparam) + ggtitle(.y)) 
+plot_grid(plotlist = pl, nrow = 1)
+```
+
+:::{.column-page}
+![](images/20230322181300.png)
+:::
+
+## Zoom on chr4
+
+```{r eval = FALSE}
+.chr <- 'chr4'
+.start <- 59000000L
+.stop <- 75000000L
+coords <- paste0(.chr, ':', .start, '-', .stop)
+topologicalFeatures(hics[["G2 block"]], "compartments")
+a <- geom_rect(data = A[A %over% GRanges(coords)] |> as.data.frame() |> mutate(start = pmax(start, .start), end = pmin(end, .stop)), aes(xmin = start, xmax = end, ymin = -500000, ymax = 0), fill = '#da2a2a', col = 'black', inherit.aes = FALSE)
+b <- geom_rect(data = B[B %over% GRanges(coords)] |> as.data.frame() |> mutate(start = pmax(start, .start), end = pmin(end, .stop)), aes(xmin = start, xmax = end, ymin = -500000, ymax = 0), fill = '#cbcbcb', col = 'black', inherit.aes = FALSE)
+x1 <- hics[["G2 block"]] |> 
+    refocus(coords) |> 
+    zoom(100000) |> 
+    autocorrelate()
+x2 <- hics[["prophase (5m)"]] |> 
+    refocus(coords) |> 
+    zoom(100000) |> 
+    autocorrelate()
+x3 <- hics[["prometaphase (30m)"]] |> 
+    refocus(coords) |> 
+    zoom(100000) |> 
+    autocorrelate()
+cowplot::plot_grid(
+    plotMatrix(
+        x1,
+        use.scores = 'autocorrelated', 
+        scale = 'linear', 
+        limits = c(-1, 1), 
+        cmap = bwrColors(), 
+        maxDistance = 10000000
+    ) + ggtitle('G2') + a + b,
+    plotMatrix(
+        x2,
+        use.scores = 'autocorrelated', 
+        scale = 'linear', 
+        limits = c(-1, 1), 
+        cmap = bwrColors(), 
+        maxDistance = 10000000
+    ) + ggtitle('Prophase 5min') + a + b,
+    plotMatrix(
+        x3,
+        use.scores = 'autocorrelated', 
+        scale = 'linear', 
+        limits = c(-1, 1), 
+        cmap = bwrColors(), 
+        maxDistance = 10000000
+    ) + ggtitle('Prometap. 30min') + a + b,
+    nrow = 1
+)
+ggsave('figures/chicken/plots_chicken_zoom.pdf', h = 5, w = 15)
+```
+
+## Quantification of interactions between compartments
+
+```{r eval = FALSE}
+comps <- sort(c(A, B))
+n <- seqlevels(seqinfo(.x))[seqlengths(seqinfo(.x)) > 2e6]
+df <- imap(hics[c(1, 2, 5)], ~ {
+    lapply(n, function(chr) {
+        x <- detrend(cis(.x[chr]))
+        ints <- interactions(x)
+        ints <- ints[pairdist(ints) > 5e6]
+        an <- anchors(ints)
+        data.frame(
+            bin1 = join_nearest(resize(an[[1]], fix = 'center', width = 1), comps)$ID, 
+            bin2 = join_nearest(resize(an[[2]], fix = 'center', width = 1), comps)$ID, 
+            length = pairdist(ints), 
+            score = ints$detrended
+        ) |> 
+            drop_na() |> 
+            group_by(bin1, bin2) |> 
+            filter(bin1 != bin2)
+    }) |> bind_rows() |> mutate(sample = factor(.y, c(names(hics[c(1, 2, 5)]))))
+}) |> bind_rows()
+df$type <- case_when(
+    grepl('A', df$bin1) & grepl('A', df$bin2) ~ 'AA',
+    grepl('B', df$bin1) & grepl('B', df$bin2) ~ 'BB',
+    grepl('A', df$bin1) & grepl('B', df$bin2) ~ 'AB',
+    grepl('B', df$bin1) & grepl('A', df$bin2) ~ 'BA'
+) |> as.factor()
+p_interactions <- ggplot(df, aes(x = length, y = score, group = type, col = type)) + 
+    ggrastr::rasterize(geom_point(size = 0.3, alpha = 0.2)) + 
+    facet_grid(type~sample) + 
+    theme_bw()
+ggsave('figures/chicken/plots_chicken_compartment-interactions-dotplot.pdf', w = 6, h = 10)
 ```

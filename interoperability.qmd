@@ -1,4 +1,9 @@
-# Interoperability with other Hi-C packages
+---
+reference-section-title: References
+bibliography: bibliography.bib
+---
+
+# Interoperability with Hi-C analyses packages
 
 ```{r}
 #| echo: false

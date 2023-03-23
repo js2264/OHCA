@@ -1,4 +1,5 @@
 ---
+reference-section-title: References
 bibliography: bibliography.bib
 ---
 
@@ -224,7 +225,7 @@ gr * 1000 # ----- Zoom in by a given factor (effectively decreasing the `GRanges
 ## Going further
 To fully grasp how to operate `GRanges` objects, we highly recommend reading the 
 detailed documentation for this class by typing `?GenomicRanges` and 
-`?GenomicRanges::\`intra-range-methods\``.
+`` ?GenomicRanges::`intra-range-methods` ``.
 :::
 
 #### Inter-range methods {#inter-range}
@@ -263,7 +264,7 @@ coverage(gr, weight = 'GC')
 ::: {.callout-warning}
 ## Going further
 To fully grasp how to operate `GRanges` objects, we highly recommend reading the 
-detailed documentation for this class by typing `?GenomicRanges::`inter-range-methods``. 
+detailed documentation for this class by typing `` ?GenomicRanges::`inter-range-methods` ``. 
 :::
 
 ### Comparing multiple `GRanges` objects
@@ -414,7 +415,7 @@ peaks %outside% TSSs
 ::: {.callout-warning}
 ## Going further
 To fully grasp how to find overlaps between `GRanges` objects, we highly recommend reading the 
-detailed documentation by typing `?IRanges::`findOverlaps-methods``.
+detailed documentation by typing `` ?IRanges::`findOverlaps-methods` ``.
 :::
 
 #### Find nearest range from a subject for each range in a query
@@ -429,7 +430,7 @@ peaks[8]
 TSSs[3]
 ```
 
-> nearest
+- `nearest()`
 
 Rather than finding the *overlapping* range in a `subject` for each range in a `query`, 
 we can find the `nearest` range. 
@@ -443,7 +444,7 @@ nearest(peaks, TSSs)
 TSSs[nearest(peaks, TSSs)]
 ```
 
-> distance
+- `distance()`
 
 Alternatively, one can simply ask to calculate the `distanceToNearest` between 
 ranges in a `query` and ranges in a `subject`. 
@@ -758,7 +759,7 @@ spanning_gi %over% gr
 ::: {.callout-warning}
 ## Going further
 A detailed manual of overlap methods available for `GInteractions` object can 
-be read by typing `?`Interaction-overlaps`` in R.
+be read by typing `` ?`Interaction-overlaps` `` in R.
 :::
 
 ## `ContactFile` class
@@ -892,12 +893,12 @@ relevant for Hi-C:
 
 `HiCExperiment` objects are created when *parsing* a `ContactFile` in R. 
 The `HiCExperiment` class reads a `ContactFile` in memory and store genomic 
-interactions as `GInteractions`. The `HiCExperiment` class is, quite obviously,  
+interactions as `GInteractions`. The `HiCExperiment` class is, quite obviously, 
 defined in the `HiCExperiment` package.
 
 ### Creating a `HiCExperiment` object
 
-#### `import`ing a `ContactFile` 
+#### Importing a `ContactFile` 
 
 In practice, to create a `HiCExperiment` object from a `ContactFile`, 
 one can use the `import` method. 
@@ -918,7 +919,7 @@ hic
 
 Printing a `HiCExperiment` to the console will not reveal the actual data 
 stored in the object (it would most likely crash your R session!). 
-Instead, it gives a summary of the data stored in the object: 
+Instead, it gives a **summary of the data** stored in the object: 
 
 - The `fileName`, i.e. the path to the disk-stored data file 
 - The `focus`, i.e. the genomic location for which data has been imported (in the example above, `"whole genome"` implies that all the data has been imported in R)
@@ -935,8 +936,8 @@ to describe important topological features.
 the contact matrix has been created. This is often useful to estimate some Hi-C metrics. 
 - `metadata` is a `list` to further describe the experiment. 
 
-::: {.callout-tip collapse="true"}
-## `HiCExperiment` slots 👇
+::: {.callout-tip}
+## `HiCExperiment` slots
 These pieces of information are called `slots`. They can be directly accessed 
 using `getter` functions, bearing the same name than the slot. 
 
@@ -967,7 +968,7 @@ metadata(hic)
 `import` also works for other types of `ContactFile` (`HicFile`, 
 `HicproFile`, `PairsFile`), e.g. 
 
-- For `HicFile` and `HicproFile`, `import` will return a `HiCExperiment` as well: 
+- For `HicFile` and `HicproFile`, `import` seamlessly returns a `HiCExperiment` as well: 
 
 ```{r}
 hf <- HicFile(hicf)
@@ -1058,7 +1059,7 @@ yeast_hic
 
 #### Interactions
 
-The imported genomic interactions can be **directly exposed** using the 
+The imported genomic interactions can be directly **exposed** using the 
 `interactions` function and are returned as a `GInteractions` object. 
 
 ```{r}
@@ -1101,7 +1102,7 @@ bins(yeast_hic)
 ## Difference between `bins` and `regions`
 `bins` are **not** equivalent to `regions` of an `HiCExperiment`. 
 
-- `bins` refer to all the possible `regions` of a `HiCExperiment`. For instance, 
+- `bins` refer to all the **possible** `regions` of a `HiCExperiment`. For instance, 
 for a `HiCExperiment` with a total genome size of `1,000,000` and a resolution of 
 `2000`, `bins` will always return a `GRanges` object with `500` ranges. 
 - `regions`, on the opposite, refer to the union of `anchors` of all the 
@@ -1187,27 +1188,16 @@ import(pairsFile(yeast_hic), format = 'pairs')
 ```
 
 Note that these `GInteractions` are **not** binned, contrary to `interactions` 
-extracted from a `HiCExperiment`. Anchors of the interactions listed in the  
+extracted from a `HiCExperiment`. Anchors of the interactions listed in the 
 `GInteractions` imported from a disk-stored `.pairs` file are all of width `1`. 
 :::
 
 ## Visual summary of the `HiCExperiment` data structure
 
-The `HiCExperiment` data structure provided by the eponymous package 
+The `HiCExperiment` data structure provided by the `HiCExperiment` package 
 inherits methods from core `GInteractions` and `BiocFile` classes to provide 
 a flexible representation of Hi-C data in `R`. It allows random access-based
 queries to seamlessly import parts or all the data contained in 
 disk-stored Hi-C contact matrices in a variety of formats. 
 
 ![](images/20230309114202.png)
-
-## References {-}
-
-::: {#refs}
-:::
-
-## Session info {-}
-
-```{r echo = FALSE}
-sessioninfo::session_info()
-```

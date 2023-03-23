@@ -1,4 +1,5 @@
 ---
+reference-section-title: References
 bibliography: bibliography.bib
 ---
 
@@ -122,7 +123,7 @@ A few of them stand out from the crowd:
 
 ::: {.callout-note}
 For larger genomes (> 1Gb) with more than few tens of M of reads per fastq (e.g. > 100M), 
-we recommend pre-processing data on an HPC cluster. Aligners, pairs procesing and matrix binning 
+we recommend pre-processing data on an HPC cluster. Aligners, pairs processing and matrix binning 
 can greatly benefit from parallelization over multiple CPUs (@Open2C2023Jan)).  
 To scale **up** data pre-processing, we recommend to rely on an efficient read 
 mapper such as `bwa`, followed by pairs parsing, sorting and deduplication with `pairtools` 
@@ -173,7 +174,7 @@ r1 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R1')
 r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
 ```
 
-We then load the `HiCool` library and execute the eponymous `HiCool` function. 
+We then load the `HiCool` library and execute the main `HiCool` function. 
 
 ```{r hicool_run}
 library(HiCool)
@@ -397,6 +398,8 @@ indexed archive file storing rectangular tables called:
 - `chroms`: summarizing the order and length of the chromosomes present in a Hi-C contact matrix;
 - `indexes`: allowing `random access`, i.e. parsing of only a subset of the data without having to read through the entire set of data. 
 
+![](images/20230322085136.png){width=40%}
+
 A single `.pairs` file binned at different resolutions can also be saved into 
 a single, multi-resolution `.mcool` file. `.mcool` essentially consists of 
 nested `.cool` files. 
@@ -414,14 +417,3 @@ Moreover, parsing `.cool` files is possible using `HDF` standard APIs.
 The `.hic` format is another type of binarized, indexed and highly-compressed file (@Durand2016Jul). It can store virtually the same information than a `.cool` file. However, parsing `.hic` files is not as straightforward as `.cool` files, as it does not 
 rely on a generic file standard. Still, the `straw` library has been implemented in several computing languages 
 to facilitate parsing of `.hic` files (@Durand2016Jul). 
-
-## References {-}
-
-::: {#refs}
-:::
-
-## Session info {-}
-
-```{r echo = FALSE}
-sessioninfo::session_info()
-```

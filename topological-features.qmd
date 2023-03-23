@@ -1,3 +1,8 @@
+---
+reference-section-title: References
+bibliography: bibliography.bib
+---
+
 # Finding topological features in Hi-C 
 
 ```{r}
@@ -25,14 +30,3 @@ source("_common.R")
 
 ## Chromatin loops 
 
-
-## References {-}
-
-::: {#refs}
-:::
-
-## Session info {-}
-
-```{r echo = FALSE}
-sessioninfo::session_info()
-```
