@@ -30,19 +30,29 @@ This chapter illustrates how to:
 
 ::: {.callout-important}
 ## Datasets
-We leverage five chicken datasets in this notebook. They are all available from 
-the 4DN data portal using the `fourDNData` package. 
+We leverage five chicken datasets in this notebook, published in @Gibcus2018Feb. 
+They are all available from the 4DN data portal using the `fourDNData` package. 
 
-- SRR8769554: chicken cell culture blocked in G2 
-- SRR10687276: chicken cell culture released from G2 block (5min)
-- SRR10687276: chicken cell culture released from G2 block (10min)
-- SRR10687276: chicken cell culture released from G2 block (15min)
-- SRR10687276: chicken cell culture released from G2 block (30min)
+- `4DNES9LEZXN7`: chicken cell culture blocked in G2 
+- `4DNESNWWIFZU`: chicken cell culture released from G2 block (5min)
+- `4DNESGDXKM2I`: chicken cell culture released from G2 block (10min)
+- `4DNESIR416OW`: chicken cell culture released from G2 block (15min)
+- `4DNESS8PTK6F`: chicken cell culture released from G2 block (30min)
 :::
 
 ## Importing data
 
+The 4DN consortium provides access to the datasets published in @Gibcus2018Feb. 
+in `R`, they can be obtained thanks to the `fourDNData` gateway package. 
+
+::: {.callout-warning}
+## Beware
+The first time the following chunk of code is executed, it will cache a large 
+amount of data (mostly consisting of contact matrices stored in `.mcool` files).
+:::
+
 ```{r eval = FALSE}
+library(HiCExperiment)
 library(fourDNData)
 library(BiocParallel)
 samples <- list(
@@ -54,10 +64,36 @@ samples <- list(
 )
 bpparam <- MulticoreParam(workers = 5, progressbar = TRUE)
 hics <- bplapply(names(samples), fourDNHiCExperiment, BPPARAM = bpparam)
-names(hics) <- samples
+## Fetching local Hi-C contact map from Bioc cache
+## Fetching local compartments bigwig file from Bioc cache
+## Fetching local insulation bigwig file from Bioc cache
+## Fetching local borders bed file from Bioc cache
+## Importing contacts in memory
+## |===================================================| 100% 
+##
+## ...
 ```
 
-## Plot whole chromosome matrices
+```{r eval = FALSE}
+names(hics) <- samples
+hics[["G2 block"]]
+## `HiCExperiment` object with 150,494,008 contacts over 4,109 regions
+## -------
+## fileName: "/home/rsg/.cache/R/fourDNData/25c33c9d826f_4DNFIT479GDR.mcool"
+## focus: "whole genome"
+## resolutions(13): 1000 2000 ... 5000000 10000000
+## active resolution: 250000
+## interactions: 7262748
+## scores(2): count balanced
+## topologicalFeatures: compartments(891) borders(3465)
+## pairsFile: N/A
+## metadata(3): 4DN_info eigens diamond_insulation
+```
+
+## Plotting whole chromosome matrices
+
+We can visualize the five different Hi-C maps on the entire chromosome `3` with 
+`HiContacts` by iterating over each of the `HiCExperiment` objects. 
 
 ```{r eval = FALSE}
 library(purrr)
@@ -75,7 +111,90 @@ plot_grid(plotlist = pl, nrow = 1)
 ![](images/20230322181000.png)
 :::
 
-## Generate saddle plots
+This highlights the progressive remodeling of chromatin into condensed 
+chromosomes, starting as soon as 5' after release from G2 phase. 
+
+## Zooming on a chromosome section
+
+Zooming on a chromosome section, we can plot the Hi-C autocorrelation matrix for each timepoint. These matrices are generally used to highlight the overall correlation of interaction profiles between different segments of a chromosome section (see [Chapter 5](matrix-centric.qmd#computing-autocorrelated-map) for more details). 
+
+```{r eval = FALSE}
+## --- Pre-computing compartments position of chr. 4 segment
+.chr <- 'chr4'
+.start <- 59000000L
+.stop <- 75000000L
+library(GenomicRanges)
+coords <- GRanges(paste0(.chr, ':', .start, '-', .stop))
+compts_df <- topologicalFeatures(hics[["G2 block"]], "compartments") |> 
+    subsetByOverlaps(coords, type = 'within') |> 
+    as.data.frame()
+compts_gg <- geom_rect(
+    data = compts_df, 
+    mapping = aes(xmin = start, xmax = end, ymin = -500000, ymax = 0, alpha = compartment), 
+    col = 'black', inherit.aes = FALSE
+)
+
+## --- Subsetting contact matrices to chr. 4 segment and computing autocorrelation scores
+g2 <- hics[["G2 block"]] |> 
+    subsetByOverlaps(coords) |>
+    zoom(100000) |> 
+    autocorrelate()
+pro5 <- hics[["prophase (5m)"]] |> 
+    subsetByOverlaps(coords) |>
+    zoom(100000) |> 
+    autocorrelate()
+pro30 <- hics[["prometaphase (30m)"]] |> 
+    subsetByOverlaps(coords) |>
+    zoom(100000) |> 
+    autocorrelate()
+
+## --- Plotting autocorrelation matrices
+plot_grid(
+    plotMatrix(
+        g2,
+        use.scores = 'autocorrelated', 
+        scale = 'linear', 
+        limits = c(-1, 1), 
+        cmap = bwrColors(), 
+        maxDistance = 10000000, 
+        caption = FALSE
+    ) + ggtitle('G2') + compts_gg,
+    plotMatrix(
+        pro5,
+        use.scores = 'autocorrelated', 
+        scale = 'linear', 
+        limits = c(-1, 1), 
+        cmap = bwrColors(), 
+        maxDistance = 10000000, 
+        caption = FALSE
+    ) + ggtitle('Prophase 5min') + compts_gg,
+    plotMatrix(
+        pro30,
+        use.scores = 'autocorrelated', 
+        scale = 'linear', 
+        limits = c(-1, 1), 
+        cmap = bwrColors(), 
+        maxDistance = 10000000, 
+        caption = FALSE
+    ) + ggtitle('Prometaphase 30min') + compts_gg,
+    nrow = 1
+)
+```
+
+:::{.column-page}
+![](images/20230324125800.png)
+:::
+
+These correlation matrices suggest that there are two different regimes of chromatin compartment remodeling in this chromosome section: 
+
+1. Correlation scores between genomic bins within the compartment A remain positive 5' after G2 release (albeit reduced compared to G2 block) and eventually become null 30' after G2 release. 
+2. Correlation scores between genomic bins within the compartment B are overall null as soon as 5' after G2 release. 
+
+## Generating saddle plots
+
+Saddle plots are typically used to measure the `observed` vs. `expected` interaction scores within or between genomic loci belonging to A and B compartments. Here, they can be used to check whether the two regimes of chromatin compartment remodeling are observed genome-wide. 
+
+Non-overlapping genomic windows are grouped by `nbins` quantiles (typically between 10 and 50 bins) according to their A/B compartment eigenvector value, from lowest eigenvector values (i.e. strongest B compartments) to highest eigenvector values (i.e. strongest A compartments). The average `observed` vs. `expected` interaction scores are computed for pairwise eigenvector quantiles and plotted in a 2D heatmap. 
 
 ```{r eval = FALSE}
 pl <- imap(hics, ~ plotSaddle(.x, nbins = 38, BPPARAM = bpparam) + ggtitle(.y)) 
@@ -86,72 +205,39 @@ plot_grid(plotlist = pl, nrow = 1)
 ![](images/20230322181300.png)
 :::
 
-## Zoom on chr4
+These plots confirm the previous observation made on chr. `4` and reveal that intra-B compartment interactions are generally lost 5' after G2 release, while intra-A interactions take up to 15' after G2 release to disappear.
+
+::: {.callout-warning}
+## Beware
+The `plotSaddle()` function requires an eigenvector corresponding to A/B 
+compartments. In this example, this eigenvector is recovered from the 4DN data 
+portal. If not already available, this eigenvector can be computed from the 
+contact matrix using the `getCompartments()` function.
+:::
+
+## Quantifying interactions within and between compartments
 
 ```{r eval = FALSE}
-.chr <- 'chr4'
-.start <- 59000000L
-.stop <- 75000000L
-coords <- paste0(.chr, ':', .start, '-', .stop)
-topologicalFeatures(hics[["G2 block"]], "compartments")
-a <- geom_rect(data = A[A %over% GRanges(coords)] |> as.data.frame() |> mutate(start = pmax(start, .start), end = pmin(end, .stop)), aes(xmin = start, xmax = end, ymin = -500000, ymax = 0), fill = '#da2a2a', col = 'black', inherit.aes = FALSE)
-b <- geom_rect(data = B[B %over% GRanges(coords)] |> as.data.frame() |> mutate(start = pmax(start, .start), end = pmin(end, .stop)), aes(xmin = start, xmax = end, ymin = -500000, ymax = 0), fill = '#cbcbcb', col = 'black', inherit.aes = FALSE)
-x1 <- hics[["G2 block"]] |> 
-    refocus(coords) |> 
-    zoom(100000) |> 
-    autocorrelate()
-x2 <- hics[["prophase (5m)"]] |> 
-    refocus(coords) |> 
-    zoom(100000) |> 
-    autocorrelate()
-x3 <- hics[["prometaphase (30m)"]] |> 
-    refocus(coords) |> 
-    zoom(100000) |> 
-    autocorrelate()
-cowplot::plot_grid(
-    plotMatrix(
-        x1,
-        use.scores = 'autocorrelated', 
-        scale = 'linear', 
-        limits = c(-1, 1), 
-        cmap = bwrColors(), 
-        maxDistance = 10000000
-    ) + ggtitle('G2') + a + b,
-    plotMatrix(
-        x2,
-        use.scores = 'autocorrelated', 
-        scale = 'linear', 
-        limits = c(-1, 1), 
-        cmap = bwrColors(), 
-        maxDistance = 10000000
-    ) + ggtitle('Prophase 5min') + a + b,
-    plotMatrix(
-        x3,
-        use.scores = 'autocorrelated', 
-        scale = 'linear', 
-        limits = c(-1, 1), 
-        cmap = bwrColors(), 
-        maxDistance = 10000000
-    ) + ggtitle('Prometap. 30min') + a + b,
-    nrow = 1
-)
-ggsave('figures/chicken/plots_chicken_zoom.pdf', h = 5, w = 15)
-```
-
-## Quantification of interactions between compartments
-
-```{r eval = FALSE}
-comps <- sort(c(A, B))
-n <- seqlevels(seqinfo(.x))[seqlengths(seqinfo(.x)) > 2e6]
+compts <- topologicalFeatures(hics[["G2 block"]], "compartments")
+compts$ID <- paste0(compts$compartment, seq_along(compts))
+chrs <- c("chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", 
+    "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", 
+    "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chr23", 
+    "chr24", "chr25", "chr26", "chr27", "chr28", "chrW", "chrZ"
+) 
 df <- imap(hics[c(1, 2, 5)], ~ {
-    lapply(n, function(chr) {
-        x <- detrend(cis(.x[chr]))
-        ints <- interactions(x)
-        ints <- ints[pairdist(ints) > 5e6]
+    lapply(chrs, function(chr) {
+        ints <- .x[chr] |> 
+            cis() |>
+            detrend() |> 
+            interactions()
+        ints$comp_first <- compts[subjectHits(findOverlaps(ints, compts, use.region = "first"))]$ID
+        ints$comp_second <- compts[subjectHits(findOverlaps(ints, compts, use.region = "second"))]$ID
+        # ints <- ints[pairdist(ints) > 5e6]
         an <- anchors(ints)
-        data.frame(
-            bin1 = join_nearest(resize(an[[1]], fix = 'center', width = 1), comps)$ID, 
-            bin2 = join_nearest(resize(an[[2]], fix = 'center', width = 1), comps)$ID, 
+        d <- data.frame(
+            bin1 = plyranges::join_nearest(resize(an[[1]], fix = 'center', width = 1), compts)$ID, 
+            bin2 = plyranges::join_nearest(resize(an[[2]], fix = 'center', width = 1), compts)$ID, 
             length = pairdist(ints), 
             score = ints$detrended
         ) |> 

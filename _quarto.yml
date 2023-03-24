@@ -7,8 +7,8 @@ book:
   reader-mode: false
   page-footer:
     left: |
-      OHCA: Orchestrating Hi-C analysis with Bioconductor was written by 
-      Jacques Serizay
+      <i>OHCA: Orchestrating Hi-C analysis with Bioconductor</i> was written by 
+      J. Serizay
     right: |
       This book was built with <a href="https://quarto.org/">Quarto</a>.
   cover-image: cover.jpg
