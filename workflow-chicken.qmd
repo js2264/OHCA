@@ -119,7 +119,7 @@ chromosomes, starting as soon as 5' after release from G2 phase.
 Zooming on a chromosome section, we can plot the Hi-C autocorrelation matrix for each timepoint. These matrices are generally used to highlight the overall correlation of interaction profiles between different segments of a chromosome section (see [Chapter 5](matrix-centric.qmd#computing-autocorrelated-map) for more details). 
 
 ```{r eval = FALSE}
-## --- Pre-computing compartments position of chr. 4 segment
+## --- Format compartment positions of chr. 4 segment
 .chr <- 'chr4'
 .start <- 59000000L
 .stop <- 75000000L
@@ -134,7 +134,7 @@ compts_gg <- geom_rect(
     col = 'black', inherit.aes = FALSE
 )
 
-## --- Subsetting contact matrices to chr. 4 segment and computing autocorrelation scores
+## --- Subset contact matrices to chr. 4 segment and computing autocorrelation scores
 g2 <- hics[["G2 block"]] |> 
     subsetByOverlaps(coords) |>
     zoom(100000) |> 
@@ -148,7 +148,7 @@ pro30 <- hics[["prometaphase (30m)"]] |>
     zoom(100000) |> 
     autocorrelate()
 
-## --- Plotting autocorrelation matrices
+## --- Plot autocorrelation matrices
 plot_grid(
     plotMatrix(
         g2,
@@ -217,44 +217,61 @@ contact matrix using the `getCompartments()` function.
 
 ## Quantifying interactions within and between compartments
 
+We can leverage the replicate-merged contact matrices to quantify the 
+interaction frequencies within A or B compartments or between A and B 
+comaprtments, at different timepoints. 
+
+We can use the A/B compartment annotations obtained at the `G2 block` timepoint and extract 
+`O/E` (observed vs expected) scores for interactions within A or B 
+compartments or between A and B compartments, at different timepoints. 
+
 ```{r eval = FALSE}
+## --- Extract the A/B compartments identified in G2 block
 compts <- topologicalFeatures(hics[["G2 block"]], "compartments")
 compts$ID <- paste0(compts$compartment, seq_along(compts))
-chrs <- c("chr1", "chr2", "chr3", "chr4", "chr5", "chr6", "chr7", "chr8", 
-    "chr9", "chr10", "chr11", "chr12", "chr13", "chr14", "chr15", 
-    "chr17", "chr18", "chr19", "chr20", "chr21", "chr22", "chr23", 
-    "chr24", "chr25", "chr26", "chr27", "chr28", "chrW", "chrZ"
-) 
+
+## --- Iterate over timepoints to extract `detrended` (O/E) scores and 
+##     compartment annotations
+library(plyranges)
 df <- imap(hics[c(1, 2, 5)], ~ {
-    lapply(chrs, function(chr) {
-        ints <- .x[chr] |> 
-            cis() |>
-            detrend() |> 
-            interactions()
-        ints$comp_first <- compts[subjectHits(findOverlaps(ints, compts, use.region = "first"))]$ID
-        ints$comp_second <- compts[subjectHits(findOverlaps(ints, compts, use.region = "second"))]$ID
-        # ints <- ints[pairdist(ints) > 5e6]
-        an <- anchors(ints)
-        d <- data.frame(
-            bin1 = plyranges::join_nearest(resize(an[[1]], fix = 'center', width = 1), compts)$ID, 
-            bin2 = plyranges::join_nearest(resize(an[[2]], fix = 'center', width = 1), compts)$ID, 
-            length = pairdist(ints), 
-            score = ints$detrended
-        ) |> 
-            drop_na() |> 
-            group_by(bin1, bin2) |> 
-            filter(bin1 != bin2)
-    }) |> bind_rows() |> mutate(sample = factor(.y, c(names(hics[c(1, 2, 5)]))))
-}) |> bind_rows()
-df$type <- case_when(
-    grepl('A', df$bin1) & grepl('A', df$bin2) ~ 'AA',
-    grepl('B', df$bin1) & grepl('B', df$bin2) ~ 'BB',
-    grepl('A', df$bin1) & grepl('B', df$bin2) ~ 'AB',
-    grepl('B', df$bin1) & grepl('A', df$bin2) ~ 'BA'
-) |> as.factor()
-p_interactions <- ggplot(df, aes(x = length, y = score, group = type, col = type)) + 
-    ggrastr::rasterize(geom_point(size = 0.3, alpha = 0.2)) + 
-    facet_grid(type~sample) + 
-    theme_bw()
-ggsave('figures/chicken/plots_chicken_compartment-interactions-dotplot.pdf', w = 6, h = 10)
+    ints <- cis(.x) |> ## Filter out trans interactions
+        detrend() |> ## Compute O/E scores
+        interactions() ## Recover interactions 
+    ints$comp_first <- join_overlap_left(anchors(ints, "first"), compts)$ID
+    ints$comp_second <- join_overlap_left(anchors(ints, "second"), compts)$ID
+    tibble(
+        sample = .y, 
+        bin1 = ints$comp_first, 
+        bin2 = ints$comp_second, 
+        dist = pairdist(ints), 
+        OE = ints$detrended 
+    ) |> 
+        filter(dist > 5e6) |>
+        mutate(type = case_when(
+            grepl('A', bin1) & grepl('A', bin2) ~ 'AA',
+            grepl('B', bin1) & grepl('B', bin2) ~ 'BB',
+            grepl('A', bin1) & grepl('B', bin2) ~ 'AB',
+            grepl('B', bin1) & grepl('A', bin2) ~ 'BA'
+        )) |> 
+        filter(bin1 != bin2)
+}) |> list_rbind() |> mutate(
+    sample = factor(sample, names(hics)[c(1, 2, 5)])
+)
 ```
+
+We can now plot the changes in O/E scores for intra-A, intra-B, A-B 
+or B-A interactions, splitting boxplots by timepoint. 
+
+```{r eval = FALSE}
+ggplot(df, aes(x = type, y = OE, group = type, fill = type)) + 
+    geom_boxplot(outlier.shape = NA) + 
+    facet_grid(~sample) + 
+    theme_bw() + 
+    ylim(c(-2, 2))
+```
+
+![](images/20230327182802.png)
+
+This visualization suggests that interactions between genomic loci belonging to 
+the B compartment are lost more rapidly than those between genomic loci belonging 
+to the A compartment, when cells are released from G2 to enter mitosis. 
