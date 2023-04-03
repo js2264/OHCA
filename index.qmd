@@ -136,20 +136,25 @@ quarto render
 All dependencies listed above will be required!
 :::
 
-In addition, the actual book rendering is done by GitHub Actions, and the 
+The actual rendering of this book is done by GitHub Actions, and the 
 rendered static website is hosted by GitHub Pages. 
 
 ## Session info {-}
 
-```{r echo = FALSE, warnings = FALSE, messages = FALSE}
+```{r}
+#| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
 library("HiCExperiment")
 library("HiCool")
 library("HiContacts")
 library("HiContactsData")
 library("fourDNData")
 library("DNAZooData")
+library("OHCA")
 ```
 
-```{r echo = FALSE}
+```{r}
 sessioninfo::session_info()
 ```

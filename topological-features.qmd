@@ -40,12 +40,16 @@ maps, including:
 
 ## Chromosome compartments 
 
+Chromosome compartments refer to the segregation of the chromatin 
+into active euchromatin (A compartments) and regulated heterochromatin 
+(B compartment).
+
 ### Importing Hi-C data
 
 To investigate chromosome compartments, we will fetch a contact matrix generated 
 from a micro-C experiment (from @Krietenstein2020May). A subset of the genome-wide
 dataset is provided in the `OHCA` package. It contains intra-chromosomal 
-interactions within `chr17`, binned at either `250000` or `5000` bp.
+interactions within `chr17`, binned at `5000`, `100000` and `250000` bp. 
 
 ```{r}
 library(HiCExperiment)
@@ -58,7 +62,11 @@ seqinfo(microC)
 
 ### Annotating A/B compartments
 
-The `getCompartments()` function performs several internal operations: 
+The consensus approach to annotate A/B compartments is to compute the 
+eigenvectors of a Hi-C contact matrix and identify the eigenvector representing 
+the chromosome-wide bi-partite segmentation of the genome. 
+
+The `getCompartments()` function performs several internal operations to achieve this:
 
 1. Obtains cis interactions per chromosome
 2. Computes O/E contact matrix scores
@@ -117,9 +125,9 @@ library(ggplot2)
 library(patchwork)
 microC <- autocorrelate(microC)
 p1 <- plotMatrix(microC, use.scores = 'autocorrelated', scale = 'linear', limits = c(-1, 1), caption = FALSE)
-cov <- coverage(metadata(microC_compts)$eigens, weight = 'eigen')[[1]]
-cov_df <- tibble(pos = cumsum(runLength(cov)), eigen = runValue(cov))
-p2 <- ggplot(cov_df, aes(x = pos, y = eigen)) + 
+eigen <- coverage(metadata(microC_compts)$eigens, weight = 'eigen')[[1]]
+eigen_df <- tibble(pos = cumsum(runLength(eigen)), eigen = runValue(eigen))
+p2 <- ggplot(eigen_df, aes(x = pos, y = eigen)) + 
     geom_area() + 
     theme_void() + 
     coord_cartesian(expand = FALSE) + 
@@ -147,7 +155,7 @@ pairwise eigenvector quantiles and plotted in a 2D heatmap.
 
 ```{r}
 library(BiocParallel)
-bpparam <- MulticoreParam(workers = 1, progressbar = FALSE)
+bpparam <- SerialParam(progressbar = FALSE)
 plotSaddle(microC_compts, nbins = 25, BPPARAM = bpparam)
 ```
 
@@ -163,29 +171,267 @@ aspect of the saddle plot.
 
 ## Topological domains
 
-Topological domains (or Topologically Associating Domains, TADs, isolated neighborhoods, contact domains, ...)
+Topological *domains* (a.k.a. Topologically Associating Domains, TADs, isolated neighborhoods, contact domains, ...) refer to local chromosomal segments (e.b. roughly ≤ 1Mb in mammal genomes)
+which preferentially self-interact, in a constrained manner.  They are demarcated by 
+domain *boundaries*. 
+
+![](images/20230403090000.png){width=40%, fig-align="center"}
+
+They are generally conserved across cell types and species (@Schmitt2016Nov), typically 
+correlate with units of DNA replication (@Pope2014Nov), and could play 
+a role during development (@Stadhouders2019May). 
 
 ### Computing diamond insulation score
 
-```{r eval = FALSE}
-# - Compute insulation score
-hic <- refocus(hic, 'II:1-300000') |> 
-    zoom(resolution = 1000) |> 
-    getDiamondInsulation(window_size = 8000) |> 
-    getBorders()
-hic
+Several approaches exist to annotate topological domains (@Sefer2022Dec). Several packages in R implement some of these functionalities, e.g. `spectralTAD` or `TADcompare`. 
 
-# - Export insulation as bigwig track and borders as bed file
-rtracklayer::export(IRanges::coverage(metadata(hic)$insulation, weight = 'insulation'), 'insulation.bw')
-rtracklayer::export(topologicalFeatures(hic, 'borders'), 'borders.bed')
+`HiContacts` offers a simple `getDiamondInsulation` function which computes the 
+diamond insulation score (@Crane2015Jul). This score quantifies average interaction 
+frequency in an insulation window (of a certain `window_size`) sliding along 
+contact matrices at a chosen `resolution`. 
+
+```{r}
+# - Compute insulation score
+bpparam <- SerialParam(progressbar = FALSE)
+hic <- zoom(microC, 5000) |> 
+    refocus('chr17:60000001-83257441') |>
+    getDiamondInsulation(window_size = 100000, BPPARAM = bpparam) |> 
+    getBorders()
+
+hic
 ```
 
-### Annotating domain borders
+::: {.callout-note}
+## Note
 
+The `getDiamondInsulation` function can be parallelized over multiple 
+threads by specifying the Bioconductor generic `BPPARAM` argument. 
+:::
 
+::: {.callout-note}
+## Note
 
+`getDiamondInsulation()` is an endomorphism: it returns the original object, enriched with 
+two new pieces of information: 
 
+- A `borders` `topologicalFeatures`:
 
+```{r}
+topologicalFeatures(hic, "borders")
+```
+
+- The calculated `insulation` scores stored in `metadata`:
+
+```{r}
+metadata(hic)$insulation
+```
+:::
+
+### Exporting insulation scores tracks
+
+To save the diamond insulation scores (as a `bigwig` file) and the borders (as a `bed` 
+file), the `export` function can be used: 
+
+```{r}
+coverage(metadata(hic)$insulation, weight = 'insulation') |> export('microC_insulation.bw')
+topologicalFeatures(hic, "borders") |> export('microC_borders.bed')
+```
+
+### Visualizing chromatin domains
+
+Insulation tracks should be visualized in a dedicated genome browser.  
+That being said, it is possible to visualize a genome track in R besides the 
+matching Hi-C contact matrix. 
+
+```{r}
+#| fig-asp: 1
+hic <- zoom(hic, 100000)
+p1 <- plotMatrix(
+    hic, 
+    use.scores = 'balanced', 
+    limits = c(-3.5, -1),
+    borders = topologicalFeatures(hic, "borders"),
+    caption = FALSE
+)
+insulation <- coverage(metadata(hic)$insulation, weight = 'insulation')[[1]]
+insulation_df <- tibble(pos = cumsum(runLength(insulation)), insulation = runValue(insulation))
+p2 <- ggplot(insulation_df, aes(x = pos, y = insulation)) + 
+    geom_area() + 
+    theme_void() + 
+    coord_cartesian(expand = FALSE) + 
+    labs(x = "Genomic position", y = "Diamond insulation score")
+wrap_plots(p1, p2, ncol = 1, heights = c(10, 1))
+```
+
+Local minima in the diamond insulation score displayed below the Hi-C contact 
+matrix are identified using the `getBorders()` function, which automatically estimates 
+a minimum threshold. These local minima correspond to borders and are visually 
+depicted on the Hi-C map by blue diamonds. 
 
 ## Chromatin loops 
 
+### `chromosight`
+
+Chromatin loops, dots, or contacts, refer to a strong increase of interaction frequency 
+between a pair of two genomic loci. They correspond to focal "dots" on a Hi-C map. 
+Relying on computer vision algorithms, `chromosight` uses this property to 
+annotate chromatin loops in a Hi-C map (@MattheyDoret2020Nov). `chromosight` is 
+a standalone `python` package and is made available in R through the `HiCool`-managed 
+conda environment with the `getLoops()` function. 
+
+#### Identifying loops
+
+```{r}
+#| echo: false
+#| eval: false
+#| results: "hide"
+#| message: false
+#| warning: false
+# microC <- import('/home/rsg/.cache/R/fourDNData/4d434d8538a0_4DNFI9FVHJZQ.mcool', resolution = 5000, focus = 'chr17:63000001-63500000')
+```
+
+```{r eval = FALSE}
+hic <- HiCool::getLoops(microC, resolution = 5000)
+
+hic
+## `HiCExperiment` object with 917,156 contacts over 100 regions
+## -------
+## fileName: "/home/rsg/.cache/R/fourDNData/4d434d8538a0_4DNFI9FVHJZQ.mcool"
+## focus: "chr17:63,000,001-63,500,000"
+## resolutions(13): 1000 2000 ... 5000000 10000000
+## active resolution: 5000
+## interactions: 5047
+## scores(2): count balanced
+## topologicalFeatures: compartments(0) borders(0) loops(66411) viewpoints(0)
+## pairsFile: N/A
+## metadata(1): chromosight_args
+```
+
+::: {.callout-note}
+## Note
+
+`getLoops()` is an endomorphism: it returns the original object, enriched with 
+two new pieces of information: 
+
+- A `loops` `topologicalFeatures`:
+
+```{r eval = FALSE}
+topologicalFeatures(hic, "loops")
+## GInteractions object with 66411 interactions and 5 metadata columns:
+##           seqnames1           ranges1     seqnames2           ranges2 |   bin_id1   bin_id2     score      ## pvalue    qvalue
+##               <Rle>         <IRanges>         <Rle>         <IRanges> | <numeric> <numeric> <numeric>   ## <numeric> <numeric>
+##       [1]      chr1     775001-780000 ---      chr1     850001-855000 |       155       170  0.334586 2.## 15995e-05 2.162e-05
+##       [2]      chr1     775001-780000 ---      chr1     865001-870000 |       155       173  0.403336 1.## 62900e-07 1.669e-07
+##       [3]      chr1     865001-870000 ---      chr1     890001-895000 |       173       178  0.337344 1.## 91400e-07 1.957e-07
+##       [4]      chr1     910001-915000 ---      chr1     955001-960000 |       182       191  0.639725 0.## 00000e+00 0.000e+00
+##       [5]      chr1     910001-915000 ---      chr1   1055001-1060000 |       182       211  0.521699 0.## 00000e+00 0.000e+00
+##       ...       ...               ... ...       ...               ... .       ...       ...       ...       ##   ...       ...
+##   [66407]      chrY 19570001-19575000 ---      chrY 19720001-19725000 |    610133    610163  0.315529    3.## 30e-08  3.55e-08
+##   [66408]      chrY 19705001-19710000 ---      chrY 19730001-19735000 |    610160    610165  0.708753    0.## 00e+00  0.00e+00
+##   [66409]      chrY 19765001-19770000 ---      chrY 19800001-19805000 |    610172    610179  0.373635    1.## 10e-09  1.40e-09
+##   [66410]      chrY 20555001-20560000 ---      chrY 20645001-20650000 |    610330    610348  0.603308    0.## 00e+00  0.00e+00
+##   [66411]      chrY 21015001-21020000 ---      chrY 21055001-21060000 |    610422    610430  0.394614    9.## 12e-08  9.45e-08
+##   -------
+##   regions: 84171 ranges and 0 metadata columns
+##   seqinfo: 24 sequences from an unspecified genome; no seqlengths
+```
+
+- The arguments used by `chromosight`, stored in `metadata`:
+
+```{r eval = FALSE}
+metadata(hic)$chromosight_args
+## $`--pattern`
+## [1] "loops"
+## 
+## $`--dump`
+## [1] "/data/.cache/R//RtmpSaRwiZ"
+## 
+## $`--inter`
+## [1] FALSE
+## 
+## $`--iterations`
+## [1] "auto"
+## 
+## $`--kernel-config`
+## NULL
+## 
+## $`--perc-zero`
+## [1] "auto"
+## 
+## $`--perc-undetected`
+## [1] "auto"
+## 
+## $`--tsvd`
+## [1] FALSE
+## 
+## $`--win-fmt`
+## [1] "json"
+## 
+## $`--win-size`
+## [1] "auto"
+## 
+## $`--no-plotting`
+## [1] TRUE
+## 
+## $`--smooth-trend`
+## [1] FALSE
+## 
+## $`--norm`
+## [1] "auto"
+## 
+## $`<contact_map>`
+## [1] "/home/rsg/.cache/R/fourDNData/4d434d8538a0_4DNFI9FVHJZQ.mcool::/resolutions/5000"
+## 
+## $`--max-dist`
+## [1] "auto"
+## 
+## $`--min-dist`
+## [1] "auto"
+## 
+## $`--min-separation`
+## [1] "auto"
+## 
+## $`--n-mads`
+## [1] 5
+## 
+## $`<prefix>`
+## [1] "chromosight/chromo"
+## 
+## $`--pearson`
+## [1] "auto"
+## 
+## $`--subsample`
+## [1] "no"
+## 
+## $`--threads`
+## [1] 1
+```
+:::
+
+#### Exporting chromatin loops
+
+```{r eval = FALSE}
+loops <- topologicalFeatures(hic, "loops")
+loops <- loops[loops$score >= 0.4 & loops$qvalue <= 1e-6]
+GenomicInteractions::export.bedpe(loops, 'loops.bedpe')
+```
+
+#### Visualizing chromatin loops
+
+```{r eval = FALSE}
+plotMatrix(
+    refocus(hic, 'chr17:62500001-63500000') |> zoom(5000), 
+    loops = loops,
+    limits = c(-4, -1.2),
+    caption = FALSE
+)
+```
+
+![](images/20230403134800.png)
+
+### Other R packages
+
+A number of other R packages have been developed to identify focal chromatin loops, 
+notably `fitHiC` (@Ay2014Feb), `GOTHiC` (@Mifsud2017Apr) or `idr2d` (@Krismer2020Apr). 
+Each fits a slightly different purpose, and we encourage the end user to read
+companion publications. 

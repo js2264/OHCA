@@ -3,8 +3,11 @@
 *rds
 *rda
 *bw
+*bed
+*bedpe
 *gff3
 *fastq*
+chromosight 
 docs
 _bookdown_files
 *_cache
