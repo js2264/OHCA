@@ -1,7 +1,10 @@
 *pdf
 *bw
 *rds
-data
+*rda
+*bw
+*gff3
+*fastq*
 docs
 _bookdown_files
 *_cache

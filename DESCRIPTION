@@ -13,6 +13,7 @@ License: MIT + file LICENSE
 URL: https://github.com/js2264/OHCA
 BugReports: https://github.com/js2264/OHCA/issues
 Depends:
+    R (>= 4.3),
     HiCExperiment,
     HiCool,
     HiContacts,
@@ -22,8 +23,10 @@ Depends:
 Imports:
     hicrep,
     multiHiCcompare,
+    BSgenome.Hsapiens.UCSC.hg38, 
     ggbio,
     cowplot,
+    patchwork, 
     fs,
     rebook,
     quarto,

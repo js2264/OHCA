@@ -5,28 +5,187 @@ bibliography: bibliography.bib
 
 # Finding topological features in Hi-C 
 
+::: {.callout-warning}
+## Page under construction
+A number of sections in this page still need to be completed. 
+:::
+
 ```{r}
 #| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
 source("_common.R")
+library(dplyr)
+library(ggplot2)
+library(GenomicRanges)
+library(InteractionSet)
+library(HiCExperiment)
+library(HiContactsData)
+library(fourDNData)
+library(HiContacts)
+library(rtracklayer)
+library(OHCA)
 ```
+
+::: {.callout-note}
+## Aims
+This chapter focuses on the annotation of topological features from Hi-C contact 
+maps, including: 
+
+- Chromosome compartments 
+- Topologically associating domains
+- Stable chromatin loops
+:::
 
 ## Chromosome compartments 
 
-### Computing eigenvectors
+### Importing Hi-C data
+
+To investigate chromosome compartments, we will fetch a contact matrix generated 
+from a micro-C experiment (from @Krietenstein2020May). A subset of the genome-wide
+dataset is provided in the `OHCA` package. It contains intra-chromosomal 
+interactions within `chr17`, binned at either `250000` or `5000` bp.
 
 ```{r}
-
+library(HiCExperiment)
+library(OHCA)
+cf <- fs::path_package('OHCA', 'extdata', 'chr17.mcool')
+microC <- import(cf, resolution = 250000)
+microC
+seqinfo(microC)
 ```
 
 ### Annotating A/B compartments
 
+The `getCompartments()` function performs several internal operations: 
+
+1. Obtains cis interactions per chromosome
+2. Computes O/E contact matrix scores
+3. Computes 3 first eigenvectors of this Hi-C contact matrix 
+4. Normalizes eigenvectors
+5. Picks the eigenvector that has the greatest absolute correlation with a phasing track (e.g. a GC% track automatically computed from a genome reference sequence, or a gene density track)
+6. Signs this eigenvector so that positive values represent the A compartment
+
+```{r}
+phasing_track <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38
+microC_compts <- getCompartments(microC, genome = phasing_track)
+
+microC_compts
+```
+
+::: {.callout-note}
+## Note
+
+`getCompartments()` is an endomorphism: it returns the original object, enriched with 
+two new pieces of information: 
+
+- A `compartments` `topologicalFeatures`:
+
+```{r}
+topologicalFeatures(microC_compts, "compartments")
+```
+
+- The calculated eigenvectors stored in `metadata`:
+
+```{r}
+metadata(microC_compts)$eigens
+```
+:::
+
+### Exporting compartment tracks
+
+To save the eigenvector (as a `bigwig` file) and the compartments(as a `gff` 
+file), the `export` function can be used: 
+
+```{r}
+library(GenomicRanges)
+coverage(metadata(microC_compts)$eigens, weight = 'eigen') |> export('microC_eigen.bw')
+topologicalFeatures(microC_compts, "compartments") |> export('microC_compartments.gff3')
+```
+
+### Visualizing compartment tracks
+
+Compartment tracks should be visualized in a dedicated genome browser, with the 
+phasing track loaded as well, to ensure they are phased accordingly.  
+That being said, it is possible to visualize a genome track in R besides the 
+matching Hi-C contact matrix. 
+
+```{r}
+#| fig-asp: 1
+library(ggplot2)
+library(patchwork)
+microC <- autocorrelate(microC)
+p1 <- plotMatrix(microC, use.scores = 'autocorrelated', scale = 'linear', limits = c(-1, 1), caption = FALSE)
+cov <- coverage(metadata(microC_compts)$eigens, weight = 'eigen')[[1]]
+cov_df <- tibble(pos = cumsum(runLength(cov)), eigen = runValue(cov))
+p2 <- ggplot(cov_df, aes(x = pos, y = eigen)) + 
+    geom_area() + 
+    theme_void() + 
+    coord_cartesian(expand = FALSE) + 
+    labs(x = "Genomic position", y = "Eigenvector value")
+wrap_plots(p1, p2, ncol = 1, heights = c(10, 1))
+```
+
+Here, we clearly note the concordance between the Hi-C correlation matrix, highlighting 
+correlated interactions between pairs of genomic segments, and the eigenvector 
+representing chromosome segmentation into 2 compartments: A (for positive values)
+and B (for negative values). 
+
 ### Saddle plots
+
+Saddle plots are typically used to measure the `observed` vs. `expected` 
+interaction scores within or between genomic loci belonging to A and B 
+compartments. 
+
+Non-overlapping genomic windows are grouped in `nbins` quantiles 
+(typically between 10 and 50 quantiles) according to their A/B compartment 
+eigenvector value, from lowest eigenvector values (i.e. strongest B 
+compartments) to highest eigenvector values (i.e. strongest A compartments). 
+The average `observed` vs. `expected` interaction scores are then computed for 
+pairwise eigenvector quantiles and plotted in a 2D heatmap. 
+
+```{r}
+library(BiocParallel)
+bpparam <- MulticoreParam(workers = 1, progressbar = FALSE)
+plotSaddle(microC_compts, nbins = 25, BPPARAM = bpparam)
+```
+
+Here, the top-left small corner represents average O/E scores between strong B 
+compartments and the bottom-right larger corner represents average O/E scores 
+between strong A compartments.
+
+::: {.callout-note}
+## Note
+Only `chr17` interactions are contained in this dataset, explaining the grainy 
+aspect of the saddle plot. 
+:::
 
 ## Topological domains
 
+Topological domains (or Topologically Associating Domains, TADs, isolated neighborhoods, contact domains, ...)
+
 ### Computing diamond insulation score
 
+```{r eval = FALSE}
+# - Compute insulation score
+hic <- refocus(hic, 'II:1-300000') |> 
+    zoom(resolution = 1000) |> 
+    getDiamondInsulation(window_size = 8000) |> 
+    getBorders()
+hic
+
+# - Export insulation as bigwig track and borders as bed file
+rtracklayer::export(IRanges::coverage(metadata(hic)$insulation, weight = 'insulation'), 'insulation.bw')
+rtracklayer::export(topologicalFeatures(hic, 'borders'), 'borders.bed')
+```
+
 ### Annotating domain borders
+
+
+
+
+
 
 ## Chromatin loops 
 
