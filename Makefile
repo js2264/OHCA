@@ -1,5 +1,25 @@
 RCMD := Rscript -e
 
+.PHONY: setup
+setup: ## Install HiCExperiment & co packages with pak.
+	@echo "🚀 Installing OHCA package"
+	$(RCMD) 'install.packages("pak", repos = "https://r-lib.github.io/p/pak/devel/")'
+	$(RCMD) 'pak::pkg_install("js2264/HiCExperiment", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("js2264/HiCool", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("js2264/HiContacts", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("js2264/HiContactsData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("js2264/fourDNData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("js2264/DNAZooData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+
+.PHONY: install
+install: ## Install OHCA package and dependencies with pak.
+	@echo "🚀 Installing OHCA package"
+	$(RCMD) 'pak::pkg_install(".", ask = FALSE, upgrade = TRUE)'
+
+.PHONY: info
+info: ## list installed packages
+	$(RCMD) 'pkgs <- installed.packages()[,"Package"] ; sessioninfo::session_info(pkgs, include_base = TRUE)'
+
 .PHONY: render
 render: ## Render OHCA book
 	@echo "📖 Rendering OHCA book"
@@ -9,27 +29,11 @@ render: ## Render OHCA book
 serve: ## serve local static site
 	$(RCMD) 'servr::httd("docs", port = 4444)'
 
-.PHONY: info
-info: ## list installed packages
-	$(RCMD) 'pkgs <- installed.packages()[,"Package"] ; sessioninfo::session_info(pkgs, include_base = TRUE)'
-
 .PHONY: render-serve
 render-serve: ## Test rendering locally
 	@echo "📖 Rendering OHCA book locally"
 	quarto render --to html
 	$(RCMD) 'servr::httd("docs", port = 4444)'
-
-.PHONY: install
-install: ## Install OHCA package and dependencies with pak.
-	@echo "🚀 Installing OHCA package"
-	$(RCMD) 'install.packages("pak", repos = "https://r-lib.github.io/p/pak/devel/")'
-	$(RCMD) 'pak::pkg_install("js2264/HiCExperiment", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install("js2264/HiCool", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install("js2264/HiContacts", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install("js2264/HiContactsData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install("js2264/fourDNData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install("js2264/DNAZooData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install(".", ask = FALSE, upgrade = TRUE, dependencies = c("Depends", "Imports", "Suggests"))'
 
 .PHONY: deps
 deps: ## Install missing OHCA dependencies
