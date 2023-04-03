@@ -9,6 +9,10 @@ render: ## Render OHCA book
 serve: ## serve local static site
 	$(RCMD) 'servr::httd("docs", port = 4444)'
 
+.PHONY: info
+info: ## list installed packages
+	$(RCMD) 'pkgs <- installed.packages()[,"Package"] ; sessioninfo::session_info(pkgs, include_base = TRUE)'
+
 .PHONY: render-serve
 render-serve: ## Test rendering locally
 	@echo "📖 Rendering OHCA book locally"
@@ -25,12 +29,12 @@ install: ## Install OHCA package and dependencies with pak.
 	$(RCMD) 'pak::pkg_install("js2264/HiContactsData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
 	$(RCMD) 'pak::pkg_install("js2264/fourDNData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
 	$(RCMD) 'pak::pkg_install("js2264/DNAZooData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install(".", ask = FALSE)'
+	$(RCMD) 'pak::pkg_install(".", ask = FALSE, upgrade = TRUE, dependencies = c("Depends", "Imports", "Suggests"))'
 
 .PHONY: deps
 deps: ## Install missing OHCA dependencies
 	@echo "🔗 Installing missing OHCA dependencies"
-	$(RCMD) 'devtools::install_dev_deps(".", dependencies = c("Depends", "Imports"))'
+	$(RCMD) 'devtools::install_dev_deps(".", dependencies = c("Depends", "Imports", "Suggests"))'
 
 .PHONY: git
 git: ## Automated commit and pushing to github rpeo

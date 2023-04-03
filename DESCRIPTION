@@ -21,6 +21,7 @@ Depends:
     DNAZooData,
     fourDNData
 Imports:
+    strawr, 
     hicrep,
     multiHiCcompare,
     BSgenome.Hsapiens.UCSC.hg38, 
