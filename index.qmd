@@ -21,10 +21,6 @@ starts with key concepts important for the analysis of chromatin conformation ca
 presents `Bioconductor` tools that can be leveraged to process, analyze, explore and visualize 
 Hi-C data. 
 
-::: {.callout-caution}
-This project is currently under active development. Several sections of this book may not be accurate, as the packages introduced in this book are still maturing. 
-:::
-
 ::: {.content-hidden when-format="pdf"}
 
 # Table of contents {-}
