@@ -1,5 +1,5 @@
 # Pull a base image from js2264/hicexperiment (should already contain most needed deps)
-FROM js2264/hicexperiment
+FROM bioconductor/bioconductor_docker:devel
 
 ARG VERSION
 

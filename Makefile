@@ -2,7 +2,7 @@ RCMD := Rscript -e
 
 .PHONY: setup
 setup: ## Install HiCExperiment & co packages with pak.
-	@echo "🚀 Installing OHCA package"
+	@echo "📦 Installing OHCA core packages"
 	$(RCMD) 'install.packages("pak", repos = "https://r-lib.github.io/p/pak/devel/")'
 	$(RCMD) 'pak::pkg_install("js2264/HiCExperiment", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
 	$(RCMD) 'pak::pkg_install("js2264/HiCool", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
@@ -13,11 +13,12 @@ setup: ## Install HiCExperiment & co packages with pak.
 
 .PHONY: install
 install: ## Install OHCA package and dependencies with pak.
-	@echo "🚀 Installing OHCA package"
+	@echo "🚀 Installing OHCA book package"
 	$(RCMD) 'pak::pkg_install(".", ask = FALSE, upgrade = TRUE)'
 
 .PHONY: info
 info: ## list installed packages
+	@echo "🗂 Listing installed packages"
 	$(RCMD) 'pkgs <- installed.packages()[,"Package"] ; sessioninfo::session_info(pkgs, include_base = TRUE)'
 
 .PHONY: render
