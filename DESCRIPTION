@@ -1,7 +1,7 @@
 Package: OHCA
 Title: Orchestrating Hi-C analysis with Bioconductor
-Version: 0.98.1
-Date: 2023-02-13
+Version: 1.0.0
+Date: 2023-04-14
 Authors@R:
     c(person(given = "Jacques",
            family = "Serizay",
