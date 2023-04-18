@@ -413,6 +413,30 @@ GenomicInteractions::export.bedpe(loops, 'loops.bedpe')
 
 #### Visualizing chromatin loops
 
+::: {.callout-tip}
+## Chromosight users
+
+If you are using `chromosight` directly from the terminal (i.e. outside `R`), 
+you can import the annotated loops in `R` as follows: 
+
+```{r eval = FALSE}
+df <- readr::read_tsv("...")
+loops <- InteractionSet::GInteractions(
+    anchor1 = GenomicRanges::GRanges(
+        df$chrom1, IRanges::IRanges(df$start1+1, df$end1)
+    ),
+    anchor2 = GenomicRanges::GRanges(
+        df$chrom2, IRanges::IRanges(df$start2+1, df$end2)
+    ),
+    bin_id1 = df$bin1, 
+    bin_id2 = df$bin2, 
+    score = df$score, 
+    pvalue = df$pvalue, 
+    qvalue = df$qvalue
+)
+```
+:::
+
 ```{r eval = FALSE}
 plotMatrix(
     refocus(hic, 'chr17:62500001-63500000') |> zoom(5000), 
