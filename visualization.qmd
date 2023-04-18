@@ -213,6 +213,7 @@ which we imported interactions from.
 
 ```{r}
 library(rtracklayer)
+library(InteractionSet)
 loops <- system.file('extdata', 'S288C-loops.bedpe', package = 'HiCExperiment') |> 
     import() |> 
     makeGInteractionsFromGRangesPairs()
