@@ -61,6 +61,8 @@ This encompasses:
 - Merging multiple Hi-C maps together
 - Comparing two Hi-C maps to each other
 
+![](images/20230421134800.png)
+
 ::: {.callout-note}
 ## Note
 - All the functions described in this chapter are **endomorphisms**: they 

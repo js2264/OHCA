@@ -51,7 +51,7 @@ This book is divided in three parts:
 
 :::
 
-# Requirements {-}
+# Installation & requirements {-}
 
 ## General audience
 
@@ -60,12 +60,10 @@ For this reason, a significant portion of this book consists of executable R cod
 To be able to reproduce the examples demonstrated in this book and go further in the analysis of 
 *your **real** datasets*, you will need to rely on several dependencies. 
 
-- The most important dependency is `R` itself! Make sure you have `R >= 4.3`. You can check that by typing `version` in an R console. If you do not have `R >= 4.3` installed, you will need to update your `R` version, as most extra dependencies 
+- `R >= 4.3` is required. You can check that by typing `version` in an R console or in RStudio. If you do not have `R >= 4.3` installed, you will need to update your `R` version, as most extra dependencies 
 will require `R >= 4.3`. 
 
-- `Bioconductor >= 3.17` is also required. You can check whether `Bioconductor` is available and its version in `R` by 
-typing `BiocManager::version()`. If you do not have `BiocManager` >= 3.17 installed, you will need to update it 
-as follows: 
+- `Bioconductor >= 3.17` is also required. You can check whether `Bioconductor` is available and its version in `R` by typing `BiocManager::version()`. If you do not have `BiocManager` >= 3.17 installed, you will need to update it as follows: 
 
 ```{r eval = FALSE}
 if (!require("BiocManager", quietly = TRUE))
