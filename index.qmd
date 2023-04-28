@@ -13,13 +13,13 @@ source("_common.R")
 .gh_url <- file.path('https://github.com', rmarkdown::metadata[['github-repo']])
 ```
 
-`r rebook::openingDetails(Copyright='J. Serizay', Source=.gh_url)`
-
 This is the landing page of the **"Orchestrating Hi-C analysis with Bioconductor"** 
-book. **The primary aim of this book is to introduce the `R` user to Hi-C analysis**. It 
-starts with key concepts important for the analysis of chromatin conformation capture and then 
+book. **The primary aim of this book is to introduce the `R` user to Hi-C analysis**. This 
+book starts with key concepts important for the analysis of chromatin conformation capture and then 
 presents `Bioconductor` tools that can be leveraged to process, analyze, explore and visualize 
 Hi-C data. 
+
+`r rebook::openingDetails(Copyright='J. Serizay', Source=.gh_url)`
 
 ::: {.content-hidden when-format="pdf"}
 
@@ -60,8 +60,60 @@ For this reason, a significant portion of this book consists of executable R cod
 To be able to reproduce the examples demonstrated in this book and go further in the analysis of 
 *your **real** datasets*, you will need to rely on several dependencies. 
 
-- `R >= 4.3` is required. You can check that by typing `version` in an R console or in RStudio. If you do not have `R >= 4.3` installed, you will need to update your `R` version, as most extra dependencies 
+- `R >= 4.3` is required. You can check R version by typing `version` in an R console or in RStudio. 
+If you do not have `R >= 4.3` installed, you will need to update your `R` version, as most extra dependencies 
 will require `R >= 4.3`. 
+
+::: {.callout-note}
+## Installing R 4.3 on Linux (Ubuntu 22.04)
+Detailed instructions are available [here](https://github.com/js2264/setup_ubuntu)
+
+To install pre-compiled version of `R 4.3.0`: 
+
+```{sh eval = FALSE}
+# This is adapted from Posit (https://docs.posit.co/resources/install-r/)
+export R_VERSION=4.3.0
+
+# Install curl and gdebi-core
+sudo apt update -qq
+sudo apt install curl gdebi-core -y
+
+# Fetching the `.deb` install file from Posit repository
+curl -O https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${R_VERSION}_1_amd64.deb
+
+# Install R
+sudo gdebi r-${R_VERSION}_1_amd64.deb --non-interactive -q
+
+# Optional: create a symlink to add R to your PATH
+sudo ln -s /opt/R/${R_VERSION}/bin/R /usr/local/bin/R
+```
+
+If you have some issues when installing the Hi-C packages listed below, you 
+may need to install the following system libraries: 
+
+```{sh eval = FALSE}
+sudo apt update -qq
+sudo apt install -y \
+    automake make cmake fort77 gfortran \
+    bzip2 unzip ftp build-essential \
+    libc6 libreadline-dev \
+    libpng-dev libjpeg-dev libtiff-dev \
+    libx11-dev libxt-dev x11-common \
+    libharfbuzz-dev libfribidi-dev \
+    libfreetype6-dev libfontconfig1-dev \
+    libbz2-dev liblzma-dev libtool \
+    libxml2 libxml2-dev \
+    libzstd-dev zlib1g-dev \
+    libdb-dev libglu1-mesa-dev \
+    libncurses5-dev libghc-zlib-dev libncurses-dev \
+    libpcre3-dev libxml2-dev libblas-dev libzmq3-dev \
+    libssl-dev libcurl4-openssl-dev \
+    libgsl-dev libeigen3-dev libboost-all-dev \
+    libgtk2.0-dev xvfb xauth xfonts-base apt-transport-https \
+    libhdf5-dev libudunits2-dev libgdal-dev libgeos-dev \
+    libproj-dev libnode-dev libmagick++-dev
+```
+:::
 
 - `Bioconductor >= 3.17` is also required. You can check whether `Bioconductor` is available and its version in `R` by typing `BiocManager::version()`. If you do not have `BiocManager` >= 3.17 installed, you will need to update it as follows: 
 
