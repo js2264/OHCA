@@ -61,7 +61,7 @@ This encompasses:
 - Merging multiple Hi-C maps together
 - Comparing two Hi-C maps to each other
 
-![](images/20230421134800.png)
+![](images/20230421134800.jpg)
 
 ::: {.callout-note}
 ## Note
@@ -133,7 +133,7 @@ visualize the newly computed `scores`. In this example, `ICE` scores
 should be nearly identical to `balanced` scores, which were originally imported 
 from the disk-stored contact matrix. 
 
-:::{.column-page}
+:::{.column-body-outset-right}
 ```{r out.width = '100%', fig.asp = .33}
 patchwork::wrap_plots(
     plotMatrix(normalized_hic, use.scores = 'count', caption = FALSE),
@@ -180,7 +180,7 @@ The `interactions` themselves are unmodified.
 
 Topological features will be visually more prominent in the O/E `detrended` Hi-C map. 
 
-:::{.column-page}
+:::{.column-page-right}
 ```{r out.width = '100%', fig.asp = .33}
 patchwork::wrap_plots(
     plotMatrix(detrended_hic, use.scores = 'balanced', scale = 'log10', limits = c(-3.5, -1.2), caption = FALSE),
@@ -276,7 +276,7 @@ using a window, whose width is provided with the `focal.size` argument. This
 results in a smoother Hi-C heatmap, effectively removing the "speckles" 
 observed at longer range. 
 
-:::{.column-page}
+:::{.column-page-right}
 ```{r out.width = '100%', fig.asp = .33}
 library(InteractionSet)
 loops <- system.file('extdata', 'S288C-loops.bedpe', package = 'HiCExperiment') |> 

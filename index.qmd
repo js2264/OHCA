@@ -65,10 +65,10 @@ If you do not have `R >= 4.3` installed, you will need to update your `R` versio
 will require `R >= 4.3`. 
 
 ::: {.callout-note}
-## Installing R 4.3 on Linux (Ubuntu 22.04)
-Detailed instructions are available [here](https://github.com/js2264/setup_ubuntu)
+Detailed instructions are available [here](https://github.com/js2264/setup_ubuntu) to 
+install `R 4.3` on a Linux machine (Ubuntu 22.04). 
 
-To install pre-compiled version of `R 4.3.0`: 
+Briefly, to install pre-compiled version of `R 4.3.0`: 
 
 ```{sh eval = FALSE}
 # This is adapted from Posit (https://docs.posit.co/resources/install-r/)

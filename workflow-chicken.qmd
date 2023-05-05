@@ -107,7 +107,7 @@ library(cowplot)
 plot_grid(plotlist = pl, nrow = 1)
 ```
 
-:::{.column-page}
+:::{.column-page-inset-right}
 ![](images/20230322181000.png)
 :::
 
@@ -181,7 +181,7 @@ plot_grid(
 )
 ```
 
-:::{.column-page}
+:::{.column-page-right}
 ![](images/20230324125800.png)
 :::
 
@@ -201,7 +201,7 @@ pl <- imap(hics, ~ plotSaddle(.x, nbins = 38, BPPARAM = bpparam) + ggtitle(.y))
 plot_grid(plotlist = pl, nrow = 1)
 ```
 
-:::{.column-page}
+:::{.column-page-right}
 ![](images/20230322181300.png)
 :::
 

@@ -246,7 +246,7 @@ v4C
 
 `ggplot2` can be used to visualize the 4C-like profile over multiple chromosomes.
 
-:::{.column-page}
+:::{.column-page-right}
 ```{r fig.asp = 0.7, out.width = '100%'}
 df <- as_tibble(v4C)
 ggplot(df, aes(x = center, y = score)) + 
@@ -277,7 +277,7 @@ plotScalogram(scalo |> filter(chr == 'II'), ylim = c(1e3, 1e5))
 Several scalograms can be plotted together to compare distance-dependent 
 contact frequencies along a given chromosome in different samples. 
 
-:::{.column-page}
+:::{.column-page-right}
 ```{r fig.asp = .4, out.width = '100%'}
 pairsFile(eco1_hic) <- eco1_pairsf
 eco1_scalo <- scalogram(eco1_hic) 
