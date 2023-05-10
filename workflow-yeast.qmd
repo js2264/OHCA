@@ -34,13 +34,13 @@ This chapter illustrates how to:
 ## Datasets
 We leverage seven yeast datasets in this notebook. They are all available from SRA: 
 
-- SRR8769554: WT yeast strain, G1 phase (rep1)
-- SRR10687276: WT yeast strain, G1 phase (rep12)
-- SRR8769549: WT yeast strain, G2/M phase (rep1)
-- SRR10687281: WT yeast strain, G2/M phase (rep12)
-- SRR8769551: *wpl1* mutant yeast strain, G2/M phase (rep1)
-- SRR10687278: *wpl1* mutant yeast strain, G2/M phase (rep2)
-- SRR8769555: *wpl1/eco1* mutant yeast strain, G2/M phase
+- `SRR8769554`: WT yeast strain, G1 phase (rep1)
+- `SRR10687276`: WT yeast strain, G1 phase (rep12)
+- `SRR8769549`: WT yeast strain, G2/M phase (rep1)
+- `SRR10687281`: WT yeast strain, G2/M phase (rep12)
+- `SRR8769551`: *wpl1* mutant yeast strain, G2/M phase (rep1)
+- `SRR10687278`: *wpl1* mutant yeast strain, G2/M phase (rep2)
+- `SRR8769555`: *wpl1/eco1* mutant yeast strain, G2/M phase
 :::
 
 ## Recovering data from SRA
