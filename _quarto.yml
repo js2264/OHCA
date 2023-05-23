@@ -35,6 +35,7 @@ book:
         - disseminating.qmd
         - workflow-yeast.qmd
         - workflow-chicken.qmd
+        - workflow-centros.qmd
         # - interoperability.qmd
 
 format:
