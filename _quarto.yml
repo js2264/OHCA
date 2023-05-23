@@ -19,6 +19,7 @@ book:
   repo-actions: [edit, issue]
   chapters:
     - index.qmd
+    - preamble.qmd
     - part: "Fundamentals concepts"
       chapters:
         - principles.qmd
