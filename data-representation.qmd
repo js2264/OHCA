@@ -51,9 +51,9 @@ to get a visual representation of these data structures.
 
 `GRanges` is a shorthand for `GenomicRanges`, a core class in `Bioconductor`. 
 This class is primarily used to describe genomic ranges of any nature, e.g. 
-sets of promoters, SNPs, chromatin loop amchors, .... 
+sets of promoters, SNPs, chromatin loop anchors, ....  
 The data structure has been published in the seminal 2015 publication by 
-`Bioconductor` (@Huber2015Feb). 
+the `Bioconductor` team (@Huber2015Feb). 
 
 ### `GRanges` fundamentals 
 
