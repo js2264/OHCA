@@ -50,7 +50,9 @@ to get a visual representation of these data structures.
 ## `GRanges` class
 
 `GRanges` is a shorthand for `GenomicRanges`, a core class in `Bioconductor`. 
-The data structure has been published in the fundamental 2015 publication by 
+This class is primarily used to describe genomic ranges of any nature, e.g. 
+sets of promoters, SNPs, chromatin loop amchors, .... 
+The data structure has been published in the seminal 2015 publication by 
 `Bioconductor` (@Huber2015Feb). 
 
 ### `GRanges` fundamentals 
@@ -491,21 +493,12 @@ gr_second <- GRanges(c(
 ```
 
 Because these two `GRanges` objects are of same length (5), one can "bind" them 
-together by using the `Pairs`function. This effectively associate with entry from 
-one `GRanges` to the entry aligned in the other `GRanges` objetc. 
-Each pair represents a set of two anchors of a single interaction.
-
-```{r}
-pairs <- Pairs(gr_first, gr_second)
-pairs
-```
-
-Finally, such `Pairs` object can be coerced into a set of genomic interactions 
-(`GInteractions`): 
+together by using the `GInteractions`function. This effectively associate each entry from 
+one `GRanges` to the entry aligned in the other `GRanges` object. 
 
 ```{r}
 library(InteractionSet)
-gi <- makeGInteractionsFromGRangesPairs(pairs)
+gi <- GInteractions(gr_first, gr_second)
 gi
 ```
 
@@ -633,7 +626,7 @@ swapAnchors(gi)
 ```
 
 ::: {.callout-warning}
-##Note
+## Note
 "Sorting" and "swapping" a `GInteractions` object are two 
 **entirely different actions**: 
 
