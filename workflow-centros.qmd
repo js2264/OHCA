@@ -112,7 +112,7 @@ ggplot(v4c_centro, aes(x = start, y = score, colour = sample)) +
 
 ![](images/20230523153300.png)
 
-## Plot aggregated 2D signal over all pairs of centromeres
+## Aggregated 2D signal over all pairs of centromeres
 
 We can start by computing all possible pairs of centromeres. 
 
@@ -172,9 +172,9 @@ cowplot::plot_grid(plotlist = aggr_maps, nrow = 1)
 
 ![](images/20230523180300.png)
 
-## Plot aggregated 1D interaction profile of centromeres 
+## Aggregated 1D interaction profile of centromeres 
 
-One can generalize the previous plot, by extracting the interaction profile 
+One can generalize the previous virtual 4C plot, by extracting the interaction profile 
 between all possible pairs of centromeres in each dataset. 
 
 ```{r eval = FALSE}

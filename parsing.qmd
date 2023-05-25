@@ -105,23 +105,27 @@ and **subsequently** subset interactions overlapping with a genomic locus
 of interest.
 
     1. With `subsetByOverlaps(<HiCExperiment>, ...)`
-    2. With `HiCExperiment["..."]`
+    2. With `<HiCExperiment>["..."]`
+
+![](images/20230525134200.png)
 :::
 
 ### Subsetting **before** import: with `focus`
 
-This topic has already been partly covered in the 
-[previous chapter](#customizing-the-import). To summarize, the `focus` argument 
-can be set when `import`ing a `ContactFile` in R, as follows: 
+Specifying a `focus` **when** importing a dataset in R 
+(i.e. `"Subset first, then parse"`) is generally the 
+recommended approach to import Hi-C data in R. 
+
+The `focus` argument can be set when `import`ing a `ContactFile` in R, as follows: 
 
 ```{r eval = FALSE}
 import(cf, focus = "...")
 ```
 
-**This ensures that only the needed data is parsed in R, reducing memory load and 
-accelerating the import.** Thus, this should be the preferred way of 
+This ensures that only the needed data is parsed in R, reducing memory load and 
+accelerating the import. Thus, this should be the preferred way of 
 parsing `HiCExperiment` data, as disk-stored contact matrices allow 
-efficient random access to indexed data.  
+**efficient random access to indexed data**.  
 
 `focus` can be any of the following string types:
 
@@ -133,7 +137,7 @@ efficient random access to indexed data.
 #   "II:300001-800000|V:1-500000"         --> import contacts between segments of two chromosomes
 ```
 
-::: {.callout-info collapse="true"}
+::: {.callout-important collapse="true"}
 ## More examples for import with `focus` argument 👇
 
 - Subsetting to a specific **on-diagonal** genomic location using standard UCSC coordinates query: 
@@ -194,11 +198,9 @@ refocus(hic, 'III')
 
 ### Subsetting **after** import
 
-While specifying a `focus` **when** importing a dataset in R 
-(`"Subset first, then parse"`) is generally the 
-recommended approach, it may sometimes be desirable to import a full dataset from
-disk and perform in-memory subsetting of the `HiCExperiment` 
-object (`"Parse first, then subset"`). **This is 
+It may sometimes be desirable to import a full dataset from
+disk first, and **only then** perform in-memory subsetting of the `HiCExperiment` 
+object (i.e. `"Parse first, then subset"`). **This is 
 for example necessary when the end user aims to investigate subsets of 
 interactions across a large number of different areas of a contact matrix.**    
 
@@ -268,7 +270,7 @@ with the `[` notation:
 #   c("II", "III", "IV")                  --> import contacts within and between several chromosomes
 ```
 
-::: {.callout-info collapse="true"}
+::: {.callout-important collapse="true"}
 ## More examples for subsetting with `[` 👇
 
 - Subsetting to a specific **on-diagonal** genomic location using standard UCSC coordinates query: 
