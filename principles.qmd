@@ -82,142 +82,6 @@ Notice how they bear the same name (first line): they form a pair. The second
 line corresponds to the sequence read by the sequencer, the third line is a single `+` separator, and the last line indicates the per-base sequencing quality following a nebulous cypher. 
 :::
 
-## Pre-processing Hi-C data
-
-### Processing workflow
-
-Fundamentally, the main steps performed to pre-process Hi-C are: 
-
-1. Separate read mapping
-2. Pairs parsing
-3. Pairs sorting
-4. Pairs filtering
-5. Pairs binning into a contact matrix
-6. Normalization of contact matrix and multi-resolution matrix generation
-
-![](images/20230303125432.png)
-
-In practice, a minimal workflow to pre-process Hi-C data is the following (adapted from @Open2C2023Jan): 
-
-```{sh eval = FALSE}
-## Note these fields have to be replaced by appropriate variables: 
-##    <index>
-##    <input.R1.fq.gz>
-##    <input.R2.fq.gz>
-##    <chromsizes.txt>
-##    <prefix>
-bwa mem2 -SP5M <index> <input.R1.fq.gz> <input.R2.fq.gz> \
-    | pairtools parse -c <chromsizes.txt> \
-    | pairtools sort \
-    | pairtools dedup \
-    | cooler cload pairs -c1 2 -p1 3 -c2 4 -p2 5 <chromsizes.txt>:10000 - <prefix>.cool
-cooler zoomify --balance --nproc 32 --resolutions 5000N --out <prefix>.mcool <prefix>.cool
-```
-
-Several pipelines have been developed to facilitate Hi-C data pre-processing. 
-A few of them stand out from the crowd: 
-
-- `nf-distiller`: a combination of an aligner + `pairtools` + `cooler`
-- `HiC-pro` (@Servant2015Dec)
-- `Juicer` (@Durand2016Jul)
-
-::: {.callout-note}
-For larger genomes (> 1Gb) with more than few tens of M of reads per fastq (e.g. > 100M), 
-we recommend pre-processing data on an HPC cluster. Aligners, pairs processing and matrix binning 
-can greatly benefit from parallelization over multiple CPUs (@Open2C2023Jan)).  
-To scale **up** data pre-processing, we recommend to rely on an efficient read 
-mapper such as `bwa`, followed by pairs parsing, sorting and deduplication with `pairtools` 
-and binning with `cooler`.  
-:::
-
-### hicstuff: lightweight Hi-C pipeline
-
-`hicstuff` is an integrated workflow to process Hi-C data. Some advantages 
-compared to solutions mentioned above are its simplicity, flexibilty and lightweight. 
-For shallow sequencing or Hi-C on smaller genomes, it efficiently parses fastq reads 
-and processes data into binned contact matrices with a single terminal command. 
-
-`hicstuff` provides both a command-line interface (`CLI`) and a python `API` to 
-process fastq reads into a binned contact matrix. 
-A processing pipeline can be launched using the standard command `pipeline` as follows: 
-
-```{sh eval = FALSE}
-## Note these fields have to be replaced by appropriate variables: 
-##    <hicstuff-options>
-##    <genome.fa>
-##    <input.R1.fq.gz>
-##    <input.R2.fq.gz>
-hicstuff pipeline \
-   <hicstuff-options> \
-   --genome <genome.fa> \
-   <input.R1.fq.gz> \
-   <input.R2.fq.gz>  
-```
-
-`hicstuff` documentation website is available 
-[here: https://hicstuff.readthedocs.io/](https://hicstuff.readthedocs.io/en/latest/) 
-to read more about available options and interal processing steps. 
-
-### HiCool: hicstuff within R
-
-`hicstuff` is available as a standalone (`conda install -c bioconda hicstuff` it!). 
-It is also shipped in an R package: `HiCool`. Thus, `HiCool` can process fastq files 
-directly within an R console.
-
-#### Executing HiCool
-
-To demonstrate this, we first fetch example `.fastq` files: 
-
-```{r fastqfiles, eval = FALSE}
-library(HiContactsData)
-r1 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R1')
-r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
-```
-
-We then load the `HiCool` library and execute the main `HiCool` function. 
-
-```{r hicool_run}
-library(HiCool)
-HiCool(
-    r1, 
-    r2, 
-    restriction = 'DpnII,HinfI', 
-    resolutions = c(4000, 8000, 16000), 
-    genome = 'R64-1-1', 
-    output = './HiCool/'
-)
-```
-
-::: {.callout-tip}
-## HiCool arguments 
-Several arguments can be passed to `HiCool` and some are worth mentioning them:   
-- `restriction`: (default: `"DpnII,HinfI"`)  
-- `resolutions`: (default: `NULL`, automatically inferring resolutions based on genome size)  
-- `iterative`: (default: `TRUE`)  
-- `filter`: (default: `TRUE`)  
-- `balancing_args`: (default: `" --cis-only --min-nnz 3 --mad-max 7 "`)  
-- `threads`: (default: `1L`)  
-:::
-
-Other `HiCool` arguments can be listed by checking `HiCool` documentation in R: `?HiCool::HiCool`. 
-
-#### HiCool outputs 
-
-We can check the generated output files placed in the `HiCool/` directory. 
-
-```{r}
-fs::dir_tree('HiCool/')
-```
-
-- The `*.pairs` and `*.mcool` files are the pairs and contact matrix files, respectively. **These are the output files the end-user is generally looking for.**
-- The `*.html` file is a report summarizing pairs numbers, filtering, etc...
-- The `*.log` file contains all output and error messages, as well as the full list of commands that have been executed to pre-process the input dataset. 
-- The `*.pdf` graphic files provide a visual representation of the distribution of informative/non-informative pairs. 
-
-::: {.callout-tip}
-All the files generated by a single `HiCool` pipeline execution contain the same 6-letter unique hash to make sure they are not overwritten if re-executing the same command. 
-:::
-
 ## Hi-C file formats
 
 Two important output files are typically generated during Hi-C data pre-processing: 
@@ -417,3 +281,140 @@ Moreover, parsing `.cool` files is possible using `HDF` standard APIs.
 The `.hic` format is another type of binarized, indexed and highly-compressed file (@Durand2016Jul). It can store virtually the same information than a `.cool` file. However, parsing `.hic` files is not as straightforward as `.cool` files, as it does not 
 rely on a generic file standard. Still, the `straw` library has been implemented in several computing languages 
 to facilitate parsing of `.hic` files (@Durand2016Jul). 
+
+## Pre-processing Hi-C data
+
+### Processing workflow
+
+Fundamentally, the main steps performed to pre-process Hi-C are: 
+
+1. Separate read mapping
+2. Pairs parsing
+3. Pairs sorting
+4. Pairs filtering
+5. Pairs binning into a contact matrix
+6. Normalization of contact matrix and multi-resolution matrix generation
+
+![](images/20230303125432.png)
+
+In practice, a minimal workflow to pre-process Hi-C data is the following (adapted from @Open2C2023Jan): 
+
+```{sh eval = FALSE}
+## Note these fields have to be replaced by appropriate variables: 
+##    <index>
+##    <input.R1.fq.gz>
+##    <input.R2.fq.gz>
+##    <chromsizes.txt>
+##    <prefix>
+bwa mem2 -SP5M <index> <input.R1.fq.gz> <input.R2.fq.gz> \
+    | pairtools parse -c <chromsizes.txt> \
+    | pairtools sort \
+    | pairtools dedup \
+    | cooler cload pairs -c1 2 -p1 3 -c2 4 -p2 5 <chromsizes.txt>:10000 - <prefix>.cool
+cooler zoomify --balance --nproc 32 --resolutions 5000N --out <prefix>.mcool <prefix>.cool
+```
+
+Several pipelines have been developed to facilitate Hi-C data pre-processing. 
+A few of them stand out from the crowd: 
+
+- `nf-distiller`: a combination of an aligner + `pairtools` + `cooler`
+- `HiC-pro` (@Servant2015Dec)
+- `Juicer` (@Durand2016Jul)
+
+::: {.callout-note}
+For larger genomes (> 1Gb) with more than few tens of M of reads per fastq (e.g. > 100M), 
+we recommend pre-processing data on an HPC cluster. Aligners, pairs processing and matrix binning 
+can greatly benefit from parallelization over multiple CPUs (@Open2C2023Jan)).  
+To scale **up** data pre-processing, we recommend to rely on an efficient read 
+mapper such as `bwa`, followed by pairs parsing, sorting and deduplication with `pairtools` 
+and binning with `cooler`.  
+:::
+
+### hicstuff: lightweight Hi-C pipeline
+
+`hicstuff` is an integrated workflow to process Hi-C data. Some advantages 
+compared to solutions mentioned above are its simplicity, flexibility and lightweight. 
+For shallow sequencing or Hi-C on smaller genomes, it efficiently parses fastq reads 
+and processes data into binned contact matrices with a single terminal command. 
+
+`hicstuff` provides both a command-line interface (`CLI`) and a python `API` to 
+process fastq reads into a binned contact matrix. 
+A processing pipeline can be launched using the standard command `pipeline` as follows: 
+
+```{sh eval = FALSE}
+## Note these fields have to be replaced by appropriate variables: 
+##    <hicstuff-options>
+##    <genome.fa>
+##    <input.R1.fq.gz>
+##    <input.R2.fq.gz>
+hicstuff pipeline \
+   <hicstuff-options> \
+   --genome <genome.fa> \
+   <input.R1.fq.gz> \
+   <input.R2.fq.gz>  
+```
+
+`hicstuff` documentation website is available 
+[here: https://hicstuff.readthedocs.io/](https://hicstuff.readthedocs.io/en/latest/) 
+to read more about available options and internal processing steps. 
+
+### HiCool: hicstuff within R
+
+`hicstuff` is available as a standalone (`conda install -c bioconda hicstuff` it!). 
+It is also shipped in an R package: `HiCool`. Thus, `HiCool` can process fastq files 
+directly within an R console.
+
+#### Executing HiCool
+
+To demonstrate this, we first fetch example `.fastq` files: 
+
+```{r fastqfiles, eval = FALSE}
+library(HiContactsData)
+r1 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R1')
+r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
+```
+
+We then load the `HiCool` library and execute the main `HiCool` function. 
+
+```{r hicool_run}
+library(HiCool)
+HiCool(
+    r1, 
+    r2, 
+    restriction = 'DpnII,HinfI', 
+    resolutions = c(4000, 8000, 16000), 
+    genome = 'R64-1-1', 
+    output = './HiCool/'
+)
+```
+
+::: {.callout-tip}
+## HiCool arguments 
+Several arguments can be passed to `HiCool` and some are worth mentioning them:   
+- `restriction`: (default: `"DpnII,HinfI"`)  
+- `resolutions`: (default: `NULL`, automatically inferring resolutions based on genome size)  
+- `iterative`: (default: `TRUE`)  
+- `filter`: (default: `TRUE`)  
+- `balancing_args`: (default: `" --cis-only --min-nnz 3 --mad-max 7 "`)  
+- `threads`: (default: `1L`)  
+:::
+
+Other `HiCool` arguments can be listed by checking `HiCool` documentation in R: `?HiCool::HiCool`. 
+
+#### HiCool outputs 
+
+We can check the generated output files placed in the `HiCool/` directory. 
+
+```{r}
+fs::dir_tree('HiCool/')
+```
+
+- The `*.pairs` and `*.mcool` files are the pairs and contact matrix files, respectively. **These are the output files the end-user is generally looking for.**
+- The `*.html` file is a report summarizing pairs numbers, filtering, etc...
+- The `*.log` file contains all output and error messages, as well as the full list of commands that have been executed to pre-process the input dataset. 
+- The `*.pdf` graphic files provide a visual representation of the distribution of informative/non-informative pairs. 
+
+::: {.callout-tip}
+All the files generated by a single `HiCool` pipeline execution contain the same 6-letter unique hash to make sure they are not overwritten if re-executing the same command. 
+:::
+
