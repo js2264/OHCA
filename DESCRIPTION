@@ -29,6 +29,7 @@ Imports:
     cowplot,
     patchwork, 
     fs,
+    knitr (<= 1.42),
     rebook,
     quarto,
     sessioninfo 
