@@ -92,23 +92,17 @@ hic
 
 ## Subsetting a contact matrix
 
-::: {.callout-tip}
-## TL;DR 
+![](images/20230525134200.png)
+
 Two entirely different approaches are possible to subset of a Hi-C contact matrix:
 
-- `"Subset first, then parse"`: leveraging random access to a **disk-stored** 
-contact matrix to **only parse interactions overlapping with a genomic locus 
-of interest**. This is done using `import(<ContactFile>, focus = "...")`.
+- **Subsetting before importing**: leveraging random access to a **disk-stored** 
+contact matrix to **only import interactions overlapping with a genomic locus 
+of interest**.
 
-- `"Parse first, then subset"`: parsing the **entire contact matrix** in memory, 
+- **Subsetting after importing**: parsing the **entire contact matrix** in memory, 
 and **subsequently** subset interactions overlapping with a genomic locus 
 of interest.
-
-    1. With `subsetByOverlaps(<HiCExperiment>, ...)`
-    2. With `<HiCExperiment>["..."]`
-
-![](images/20230525134200.png)
-:::
 
 ### Subsetting **before** import: with `focus`
 
