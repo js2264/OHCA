@@ -1,4 +1,4 @@
-# Pull a base image from js2264/hicexperiment (should already contain most needed deps)
+# Pull the base image from bioconductor/bioconductor_docker
 FROM bioconductor/bioconductor_docker:devel
 
 ARG VERSION
@@ -14,7 +14,10 @@ LABEL org.opencontainers.image.version ${VERSION}
 COPY . /opt/OHCA
 WORKDIR /opt/OHCA
 
+RUN make quarto
+RUN make info
 RUN make setup
+RUN make info
 RUN make install
 RUN make info
 RUN make render

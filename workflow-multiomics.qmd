@@ -1,0 +1,213 @@
+---
+reference-section-title: References
+bibliography: bibliography.bib
+---
+
+# Workflow 4: Multi-omics data visualization
+
+```{r}
+#| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
+source("_common.R")
+library(ggplot2)
+library(purrr)
+library(GenomicRanges)
+library(InteractionSet)
+library(HiCExperiment)
+library(HiContactsData)
+library(hicrep)
+library(multiHiCcompare)
+```
+
+::: {.callout-note}
+## Aims
+This chapter illustrates how to visualize a Hi-C matrix aligned with 
+a number of bigwig tracks. 
+:::
+
+::: {.callout-important}
+## Datasets
+We leverage several yeast datasets in this notebook, published from 
+[Piazza, Bordelet et al., Nat. Cell Biol. 2021](https://www.nature.com/articles/s41556-021-00783-x) 
+and . 
+
+  - A Hi-C experiment upon (Piazza et al.)
+  - A Scc1 ChIP-seq experiment upon (Piazza et al.)
+  - A stranded RNA-seq dataset from yeast in G2/M ()
+:::
+
+## Importing Hi-C data and plotting contact matrices
+
+```{r eval = FALSE}
+library(HiContacts)
+library(purrr)
+library(ggplot2)
+hics <- list(
+    'G1' = import('/home/rsg/repos/OHCA-data/S288c_G1.mcool', resolution = 4000),
+    'G2M' = import('/home/rsg/repos/OHCA-data/S288c_G2M.mcool', resolution = 4000)
+)
+imap(hics, ~ plotMatrix(
+    .x, use.scores = 'balanced', limits = c(-4, -1), caption = FALSE
+) + ggtitle(.y))
+```
+
+![](images/20230523141745.jpg)
+
+We can visually appreciate that inter-chromosomal interactions, notably 
+between centromeres, are less prominent in G2/M.
+
+## Checking P(s) and cis/trans interactions ratio
+
+```{r eval = FALSE}
+library(dplyr)
+pairs <- list(
+    'G1' = PairsFile('/home/rsg/repos/OHCA-data/S288c_G1.pairs'),
+    'G2M' = PairsFile('/home/rsg/repos/OHCA-data/S288c_G2M.pairs') 
+)
+ps <- imap_dfr(pairs, ~ distanceLaw(.x, by_chr = TRUE) |> 
+    mutate(sample = .y) 
+)
+plotPs(ps, aes(x = binned_distance, y = norm_p, group = interaction(sample, chr), color = sample)) + 
+    scale_color_manual(values = c('black', 'red'))
+plotPsSlope(ps, ggplot2::aes(x = binned_distance, y = slope, group = interaction(sample, chr), color = sample)) + 
+    scale_color_manual(values = c('black', 'red'))
+```
+
+![](images/20230523144800.png)
+
+This confirms that interactions in cells synchronized in G2/M are enriched 
+for 10-30kb-long interactions. 
+
+```{r eval = FALSE}
+ratios <- imap_dfr(hics, ~ cisTransRatio(.x) |> mutate(sample = .y))
+ggplot(ratios, aes(x = chr, y = trans_pct, fill = sample)) + 
+    geom_col() + 
+    labs(x = 'Chromosomes', y = "% of trans interactions") + 
+    scale_y_continuous(labels = scales::percent) + 
+    facet_grid(~sample)
+```
+
+![](images/20230523152700.png)
+
+We can also highlight that trans (inter-chromosomal) interactions are proportionally 
+decreasing in G2/M-synchronized cells. 
+
+## Centromere virtual 4C profiles
+
+```{r eval = FALSE}
+data(centros_yeast)
+v4c_centro <- imap_dfr(hics, ~ virtual4C(.x, resize(centros_yeast[2], 8000)) |> 
+    as_tibble() |> 
+    mutate(sample = .y) |> 
+    filter(seqnames == 'IV')
+) 
+ggplot(v4c_centro, aes(x = start, y = score, colour = sample)) +
+    geom_line() +
+    theme_bw() +
+    labs(
+        x = "chrIV position", 
+        y = "Contacts with chrII centromere", 
+        title = "Interaction profile of chrII centromere"
+    )
+```
+
+![](images/20230523153300.png)
+
+## Aggregated 2D signal over all pairs of centromeres
+
+We can start by computing all possible pairs of centromeres. 
+
+```{r eval = FALSE}
+centros_pairs <- lapply(1:length(centros_yeast), function(i) {
+    lapply(1:length(centros_yeast), function(j) {
+        S4Vectors::Pairs(centros_yeast[i], centros_yeast[j])
+    })
+}) |> 
+    do.call(c, args = _) |>
+    do.call(c, args = _) |> 
+    InteractionSet::makeGInteractionsFromGRangesPairs()
+centros_pairs <- centros_pairs[anchors(centros_pairs, 'first') != anchors(centros_pairs, 'second')]
+
+centros_pairs
+## GInteractions object with 240 interactions and 0 metadata columns:
+##         seqnames1       ranges1     seqnames2       ranges2
+##             <Rle>     <IRanges>         <Rle>     <IRanges>
+##     [1]         I 151583-151641 ---        II 238361-238419
+##     [2]         I 151583-151641 ---       III 114322-114380
+##     [3]         I 151583-151641 ---        IV 449879-449937
+##     [4]         I 151583-151641 ---         V 152522-152580
+##     [5]         I 151583-151641 ---        VI 147981-148039
+##     ...       ...           ... ...       ...           ...
+##   [236]       XVI 556255-556313 ---        XI 440229-440287
+##   [237]       XVI 556255-556313 ---       XII 151366-151424
+##   [238]       XVI 556255-556313 ---      XIII 268222-268280
+##   [239]       XVI 556255-556313 ---       XIV 628588-628646
+##   [240]       XVI 556255-556313 ---        XV 326897-326955
+##   -------
+##   regions: 16 ranges and 0 metadata columns
+##   seqinfo: 17 sequences (1 circular) from R64-1-1 genome
+```
+
+Then we can aggregate the Hi-C signal over each pair of centromeres.
+
+```{r eval = FALSE}
+aggr_maps <- purrr::imap(hics, ~ {
+    aggr <- aggregate(.x, centros_pairs, maxDistance = 1e999)
+    plotMatrix(
+        aggr, use.scores = 'balanced', limits = c(-5, -1), 
+        cmap = HiContacts::rainbowColors(), 
+        caption = FALSE
+    ) + ggtitle(.y)
+})
+## Going through preflight checklist...
+## Parsing the entire contact matrice as a sparse matrix...
+## Modeling distance decay...
+## Filtering for contacts within provided targets...
+## Going through preflight checklist...
+## Parsing the entire contact matrice as a sparse matrix...
+## Modeling distance decay...
+## Filtering for contacts within provided targets...
+
+cowplot::plot_grid(plotlist = aggr_maps, nrow = 1)
+```
+
+![](images/20230523180300.png)
+
+## Aggregated 1D interaction profile of centromeres 
+
+One can generalize the previous virtual 4C plot, by extracting the interaction profile 
+between all possible pairs of centromeres in each dataset. 
+
+```{r eval = FALSE}
+df <- map_dfr(1:{length(centros_yeast)-1}, function(i) {
+    centro1 <- resize(centros_yeast[i], fix = 'center', 8000)
+    map_dfr({i+1}:length(centros_yeast), function(j) {
+        centro2 <- resize(centros_yeast[j], fix = 'center', 80000)
+        gi <- GInteractions(centro1, centro2)
+        imap_dfr(hics, ~ .x[gi] |> 
+            interactions() |> 
+            as_tibble() |>
+            mutate(
+                sample = .y, 
+                center = center2 - start(resize(centro2, fix = 'center', 1))
+            ) |> 
+            select(sample, seqnames1, seqnames2, center, balanced)
+        )
+    })
+}) 
+p <- ggplot(df, aes(x = center/1e3, y = balanced)) + 
+    geom_line(aes(group = interaction(seqnames1, seqnames2)), alpha = 0.03, col = "black") + 
+    geom_smooth(col = "red", fill = "red") + 
+    theme_bw() + 
+    theme(legend.position = 'none') + 
+    labs(
+        x = "Distance from centromere (kb)", y = "Normalized interaction frequency", 
+        title = "Centromere pairwise interaction profiles"
+    ) +
+    facet_grid(~sample)
+```
+
+![](images/20230523180000.png)
+
