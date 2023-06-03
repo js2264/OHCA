@@ -33,6 +33,7 @@ We leverage two yeast datasets in this notebook.
 
 - One from a WT yeast strain in G1 phase
 - One from a WT yeast strain in G2/M phase
+
 :::
 
 ## Importing Hi-C data and plotting contact matrices

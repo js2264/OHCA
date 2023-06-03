@@ -3,7 +3,7 @@ reference-section-title: References
 bibliography: bibliography.bib
 ---
 
-# Access to public Hi-C data portals
+# Data gateways: accessing public Hi-C data portals
 
 ```{r}
 #| echo: false

@@ -28,6 +28,7 @@ This chapter illustrates how to:
 - Compute P(s) of several samples and compare them 
 - Compute distance-adjusted correlation between Hi-C datasets with `HiCRep`
 - Perform differential interaction analysis between Hi-C datasets with `multiHiCcompare`
+
 :::
 
 ::: {.callout-important}
@@ -41,6 +42,7 @@ We leverage seven yeast datasets in this notebook. They are all available from S
 - `SRR8769551`: *wpl1* mutant yeast strain, G2/M phase (rep1)
 - `SRR10687278`: *wpl1* mutant yeast strain, G2/M phase (rep2)
 - `SRR8769555`: *wpl1/eco1* mutant yeast strain, G2/M phase
+
 :::
 
 ## Recovering data from SRA

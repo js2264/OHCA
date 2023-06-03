@@ -52,6 +52,7 @@ library(OHCA)
 cf <- fs::path_package('OHCA', 'extdata', 'chr17.mcool')
 microC <- import(cf, resolution = 250000)
 microC
+
 seqinfo(microC)
 ```
 

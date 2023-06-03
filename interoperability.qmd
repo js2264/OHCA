@@ -3,39 +3,294 @@ reference-section-title: References
 bibliography: bibliography.bib
 ---
 
-# Interoperability with Hi-C analyses packages
+# Interoperability: using HiCExperiment with other R packages
+
+::: {.callout-note}
+## Aims
+
+This notebook illustrates how to use a range of popular Hi-C—related `R` packages with 
+`HiCExperiment` objects. Conversion to the following packages is 
+illustrated here: 
+
+- `hicrep`
+- `multiHiCcompare`
+- `TopDom`
+- `GOTHiC`
+<!-- - `HiCDOC` -->
+
+:::
 
 ```{r}
 #| echo: false
+#| results: "hide"
+#| message: false
+#| warning: false
 source("_common.R")
-```
+library(ggplot2)
+library(purrr)
+library(tidyverse)
+library(GenomicRanges)
+library(InteractionSet)
+library(HiCExperiment)
+library(HiContactsData)
+library(hicrep)
+library(multiHiCcompare)
 
-## Basic interoperability with Bioconductor 
-
-### Add topological features 
-
-```{r}
-
-```
-
-### Align tracks from `.bw` files 
-
-```{r}
-
+coolf_wt <- HiContactsData('yeast_wt', 'mcool')
+coolf_eco1 <- HiContactsData('yeast_eco1', 'mcool')
 ```
 
 ## HiCrep
 
+`hicrep` is a popular package to compute **stratum-adjusted correlations** between Hi-C datasets (@Yang2017Nov). 
+"Stratum" refers to the distance from the main diagonal: with increase distance from the main diagonal, 
+interactions of the DNA polymer are bound to decrease. `hicrep` computes a "per-stratum" correlation score and 
+computes a weighted average correlation for entire chromosomes. 
+
+::: {.callout-tip}
+### Installing `hicrep`
+
+`hicrep` package has been available from Bioconductor for many years but has 
+been withdrawn from their repositories at some point. You can always install 
+`hicrep` directly from its GitHub repository as follows: 
+
+```{r}
+remotes::install_github('TaoYang-dev/hicrep')
+```
+
+:::
+
+In order to use `hicrep`, we first need to create two `HiCExperiment` objects. 
+
+```{r eval = FALSE}
+library(HiCExperiment)
+library(HiContactsData)
+
+# ---- This downloads example `.mcool` and `.pairs` files and caches them locally 
+coolf_wt <- HiContactsData('yeast_wt', 'mcool')
+coolf_eco1 <- HiContactsData('yeast_eco1', 'mcool')
+```
+
+```{r}
+hic_wt <- import(coolf_wt, format = 'cool')
+hic_eco1 <- import(coolf_eco1, format = 'cool')
+```
+
+We can now run the main `get.scc` function from `hicrep`. The documentation 
+for this function is available from the console by typing `?hicrep::get.scc`. 
+More information is also available from the [GitHub page](https://github.com/TaoYang-dev/hicrep#compute-reproducibility-score-using-hicrep). It informs the end user that 
+the input for this function should be two intra-chromosomal Hi-C **raw count** matrices 
+in square (optionally sparse) format. 
+
+```{r}
+hic_wt
+
+as.matrix(hic_wt["IV"], use.scores = 'count')[1:10, 1:10]
+
+library(hicrep)
+scc <- get.scc(
+    as.matrix(hic_wt["IV"], use.scores = 'count'), 
+    as.matrix(hic_eco1["IV"], use.scores = 'count'), 
+    resol = 1000, h = 25, lbr = 5000, ubr = 50000
+)
+scc
+
+scc$scc
+```
+
 ## multiHiCcompare
+
+The `multiHiCcompare` package provides functions for joint 
+normalization and difference detection in multiple Hi-C datasets (@Stansfield2019Sep). 
+According to its excerpt, to perform differential interaction analysis, 
+it requires a `list` of **raw counts** for different 
+samples/replicates, stored in **data frames with four columns** (`chr`, `start1`, `start2`, `count`).  
+Manipulate a `HiCExperiment` object to coerce it into such structure is straightforward. 
+
+```{r}
+library(dplyr)
+library(tidyr)
+hics <- list(
+    "wt" = import(coolf_wt, format = 'cool'),
+    "eco1" = import(coolf_eco1, format = 'cool')
+)
+hics_list <- map(hics, ~ .x['XI'] |> 
+    as.data.frame() |>
+    mutate(chr = 1) |> 
+    relocate(chr) |>
+    select(chr, start1, start2, count)
+)
+head(hics_list[[1]])
+```
+
+Once this list is generated, the classical `multiHiCcompare` workflow can be applied: 
+first run `make_hicexp()`, followed by `cyclic_loess()`, then `hic_exactTest()` and finally `results()`: 
+
+```{r}
+#| warning: false
+DI <- hics_list |> 
+    make_hicexp(
+        data_list = hics_list, 
+        groups = factor(c(1, 2))
+    ) |> 
+    cyclic_loess() |> 
+    hic_exactTest() |> 
+    results()
+DI
+```
 
 ## TopDom
 
+The `TopDom` method is widely used to annotate topological domains in genomes from Hi-C 
+data (@Shin2016Apr). The `TopDom` package was created to implement this method 
+in `R` (@BibEntry2021May).
+
+Unfortunately, the format of the input to `TopDom` is rather tricky (see `?TopDom::readHiC`). 
+The following chunk of code shows how to coerce a `HiCExperiment` object into a 
+`TopDom`-compatible object. 
+
+
+```{r}
+library(TopDom)
+hic <- import(coolf_wt, format = 'cool')
+HiCExperiment2TopDom <- function(hic, chr) {
+    data <- list()
+    cm <- as(hic[chr], 'ContactMatrix')
+    data$counts <- as.matrix(cm) |> base::as.matrix()
+    data$counts[is.na(data$counts)] <- 0
+    data$bins <- regions(cm) |> 
+        as.data.frame() |> 
+        select(seqnames, start, end) |>
+        mutate(seqnames = as.character(seqnames)) |>
+        mutate(id = 1:n(), start = start - 1) |> 
+        relocate(id) |> 
+        dplyr::rename(chr = seqnames, from.coord = start, to.coord = end)
+    class(data) <- 'TopDomData'
+    return(data)
+}
+hic_topdom <- HiCExperiment2TopDom(hic, "II")
+hic_topdom
+```
+
+Now that we have coerced a `HiCExperiment` object into a `TopDom`-compatible 
+object, we can use the main `TopDom` function to annotate topological domains. 
+
+```{r}
+domains <- TopDom::TopDom(hic_topdom, window.size = 5)
+domains
+```
+
+The resulting `domains` object can be used to extract annotated domains, 
+store them in `topologicalFeatures` of the original `HiCExperiment`, and 
+optionally write a `bed` file to export them in text. 
+
+```{r}
+topologicalFeatures(hic, 'domain') <- domains$bed |> 
+    mutate(chromStart = chromStart + 1) |> 
+    filter(name == 'domain') |> 
+    makeGRangesFromDataFrame()
+topologicalFeatures(hic, 'domain')
+
+rtracklayer::export(topologicalFeatures(hic, 'domain'), 'hic_domains.bed')
+```
+
 ## GOTHiC
 
-## HiCDOC
+`GOTHiC` relies on a cumulative binomial test to detect interactions between distal genomic loci that have significantly more reads than expected by chance in Hi-C experiments (@Mifsud2017Apr). 
 
+::: {.callout-important icon='true'}
+### Using the `GOTHiC` function
 
+Unfortunately, the main `GOTHiC` function 
+require two `.bam` files as input. These files are often deleted due to 
+their larger size, while the filtered `pairs` file itself is retained. 
 
+Moreover, the internal nuts and bolts of the main `GOTHiC` function perform 
+several operations that are not required in modern workflows: 
+
+1. [Filtering pairs from same restriction fragment](https://code.bioconductor.org/browse/GOTHiC/blob/RELEASE_3_17/R/GOTHiC.R#L814); this step is now usually taken care of automatically, e.g. with `HiCool` Hi-C processing package. 
+2. [Filtering short-range pairs](https://code.bioconductor.org/browse/GOTHiC/blob/RELEASE_3_17/R/GOTHiC.R#L826); the `GOTHiC` package hard-codes a 10kb lower threshold for minimum pair distance. More advanced optimized filtering approaches have been implemented since then, to circumvent the need for such hard-coded threshold.
+3. [Binning pairs](https://code.bioconductor.org/browse/GOTHiC/blob/RELEASE_3_17/R/GOTHiC.R#L834); this step 
+is also already taken care of, when working with Hi-C matrices in modern formats, e.g. with `.(m)cool` files. 
+
+:::
+
+Based on these facts, we can simplify the binomial test function provided by 
+`GOTHiC` so that it can directly used binned interactions imported as a  
+`HiCExperiment` object in `R`. 
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the code for `GOTHiC_binomial` functioncode-link: true
+"
+GOTHiC_binomial <- function(x) {
+
+    if (length(trans(x)) != 0) stop("Only `cis` interactions can be used here.")
+    ints <- interactions(x) |>
+        as.data.frame() |> 
+        select(seqnames1, start1, seqnames2, start2, count) |>
+        dplyr::rename(chr1 = seqnames1, locus1 = start1, chr2 = seqnames2, locus2 = start2, frequencies = count) |>
+        mutate(locus1 = locus1 - 1, locus2 = locus2 - 1) |>
+        mutate(int1 = paste0(chr1, '_', locus1), int2 = paste0(chr2, '_', locus2))
+    
+    numberOfReadPairs <- sum(ints$frequencies)
+    all_bins <- unique(c(unique(ints$int1), unique(ints$int2)))
+    all_bins <- sort(all_bins)
+    upperhalfBinNumber <- (length(all_bins)^2 - length(all_bins))/2
+
+    cov <- ints |> 
+        group_by(int1) |> 
+        tally(frequencies) |> 
+        full_join(ints |> 
+            group_by(int2) |> 
+            tally(frequencies), 
+            by = c('int1' = 'int2')
+        ) |> 
+        rowwise() |> 
+        mutate(coverage = sum(n.x, n.y, na.rm = TRUE)) |> 
+        ungroup() |>
+        mutate(relative_coverage = coverage/sum(coverage))
+    
+    results <- mutate(ints,
+        cov1 = left_join(ints, select(cov, int1, relative_coverage), by = c('int1' = 'int1'))$relative_coverage, 
+        cov2 = left_join(ints, select(cov, int1, relative_coverage), by = c('int2' = 'int1'))$relative_coverage,
+        probability = cov1 * cov2 * 2 * 1/(1 - sum(cov$relative_coverage^2)),
+        predicted = probability * numberOfReadPairs
+    ) |> 
+    rowwise() |>
+    mutate(
+        pvalue = binom.test(
+            frequencies, 
+            numberOfReadPairs, 
+            probability,
+            alternative = "greater"
+        )$p.value
+    ) |> 
+    ungroup() |> 
+    mutate(
+        logFoldChange = log2(frequencies / predicted), 
+        qvalue = stats::p.adjust(pvalue, method = "BH", n = upperhalfBinNumber)
+    )
+
+    scores(x, "probability") <- results$probability
+    scores(x, "predicted") <- results$predicted
+    scores(x, "pvalue") <- results$pvalue
+    scores(x, "qvalue") <- results$qvalue
+    scores(x, "logFoldChange") <- results$logFoldChange
+
+    return(x)
+
+} 
+```
+
+```{r}
+res <- GOTHiC_binomial(hic["II"])
+res
+
+interactions(res)
+```
+
+<!-- ## HiCDOC -->
 
 ## References {-}
 

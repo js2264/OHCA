@@ -34,10 +34,10 @@ book:
     - part: "Advanced Hi-C topics"
       chapters:
         - disseminating.qmd
+        - interoperability.qmd
         - workflow-yeast.qmd
         - workflow-chicken.qmd
         - workflow-centros.qmd
-        # - interoperability.qmd
 
 format:
   html:

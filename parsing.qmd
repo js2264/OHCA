@@ -92,8 +92,6 @@ hic
 
 ## Subsetting a contact matrix
 
-![](images/20230525134200.png)
-
 Two entirely different approaches are possible to subset of a Hi-C contact matrix:
 
 - **Subsetting before importing**: leveraging random access to a **disk-stored** 
@@ -103,6 +101,8 @@ of interest**.
 - **Subsetting after importing**: parsing the **entire contact matrix** in memory, 
 and **subsequently** subset interactions overlapping with a genomic locus 
 of interest.
+
+![](images/20230525134200.png)
 
 ### Subsetting **before** import: with `focus`
 
