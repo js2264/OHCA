@@ -28,7 +28,6 @@ illustrated here:
 source("_common.R")
 library(ggplot2)
 library(purrr)
-library(tidyverse)
 library(GenomicRanges)
 library(InteractionSet)
 library(HiCExperiment)

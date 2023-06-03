@@ -3,7 +3,7 @@ reference-section-title: References
 bibliography: bibliography.bib
 ---
 
-# Contact matrix-centric analysis
+# Matrix-centric analysis
 
 ```{r}
 #| echo: false
