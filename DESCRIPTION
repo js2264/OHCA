@@ -25,7 +25,7 @@ Imports:
     hicrep,
     multiHiCcompare,
     TopDom, 
-    GOTHiC, OTH
+    GOTHiC, 
     BSgenome.Hsapiens.UCSC.hg38, 
     ggbio,
     cowplot,
