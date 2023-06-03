@@ -221,8 +221,7 @@ Based on these facts, we can simplify the binomial test function provided by
 
 ```{r}
 #| code-fold: true
-#| code-summary: "Show the code for `GOTHiC_binomial` functioncode-link: true
-"
+#| code-summary: "Show the code for `GOTHiC_binomial` function"
 GOTHiC_binomial <- function(x) {
 
     if (length(trans(x)) != 0) stop("Only `cis` interactions can be used here.")
