@@ -34,6 +34,8 @@ library(HiCExperiment)
 library(HiContactsData)
 library(hicrep)
 library(multiHiCcompare)
+library(dplyr)
+library(tidyr)
 
 coolf_wt <- HiContactsData('yeast_wt', 'mcool')
 coolf_eco1 <- HiContactsData('yeast_eco1', 'mcool')
@@ -215,7 +217,7 @@ is also already taken care of, when working with Hi-C matrices in modern formats
 :::
 
 Based on these facts, we can simplify the binomial test function provided by 
-`GOTHiC` so that it can directly used binned interactions imported as a  
+`GOTHiC` so that it can directly used binned interactions imported as a 
 `HiCExperiment` object in `R`. 
 
 ```{r}

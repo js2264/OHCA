@@ -5,13 +5,13 @@ reference-section-title: References
 bibliography: bibliography.bib
 ---
 
-# Welcome {-}
-
 ```{r}
 #| echo: false
 source("_common.R")
 .gh_url <- file.path('https://github.com', rmarkdown::metadata[['github-repo']])
 ```
+
+# Welcome {-}
 
 This is the landing page of the **"Orchestrating Hi-C analysis with Bioconductor"** 
 book. **The primary aim of this book is to introduce the `R` user to Hi-C analysis**. This 

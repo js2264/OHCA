@@ -41,8 +41,12 @@ div.sidebar-item-container .active, div.sidebar-item-container .show>.nav-link, 
   font-weight: 800;
 }
 
-/* right navbar ------------------------------------------------------ */
+#quarto-sidebar {
+  transition: width .15s ease-in;
+  padding: 14px 10%;
+}
 
+/* right navbar ------------------------------------------------------ */
 
 .sidebar nav[role=doc-toc] ul>li>a.active, .sidebar nav[role=doc-toc] ul>li>ul>li>a.active {
   // border-left: 4px solid #480f1f;
