@@ -24,6 +24,16 @@ jobs:
           with:
             persist-credentials: false
 
+        # Free disk space
+        - name: Free disk space
+          run: |
+            df -h
+            sudo swapoff -a
+            sudo rm -f /swapfile
+            sudo apt clean
+            docker rmi $(docker image ls -aq)
+            df -h
+
         # https://github.com/docker/setup-qemu-action
         - name: Set up QEMU
           uses: docker/setup-qemu-action@v2
@@ -69,6 +79,16 @@ jobs:
             build-args: VERSION=${{ steps.release-version.outputs.version }}
             outputs: type=image,annotation-index.org.opencontainers.image.description=OHCA
 
+        # Free disk space
+        - name: Free disk space
+          run: |
+            df -h
+            sudo swapoff -a
+            sudo rm -f /swapfile
+            sudo apt clean
+            docker rmi $(docker image ls -aq)
+            df -h
+      
         # This (re)fetches the book from GHCR and extract the rendered book
         - name: Extract OHCA book from Docker container
           run: |
