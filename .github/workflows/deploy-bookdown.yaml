@@ -7,38 +7,35 @@ on:
     branches:
       - main
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
-    build-render-push-deploy:
+    build-push:
+      strategy:
+        matrix:
+          BIOC_VERSION: [devel, RELEASE_3_17]
       runs-on: ubuntu-latest
+      name: ${{ matrix.BIOC_VERSION }}
       permissions:
         contents: read
         packages: write
-
       steps:
         - name: Checkout repository
           uses: actions/checkout@v3
           with:
             persist-credentials: false
 
-        # Free disk space
-        - name: Free disk space
+        - name: Free Disk Space (Ubuntu)
+          uses: jlumbroso/free-disk-space@v1.2.0
+        - name: Free disk space (2)
           run: |
             df -h
             sudo swapoff -a
             sudo rm -f /swapfile
             sudo apt clean
-            docker rmi $(docker image ls -aq)
             df -h
 
-        # https://github.com/docker/setup-qemu-action
         - name: Set up QEMU
           uses: docker/setup-qemu-action@v2
 
-        # https://github.com/docker/setup-buildx-action
         - name: Set up Docker Buildx
           id: buildx
           uses: docker/setup-buildx-action@v2
@@ -52,7 +49,7 @@ jobs:
         - name: Log in to the Container registry
           uses: docker/login-action@v2
           with:
-            registry: ${{ env.REGISTRY }}
+            registry: ghcr.io
             username: ${{ github.actor }}
             password: ${{ secrets.PAT_GITHUB }}
 
@@ -60,10 +57,11 @@ jobs:
           id: meta
           uses: docker/metadata-action@v4
           with:
-            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            images: ghcr.io/js2264/ohca
             tags: |
               type=raw,value=latest,enable=true
               type=raw,value=${{ steps.release-version.outputs.version }},enable=true
+              type=raw,value=bioc_${{ matrix.BIOC_VERSION }},enable=true
 
         # This BUILDS the Docker image, RENDERS the book inside it, and PUSHES the image to GHCR
         - name: Build and push multi-arch Docker image
@@ -76,32 +74,46 @@ jobs:
             push: true
             tags: ${{ steps.meta.outputs.tags }}
             labels: ${{ steps.meta.outputs.labels }}
-            build-args: VERSION=${{ steps.release-version.outputs.version }}
+            build-args: |
+              VERSION=${{ steps.release-version.outputs.version }}
+              BIOC_VERSION=${{ matrix.BIOC_VERSION }}
             outputs: type=image,annotation-index.org.opencontainers.image.description=OHCA
 
         # Free disk space
         - name: Free disk space
+          continue-on-error: true
           run: |
             df -h
             sudo swapoff -a
             sudo rm -f /swapfile
             sudo apt clean
+            docker system df
+            docker ps -s -a
+            docker kill $(docker ps -q -a)
+            docker rm $(docker ps -a -q)
             docker rmi $(docker image ls -aq)
+            docker system df
             df -h
-      
-        # This (re)fetches the book from GHCR and extract the rendered book
-        - name: Extract OHCA book from Docker container
+    
+    render-deploy:
+      needs: build-push
+      strategy:
+        matrix:
+          BIOC_VERSION: [devel]
+      runs-on: ubuntu-latest
+      container: ghcr.io/js2264/ohca:bioc_${{ matrix.BIOC_VERSION }}
+      permissions:
+        contents: read
+        packages: write
+      steps:
+        - name: Render OHCA book from versionized OHCA container
           run: |
-            docker pull ghcr.io/js2264/ohca
-            sudo docker create --name OHCA ghcr.io/js2264/ohca
-            docker cp OHCA:/opt/OHCA/docs ./docs
+            make render
 
-        # This DEPLOYS the book to gh-pages
-        - name: Deploy OHCA book to github pages
+        - name: Deploy OHCA book to Github Pages on versionized branch
           uses: JamesIves/github-pages-deploy-action@3.7.1
           with:
             GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
-            BRANCH: gh-pages # The branch the action should deploy to
+            BRANCH: bioc_${{ matrix.BIOC_VERSION }} # The branch the action should deploy to
             FOLDER: docs # The folder the action should deploy
             CLEAN: true # Automatically remove deleted files from the deploy branch
-

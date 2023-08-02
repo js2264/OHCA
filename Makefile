@@ -1,4 +1,5 @@
 RCMD := Rscript -e
+CONDA := /root/.cache/R/basilisk/1.12.1/0/bin/conda
 
 .PHONY: quarto
 quarto: ## Update to latest available quarto
@@ -15,17 +16,19 @@ quarto: ## Update to latest available quarto
 setup: ## Install HiCExperiment & co packages with pak.
 	@echo "📦 Installing OHCA core packages"
 	$(RCMD) 'install.packages("pak", repos = "https://r-lib.github.io/p/pak/devel/")'
-	$(RCMD) 'pak::pkg_install("js2264/HiCExperiment", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install("js2264/HiCool", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install("js2264/HiContacts", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install("js2264/HiContactsData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install("js2264/fourDNData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
-	$(RCMD) 'pak::pkg_install("js2264/DNAZooData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'writeLines(paste0("R_BIOC_VERSION=", gsub(".[0-9]*$$", "", as.character(packageVersion("BiocVersion")))), ".Renviron")'
+	$(RCMD) 'pak::repo_status()$$url'
+	$(RCMD) 'pak::pkg_install("HiCExperiment", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("HiCool", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("HiContacts", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("HiContactsData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("fourDNData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("DNAZooData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
 
 .PHONY: install
 install: ## Install OHCA package and dependencies with pak.
 	@echo "🚀 Installing OHCA book package"
-	$(RCMD) 'pak::pkg_install(".", ask = FALSE, upgrade = TRUE)'
+	$(RCMD) 'remotes::install_local(".", ask = FALSE, upgrade = TRUE)'
 
 .PHONY: info
 info: ## list installed packages
@@ -37,22 +40,30 @@ render: ## Render OHCA book
 	@echo "📖 Rendering OHCA book"
 	quarto render --to html
 
-.PHONY: serve
+.PHONY: cleanup
+cleanup: ## Removing temp files before pushing to ghcr.io
+	@echo "🧹 Cleaning up"
+	$(RCMD) 'pak::cache_clean()'
+	rm -rf /tmp/*
+	rm -rf *_cache
+	df -h 
+
+.PHONY: .serve
 serve: ## serve local static site
 	$(RCMD) 'servr::httd("docs", port = 4444)'
 
-.PHONY: render-serve
+.PHONY: .render-serve
 render-serve: ## Test rendering locally
 	@echo "📖 Rendering OHCA book locally"
 	quarto render --to html
 	$(RCMD) 'servr::httd("docs", port = 4444)'
 
-.PHONY: deps
+.PHONY: .deps
 deps: ## Install missing OHCA dependencies
 	@echo "🔗 Installing missing OHCA dependencies"
 	$(RCMD) 'devtools::install_dev_deps(".", dependencies = c("Depends", "Imports", "Suggests"))'
 
-.PHONY: git
+.PHONY: .git
 git: ## Automated commit and pushing to github rpeo
 	@echo "📨 Pushing to GH"
 	git add .
@@ -63,5 +74,7 @@ git: ## Automated commit and pushing to github rpeo
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-.DEFAULT_GOAL := help
+.PHONY: all
+all: quarto setup install info cleanup
 
+.DEFAULT_GOAL := all
