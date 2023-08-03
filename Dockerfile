@@ -1,8 +1,8 @@
-# Pull the base image from bioconductor/bioconductor_docker
 ARG BIOC_VERSION
-FROM bioconductor/bioconductor_docker:${BIOC_VERSION}
-
 ARG VERSION
+
+# Pull the base image from bioconductor/bioconductor_docker
+FROM bioconductor/bioconductor_docker:${BIOC_VERSION}
 
 LABEL org.opencontainers.image.source=https://github.com/js2264/OHCA
 LABEL org.opencontainers.image.documentation=https://js2264.github.io/OHCA

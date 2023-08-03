@@ -108,6 +108,7 @@ jobs:
       steps:
         - name: Render OHCA book from versionized OHCA container
           run: |
+            cd /opt/OHCA/
             make render
 
         - name: Deploy OHCA book to Github Pages on versionized branch
