@@ -166,7 +166,7 @@ import(cf, focus = 'II:300001-800000|V:1-500000', resolution = 2000)
 :::
 
 <!-- 
-#### `refocus(<HiCExperiment>, focus = "...")`
+### `refocus(<HiCExperiment>, focus = "...")`
 
 Bear in mind that every call to `import` creates a `HiCExperiment` from 
 scratch. However, in some cases, one may want to **change** the `focus` of a 
@@ -187,7 +187,7 @@ import(cf, focus = 'III', resolution = 2000)
 # --- However, these fields can be preserved using the `refocus` 
 #     function on the original `HiCExperiment` object
 refocus(hic, 'III')
-``` 
+```
 -->
 
 ### Subsetting **after** import
@@ -226,21 +226,6 @@ at least one of their anchors within `telomere`.
 subsetByOverlaps(hic, telomere, type = "any") |> interactions()
 ```
 :::
-
-#### `subsetByOverlaps(<HiCExperiment>, <GInteractions>)`
-
-A `GInteractions` can also be provided as a query for `subsetByOverlaps`. 
-In this case, the `GInteractions` is used to extract interactions for which 
-ends overlap with each end of the `GInteractions` entries. 
-
-```{r}
-hic <- import(cf, focus = 'II')
-telos <- GInteractions(
-    GRanges("II:1-113184"), 
-    GRanges("II:700001-813184")
-)
-subsetByOverlaps(hic, telos) |> interactions()
-```
 
 #### `<HiCExperiment>["..."]`
 
