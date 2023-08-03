@@ -78,22 +78,6 @@ jobs:
               VERSION=${{ steps.release-version.outputs.version }}
               BIOC_VERSION=${{ matrix.BIOC_VERSION }}
             outputs: type=image,annotation-index.org.opencontainers.image.description=OHCA
-
-        # Free disk space
-        - name: Free disk space
-          continue-on-error: true
-          run: |
-            df -h
-            sudo swapoff -a
-            sudo rm -f /swapfile
-            sudo apt clean
-            docker system df
-            docker ps -s -a
-            docker kill $(docker ps -q -a)
-            docker rm $(docker ps -a -q)
-            docker rmi $(docker image ls -aq)
-            docker system df
-            df -h
     
     render-deploy:
       needs: build-push
@@ -108,13 +92,15 @@ jobs:
       steps:
         - name: Render OHCA book from versionized OHCA container
           run: |
-            cd /opt/OHCA/
+            cp -rf /opt/OHCA/ .
+            cd OHCA/
             make render
+            cp -rf OHCA/docs/ .
 
         - name: Deploy OHCA book to Github Pages on versionized branch
           uses: JamesIves/github-pages-deploy-action@3.7.1
           with:
             GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
             BRANCH: bioc_${{ matrix.BIOC_VERSION }} # The branch the action should deploy to
-            FOLDER: docs # The folder the action should deploy
+            FOLDER: OHCA/docs # The folder the action should deploy
             CLEAN: true # Automatically remove deleted files from the deploy branch
