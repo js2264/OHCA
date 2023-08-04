@@ -2,105 +2,99 @@ name: Docker image
 
 on:
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '0 1 1,16 * *'
   push:
     branches:
       - main
 
+env: 
+  registry: ghcr.io
+  user: js2264
+  repository: ohca
+
 jobs:
-    build-push:
-      strategy:
-        matrix:
-          BIOC_VERSION: [devel, RELEASE_3_17]
-      runs-on: ubuntu-latest
-      name: ${{ matrix.BIOC_VERSION }}
-      permissions:
-        contents: read
-        packages: write
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v3
-          with:
-            persist-credentials: false
+  build-push:
+    strategy:
+      matrix:
+        BIOC_VERSION: [devel, RELEASE_3_17]
+    runs-on: ubuntu-latest
+    name: ${{ matrix.BIOC_VERSION }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
-        - name: Free Disk Space (Ubuntu)
-          uses: jlumbroso/free-disk-space@v1.2.0
-        - name: Free disk space (2)
-          run: |
-            df -h
-            sudo swapoff -a
-            sudo rm -f /swapfile
-            sudo apt clean
-            df -h
+      - name: 📀 Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@v1.2.0
 
-        - name: Set up QEMU
-          uses: docker/setup-qemu-action@v2
+      - name: 𝌚 Get current package version
+        id: version
+        run: |
+          version=$(grep -m1 -E '^Version: +' DESCRIPTION | sed -E 's/.*: +//')
 
-        - name: Set up Docker Buildx
-          id: buildx
-          uses: docker/setup-buildx-action@v2
+      - name: 🔐 Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.PAT_GITHUB }}
 
-        - name: Get current release version
-          id: release-version
-          run: |
-            version=$(grep -m1 -E '^Version: +' DESCRIPTION | sed -E 's/.*: +//')
-            echo "version=${version}" >> $GITHUB_OUTPUT
+      - name: 🏷 Get metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/js2264/ohca
+          tags: |
+            type=raw,value=latest,enable=true
+            type=raw,value=${{ steps.version.outputs.version }},enable=true
+            type=raw,value=bioc_${{ matrix.BIOC_VERSION }},enable=true
 
-        - name: Log in to the Container registry
-          uses: docker/login-action@v2
-          with:
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.PAT_GITHUB }}
+      - name: 👷 Build and push multi-arch Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
+          platforms: linux/amd64
+          file: Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          outputs: type=image,annotation-index.org.opencontainers.image.description=OHCA
+          build-args: |
+            VERSION=${{ steps.version.outputs.version }}
+            BIOC_VERSION=${{ matrix.BIOC_VERSION }}
+  
+  
+  render-deploy:
+    needs: build-push
+    strategy:
+      matrix:
+        BIOC_VERSION: [devel]
+    runs-on: ubuntu-latest
+    container: ghcr.io/js2264/ohca:bioc_${{ matrix.BIOC_VERSION }}
+    steps:
 
-        - name: Extract metadata (tags, labels) for Docker
-          id: meta
-          uses: docker/metadata-action@v4
-          with:
-            images: ghcr.io/js2264/ohca
-            tags: |
-              type=raw,value=latest,enable=true
-              type=raw,value=${{ steps.release-version.outputs.version }},enable=true
-              type=raw,value=bioc_${{ matrix.BIOC_VERSION }},enable=true
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
-        # This BUILDS the Docker image, RENDERS the book inside it, and PUSHES the image to GHCR
-        - name: Build and push multi-arch Docker image
-          uses: docker/build-push-action@v4
-          with:
-            context: .
-            GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
-            platforms: linux/amd64
-            file: Dockerfile
-            push: true
-            tags: ${{ steps.meta.outputs.tags }}
-            labels: ${{ steps.meta.outputs.labels }}
-            build-args: |
-              VERSION=${{ steps.release-version.outputs.version }}
-              BIOC_VERSION=${{ matrix.BIOC_VERSION }}
-            outputs: type=image,annotation-index.org.opencontainers.image.description=OHCA
-    
-    render-deploy:
-      needs: build-push
-      strategy:
-        matrix:
-          BIOC_VERSION: [devel]
-      runs-on: ubuntu-latest
-      container: ghcr.io/js2264/ohca:bioc_${{ matrix.BIOC_VERSION }}
-      permissions:
-        contents: read
-        packages: write
-      steps:
-        - name: Render OHCA book from versionized OHCA container
-          run: |
-            cp -rf /opt/OHCA/ .
-            cd OHCA/
-            make render
-            cp -rf OHCA/docs/ .
+      - name: 🖌 Render OHCA book from versionized OHCA container
+        run: |
+          quarto install tinytex
+          quarto render
 
-        - name: Deploy OHCA book to Github Pages on versionized branch
-          uses: JamesIves/github-pages-deploy-action@3.7.1
-          with:
-            GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
-            BRANCH: bioc_${{ matrix.BIOC_VERSION }} # The branch the action should deploy to
-            FOLDER: OHCA/docs # The folder the action should deploy
-            CLEAN: true # Automatically remove deleted files from the deploy branch
+      - name: 📚 Install rsync
+        run: |
+          apt-get update && apt-get install -y rsync
+
+      - name: 🚀 Deploy OHCA book to Github Pages on versionized branch
+        uses: JamesIves/github-pages-deploy-action@v4.4.3
+        with:
+          folder: docs/ 
+          branch: bioc_${{ matrix.BIOC_VERSION }} 
+          clean: true 

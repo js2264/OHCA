@@ -58,18 +58,5 @@ format:
         # style: "docked"
         search: true
         collapse-level: 5
-  pdf:
-    default-image-extension: pdf
-    theme:
-      - yeti
-      - OHCA.scss
-    code-link: true
-    author-meta: "Jacques Serizay"
-    documentclass: scrbook
-    papersize: a4
-    toc: true
-    toc-title: Contents
-    number-sections: true
-    colorlinks: true
 
 editor: visual
