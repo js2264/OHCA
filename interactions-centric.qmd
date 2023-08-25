@@ -146,8 +146,9 @@ The `plotPs()` and `plotPsSlope()` functions are convenient `ggplot2`-based func
 with pre-configured settings optimized for P(s) visualization.
 
 ```{r ps}
-plotPs(ps, aes(x = binned_distance, y = norm_p))
-plotPsSlope(ps, ggplot2::aes(x = binned_distance, y = slope))
+library(ggplot2)
+plotPs(ps, aes(x = binned_distance, y = norm_p, color = chr))
+plotPsSlope(ps, aes(x = binned_distance, y = slope, color = chr))
 ```
 
 ### P(s) for multiple `.pairs` files
@@ -174,9 +175,9 @@ merged_ps <- rbind(
     ps |> mutate(sample = 'WT'), 
     eco1_ps |> mutate(sample = 'eco1')
 )
-plotPs(merged_ps, aes(x = binned_distance, y = norm_p, color = sample)) + 
+plotPs(merged_ps, aes(x = binned_distance, y = norm_p, color = sample, linetype = chr)) + 
     scale_color_manual(values = c('#c6c6c6', '#ca0000'))
-plotPsSlope(merged_ps, ggplot2::aes(x = binned_distance, y = slope, color = sample)) + 
+plotPsSlope(merged_ps, aes(x = binned_distance, y = slope, color = sample, linetype = chr)) + 
     scale_color_manual(values = c('#c6c6c6', '#ca0000'))
 ```
 
@@ -190,7 +191,7 @@ curves will be greatly impacted, notably at short distances.
 ```{r}
 ps_from_hic <- distanceLaw(hic, by_chr = TRUE) 
 plotPs(ps_from_hic, aes(x = binned_distance, y = norm_p))
-plotPsSlope(ps_from_hic, ggplot2::aes(x = binned_distance, y = slope))
+plotPsSlope(ps_from_hic, aes(x = binned_distance, y = slope))
 ```
 
 ## Cis/trans ratios
@@ -240,6 +241,7 @@ For instance, we can compute the genome-wide virtual 4C profile of interactions
 anchored at the centromere in chromosome `II` (located at ~ 238kb). 
 
 ```{r}
+library(GenomicRanges)
 v4C <- virtual4C(full_hic, viewpoint = GRanges("II:230001-240000"))
 v4C
 ```
