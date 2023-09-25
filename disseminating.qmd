@@ -219,9 +219,6 @@ fourDNData(experimentSetAccession = '4DNES25ABNZ1', type = 'compartments') |>
 
 ### Querying a complete experiment dataset
 
-Rather than querying each genomic file independently, one can automatically 
-fetch all the files associated with a given `experiment
-
 Rather than importing multiple files corresponding to a single experimentSet 
 accession ID one by one, one can import all the available files associated with 
 a experimentSet accession ID into a `HiCExperiment` object by using the 

@@ -1166,6 +1166,8 @@ distribution, e.g. when calculating distance-dependent genomic interaction
 frequency. 
 
 ```{r}
+pairsFile(yeast_hic) <- pairsf
+
 pairsFile(yeast_hic)
 
 readLines(pairsFile(yeast_hic), 25)

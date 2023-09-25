@@ -65,6 +65,7 @@ remotes::install_github('TaoYang-dev/hicrep')
 In order to use `hicrep`, we first need to create two `HiCExperiment` objects. 
 
 ```{r eval = FALSE}
+library(InteractionSet)
 library(HiCExperiment)
 library(HiContactsData)
 
@@ -112,6 +113,7 @@ Manipulate a `HiCExperiment` object to coerce it into such structure is straight
 ```{r}
 library(dplyr)
 library(tidyr)
+library(purrr)
 hics <- list(
     "wt" = import(coolf_wt, format = 'cool'),
     "eco1" = import(coolf_eco1, format = 'cool')

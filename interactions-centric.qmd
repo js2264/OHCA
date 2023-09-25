@@ -281,6 +281,12 @@ contact frequencies along a given chromosome in different samples.
 
 :::{.column-page-right}
 ```{r fig.asp = .4, out.width = '100%'}
+eco1_hic <- import(
+    CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
+    focus = 'II', 
+    resolution = 2000
+)
+eco1_pairsf <- HiContactsData('yeast_eco1', 'pairs.gz')
 pairsFile(eco1_hic) <- eco1_pairsf
 eco1_scalo <- scalogram(eco1_hic) 
 merged_scalo <- rbind(
