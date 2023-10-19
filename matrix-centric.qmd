@@ -114,19 +114,14 @@ data can be normalized using matrix balancing approaches
 disk-stored matrices using out-of-memory strategies (e.g. with 
 `cooler balance <.cool>`). However, if contact matrix files are imported 
 into a `HiCExperiment` object but no `balanced` scores are available, 
-in-memory balancing can be performed using the `normalize` function.
+in-memory balancing can be performed using the `normalize` function. This 
+adds an extra `ICE` element in `scores` list (while the `interactions` 
+themselves are unmodified).
 
 ```{r}
 normalized_hic <- normalize(hic)
 normalized_hic
 ```
-
-::: {.callout-note}
-## Note
-The only change done to the `HiCExperiment` object by the `normalize` function is 
-the addition of a single extra `ICE` in `scores` list. The `interactions` 
-themselves are unmodified. 
-:::
 
 It is possible to plot the different `scores` of the resulting object to 
 visualize the newly computed `scores`. In this example, `ICE` scores 
@@ -161,22 +156,13 @@ This is sometimes called "detrending", as it
 effectively removes the average polymer behavior from the balanced matrix. 
 
 The `detrend` function performs this operation on a given `HiCExperiment` object. 
+It adds two extra elements in `scores` list: `expected` and `detrended` metrics
+(while the `interactions` themselves are unmodified). 
 
 ```{r}
 detrended_hic <- detrend(hic)
 detrended_hic
 ```
-
-::: {.callout-note}
-## Note
-The only change done to the `HiCExperiment` object by the `detrend` function is 
-the addition of two extra `scores`: 
-
-1. `expected`
-2. `detrended`
-
-The `interactions` themselves are unmodified. 
-:::
 
 Topological features will be visually more prominent in the O/E `detrended` Hi-C map. 
 

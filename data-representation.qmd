@@ -238,7 +238,7 @@ involve comparisons *between* ranges **in a single** GRanges object.
 ::: {.callout-note}
 ## Note 
 Compared to previous section, the result of each function described below 
-depends on the entire set of ranges in the input `GRanges` object.
+depends on the **entire set of ranges** in the input `GRanges` object.
 :::
 
 - Computing the "inverse" genomic ranges, i.e. ranges in-between the input ranges:
@@ -345,17 +345,12 @@ none of the remaining ranges from `query` overlap with ranges from `subject`.
 
 To directly **subset** ranges from `query` overlapping with ranges from a 
 `subject` (e.g. to only keep *peaks* overlapping a *TSS*), we can use the 
-`subsetByOverlaps` function. 
+`subsetByOverlaps` function. The output of `subsetByOverlaps` is a subset of the original `GRanges` object
+provided as a `query`, with retained ranges being unmodified. 
 
 ```{r}
 subsetByOverlaps(peaks, TSSs)
 ```
-
-::: {.callout-note}
-## Note 
-The output of `subsetByOverlaps` is a subset of the original `GRanges` object
-provided as a `query`, with retained ranges being unmodified. 
-:::
 
 - Counting overlaps between a query and a subject
 
@@ -506,8 +501,6 @@ The way `GInteractions` objects are printed in an R console mimics that of
 `GRanges`, but pairs two "ends" (a.k.a. *anchors*) of an interaction together, 
 each end being represented as a separate `GRanges` range. 
 
-::: {.callout-note}
-## Notes
 - Note that it is possible to have interactions joining two identical anchors. 
 
 ```{r}
@@ -525,7 +518,6 @@ gi[4]
 ```{r}
 gi[5]
 ```
-:::
 
 ### `GInteractions` specific slots
 
@@ -650,9 +642,7 @@ Note that for "trans" inter-chromosomal interactions, i.e. interactions with anc
 different chromosomes, the notion of genomic distance is meaningless and for 
 this reason, `pairdist` returns a `NA` value. 
 
-::: {.callout-tip}
-## Advanced `pairdist` arguments
-The `type` argument can be tweaked to specify which type of "distance" should 
+The `type` argument of the `pairdist()` function can be tweaked to specify which type of "distance" should 
 be computed:  
 
 - `mid`: The distance between the midpoints of the two regions
@@ -665,7 +655,6 @@ be computed:
 - `diag`: The difference between the anchor indices is returned.
           This corresponds to a diagonal on the interaction space when
           bins are used in the 'regions' slot of 'x'.
-:::
 
 #### `GInteractions` overlap methods
 
@@ -929,8 +918,6 @@ to describe important topological features.
 the contact matrix has been created. This is often useful to estimate some Hi-C metrics. 
 - `metadata` is a `list` to further describe the experiment. 
 
-::: {.callout-tip}
-## `HiCExperiment` slots
 These pieces of information are called `slots`. They can be directly accessed 
 using `getter` functions, bearing the same name than the slot. 
 
@@ -953,10 +940,6 @@ pairsFile(hic)
 
 metadata(hic)
 ```
-:::
-
-::: {.callout-note}
-## Notes
 
 `import` also works for other types of `ContactFile` (`HicFile`, 
 `HicproFile`, `PairsFile`), e.g. 
@@ -977,17 +960,19 @@ pf <- PairsFile(pairsf)
 pairs <- import(pf)
 pairs
 ```
-:::
 
 #### Customizing the `import`
 
 To reduce the `import` to only parse the data that is relevant to the study,
 two arguments can be passed to `import`, along with a `ContactFile`. 
 
-::: {.callout-tip}
-## Key `import` arguments:
+::: {.callout-warning icon='true'}
+
+##### Key `import` arguments:
+
 - `focus`: This can be used to **only parse data for a specific genomic location**.
 - `resolution`: This can be used to choose which resolution to parse the contact matrix at (this is ignored if the `ContactFile` is not multi-resolution, e.g. `.cool` or HiC-Pro generated matrices)
+
 :::
 
 - Import interactions within a single chromosome:
@@ -1059,12 +1044,9 @@ The imported genomic interactions can be directly **exposed** using the
 interactions(yeast_hic)
 ```
 
-::: {.callout-note}
-## Note 
 Because genomic interactions are actually stored as `GInteractions`, `regions` 
 and `anchors` work on `HiCExperiment` objects just as they work with 
 `GInteractions`!
-:::
 
 ```{r}
 regions(yeast_hic)
@@ -1119,8 +1101,6 @@ head(scores(yeast_hic, "count"))
 head(scores(yeast_hic, "balanced"))
 ```
 
-::: {.callout-tip}
-## Tip
 Calling `interactions(hic)` returns a `GInteractions` with `scores` already 
 stored in extra columns. This short-hand allows one to dynamically check `scores` 
 directly from the `interactions` output.
@@ -1130,7 +1110,6 @@ interactions(yeast_hic)
 
 head(interactions(yeast_hic)$count)
 ```
-:::
 
 #### topologicalFeatures
 
@@ -1173,8 +1152,7 @@ pairsFile(yeast_hic)
 readLines(pairsFile(yeast_hic), 25)
 ```
 
-::: {.callout-important}
-## Importing a `PairsFile`
+#### Importing a `PairsFile`
 The `.pairs` file linked to a `HiCExperiment` object can itself be imported in 
 a `GInteractions` object: 
 
@@ -1185,7 +1163,6 @@ import(pairsFile(yeast_hic), format = 'pairs')
 Note that these `GInteractions` are **not** binned, contrary to `interactions` 
 extracted from a `HiCExperiment`. Anchors of the interactions listed in the 
 `GInteractions` imported from a disk-stored `.pairs` file are all of width `1`. 
-:::
 
 ## Visual summary of the `HiCExperiment` data structure
 

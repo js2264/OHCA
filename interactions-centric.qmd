@@ -115,15 +115,12 @@ pf <- PairsFile(pairsf)
 pf
 ```
 
-::: {.callout-note}
-## Reminder!
-`PairsFile` connections can be imported directly into a `GInteractions` object 
-with `import()`: 
+If needed, `PairsFile` connections can be imported directly into a `GInteractions` object 
+with `import()`. 
 
 ```{r}
 import(pf)
 ```
-:::
 
 We can compute a P(s) per chromosome from this `.pairs` file using the `distanceLaw` function.
 
@@ -132,15 +129,6 @@ library(HiContacts)
 ps <- distanceLaw(pf, by_chr = TRUE) 
 ps
 ```
-
-::: {.callout-note}
-## Note
-Because this is a toy dataset, contacts are only provided for the chromosome `II`. 
-
-```{r}
-table(ps$chr)
-```
-:::
 
 The `plotPs()` and `plotPsSlope()` functions are convenient `ggplot2`-based functions
 with pre-configured settings optimized for P(s) visualization.
@@ -198,13 +186,8 @@ plotPsSlope(ps_from_hic, aes(x = binned_distance, y = slope))
 
 The ratio between cis interactions and trans interactions is often used to 
 assess the overall quality of a Hi-C dataset. It can be computed *per chromosome* 
-using the `cisTransRatio()` function. 
-
-::: {.callout-tip}
-## Tip!
-You will need to provide a genome-wide `HiCExperiment` to estimate
+using the `cisTransRatio()` function. You will need to provide a **genome-wide** `HiCExperiment` to estimate
 cis/trans ratios!
-:::
 
 ```{r}
 full_hic <- import(cf, resolution = 2000)
@@ -223,13 +206,10 @@ ggplot(ct, aes(x = chr, y = cis_pct)) +
     labs(x = 'Chromosomes', y = '% of cis contacts')
 ```
 
-::: {.callout-important}
-## Watch out
 Cis/trans contact ratios will greatly vary **depending on the cell cycle 
 phase the sample is in!** For instance, chromosomes during the mitosis phase 
 of the cell cycle have very little trans contacts, due to their structural 
 organization and individualization. 
-:::
 
 ## Virtual 4C profiles
 

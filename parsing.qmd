@@ -212,9 +212,6 @@ telomere <- GRanges("II:700001-813184")
 subsetByOverlaps(hic, telomere) |> interactions()
 ```
 
-::: {.callout-important icon='true'}
-## `type` argument
-
 By default, `subsetByOverlaps(hic, telomere)` will only recover interactions 
 **constrained** within `telomere`, i.e. interactions for which both ends are 
 in `telomere`. 
@@ -225,7 +222,6 @@ at least one of their anchors within `telomere`.
 ```{r}
 subsetByOverlaps(hic, telomere, type = "any") |> interactions()
 ```
-:::
 
 #### `<HiCExperiment>["..."]`
 
@@ -287,10 +283,9 @@ hic["II:300001-320000|IV:1-100000"]
 ```{r}
 hic[c('II', 'III', 'IV')]
 ```
-:::
 
-::: {.callout-note}
-## Note
+Some notes: 
+
 - This last example (subsetting for a vector of several chromosomes) is the 
 only scenario for which `[`-based in-memory subsetting of pre-imported data is 
 the only way to go, as such subsetting is not possible with `focus` 
@@ -301,6 +296,7 @@ efficiently using the `focus` argument when `import`ing data into a
 - However, keep in mind that subsetting preserves extra data, e.g. added `scores`, 
 `topologicalFeatures`, `metadata` or `pairsFile`, whereas this information is 
 lost using `focus` with `import`.
+
 :::
 
 ### Zooming on a `HiCExperiment`
@@ -431,8 +427,6 @@ topologicalFeatures(hic, 'loops')
 hic
 ```
 
-::: {.callout-note}
-## Note
 All these objects can be used in `*Overlap` methods, as they all 
 extend the `GRanges` class of objects. 
 
@@ -444,7 +438,6 @@ countOverlaps(
     subject = topologicalFeatures(hic, 'loops')
 )
 ```
-:::
 
 #### `pairsFile`
 

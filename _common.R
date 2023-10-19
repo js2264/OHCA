@@ -17,7 +17,7 @@ options(
   cli.num_colors = 0,
   cli.hyperlink = FALSE,
   pillar.bold = TRUE,
-  width = 77 # 80 - 3 for #> comment
+  width = 9999 # 80 - 3 for #> comment
 )
 
 ggplot2::theme_set(ggplot2::theme_gray(12))
