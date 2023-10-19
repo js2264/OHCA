@@ -30,7 +30,7 @@ jobs:
           persist-credentials: false
 
       - name: 📀 Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@v1.2.0
+        uses: jlumbroso/free-disk-space@v1.3.0
 
       - name: 𝌚 Get current package version
         id: version
