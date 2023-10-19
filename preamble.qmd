@@ -5,7 +5,7 @@ bibliography: bibliography.bib
 
 # Preamble {-}
 
-Hi-C is an experimental method to quantify spatial interactions between any pair of genomic loci. While a number of command-line interfaces (CLI) exist to process and manipulate Hi-C data (e.g. `cooler` (@Abdennur2020Jan), `juicer` (@Durand2016Jul) and HiC-Pro (@Servant2015Dec)), they generally suffer from several limitations often found in emerging genomics techniques: 
+Hi-C is an experimental method to quantify spatial interactions between any pair of genomic loci. While a number of command-line interfaces (CLI) exist to process and manipulate Hi-C data (e.g. `cooler` (@Abdennur_2019), `juicer` (@Durand_2016) and HiC-Pro (@Servant_2015)), they generally suffer from several limitations often found in emerging genomics techniques: 
 
 - **No genomic representation of Hi-C processed data**: the existing CLIs can efficiently parse Hi-C data as a numerical matrix and perform a few standard quantitative operations (e.g. contact matrix binning and normalization, dimensionality reduction, etc). However, they systematically fail to **represent a Hi-C contact matrix as a genomic object**. Qualitative analyses (e.g. intersecting chromatin loops with genomic features, finding genes overlapping with domains, etc) therefore remain extremely tedious. 
 - **No format-agnostic analysis libraries**. Three competing file format standards (`.(m)cool`, `.hic` and `HiC-Pro` files) currently exist to store Hi-C processed data and dedicated CLIs propose sets of tools specifically working with their corresponding Hi-C processed data file format. This has curbed the development of generic Hi-C data analysis libraries by favoring the emergence of several redundant tools. 

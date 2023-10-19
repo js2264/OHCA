@@ -208,7 +208,7 @@ e.g. ...) are often displayed over a Hi-C heatmap.
 
 To illustrate how to do this, let's import pre-computed chromatin loops in `R`. 
 These loops have been identified using `chromosight` 
-(@MattheyDoret2020Nov) on the contact matrix 
+(@Matthey_Doret_2020) on the contact matrix 
 which we imported interactions from. 
 
 ```{r}

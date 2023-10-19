@@ -43,7 +43,7 @@ coolf_eco1 <- HiContactsData('yeast_eco1', 'mcool')
 
 ## HiCrep
 
-`hicrep` is a popular package to compute **stratum-adjusted correlations** between Hi-C datasets (@Yang2017Nov). 
+`hicrep` is a popular package to compute **stratum-adjusted correlations** between Hi-C datasets (@Yang_2017). 
 "Stratum" refers to the distance from the main diagonal: with increase distance from the main diagonal, 
 interactions of the DNA polymer are bound to decrease. `hicrep` computes a "per-stratum" correlation score and 
 computes a weighted average correlation for entire chromosomes. 
@@ -104,7 +104,7 @@ scc$scc
 ## multiHiCcompare
 
 The `multiHiCcompare` package provides functions for joint 
-normalization and difference detection in multiple Hi-C datasets (@Stansfield2019Sep). 
+normalization and difference detection in multiple Hi-C datasets (@Stansfield_2019). 
 According to its excerpt, to perform differential interaction analysis, 
 it requires a `list` of **raw counts** for different 
 samples/replicates, stored in **data frames with four columns** (`chr`, `start1`, `start2`, `count`).  
@@ -146,8 +146,8 @@ DI
 ## TopDom
 
 The `TopDom` method is widely used to annotate topological domains in genomes from Hi-C 
-data (@Shin2016Apr). The `TopDom` package was created to implement this method 
-in `R` (@BibEntry2021May).
+data (@Shin_2016). The `TopDom` package was created to implement this method 
+in `R` (@Bengtsson_2020).
 
 Unfortunately, the format of the input to `TopDom` is rather tricky (see `?TopDom::readHiC`). 
 The following chunk of code shows how to coerce a `HiCExperiment` object into a 
@@ -200,7 +200,7 @@ rtracklayer::export(topologicalFeatures(hic, 'domain'), 'hic_domains.bed')
 
 ## GOTHiC
 
-`GOTHiC` relies on a cumulative binomial test to detect interactions between distal genomic loci that have significantly more reads than expected by chance in Hi-C experiments (@Mifsud2017Apr). 
+`GOTHiC` relies on a cumulative binomial test to detect interactions between distal genomic loci that have significantly more reads than expected by chance in Hi-C experiments (@Mifsud_2017). 
 
 ::: {.callout-important icon='true'}
 ### Using the `GOTHiC` function

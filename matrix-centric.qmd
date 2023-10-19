@@ -110,7 +110,7 @@ artifacts in un-normalized `count` matrices.
 
 To correct for sequencing coverage heterogeneity of raw `count` maps, Hi-C 
 data can be normalized using matrix balancing approaches 
-(@Cournac2012Dec, @Imakaev2012Oct). This is generally done directly on the 
+(@Cournac_2012, @Imakaev_2012). This is generally done directly on the 
 disk-stored matrices using out-of-memory strategies (e.g. with 
 `cooler balance <.cool>`). However, if contact matrix files are imported 
 into a `HiCExperiment` object but no `balanced` scores are available, 
@@ -203,7 +203,7 @@ patchwork::wrap_plots(
 Correlation matrices are often calculated from balanced Hi-C matrices. 
 For instance, in genomes composed of eu- and heterochromatin, a correlation 
 matrix can be used to reveal a checkerboard pattern emphasizing the segregation 
-of chromatin into two A/B compartments (@Lieberman-Aiden2009Oct). 
+of chromatin into two A/B compartments (@Lieberman_Aiden_2009). 
 
 The `autocorrelate` function is used to compute a correlation matrix of a 
 `HiCExperiment` object. For each pair of interacting loci, the `autocorrelated` 
@@ -233,7 +233,7 @@ Here we have illustrated how to compute an autocorrelation matrix from a
 `HiCExperiment` object using the example **yeast** Hi-C experiment. 
 Bear in mind that this is unusual and not very useful, as yeast chromatin 
 is not segregated in two compartments but rather follows a Rabl 
-conformation (@Duan2010May). An example of autocorrelation map 
+conformation (@Duan_2010). An example of autocorrelation map 
 from a vertebrate Hi-C experiment (for which chromatin is segregated in 
 A/B compartments) is shown in [Chapter 10](workflow-chicken.qmd).
 :::

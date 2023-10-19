@@ -53,7 +53,7 @@ to get a visual representation of these data structures.
 This class is primarily used to describe genomic ranges of any nature, e.g. 
 sets of promoters, SNPs, chromatin loop anchors, ....  
 The data structure has been published in the seminal 2015 publication by 
-the `Bioconductor` team (@Huber2015Feb). 
+the `Bioconductor` team (@Huber_2015). 
 
 ### `GRanges` fundamentals 
 
@@ -466,7 +466,7 @@ as an overlap!
 To study chromatin interactions, we need a way to link pairs of `GRanges`. This is exactly what 
 the `GInteractions` class does. This data structure is defined in the 
 `InteractionSet` package and has been published in the 
-2016 paper by `Lun et al.` (@Lun2016May). 
+2016 paper by `Lun et al.` (@Lun_2016). 
 
 ![](images/20230309114047.png)
 

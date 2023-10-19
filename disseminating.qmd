@@ -146,7 +146,7 @@ fourDNData(experimentSetAccession = '4DNES25ABNZ1', type = 'pairs') |>
 a large storage footprint. 
 :::
 
-- `type = 'insulation'` will fetch a `.bigwig` track file precomputed by the 4DN consortium. This track corresponds to the genome-wide insulation score computed by `cooltools` as described in @Crane2015Jul. To know more about this, read [the excerpt from 4DN data portal](https://data.4dnucleome.org/resources/data-analysis/insulation_compartment_scores#insulation_scores_and_boundaries_page_all). Once fetched from the 4DN data portal, the local file can be imported in `R` using the `import` function, which will generate a `RleList` object. 
+- `type = 'insulation'` will fetch a `.bigwig` track file precomputed by the 4DN consortium. This track corresponds to the genome-wide insulation score computed by `cooltools` as described in @Crane_2015. To know more about this, read [the excerpt from 4DN data portal](https://data.4dnucleome.org/resources/data-analysis/insulation_compartment_scores#insulation_scores_and_boundaries_page_all). Once fetched from the 4DN data portal, the local file can be imported in `R` using the `import` function, which will generate a `RleList` object. 
 
 ```{r eval = FALSE}
 fourDNData(experimentSetAccession = '4DNES25ABNZ1', type = 'insulation') |> 

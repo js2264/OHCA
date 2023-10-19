@@ -59,4 +59,9 @@ format:
         search: true
         collapse-level: 5
 
+filters:
+  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
+
+csl: apa.csl
+
 editor: visual

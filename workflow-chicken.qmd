@@ -30,7 +30,7 @@ This chapter illustrates how to:
 
 ::: {.callout-important}
 ## Datasets
-We leverage five chicken datasets in this notebook, published in @Gibcus2018Feb. 
+We leverage five chicken datasets in this notebook, published in @Gibcus_2018. 
 They are all available from the 4DN data portal using the `fourDNData` package. 
 
 - `4DNES9LEZXN7`: chicken cell culture blocked in G2 
@@ -42,7 +42,7 @@ They are all available from the 4DN data portal using the `fourDNData` package.
 
 ## Importing data
 
-The 4DN consortium provides access to the datasets published in @Gibcus2018Feb. 
+The 4DN consortium provides access to the datasets published in @Gibcus_2018. 
 in `R`, they can be obtained thanks to the `fourDNData` gateway package. 
 
 ::: {.callout-warning}

@@ -42,7 +42,7 @@ into active euchromatin (A compartments) and regulated heterochromatin
 ### Importing Hi-C data
 
 To investigate chromosome compartments, we will fetch a contact matrix generated 
-from a micro-C experiment (from @Krietenstein2020May). A subset of the genome-wide
+from a micro-C experiment (from @Krietenstein_2020). A subset of the genome-wide
 dataset is provided in the `OHCA` package. It contains intra-chromosomal 
 interactions within `chr17`, binned at `5000`, `100000` and `250000` bp. 
 
@@ -173,16 +173,16 @@ domain *boundaries*.
 
 ![](images/20230403090000.png){width=40%, fig-align="center"}
 
-They are generally conserved across cell types and species (@Schmitt2016Nov), typically 
-correlate with units of DNA replication (@Pope2014Nov), and could play 
-a role during development (@Stadhouders2019May). 
+They are generally conserved across cell types and species (@Schmitt_2016), typically 
+correlate with units of DNA replication (@Pope_2014), and could play 
+a role during development (@Stadhouders_2019). 
 
 ### Computing diamond insulation score
 
-Several approaches exist to annotate topological domains (@Sefer2022Dec). Several packages in R implement some of these functionalities, e.g. `spectralTAD` or `TADcompare`. 
+Several approaches exist to annotate topological domains (@Sefer_2022). Several packages in R implement some of these functionalities, e.g. `spectralTAD` or `TADcompare`. 
 
 `HiContacts` offers a simple `getDiamondInsulation` function which computes the 
-diamond insulation score (@Crane2015Jul). This score quantifies average interaction 
+diamond insulation score (@Crane_2015). This score quantifies average interaction 
 frequency in an insulation window (of a certain `window_size`) sliding along 
 contact matrices at a chosen `resolution`. 
 
@@ -271,7 +271,7 @@ depicted on the Hi-C map by blue diamonds.
 Chromatin loops, dots, or contacts, refer to a strong increase of interaction frequency 
 between a pair of two genomic loci. They correspond to focal "dots" on a Hi-C map. 
 Relying on computer vision algorithms, `chromosight` uses this property to 
-annotate chromatin loops in a Hi-C map (@MattheyDoret2020Nov). `chromosight` is 
+annotate chromatin loops in a Hi-C map (@Matthey_Doret_2020). `chromosight` is 
 a standalone `python` package and is made available in R through the `HiCool`-managed 
 conda environment with the `getLoops()` function. 
 
@@ -452,6 +452,6 @@ plotMatrix(
 ### Other R packages
 
 A number of other R packages have been developed to identify focal chromatin loops, 
-notably `fitHiC` (@Ay2014Feb), `GOTHiC` (@Mifsud2017Apr) or `idr2d` (@Krismer2020Apr). 
+notably `fitHiC` (@Ay_2014), `GOTHiC` (@Mifsud_2017) or `idr2d` (@Krismer_2020). 
 Each fits a slightly different purpose, and we encourage the end user to read
 companion publications. 

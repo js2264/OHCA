@@ -265,7 +265,7 @@ with the centromeres from other chromosomes.
 
 ## Scalograms
 
-Scalograms were introduced in @Lioy2018Feb to investigate distance-dependent 
+Scalograms were introduced in @Lioy_2018 to investigate distance-dependent 
 contact frequencies for individual genomic bins along chromosomes.  
 To generate a scalogram, one needs to provide a `HiCExperiment` object 
 with a valid associated `pairsFile`. 
