@@ -21,6 +21,7 @@ Depends:
     DNAZooData,
     fourDNData
 Imports:
+    diffHic, 
     strawr, 
     hicrep,
     multiHiCcompare,
