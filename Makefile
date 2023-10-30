@@ -24,6 +24,7 @@ setup: ## Install HiCExperiment & co packages with pak.
 	$(RCMD) 'pak::pkg_install("HiContactsData", upgrade = TRUE, ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
 	$(RCMD) 'pak::pkg_install("fourDNData", upgrade = TRUE, ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
 	$(RCMD) 'pak::pkg_install("DNAZooData", upgrade = TRUE, ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
+	$(RCMD) 'pak::pkg_install("tidyomics/plyinteractions", upgrade = TRUE, ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))'
 
 .PHONY: install
 install: ## Install OHCA package and dependencies with pak.
