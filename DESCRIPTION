@@ -38,7 +38,7 @@ Imports:
     quarto,
     sessioninfo 
 Remotes:
-    github::TaoYang-dev/hicrep
+    github::TaoYang-dev/hicrep,
     github::tidyomics/plyinteractions
 biocViews:
     HiC,
