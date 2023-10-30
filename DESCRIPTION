@@ -21,6 +21,7 @@ Depends:
     DNAZooData,
     fourDNData
 Imports:
+    plyinteractions, 
     diffHic, 
     strawr, 
     hicrep,

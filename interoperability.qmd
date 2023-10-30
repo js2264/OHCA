@@ -34,6 +34,7 @@ library(GenomicRanges)
 library(InteractionSet)
 library(HiCExperiment)
 library(HiContactsData)
+library(plyinteractions)
 library(hicrep)
 library(multiHiCcompare)
 library(dplyr)
@@ -81,13 +82,17 @@ enrichment over background.
 
 ```{r}
 library(diffHic)
+set.seed(1234)
 
 # --- Filter to find aggregated interactions
 enrichments <- enrichedPairs(iset)
 filter <- filterPeaks(enrichments, min.enrich = log2(1.2), min.diag = 5)
 filtered_iset <- iset[filter]
+filtered_iset
 
 # --- Visualize filtered interactions 
+library(plyinteractions)
+library(HiContacts)
 interactions(filtered_iset) |> 
     filter(seqnames2 == 'II', seqnames1 == seqnames2) |> 
     plotMatrix(use.scores = 'count')
@@ -97,11 +102,12 @@ Next, we can cluster filtered interactions that are next to each other.
 
 ```{r}
 # --- Cluster interactions to find loops
-clustered_iset <- clusterPairs(filtered_iset, tol = 2000)
+clustered_iset <- clusterPairs(filtered_iset, tol = 5000)
+clustered_iset$interactions 
 
 # --- Visualize clustered interactions 
 interactions(filtered_iset) |> 
-    mutate(cluster = clustered_iset$indices[[1]])
+    mutate(cluster = clustered_iset$indices[[1]]) |> 
     filter(seqnames2 == 'II', seqnames1 == seqnames2) |> 
     plotMatrix(use.scores = 'cluster')
 ```
@@ -110,7 +116,7 @@ Finally, we can visualize identified individual interaction clusters identified 
 
 ```{r}
 # --- Plot matrix at a clustered loops
-cgi <- clustered_iset$interactions[19626]
+cgi <- clustered_iset$interactions[554]
 seqn <- seqnames(anchors(cgi, type="second"))
 start <- start(anchors(cgi, type="second")) - 50000
 end <- end(anchors(cgi, type="first")) + 50000
@@ -229,7 +235,7 @@ DI
 ## TopDom
 
 The `TopDom` method is widely used to annotate topological domains in genomes from Hi-C 
-data (@Shin_2016). The `TopDom` package was created to implement this method 
+data (@Shin_2015). The `TopDom` package was created to implement this method 
 in `R` (@Bengtsson_2020).
 
 Unfortunately, the format of the input to `TopDom` is rather tricky (see `?TopDom::readHiC`). 
