@@ -80,6 +80,8 @@ From there, we can **filter** interactions to only retain those with significant
 enrichment over background. 
 
 ```{r}
+library(diffHic)
+
 # --- Filter to find aggregated interactions
 enrichments <- enrichedPairs(iset)
 filter <- filterPeaks(enrichments, min.enrich = log2(1.2), min.diag = 5)
