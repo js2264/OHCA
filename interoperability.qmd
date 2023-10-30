@@ -6,12 +6,14 @@ bibliography: bibliography.bib
 # Interoperability: using HiCExperiment with other R packages
 
 ::: {.callout-note}
+
 ## Aims
 
 This notebook illustrates how to use a range of popular Hi-C—related `R` packages with 
-`HiCExperiment` objects. Conversion to the following packages is 
-illustrated here: 
+`HiCExperiment` objects. Conversion to the data structures supported by the 
+following packages is illustrated here: 
 
+- `diffHic`
 - `hicrep`
 - `multiHiCcompare`
 - `TopDom`
@@ -41,6 +43,89 @@ coolf_wt <- HiContactsData('yeast_wt', 'mcool')
 coolf_eco1 <- HiContactsData('yeast_eco1', 'mcool')
 ```
 
+## diffHic
+
+`diffHic` is the first R package dedicated to Hi-C processing and analysis (@Lun_2015). It is packed with 
+useful functions to generate a contact matrix from read pairs and to perform downstream 
+investigation, including normalization, 2D "peak" (i.e. loops) finding and aggregation, 
+differential interaction between samples, etc. It works seamlessly with the `InteractionSet` 
+class of object, which can be easily obtained from a `HiCExperiment` object. 
+
+To do so, we first need to extract `GInteractions` from one or several `HiCExperiment` objects
+and **create** a single `InteractionSet` object. 
+
+```{r}
+library(InteractionSet)
+library(GenomicRanges)
+library(HiCExperiment)
+library(HiContactsData)
+
+# ---- This downloads an example `.mcool` file and caches it locally 
+coolf <- HiContactsData('yeast_wt', 'mcool')
+cool <- import(coolf, format = 'cool')
+gi <- cool |> 
+    interactions() |> 
+    as("ReverseStrictGInteractions")
+iset <- InteractionSet(
+    assays = list(
+        counts = matrix(gi$count, ncol = 1), 
+        balanced = matrix(gi$balanced, ncol = 1)
+    ), 
+    interactions = gi, 
+    colData = data.frame(lib = c("WT"), totals = sum(gi$count))
+)
+```
+
+From there, we can **filter** interactions to only retain those with significant 
+enrichment over background. 
+
+```{r}
+# --- Filter to find aggregated interactions
+enrichments <- enrichedPairs(iset)
+filter <- filterPeaks(enrichments, min.enrich = log2(1.2), min.diag = 5)
+filtered_iset <- iset[filter]
+
+# --- Visualize filtered interactions 
+interactions(filtered_iset) |> 
+    filter(seqnames2 == 'II', seqnames1 == seqnames2) |> 
+    plotMatrix(use.scores = 'count')
+```
+
+Next, we can cluster filtered interactions that are next to each other. 
+
+```{r}
+# --- Cluster interactions to find loops
+clustered_iset <- clusterPairs(filtered_iset, tol = 2000)
+
+# --- Visualize clustered interactions 
+interactions(filtered_iset) |> 
+    mutate(cluster = clustered_iset$indices[[1]])
+    filter(seqnames2 == 'II', seqnames1 == seqnames2) |> 
+    plotMatrix(use.scores = 'cluster')
+```
+
+Finally, we can visualize identified individual interaction clusters identified with `diffHic` using `HiContacts`. 
+
+```{r}
+# --- Plot matrix at a clustered loops
+cgi <- clustered_iset$interactions[19626]
+seqn <- seqnames(anchors(cgi, type="second"))
+start <- start(anchors(cgi, type="second")) - 50000
+end <- end(anchors(cgi, type="first")) + 50000
+interactions_peak <- GRanges(seqn, IRanges(start, end))
+p <- plotMatrix(cool[interactions_peak])
+
+library(ggplot2)
+an <- anchors(cgi)
+p + geom_rect(
+    data = data.frame(xmin = start(an[[2]]), xmax = end(an[[2]]), ymin = start(an[[1]]), ymax = end(an[[1]])), 
+    aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax), 
+    inherit.aes = FALSE, 
+    fill = NA, 
+    colour = 'cyan'
+)
+```
+
 ## HiCrep
 
 `hicrep` is a popular package to compute **stratum-adjusted correlations** between Hi-C datasets (@Yang_2017). 
@@ -49,6 +134,7 @@ interactions of the DNA polymer are bound to decrease. `hicrep` computes a "per-
 computes a weighted average correlation for entire chromosomes. 
 
 ::: {.callout-tip}
+
 ### Installing `hicrep`
 
 `hicrep` package has been available from Bioconductor for many years but has 
@@ -65,12 +151,7 @@ remotes::install_github('TaoYang-dev/hicrep')
 In order to use `hicrep`, we first need to create two `HiCExperiment` objects. 
 
 ```{r eval = FALSE}
-library(InteractionSet)
-library(HiCExperiment)
-library(HiContactsData)
-
-# ---- This downloads example `.mcool` and `.pairs` files and caches them locally 
-coolf_wt <- HiContactsData('yeast_wt', 'mcool')
+# ---- This downloads example `.mcool` files and caches them locally 
 coolf_eco1 <- HiContactsData('yeast_eco1', 'mcool')
 ```
 
