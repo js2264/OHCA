@@ -1,4 +1,6 @@
 ---
+filters:
+  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
 reference-section-title: References
 bibliography: bibliography.bib
 ---

@@ -49,6 +49,7 @@ format:
     author-meta: "Jacques Serizay"
     highlight-style: atom-one-dark.theme
     citations-hover: true
+    citation-location: margin
     toc: true
     toc-float: 
       collapsed: false

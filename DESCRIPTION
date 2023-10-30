@@ -39,6 +39,7 @@ Imports:
     sessioninfo 
 Remotes:
     github::TaoYang-dev/hicrep
+    github::js2264/plyinteractions
 biocViews:
     HiC,
     DNA3DStructure

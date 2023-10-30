@@ -1,8 +1,10 @@
 ---
-reference-section-title: References
+filters:
+  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
 bibliography: bibliography.bib
 ---
 
+reference-section-title: References
 # Finding topological features in Hi-C 
 
 ```{r}
