@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
 # Workflow 2: Chromosome compartment cohesion upon mitosis entry
 
 ```{r}
@@ -12,7 +5,6 @@ bibliography: bibliography.bib
 #| results: "hide"
 #| message: false
 #| warning: false
-source("_common.R")
 library(ggplot2)
 library(cowplot)
 library(purrr)
@@ -22,16 +14,19 @@ library(fourDNData)
 ```
 
 ::: {.callout-note}
+
 ## Aims
 This chapter illustrates how to: 
 
 - Annotate compartments for a list of HiC experiments
 - Generate saddle plots for a list of HiC experiments
 - Quantify changes in interactions between compartments between different timepoints
+
 :::
 
 ::: {.callout-important}
 ## Datasets
+
 We leverage five chicken datasets in this notebook, published in @Gibcus_2018. 
 They are all available from the 4DN data portal using the `fourDNData` package. 
 
@@ -40,6 +35,7 @@ They are all available from the 4DN data portal using the `fourDNData` package.
 - `4DNESGDXKM2I`: chicken cell culture released from G2 block (10min)
 - `4DNESIR416OW`: chicken cell culture released from G2 block (15min)
 - `4DNESS8PTK6F`: chicken cell culture released from G2 block (30min)
+
 :::
 
 ## Importing data
@@ -48,9 +44,11 @@ The 4DN consortium provides access to the datasets published in @Gibcus_2018.
 in `R`, they can be obtained thanks to the `fourDNData` gateway package. 
 
 ::: {.callout-warning}
-## Beware
+
+### Beware
 The first time the following chunk of code is executed, it will cache a large 
 amount of data (mostly consisting of contact matrices stored in `.mcool` files).
+
 :::
 
 ```{r eval = FALSE}
@@ -110,7 +108,9 @@ plot_grid(plotlist = pl, nrow = 1)
 ```
 
 :::{.column-page-inset-right}
+
 ![](images/20230322181000.png)
+
 :::
 
 This highlights the progressive remodeling of chromatin into condensed 
@@ -184,7 +184,9 @@ plot_grid(
 ```
 
 :::{.column-page-right}
+
 ![](images/20230324125800.png)
+
 :::
 
 These correlation matrices suggest that there are two different regimes of chromatin compartment remodeling in this chromosome section: 
@@ -204,17 +206,21 @@ plot_grid(plotlist = pl, nrow = 1)
 ```
 
 :::{.column-page-right}
+
 ![](images/20230322181300.png)
+
 :::
 
 These plots confirm the previous observation made on chr. `4` and reveal that intra-B compartment interactions are generally lost 5' after G2 release, while intra-A interactions take up to 15' after G2 release to disappear.
 
 ::: {.callout-warning}
-## Beware
+
+### Beware
 The `plotSaddle()` function requires an eigenvector corresponding to A/B 
 compartments. In this example, this eigenvector is recovered from the 4DN data 
 portal. If not already available, this eigenvector can be computed from the 
 contact matrix using the `getCompartments()` function.
+
 :::
 
 ## Quantifying interactions within and between compartments
@@ -277,3 +283,5 @@ ggplot(df, aes(x = type, y = OE, group = type, fill = type)) +
 This visualization suggests that interactions between genomic loci belonging to 
 the B compartment are lost more rapidly than those between genomic loci belonging 
 to the A compartment, when cells are released from G2 to enter mitosis. 
+
+# References {-}

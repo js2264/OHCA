@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
 # Matrix-centric analysis
 
 ```{r}
@@ -12,7 +5,6 @@ bibliography: bibliography.bib
 #| results: "hide"
 #| message: false
 #| warning: false
-source("_common.R")
 library(ggplot2)
 library(GenomicRanges)
 library(InteractionSet)
@@ -33,9 +25,11 @@ hic_eco1 <- import(
 ```
 
 ::: {.callout-note}
+
 ## Aims
 This chapter focuses on the various analytical tools offered by `HiContacts`
 to compute matrix-related metrics from a `HiCExperiment` object.
+
 :::
 
 In the first part of this book, we have seen how to query parts or all of the 
@@ -66,15 +60,18 @@ This encompasses:
 ![](images/20230421134800.jpg)
 
 ::: {.callout-note}
+
 ## Note
 - All the functions described in this chapter are **endomorphisms**: they 
 take `HiCExperiment` objects as input and return modified `HiCExperiment` 
 objects.
 - Internally, most of the functions presented in this chapter make a call to 
 `as.matrix(<HiCExperiment>)` to coerce it into a `matrix`. 
+
 :::
 
 ::: {.callout-tip collapse="true"}
+
 ## Generating the example `hic` object 👇
 
 To demonstrate `HiContacts` functionalities, we will create 
@@ -99,6 +96,7 @@ hic <- import(cf, focus = 'II', resolution = 2000)
 ```{r}
 hic
 ```
+
 :::
 
 ## Operations in an individual matrix
@@ -131,6 +129,7 @@ should be nearly identical to `balanced` scores, which were originally imported
 from the disk-stored contact matrix. 
 
 :::{.column-body-outset-right}
+
 ```{r out.width = '100%', fig.asp = .33}
 patchwork::wrap_plots(
     plotMatrix(normalized_hic, use.scores = 'count', caption = FALSE),
@@ -139,6 +138,7 @@ patchwork::wrap_plots(
     nrow = 1
 )
 ```
+
 :::
 
 ### Computing observed/expected (O/E) map
@@ -169,6 +169,7 @@ detrended_hic
 Topological features will be visually more prominent in the O/E `detrended` Hi-C map. 
 
 :::{.column-page-right}
+
 ```{r out.width = '100%', fig.asp = .33}
 patchwork::wrap_plots(
     plotMatrix(detrended_hic, use.scores = 'balanced', scale = 'log10', limits = c(-3.5, -1.2), caption = FALSE),
@@ -177,13 +178,16 @@ patchwork::wrap_plots(
     nrow = 1
 )
 ```
+
 :::
 
 ::: {.callout-note}
-## Scale for `detrended` scores
+
+#### Scale for `detrended` scores
 - `expected` scores are in `linear` scale and ± in the same amplitude than `balanced` scores;
 - `detrended` scores are in `log2` scale, in general approximately centered around 0. When plotting `detrended` scores, 
-`scale = linear` should be set to prevent the default `log10` scaling. 
+`scale = linear` should be set to prevent the default `log10` scaling.
+
 :::
 
 ### Computing autocorrelated map 
@@ -216,7 +220,8 @@ Correlated and anti-correlated loci will be visually represented in the
 `autocorrelated` Hi-C map in red and blue pixels, respectively. 
 
 ::: {.callout-note}
-## Note
+
+#### Note
 Here we have illustrated how to compute an autocorrelation matrix from a 
 `HiCExperiment` object using the example **yeast** Hi-C experiment. 
 Bear in mind that this is unusual and not very useful, as yeast chromatin 
@@ -224,6 +229,7 @@ is not segregated in two compartments but rather follows a Rabl
 conformation (@Duan_2010). An example of autocorrelation map 
 from a vertebrate Hi-C experiment (for which chromatin is segregated in 
 A/B compartments) is shown in [Chapter 10](workflow-chicken.qmd).
+
 :::
 
 ```{r}
@@ -237,11 +243,13 @@ plotMatrix(
 ```
 
 ::: {.callout-note}
-## Scale for `autocorrelated` scores
+
+#### Scale for `autocorrelated` scores
 - `autocorrelated` scores are in `linear` scale, in general approximately centered around 0. When plotting `autocorrelated` scores, 
 `scale = linear` should be set to prevent the default `log10` scaling. 
 - `limits` should be manually set to `c(-x, x)` (`0 < x <= 1`) to ensure 
 that the color range is effectively centered on `0`. 
+
 :::
 
 ### Despeckling (smoothing out) a contact map
@@ -265,6 +273,7 @@ results in a smoother Hi-C heatmap, effectively removing the "speckles"
 observed at longer range. 
 
 :::{.column-page-right}
+
 ```{r out.width = '100%', fig.asp = .33}
 library(InteractionSet)
 loops <- system.file('extdata', 'S288C-loops.bedpe', package = 'HiCExperiment') |> 
@@ -287,12 +296,15 @@ patchwork::wrap_plots(
     nrow = 1
 )
 ```
+
 :::
 
 ::: {.callout-note}
-## Scale for `despeckled` scores
+
+#### Scale for `despeckled` scores
 `despeckled` scores are in the same scale than the `scores` they were computed 
 from. 
+
 :::
 
 ## Operations between multiple matrices
@@ -352,3 +364,5 @@ cowplot::plot_grid(
     )
 )
 ```
+
+# References {-}

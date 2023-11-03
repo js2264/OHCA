@@ -1,15 +1,27 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
-```{r}
+```{r "intro"}
 #| echo: false
-source("_common.R")
-.gh_url <- file.path('https://github.com', rmarkdown::metadata[['github-repo']])
+intro <- tryCatch(
+    {
+        description <- packageDescription("OHCA")
+        pkg <- description$Package
+        version <- description$Version
+        authors <- eval(parse(text = description$Authors))
+        license <- description$License
+        glue::glue(
+            "**Package:** {pkg}<br/>\n", 
+            "**Authors:** {paste(format(authors, include = c('given', 'family', 'role')), collapse = ', ')}<br/>\n", 
+            "**Compiled:** {as.character(Sys.Date())}<br/>\n", 
+            "**Package version:** {version}<br/>\n", 
+            "**R version:** <b style='color:red;'>{R.version.string}</b><br/>\n", 
+            "**BioC version:** <b style='color:red;'>{BiocManager::version()}</b><br/>\n", 
+            "**License:** {license}<br/>"
+        )
+    }, 
+    error = function(e) {"Local preview"}
+)
 ```
+
+`r intro`
 
 # Welcome {-}
 
@@ -19,11 +31,9 @@ book starts with key concepts important for the analysis of chromatin conformati
 presents `Bioconductor` tools that can be leveraged to process, analyze, explore and visualize 
 Hi-C data. 
 
-`r rebook::openingDetails(Copyright='J. Serizay', Source=.gh_url)`
-
 ::: {.content-hidden when-format="pdf"}
 
-# Table of contents {-}
+## Table of contents {-}
 
 This book is divided in three parts:  
 
@@ -54,7 +64,7 @@ This book is divided in three parts:
 
 # Installation & requirements {-}
 
-## General audience
+## General audience {-}
 
 This books aims to demonstrate how to pre-process, parse and investigate Hi-C data in `R`. 
 For this reason, a significant portion of this book consists of executable R code chunks. 
@@ -66,7 +76,8 @@ If you do not have `R >= 4.3` installed, you will need to update your `R` versio
 will require `R >= 4.3`. 
 
 ::: {.callout-note collapse="true"}
-## Installing R 4.3 👇
+
+### Installing R 4.3 👇
 
 Detailed instructions are available [here](https://github.com/js2264/setup_ubuntu) to 
 install `R 4.3` on a Linux machine (Ubuntu 22.04). 
@@ -116,14 +127,15 @@ sudo apt install -y \
     libhdf5-dev libudunits2-dev libgdal-dev libgeos-dev \
     libproj-dev libnode-dev libmagick++-dev
 ```
+
 :::
 
-- `Bioconductor >= 3.17` is also required. You can check whether `Bioconductor` is available and its version in `R` by typing `BiocManager::version()`. If you do not have `BiocManager` >= 3.17 installed, you will need to update it as follows: 
+- `Bioconductor >= 3.18` is also required. You can check whether `Bioconductor` is available and its version in `R` by typing `BiocManager::version()`. If you do not have `BiocManager` >= 3.18 installed, you will need to update it as follows: 
 
 ```{r eval = FALSE}
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install(version = "3.17")
+BiocManager::install(version = "3.18")
 ```
 
 - You will also need important packages, which will be described in length in this book. 
@@ -138,7 +150,7 @@ BiocManager::install("fourDNData", ask = FALSE)
 BiocManager::install("DNAZooData", ask = FALSE)
 ```
 
-## Developers 
+## Developers {-}
 
 For developers or advanced R users, the `devel` versions of these packages 
 can be installed along with their dependencies: 
@@ -153,7 +165,7 @@ pak::pkg_install("js2264/fourDNData", ask = FALSE, dependencies = c("Depends", "
 pak::pkg_install("js2264/DNAZooData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
 ```
 
-## Docker image
+## Docker image {-}
 
 If you have `docker` installed, the easiest approach would be to run the following command in a `shell` terminal:
 
@@ -182,28 +194,27 @@ quarto render
 ```
 
 ::: {.callout-warning}
+
 All dependencies listed above will be required!
+
 :::
 
 The actual rendering of this book is done by GitHub Actions, and the 
 rendered static website is hosted by GitHub Pages. 
 
-## Session info {-}
 
-```{r}
-#| echo: false
-#| results: "hide"
-#| message: false
-#| warning: false
-library("HiCExperiment")
-library("HiCool")
-library("HiContacts")
-library("HiContactsData")
-library("fourDNData")
-library("DNAZooData")
-library("OHCA")
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(
+    installed.packages()[,"Package"], 
+    include_base = TRUE
+)
 ```
 
-```{r}
-sessioninfo::session_info()
-```
+:::

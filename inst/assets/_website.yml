@@ -1,0 +1,14 @@
+website:
+  back-to-top-navigation: true
+  search: 
+    location: sidebar
+  page-footer:
+    background: light
+    left: |
+      <i>OHCA: Orchestrating Hi-C analysis with Bioconductor</i> was written by 
+      J. Serizay
+    right: |
+      This book was built with <a href="https://github.com/js2264/BiocBook/">BiocBook</a> with :heart:
+  repo-branch: devel
+  repo-actions: [edit, issue]
+  open-graph: true

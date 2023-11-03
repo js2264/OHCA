@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
 # Workflow 3: Inter-centromere interactions in yeast
 
 ```{r}
@@ -12,7 +5,6 @@ bibliography: bibliography.bib
 #| results: "hide"
 #| message: false
 #| warning: false
-source("_common.R")
 library(ggplot2)
 library(purrr)
 library(GenomicRanges)
@@ -24,12 +16,15 @@ library(multiHiCcompare)
 ```
 
 ::: {.callout-note}
+
 ## Aims
 This chapter illustrates how to plot the aggregate signal over pairs of 
 genomic ranges, in this case pairs of yeast centromeres. 
+
 :::
 
 ::: {.callout-important}
+
 ## Datasets
 We leverage two yeast datasets in this notebook. 
 
@@ -211,3 +206,4 @@ p <- ggplot(df, aes(x = center/1e3, y = balanced)) +
 
 ![](images/20230523180000.png)
 
+# References {-}

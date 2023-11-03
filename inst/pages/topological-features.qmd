@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-bibliography: bibliography.bib
----
-
-reference-section-title: References
 # Finding topological features in Hi-C 
 
 ```{r}
@@ -12,7 +5,6 @@ reference-section-title: References
 #| results: "hide"
 #| message: false
 #| warning: false
-source("_common.R")
 library(dplyr)
 library(ggplot2)
 library(GenomicRanges)
@@ -26,6 +18,7 @@ library(OHCA)
 ```
 
 ::: {.callout-note}
+
 ## Aims
 This chapter focuses on the annotation of topological features from Hi-C contact 
 maps, including: 
@@ -33,6 +26,7 @@ maps, including:
 - Chromosome compartments 
 - Topologically associating domains
 - Stable chromatin loops
+
 :::
 
 ## Chromosome compartments 
@@ -206,10 +200,12 @@ metadata(hic)$insulation
 ```
 
 ::: {.callout-note}
-## Note
+
+#### Note
 
 The `getDiamondInsulation` function can be parallelized over multiple 
 threads by specifying the Bioconductor generic `BPPARAM` argument. 
+
 :::
 
 ### Exporting insulation scores tracks
@@ -438,3 +434,5 @@ A number of other R packages have been developed to identify focal chromatin loo
 notably `fitHiC` (@Ay_2014), `GOTHiC` (@Mifsud_2017) or `idr2d` (@Krismer_2020). 
 Each fits a slightly different purpose, and we encourage the end user to read
 companion publications. 
+
+# References {-}

@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
 # Data gateways: accessing public Hi-C data portals
 
 ```{r}
@@ -12,7 +5,6 @@ bibliography: bibliography.bib
 #| results: "hide"
 #| message: false
 #| warning: false
-source("_common.R")
 library(ggplot2)
 library(GenomicRanges)
 library(InteractionSet)
@@ -22,6 +14,7 @@ library(DNAZooData)
 ```
 
 ::: {.callout-note}
+
 ## Aims
 This chapter focuses on introducing two important portals hosting 
 public Hi-C datasets: the [4DN Consortium](https://www.4dnucleome.org/) 
@@ -30,6 +23,7 @@ a programmatic access to these portals:
 
 - `fourDNData`
 - `DNAZooData`
+
 :::
 
 The Hi-C experimental approach has gained significant traction across multiple 
@@ -143,9 +137,11 @@ fourDNData(experimentSetAccession = '4DNES25ABNZ1', type = 'pairs') |>
 ```
 
 ::: {.callout-warning}
-## Watch out
+
+#### Watch out
 `.pairs` files can be particularly large and therefore will take both and long time to download and 
 a large storage footprint. 
+
 :::
 
 - `type = 'insulation'` will fetch a `.bigwig` track file precomputed by the 4DN consortium. This track corresponds to the genome-wide insulation score computed by `cooltools` as described in @Crane_2015. To know more about this, read [the excerpt from 4DN data portal](https://data.4dnucleome.org/resources/data-analysis/insulation_compartment_scores#insulation_scores_and_boundaries_page_all). Once fetched from the 4DN data portal, the local file can be imported in `R` using the `import` function, which will generate a `RleList` object. 
@@ -367,3 +363,5 @@ corrected by the DNA Zoo consortium.
 metadata(hicfile)$assemblyURL
 ##  [1] "https://dnazoo.s3.wasabisys.com/Hypsibius_dujardini/nHd_3.1_HiC.fasta.gz"
 ```
+
+# References {-}

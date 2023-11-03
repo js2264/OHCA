@@ -1,0 +1,37 @@
+book:
+  title: "Orchestrating Hi-C analysis with Bioconductor"
+  chapters:
+    - index.qmd
+    - pages/preamble.qmd
+    - part: "Fundamentals concepts"
+      chapters:
+        - pages/principles.qmd
+        - pages/data-representation.qmd
+        - pages/parsing.qmd
+        - pages/visualization.qmd
+    - part: "In-depth Hi-C analysis"
+      chapters:
+        - pages/matrix-centric.qmd
+        - pages/interactions-centric.qmd
+        - pages/topological-features.qmd
+    - part: "Advanced Hi-C topics"
+      chapters:
+        - pages/disseminating.qmd
+        - pages/interoperability.qmd
+        - pages/workflow-yeast.qmd
+        - pages/workflow-chicken.qmd
+        - pages/workflow-centros.qmd
+  downloads: pdf
+  cover-image: assets/cover.jpg
+  favicon: assets/cover.jpg
+  sidebar: 
+    tools: 
+      - icon: git
+        menu:
+          - text: Source Code
+            url:  https://github.com/js2264/OHCA/
+          - text: Browse version `devel`
+            url:  https://js2264.github.io/OHCA/devel/
+    style: "docked"
+    background: "light"
+    collapse-level: 5

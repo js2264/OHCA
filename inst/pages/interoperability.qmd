@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
 # Interoperability: using HiCExperiment with other R packages
 
 ::: {.callout-note}
@@ -29,7 +22,6 @@ following packages is illustrated here:
 #| results: "hide"
 #| message: false
 #| warning: false
-source("_common.R")
 library(ggplot2)
 library(purrr)
 library(GenomicRanges)
@@ -244,7 +236,6 @@ Unfortunately, the format of the input to `TopDom` is rather tricky (see `?TopDo
 The following chunk of code shows how to coerce a `HiCExperiment` object into a 
 `TopDom`-compatible object. 
 
-
 ```{r}
 library(TopDom)
 hic <- import(coolf_wt, format = 'cool')
@@ -294,6 +285,7 @@ rtracklayer::export(topologicalFeatures(hic, 'domain'), 'hic_domains.bed')
 `GOTHiC` relies on a cumulative binomial test to detect interactions between distal genomic loci that have significantly more reads than expected by chance in Hi-C experiments (@Mifsud_2017). 
 
 ::: {.callout-important icon='true'}
+
 ### Using the `GOTHiC` function
 
 Unfortunately, the main `GOTHiC` function 
@@ -386,13 +378,4 @@ interactions(res)
 
 <!-- ## HiCDOC -->
 
-## References {-}
-
-::: {#refs}
-:::
-
-## Session info {-}
-
-```{r echo = FALSE}
-sessioninfo::session_info()
-```
+# References {-}

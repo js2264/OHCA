@@ -1,21 +1,10 @@
 ARG BIOC_VERSION
-ARG VERSION
-
-# Pull the base image from bioconductor/bioconductor_docker
 FROM bioconductor/bioconductor_docker:${BIOC_VERSION}
+COPY . /opt/pkg
 
-LABEL org.opencontainers.image.source=https://github.com/js2264/OHCA
-LABEL org.opencontainers.image.documentation=https://js2264.github.io/OHCA
-LABEL org.opencontainers.image.authors="OHCA authors"
-LABEL org.opencontainers.image.description="Orchestrating Hi-C analysis with Bioconductor"
-LABEL org.opencontainers.image.licenses=MIT
-LABEL org.opencontainers.image.version ${VERSION}
+# Install book package 
+RUN Rscript -e 'repos <- BiocManager::repositories() ; remotes::install_local(path = "/opt/pkg/", repos=repos, dependencies=TRUE, build_vignettes=FALSE, upgrade=TRUE) ; sessioninfo::session_info(installed.packages()[,"Package"], include_base = TRUE)'
 
-# Install quarto
-# Install OHCA package suite
-# Install OHCA package itself
-# Print info 
-# Cleanup files
-WORKDIR /opt/OHCA
-COPY . /opt/OHCA
-RUN make 
+## Build/install using same approach than BBS
+RUN R CMD INSTALL /opt/pkg
+RUN quarto install tinytex && R CMD build --keep-empty-dirs --no-resave-data /opt/pkg

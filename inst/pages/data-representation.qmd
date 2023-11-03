@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
 # Hi-C data structures in R
 
 ```{r}
@@ -12,7 +5,6 @@ bibliography: bibliography.bib
 #| results: "hide"
 #| message: false
 #| warning: false
-source("_common.R")
 library(ggplot2)
 library(GenomicRanges)
 library(InteractionSet)
@@ -33,6 +25,7 @@ metadata(yeast_hic) <- list(
 ```
 
 ::: {.callout-note}
+
 ## Aims
 This chapter introduces the four main classes offered by `Bioconductor` 
 leveraged to perform Hi-C analysis, describes their structure and how to interact with them:  
@@ -40,13 +33,16 @@ leveraged to perform Hi-C analysis, describes their structure and how to interac
 - `GRanges` (jump to [the section](#granges-class))  
 - `GInteractions` (jump to [the section](#ginteractions-class))  
 - `ContactFile` (jump to [the section](#contactfile-class))  
-- `HiCExperiment` (jump to [the section](#hicexperiment-class))  
+- `HiCExperiment` (jump to [the section](#hicexperiment-class)) 
+
 :::
 
 ::: {.callout-tip}
+
 ## TL;DR
 Directly jump to the [last section of this chapter](#visual-summary-of-the-hicexperiment-data-structure) 
 to get a visual representation of these data structures. 
+
 :::
 
 ## `GRanges` class
@@ -152,11 +148,13 @@ These methods are referred to as "intra-range" methods
 as they work *"one-region-at-a-time"*. 
 
 ::: {.callout-note}
-## Note 
+
+##### Note 
 - Each range of the input `GRanges` object is modified independently from the 
 other ranges in the following code chunks.
 - Intra-range operations are **endomorphisms**: they all take `GRanges` inputs 
 and always return `GRanges` objects. 
+
 :::
 
 - Shifting each genomic range in a `GRanges` object by a certain number of bases: 
@@ -226,10 +224,12 @@ gr * 1000 # ----- Zoom in by a given factor (effectively decreasing the `GRanges
 ```
 
 ::: {.callout-warning}
-## Going further
+
+##### Going further
 To fully grasp how to operate `GRanges` objects, we highly recommend reading the 
 detailed documentation for this class by typing `?GenomicRanges` and 
 `` ?GenomicRanges::`intra-range-methods` ``.
+
 :::
 
 #### Inter-range methods {#inter-range}
@@ -238,9 +238,11 @@ Compared to "intra-range" methods described above, **inter-range** methods
 involve comparisons *between* ranges **in a single** GRanges object.
 
 ::: {.callout-note}
-## Note 
+
+##### Note 
 Compared to previous section, the result of each function described below 
 depends on the **entire set of ranges** in the input `GRanges` object.
+
 :::
 
 - Computing the "inverse" genomic ranges, i.e. ranges in-between the input ranges:
@@ -266,9 +268,11 @@ coverage(gr, weight = 'GC')
 ```
 
 ::: {.callout-warning}
-## Going further
+
+##### Going further
 To fully grasp how to operate `GRanges` objects, we highly recommend reading the 
 detailed documentation for this class by typing `` ?GenomicRanges::`inter-range-methods` ``. 
+
 :::
 
 ### Comparing multiple `GRanges` objects
@@ -338,9 +342,11 @@ The `Hits` output clearly describes what overlaps with what:
 - The query (peak) `#5` overlaps with subject (TSS) `#2`
 
 ::: {.callout-note}
-## Note 
+
+##### Note 
 Because no other query index or subject index is listed in the `ov` output, 
 none of the remaining ranges from `query` overlap with ranges from `subject`.
+
 :::
 
 - Subsetting by overlaps between a query and a subject
@@ -364,7 +370,8 @@ countOverlaps(query = peaks, subject = TSSs)
 ```
 
 ::: {.callout-note}
-## Note 
+
+##### Note 
 Note that which `GRanges` goes in `query` or `subject` is crucial! Counting 
 **for each peak, the number of TSSs it overlaps with** is very different from 
 **for each TSS, how many peaks it overlaps with**. 
@@ -382,6 +389,7 @@ We can add these counts to the original `query` object:
 TSSs$n_peaks <- countOverlaps(query = TSSs, subject = peaks)
 TSSs
 ```
+
 :::
 
 - `%over%`, `%within%`, `%outside%` : handy operators
@@ -412,9 +420,11 @@ peaks %outside% TSSs
 ```
 
 ::: {.callout-warning}
-## Going further
+
+##### Going further
 To fully grasp how to find overlaps between `GRanges` objects, we highly recommend reading the 
 detailed documentation by typing `` ?IRanges::`findOverlaps-methods` ``.
+
 :::
 
 #### Find nearest range from a subject for each range in a query
@@ -620,12 +630,14 @@ swapAnchors(gi)
 ```
 
 ::: {.callout-warning}
-## Note
+
+##### Note
 "Sorting" and "swapping" a `GInteractions` object are two 
 **entirely different actions**: 
 
 - "sorting" reorganizes all *rows* (interactions);
 - "swapping" *anchors* reorganizes *"first" and "second" anchors* for each interaction independently.
+
 :::
 
 #### `GInteractions` distance method
@@ -1175,3 +1187,5 @@ queries to seamlessly import parts or all the data contained in
 disk-stored Hi-C contact matrices in a variety of formats. 
 
 ![](images/20230309114202.png)
+
+# References {-}

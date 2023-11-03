@@ -22,6 +22,9 @@ Depends:
     fourDNData
 Imports:
     plyinteractions, 
+    terra, 
+    Rfast, 
+    WGCNA, 
     diffHic, 
     strawr, 
     hicrep,
@@ -37,9 +40,9 @@ Imports:
     rebook,
     quarto,
     sessioninfo 
+Suggests:
 Remotes:
-    github::TaoYang-dev/hicrep,
-    github::tidyomics/plyinteractions
+    github::TaoYang-dev/hicrep
 biocViews:
     HiC,
     DNA3DStructure

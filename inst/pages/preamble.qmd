@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
 # Preamble {-}
 
 Hi-C is an experimental method to quantify spatial interactions between any pair of genomic loci. While a number of command-line interfaces (CLI) exist to process and manipulate Hi-C data (e.g. `cooler` (@Abdennur_2019), `juicer` (@Durand_2016) and HiC-Pro (@Servant_2015)), they generally suffer from several limitations often found in emerging genomics techniques: 
@@ -21,6 +14,8 @@ On top of the `HiCExperiment` data structure, the `HiContacts` package offers ex
 
 ![](images/20230421134800.jpg)
 
+::: {.content-hidden when-format="pdf"}
+
 # Package status {-}
 
 |Github repo 💾|Doc 📘|Github checks ✅|Bioc builds 🏗|Lifecycle 🌱|
@@ -31,3 +26,7 @@ On top of the `HiCExperiment` data structure, the `HiContacts` package offers ex
 |[HiContactsData](https://github.com/js2264/HiContactsData)|[Doc](https://js2264.github.io/HiContactsData)|[![R-CMD-check-bioc](https://github.com/js2264/HiContactsData/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/js2264/HiContactsData/actions/workflows/check-bioc.yml)|Bioc release:<br/>[![Release](https://bioconductor.org/shields/build/release/data-experiment/HiContactsData.svg)](https://bioconductor.org/checkResults/release/data-experiment-LATEST/HiContactsData/) <br/>Bioc devel:<br/>[![Devel](https://bioconductor.org/shields/build/release/data-experiment/HiContactsData.svg)](https://bioconductor.org/checkResults/devel/data-experiment-LATEST/HiContactsData/)|[![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)|
 |[DNAZooData](https://github.com/js2264/DNAZooData)|[Doc](https://js2264.github.io/DNAZooData)|[![rworkflows](https://github.com/js2264/DNAZooData/actions/workflows/rworkflows.yml/badge.svg)](https://github.com/js2264/DNAZooData/actions/workflows/rworkflows.yml)|Bioc release:<br/>[![Release](https://bioconductor.org/shields/build/release/data-experiment/DNAZooData.svg)](https://bioconductor.org/checkResults/release/data-experiment-LATEST/DNAZooData/) <br/>Bioc devel:<br/>[![Devel](https://bioconductor.org/shields/build/release/data-experiment/DNAZooData.svg)](https://bioconductor.org/checkResults/devel/data-experiment-LATEST/DNAZooData/)|[![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)|
 |[fourDNData](https://github.com/js2264/fourDNData)|[Doc](https://js2264.github.io/fourDNData)|[![rworkflows](https://github.com/js2264/fourDNData/actions/workflows/rworkflows.yml/badge.svg)](https://github.com/js2264/fourDNData/actions/workflows/rworkflows.yml)|Bioc release:<br/>[![Release](https://bioconductor.org/shields/build/release/data-experiment/fourDNData.svg)](https://bioconductor.org/checkResults/release/data-experiment-LATEST/fourDNData/) <br/>Bioc devel:<br/>[![Devel](https://bioconductor.org/shields/build/release/data-experiment/fourDNData.svg)](https://bioconductor.org/checkResults/devel/data-experiment-LATEST/fourDNData/)|[![](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)|
+
+:::
+
+# References {-}

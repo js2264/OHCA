@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
 # Hi-C data visualization
 
 ```{r}
@@ -12,7 +5,6 @@ bibliography: bibliography.bib
 #| results: "hide"
 #| message: false
 #| warning: false
-source("_common.R")
 library(ggplot2)
 library(GenomicRanges)
 library(InteractionSet)
@@ -33,12 +25,15 @@ hic2 <- import(
 ```
 
 ::: {.callout-note}
+
 ## Aims
 This chapter focuses on the various visualization tools offered by `HiContacts`
 to plot `HiCExperiment` contact matrices in R. 
+
 :::
 
 ::: {.callout-tip collapse="true"}
+
 ## Generating the example `hic` object 👇
 
 To demonstrate how to visualize a `HiCExperiment` contact matrix, we will create 
@@ -63,6 +58,7 @@ hic <- import(cf, focus = 'V', resolution = 2000)
 ```{r}
 hic
 ```
+
 :::
 
 ## Visualizing Hi-C contact maps
@@ -93,9 +89,11 @@ plotMatrix(hic)
 ```
 
 ::: {.callout-note}
-## Note
+
+#### Note
 A caption summarizing the plotting parameters is added below the heatmap. This 
-can be removed with `caption = FALSE`. 
+can be removed with `caption = FALSE`.
+
 :::
 
 ### Horizontal map
@@ -287,3 +285,5 @@ plotMatrix(
     cmap = bgrColors()
 )
 ```
+
+# References {-}

@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
 # Workflow 1: Distance-dependent interactions across yeast mutants
 
 ```{r}
@@ -12,7 +5,6 @@ bibliography: bibliography.bib
 #| results: "hide"
 #| message: false
 #| warning: false
-source("_common.R")
 library(ggplot2)
 library(purrr)
 library(GenomicRanges)
@@ -24,6 +16,7 @@ library(multiHiCcompare)
 ```
 
 ::: {.callout-note}
+
 ## Aims
 This chapter illustrates how to: 
 
@@ -34,6 +27,7 @@ This chapter illustrates how to:
 :::
 
 ::: {.callout-important}
+
 ## Datasets
 We leverage seven yeast datasets in this notebook. They are all available from SRA: 
 
@@ -52,9 +46,11 @@ We leverage seven yeast datasets in this notebook. They are all available from S
 The easiest for this is to directly fetch files from SRA from their FTP server. We can do so using the base `download.file` function. 
 
 ::: {.callout-note}
+
 The next two code chunks illustrate how to do download and process Hi-C reads from SRA, but 
 they are not actually executed when rendering this website as it would take a 
 significant amount of time. 
+
 :::
 
 ```{r eval = FALSE}
@@ -202,9 +198,11 @@ imported in memory, but it will be accurate at the base resolution,
 rather than bin resolution from matrices. 
 
 ::: {.callout-note}
-## Note
+
+### Note
 Since matrices were imported after `HiCool` processing with the `importHiCoolFolder`, 
 the associated `.pairs` file has been automatically added to each `HiCExperiment` object!
+
 :::
 
 The computed P(s) is stored for each sample as a `tibble`. 
@@ -268,8 +266,10 @@ Fortunately, `HiCExperiment` objects can easily be coerced into actual dense mat
 `as.matrix()` function. 
 
 ::: {.callout-important}
-## Important
+
+### Important
 Make sure to use the `count` scores, which are required by `hicrep`. 
+
 :::
 
 We can calculate the overall stratum-corrected correlation score over the chromosome
@@ -321,9 +321,11 @@ We can even iterate over an extra level, to compute stratum-corrected correlatio
 Here, we will only compute correlation scores between any sample and `WT_G2M_rep1` sample. 
 
 ::: {.callout-tip}
-## Parallelizing over chromosomes 
+
+### Parallelizing over chromosomes 
 `BiocParallel::bplapply()` replaces `purrr::map()` here, as it allows 
 parallelization of independent correlation computation runs over multiple CPUs. 
+
 :::
 
 ```{r eval = FALSE}
@@ -486,3 +488,5 @@ cowplot::plot_grid(
 ```
 
 ![](images/20230322102919.png)
+
+# References {-}

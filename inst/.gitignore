@@ -1,0 +1,6 @@
+/.quarto/
+docs/
+*html
+*rmarkdown
+*_files
+*_cache

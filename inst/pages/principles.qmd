@@ -1,10 +1,3 @@
----
-filters:
-  - _extensions/pandoc-ext/section-bibliographies/section-bibliographies.lua
-reference-section-title: References
-bibliography: bibliography.bib
----
-
 # Hi-C pre-processing steps
 
 ```{r}
@@ -12,7 +5,6 @@ bibliography: bibliography.bib
 #| results: "hide"
 #| message: false
 #| warning: false
-source("_common.R")
 library(HiContactsData)
 r1 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R1')
 r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
@@ -61,7 +53,7 @@ necessarily come in pairs, generally called `*_R1.fq.gz` and `*_R2.fq.gz`.
 
 Here is the first read listed in `sample_R1.fq.gz` file:
 
-```{filename='sample_R1.fq.gz'}
+```{filename="sample-R1.fq.gz"}
 @SRR5399542.1.1 DH1DQQN1:393:H9GEWADXX:1:1101:1187:2211 length=24
 CAACTTCAATACCAGCAGCAGCAA
 +
@@ -70,7 +62,7 @@ CCCFFFFFHHHHHJJJJJIJJJJJ
 
 And here is the first read listed in `sample_R2.fq.gz` file:
 
-```{filename='sample_R2.fq.gz'}
+```{filename="sample-R2.fq.gz"}
 @SRR5399542.1.1 DH1DQQN1:393:H9GEWADXX:1:1101:1187:2211 length=24
 GCTGTTGTTGTTGTTGTATTTGCA
 +
@@ -127,7 +119,7 @@ A `.pairs` file is organized in a `header` followed by a `body`:
     * `frag1`, `frag2`: restriction enzyme fragment index used by `Juicer`
   * Any number of optional columns can be added
 
-```{filename='sample.pairs'}
+```{filename="sample.pairs"}
 ## pairs format v1.0
 #sorted: chr1-chr2-pos1-pos2
 #shape: upper triangle
@@ -157,7 +149,7 @@ between any pair of genomic bins, i.e. the "contact matrix".
 
 For instance, here is a dummy `.pairs` file with a total of 5 pairs: 
 
-```{filename='dummy.pairs'}
+```{filename="dummy.pairs"}
 ## pairs format v1.0
 #sorted: chr1-chr2-pos1-pos2
 #columns: readID chr1 pos1 chr2 pos2 strand1 strand2
@@ -172,7 +164,7 @@ For instance, here is a dummy `.pairs` file with a total of 5 pairs:
 Note that this genome reference is made of a single chromosome (`chr1`), very short (length of `389`). 
 By binning this chromosome in 100bp-wide bins (`100` bp is the *`resolution`*), one would optain the following four `bins`: 
 
-```{filename='bins.bed'}
+```{filename="bins.bed"}
 <chr>  <pos> <bin>
 chr1   1     100
 chr1   101   200
@@ -215,7 +207,7 @@ By pasting side-to-side the left-hand and right-hand extremities of each pair, t
 
 And if we now count the number of each `<bin1> <bin2>` combinaison, adding a third `<count>` column, we end up with a `count.matrix` text file: 
 
-```{filename='count.matrix'}
+```{filename="count.matrix"}
 <bin1> <bin2>  <count>
 2      2       2
 2      3       1
@@ -372,7 +364,7 @@ r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
 
 We then load the `HiCool` library and execute the main `HiCool` function. 
 
-```{r hicool_run}
+```{r hicool_run, eval = FALSE}
 library(HiCool)
 HiCool(
     r1, 
@@ -401,7 +393,7 @@ Other `HiCool` arguments can be listed by checking `HiCool` documentation in R: 
 
 We can check the generated output files placed in the `HiCool/` directory. 
 
-```{r}
+```{r, eval = FALSE}
 fs::dir_tree('HiCool/')
 ```
 
@@ -469,3 +461,5 @@ selected from [this longer list](https://github.com/mdozmorov/HiC_tools).
 
 All references as well as many other softwares and references are available 
 [here](https://github.com/mdozmorov/HiC_tools). 
+
+# References {-}
