@@ -283,10 +283,9 @@ div.csl-indent {
    
   <ul>
 <li><a href="#diffhic" id="toc-diffhic" class="nav-link active" data-scroll-target="#diffhic"><span class="header-section-number">9.1</span> diffHic</a></li>
-  <li><a href="#hicrep" id="toc-hicrep" class="nav-link" data-scroll-target="#hicrep"><span class="header-section-number">9.2</span> HiCrep</a></li>
-  <li><a href="#multihiccompare" id="toc-multihiccompare" class="nav-link" data-scroll-target="#multihiccompare"><span class="header-section-number">9.3</span> multiHiCcompare</a></li>
-  <li><a href="#topdom" id="toc-topdom" class="nav-link" data-scroll-target="#topdom"><span class="header-section-number">9.4</span> TopDom</a></li>
-  <li><a href="#gothic" id="toc-gothic" class="nav-link" data-scroll-target="#gothic"><span class="header-section-number">9.5</span> GOTHiC</a></li>
+  <li><a href="#multihiccompare" id="toc-multihiccompare" class="nav-link" data-scroll-target="#multihiccompare"><span class="header-section-number">9.2</span> multiHiCcompare</a></li>
+  <li><a href="#topdom" id="toc-topdom" class="nav-link" data-scroll-target="#topdom"><span class="header-section-number">9.3</span> TopDom</a></li>
+  <li><a href="#gothic" id="toc-gothic" class="nav-link" data-scroll-target="#gothic"><span class="header-section-number">9.4</span> GOTHiC</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></nav>
     </div>
@@ -319,8 +318,9 @@ Aims
 <div class="callout-body-container callout-body">
 <p>This notebook illustrates how to use a range of popular Hi-C—related <code>R</code> packages with <code>HiCExperiment</code> objects. Conversion to the data structures supported by the following packages is illustrated here:</p>
 <ul>
-<li><code>diffHic</code></li>
-<li><code>hicrep</code></li>
+<li>
+<code>diffHic</code> <!-- - `hicrep` -->
+</li>
 <li><code>multiHiCcompare</code></li>
 <li><code>TopDom</code></li>
 <li>
@@ -461,104 +461,12 @@ Aims
 </div>
 </div>
 </div>
-</section><section id="hicrep" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="hicrep">
-<span class="header-section-number">9.2</span> HiCrep</h2>
-<p><code>hicrep</code> is a popular package to compute <strong>stratum-adjusted correlations</strong> between Hi-C datasets (<span class="citation" data-cites="Yang_2017">Yang et al. (<a href="#ref-Yang_2017" role="doc-biblioref">2017</a>)</span>). “Stratum” refers to the distance from the main diagonal: with increase distance from the main diagonal, interactions of the DNA polymer are bound to decrease. <code>hicrep</code> computes a “per-stratum” correlation score and computes a weighted average correlation for entire chromosomes.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Installing <code>hicrep</code>
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>hicrep</code> package has been available from Bioconductor for many years but has been withdrawn from their repositories at some point. You can always install <code>hicrep</code> directly from its GitHub repository as follows:</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">'TaoYang-dev/hicrep'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-</div>
-<p>In order to use <code>hicrep</code>, we first need to create two <code>HiCExperiment</code> objects.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ---- This downloads example `.mcool` files and caches them locally </span></span>
-<span><span class="va">coolf_eco1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_eco1'</span>, <span class="st">'mcool'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic_wt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">coolf_wt</span>, format <span class="op">=</span> <span class="st">'cool'</span><span class="op">)</span></span>
-<span><span class="va">hic_eco1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">coolf_eco1</span>, format <span class="op">=</span> <span class="st">'cool'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>We can now run the main <code>get.scc</code> function from <code>hicrep</code>. The documentation for this function is available from the console by typing <code><a href="https://rdrr.io/pkg/hicrep/man/get.scc.html">?hicrep::get.scc</a></code>. More information is also available from the <a href="https://github.com/TaoYang-dev/hicrep#compute-reproducibility-score-using-hicrep">GitHub page</a>. It informs the end user that the input for this function should be two intra-chromosomal Hi-C <strong>raw count</strong> matrices in square (optionally sparse) format.</p>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic_wt</span></span>
-<span><span class="co">##  `HiCExperiment` object with 8,757,906 contacts over 12,079 regions </span></span>
-<span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/1701a09a86_7752" </span></span>
-<span><span class="co">##  focus: "whole genome" </span></span>
-<span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
-<span><span class="co">##  active resolution: 1000 </span></span>
-<span><span class="co">##  interactions: 2945692 </span></span>
-<span><span class="co">##  scores(2): count balanced </span></span>
-<span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
-<span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic_wt</span><span class="op">[</span><span class="st">"IV"</span><span class="op">]</span>, use.scores <span class="op">=</span> <span class="st">'count'</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span>
-<span><span class="co">##  10 x 10 sparse Matrix of class "dgTMatrix"</span></span>
-<span><span class="co">##                           </span></span>
-<span><span class="co">##   [1,] . 1 . . 1 . . . . .</span></span>
-<span><span class="co">##   [2,] 1 . . . . . . . . .</span></span>
-<span><span class="co">##   [3,] . . . . . . . . . .</span></span>
-<span><span class="co">##   [4,] . . . . . . . . . .</span></span>
-<span><span class="co">##   [5,] 1 . . . . . . . 1 .</span></span>
-<span><span class="co">##   [6,] . . . . . . . . . .</span></span>
-<span><span class="co">##   [7,] . . . . . . . . . .</span></span>
-<span><span class="co">##   [8,] . . . . . . . . 1 .</span></span>
-<span><span class="co">##   [9,] . . . . 1 . . 1 . .</span></span>
-<span><span class="co">##  [10,] . . . . . . . . . .</span></span>
-<span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">hicrep</span><span class="op">)</span></span>
-<span><span class="va">scc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/hicrep/man/get.scc.html">get.scc</a></span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic_wt</span><span class="op">[</span><span class="st">"IV"</span><span class="op">]</span>, use.scores <span class="op">=</span> <span class="st">'count'</span><span class="op">)</span>, </span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic_eco1</span><span class="op">[</span><span class="st">"IV"</span><span class="op">]</span>, use.scores <span class="op">=</span> <span class="st">'count'</span><span class="op">)</span>, </span>
-<span>    resol <span class="op">=</span> <span class="fl">1000</span>, h <span class="op">=</span> <span class="fl">25</span>, lbr <span class="op">=</span> <span class="fl">5000</span>, ubr <span class="op">=</span> <span class="fl">50000</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">scc</span></span>
-<span><span class="co">##  $corr</span></span>
-<span><span class="co">##   [1] 0.9412784 0.9410680 0.9408082 0.9404796 0.9404544 0.9402584 0.9400710</span></span>
-<span><span class="co">##   [8] 0.9398965 0.9397935 0.9397027 0.9396112 0.9393001 0.9393180 0.9390608</span></span>
-<span><span class="co">##  [15] 0.9391645 0.9394670 0.9395147 0.9396798 0.9397547 0.9398291 0.9401371</span></span>
-<span><span class="co">##  [22] 0.9402369 0.9402251 0.9404188 0.9404327 0.9403101 0.9402634 0.9401683</span></span>
-<span><span class="co">##  [29] 0.9401746 0.9394978 0.9391277 0.9381969 0.9371561 0.9357012 0.9342620</span></span>
-<span><span class="co">##  [36] 0.9324366 0.9302835 0.9277556 0.9247008 0.9208466 0.9166648 0.9120206</span></span>
-<span><span class="co">##  [43] 0.9060828 0.9002430 0.8931754 0.8847777</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  $wei</span></span>
-<span><span class="co">##   [1] 123.2500 123.1667 123.0833 123.0000 122.9167 122.8333 122.7500 122.6667</span></span>
-<span><span class="co">##   [9] 122.5833 122.5000 122.4167 122.3333 122.2500 122.1667 122.0833 122.0000</span></span>
-<span><span class="co">##  [17] 121.9167 121.8333 121.7500 121.6667 121.5833 121.5000 121.4167 121.3333</span></span>
-<span><span class="co">##  [25] 121.2500 121.1667 121.0833 121.0000 120.9167 120.8333 120.7500 120.6667</span></span>
-<span><span class="co">##  [33] 120.5833 120.5000 120.4167 120.3333 120.2500 120.1667 120.0833 120.0000</span></span>
-<span><span class="co">##  [41] 119.9167 119.8333 119.7500 119.6667 119.5833 119.5000</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  $scc</span></span>
-<span><span class="co">##            [,1]</span></span>
-<span><span class="co">##  [1,] 0.9334303</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  $std</span></span>
-<span><span class="co">##  [1] 0.001994845</span></span>
-<span></span>
-<span><span class="va">scc</span><span class="op">$</span><span class="va">scc</span></span>
-<span><span class="co">##            [,1]</span></span>
-<span><span class="co">##  [1,] 0.9334303</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section><section id="multihiccompare" class="level2" data-number="9.3"><h2 data-number="9.3" class="anchored" data-anchor-id="multihiccompare">
-<span class="header-section-number">9.3</span> multiHiCcompare</h2>
+</section><section id="multihiccompare" class="level2" data-number="9.2"><h2 data-number="9.2" class="anchored" data-anchor-id="multihiccompare">
+<span class="header-section-number">9.2</span> multiHiCcompare</h2>
 <p>The <code>multiHiCcompare</code> package provides functions for joint normalization and difference detection in multiple Hi-C datasets (<span class="citation" data-cites="Stansfield_2019">Stansfield et al. (<a href="#ref-Stansfield_2019" role="doc-biblioref">2019</a>)</span>). According to its excerpt, to perform differential interaction analysis, it requires a <code>list</code> of <strong>raw counts</strong> for different samples/replicates, stored in <strong>data frames with four columns</strong> (<code>chr</code>, <code>start1</code>, <code>start2</code>, <code>count</code>).<br>
 Manipulate a <code>HiCExperiment</code> object to coerce it into such structure is straightforward.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/">purrr</a></span><span class="op">)</span></span>
 <span><span class="va">hics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
@@ -582,7 +490,7 @@ Manipulate a <code>HiCExperiment</code> object to coerce it into such structure 
 </div>
 <p>Once this list is generated, the classical <code>multiHiCcompare</code> workflow can be applied: first run <code>make_hicexp()</code>, followed by <code>cyclic_loess()</code>, then <code>hic_exactTest()</code> and finally <code>results()</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">DI</span> <span class="op">&lt;-</span> <span class="va">hics_list</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">DI</span> <span class="op">&lt;-</span> <span class="va">hics_list</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu">make_hicexp</span><span class="op">(</span></span>
 <span>        data_list <span class="op">=</span> <span class="va">hics_list</span>, </span>
 <span>        groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
@@ -604,12 +512,12 @@ Manipulate a <code>HiCExperiment</code> object to coerce it into such structure 
 <span><span class="co">##  22640:   1  665001  665001 0 -0.3110054 10.013750 0.60075706 1.0000000</span></span>
 <span><span class="co">##  22641:   1  665001  666001 1 -0.4989794  7.750157 0.41481212 1.0000000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="topdom" class="level2" data-number="9.4"><h2 data-number="9.4" class="anchored" data-anchor-id="topdom">
-<span class="header-section-number">9.4</span> TopDom</h2>
+</section><section id="topdom" class="level2" data-number="9.3"><h2 data-number="9.3" class="anchored" data-anchor-id="topdom">
+<span class="header-section-number">9.3</span> TopDom</h2>
 <p>The <code>TopDom</code> method is widely used to annotate topological domains in genomes from Hi-C data (<span class="citation" data-cites="Shin_2015">Shin et al. (<a href="#ref-Shin_2015" role="doc-biblioref">2015</a>)</span>). The <code>TopDom</code> package was created to implement this method in <code>R</code> (<span class="citation" data-cites="Bengtsson_2020">Bengtsson et al. (<a href="#ref-Bengtsson_2020" role="doc-biblioref">2020</a>)</span>).</p>
 <p>Unfortunately, the format of the input to <code>TopDom</code> is rather tricky (see <code><a href="https://rdrr.io/pkg/TopDom/man/readHiC.html">?TopDom::readHiC</a></code>). The following chunk of code shows how to coerce a <code>HiCExperiment</code> object into a <code>TopDom</code>-compatible object.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/TopDom">TopDom</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/HenrikBengtsson/TopDom">TopDom</a></span><span class="op">)</span></span>
 <span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">coolf_wt</span>, format <span class="op">=</span> <span class="st">'cool'</span><span class="op">)</span></span>
 <span><span class="va">HiCExperiment2TopDom</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">hic</span>, <span class="va">chr</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -640,7 +548,7 @@ Manipulate a <code>HiCExperiment</code> object to coerce it into such structure 
 </div>
 <p>Now that we have coerced a <code>HiCExperiment</code> object into a <code>TopDom</code>-compatible object, we can use the main <code>TopDom</code> function to annotate topological domains.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">domains</span> <span class="op">&lt;-</span> <span class="fu">TopDom</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/TopDom/man/TopDom.html">TopDom</a></span><span class="op">(</span><span class="va">hic_topdom</span>, window.size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">domains</span> <span class="op">&lt;-</span> <span class="fu">TopDom</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/TopDom/man/TopDom.html">TopDom</a></span><span class="op">(</span><span class="va">hic_topdom</span>, window.size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">domains</span></span>
 <span><span class="co">##  TopDom:</span></span>
 <span><span class="co">##  Parameters:</span></span>
@@ -673,7 +581,7 @@ Manipulate a <code>HiCExperiment</code> object to coerce it into such structure 
 </div>
 <p>The resulting <code>domains</code> object can be used to extract annotated domains, store them in <code>topologicalFeatures</code> of the original <code>HiCExperiment</code>, and optionally write a <code>bed</code> file to export them in text.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'domain'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">domains</span><span class="op">$</span><span class="va">bed</span> <span class="op">|&gt;</span> </span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'domain'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">domains</span><span class="op">$</span><span class="va">bed</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>chromStart <span class="op">=</span> <span class="va">chromStart</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">name</span> <span class="op">==</span> <span class="st">'domain'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/makeGRangesFromDataFrame.html">makeGRangesFromDataFrame</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -697,8 +605,8 @@ Manipulate a <code>HiCExperiment</code> object to coerce it into such structure 
 <span></span>
 <span><span class="fu">rtracklayer</span><span class="fu">::</span><span class="fu">export</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'domain'</span><span class="op">)</span>, <span class="st">'hic_domains.bed'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="gothic" class="level2" data-number="9.5"><h2 data-number="9.5" class="anchored" data-anchor-id="gothic">
-<span class="header-section-number">9.5</span> GOTHiC</h2>
+</section><section id="gothic" class="level2" data-number="9.4"><h2 data-number="9.4" class="anchored" data-anchor-id="gothic">
+<span class="header-section-number">9.4</span> GOTHiC</h2>
 <p><code>GOTHiC</code> relies on a cumulative binomial test to detect interactions between distal genomic loci that have significantly more reads than expected by chance in Hi-C experiments (<span class="citation" data-cites="Mifsud_2017">Mifsud et al. (<a href="#ref-Mifsud_2017" role="doc-biblioref">2017</a>)</span>).</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -724,7 +632,7 @@ Using the <code>GOTHiC</code> function
 </div>
 <p>Based on these facts, we can simplify the binomial test function provided by <code>GOTHiC</code> so that it can directly used binned interactions imported as a <code>HiCExperiment</code> object in <code>R</code>.</p>
 <div class="cell" data-layout-align="center">
-<details><summary>Show the code for <code>GOTHiC_binomial</code> function</summary><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GOTHiC_binomial</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<details><summary>Show the code for <code>GOTHiC_binomial</code> function</summary><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">GOTHiC_binomial</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
 <span>    <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">trans</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span> <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"Only `cis` interactions can be used here."</span><span class="op">)</span></span>
 <span>    <span class="va">ints</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -785,11 +693,11 @@ Using the <code>GOTHiC</code> function
 </details>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">GOTHiC_binomial</span><span class="op">(</span><span class="va">hic</span><span class="op">[</span><span class="st">"II"</span><span class="op">]</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">GOTHiC_binomial</span><span class="op">(</span><span class="va">hic</span><span class="op">[</span><span class="st">"II"</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">res</span></span>
 <span><span class="co">##  `HiCExperiment` object with 471,364 contacts over 802 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/1701a09a86_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/174688ce76a_7752" </span></span>
 <span><span class="co">##  focus: "II" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
@@ -863,9 +771,6 @@ Shin, H., Shi, Y., Dai, C., Tjong, H., Gong, K., Alber, F., &amp; Zhou, X. J. (2
 </div>
 <div id="ref-Stansfield_2019" class="csl-entry" role="listitem">
 Stansfield, J. C., Cresswell, K. G., &amp; Dozmorov, M. G. (2019). <span class="nocase">multiHiCcompare</span>: Joint normalization and comparative analysis of complex hi-c experiments. <em>Bioinformatics</em>, <em>35</em>(17), 2916–2923. <a href="https://doi.org/10.1093/bioinformatics/btz048">https://doi.org/10.1093/bioinformatics/btz048</a>
-</div>
-<div id="ref-Yang_2017" class="csl-entry" role="listitem">
-Yang, T., Zhang, F., Yardımcı, G. G., Song, F., Hardison, R. C., Noble, W. S., Yue, F., &amp; Li, Q. (2017). <span>HiCRep</span>: Assessing the reproducibility of hi-c data using a stratum-adjusted correlation coefficient. <em>Genome Research</em>, <em>27</em>(11), 1939–1949. <a href="https://doi.org/10.1101/gr.220640.117">https://doi.org/10.1101/gr.220640.117</a>
 </div>
 </div>
 </section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
