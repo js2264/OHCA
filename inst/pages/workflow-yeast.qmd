@@ -11,7 +11,6 @@ library(GenomicRanges)
 library(InteractionSet)
 library(HiCExperiment)
 library(HiContactsData)
-library(hicrep)
 library(multiHiCcompare)
 ```
 

@@ -27,7 +27,6 @@ Imports:
     WGCNA, 
     diffHic, 
     strawr, 
-    hicrep,
     multiHiCcompare,
     TopDom, 
     GOTHiC, 
@@ -41,8 +40,6 @@ Imports:
     quarto,
     sessioninfo 
 Suggests:
-Remotes:
-    github::TaoYang-dev/hicrep
 biocViews:
     HiC,
     DNA3DStructure

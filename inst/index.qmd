@@ -182,6 +182,7 @@ aforementioned packages pre-installed, and initiate an interactive R session.
 
 The OHCA book has been rendered in R thanks to a number of packages, including but not only: 
 
+- **`BiocBook`**
 - `devtools`
 - `quarto`
 - `rebook`

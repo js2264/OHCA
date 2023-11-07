@@ -25,16 +25,6 @@ jobs:
           r: auto
           cont: ghcr.io/bioconductor/bioconductor:devel
           rspm: https://packagemanager.rstudio.com/cran/__linux__/focal/release
-        # - os: macOS-latest
-        #   bioc: release
-        #   r: auto
-        #   cont: ~
-        #   rspm: ~
-        # - os: windows-latest
-        #   bioc: release
-        #   r: auto
-        #   cont: ~
-        #   rspm: ~
     steps:
     - uses: neurogenomics/rworkflows@master
       with:

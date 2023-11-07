@@ -9,7 +9,7 @@ This notebook illustrates how to use a range of popular Hi-C—related `R` packa
 following packages is illustrated here: 
 
 - `diffHic`
-- `hicrep`
+<!-- - `hicrep` -->
 - `multiHiCcompare`
 - `TopDom`
 - `GOTHiC`
@@ -29,7 +29,7 @@ library(InteractionSet)
 library(HiCExperiment)
 library(HiContactsData)
 library(plyinteractions)
-library(hicrep)
+# library(hicrep)
 library(multiHiCcompare)
 library(dplyr)
 library(tidyr)
@@ -126,62 +126,6 @@ p + geom_rect(
     fill = NA, 
     colour = 'cyan'
 )
-```
-
-## HiCrep
-
-`hicrep` is a popular package to compute **stratum-adjusted correlations** between Hi-C datasets (@Yang_2017). 
-"Stratum" refers to the distance from the main diagonal: with increase distance from the main diagonal, 
-interactions of the DNA polymer are bound to decrease. `hicrep` computes a "per-stratum" correlation score and 
-computes a weighted average correlation for entire chromosomes. 
-
-::: {.callout-tip}
-
-### Installing `hicrep`
-
-`hicrep` package has been available from Bioconductor for many years but has 
-been withdrawn from their repositories at some point. You can always install 
-`hicrep` directly from its GitHub repository as follows: 
-
-```{r}
-#| eval: false
-remotes::install_github('TaoYang-dev/hicrep')
-```
-
-:::
-
-In order to use `hicrep`, we first need to create two `HiCExperiment` objects. 
-
-```{r eval = FALSE}
-# ---- This downloads example `.mcool` files and caches them locally 
-coolf_eco1 <- HiContactsData('yeast_eco1', 'mcool')
-```
-
-```{r}
-hic_wt <- import(coolf_wt, format = 'cool')
-hic_eco1 <- import(coolf_eco1, format = 'cool')
-```
-
-We can now run the main `get.scc` function from `hicrep`. The documentation 
-for this function is available from the console by typing `?hicrep::get.scc`. 
-More information is also available from the [GitHub page](https://github.com/TaoYang-dev/hicrep#compute-reproducibility-score-using-hicrep). It informs the end user that 
-the input for this function should be two intra-chromosomal Hi-C **raw count** matrices 
-in square (optionally sparse) format. 
-
-```{r}
-hic_wt
-
-as.matrix(hic_wt["IV"], use.scores = 'count')[1:10, 1:10]
-
-library(hicrep)
-scc <- get.scc(
-    as.matrix(hic_wt["IV"], use.scores = 'count'), 
-    as.matrix(hic_eco1["IV"], use.scores = 'count'), 
-    resol = 1000, h = 25, lbr = 5000, ubr = 50000
-)
-scc
-
-scc$scc
 ```
 
 ## multiHiCcompare
