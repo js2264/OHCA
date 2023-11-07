@@ -85,6 +85,7 @@ jobs:
           tar --extract --gzip --file ${{ env.Pkgname }}_${{ env.pkgversion }}.tar.gz
           echo bundle_path=${{ env.Pkgname }}_${{ env.pkgversion }}.tar.gz >> "${GITHUB_ENV}"
           echo book_path=${{ env.Pkgname }}/inst/doc/book/ >> "${GITHUB_ENV}"
+          ls -l $(${{ env.Pkgname }}/inst/doc/book/)
 
       - name: 🏷 Get gh-branch directory to deploy to
         run: |
