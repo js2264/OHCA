@@ -1,7 +1,7 @@
-📖 **[Orchestrating Hi-C Analysis with Bioconductor](https://js2264.github.io/OHCA/)**   
+📖 **[Orchestrating Hi-C Analysis with Bioconductor](https://js2264.github.io/OHCA/devel/)**   
 👉 [Repo](https://github.com/js2264/OHCA)  
-👉 [Book](https://js2264.github.io/OHCA/) [![pages-build-deployment](https://github.com/js2264/OHCA/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/js2264/OHCA/actions/workflows/pages/pages-build-deployment)  
-👉 [Docker](https://github.com/js2264/OHCA/pkgs/container/ohca) [![Build docker (rendering book), push to Github container registry, and deploy book to GitHub Pages](https://github.com/js2264/OHCA/actions/workflows/deploy-bookdown.yaml/badge.svg)](https://github.com/js2264/OHCA/actions/workflows/deploy-bookdown.yaml)
+👉 [Book](https://js2264.github.io/OHCA/devel/) [![pages-build-deployment](https://github.com/js2264/OHCA/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/js2264/OHCA/actions/workflows/pages/pages-build-deployment)  
+👉 [Docker](https://github.com/js2264/OHCA/pkgs/container/ohca) [![Build docker (rendering book), push to Github container registry, and deploy book to GitHub Pages](https://github.com/js2264/OHCA/actions/workflows/biocbook.yml/badge.svg)](https://github.com/js2264/OHCA/actions/workflows/biocbook.yml)
 
 ## Package status 
 
