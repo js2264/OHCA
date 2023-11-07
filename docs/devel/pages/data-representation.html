@@ -1571,8 +1571,8 @@ Going further
 <p>This fetches files from the cloud, download them locally and returns the path of the local file.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">coolf</span></span>
-<span><span class="co">##                                          EH7702 </span></span>
-<span><span class="co">##  "/root/.cache/R/ExperimentHub/16dd6c5d5f_7752"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##                                           EH7702 </span></span>
+<span><span class="co">##  "/root/.cache/R/ExperimentHub/17079abac61_7752"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Similarly, example files are available for other file formats:</p>
 <div class="cell" data-layout-align="center">
@@ -1642,7 +1642,7 @@ Going further
 <span><span class="co"># ----- This creates a connection to a `.(m)cool` file (path stored in `coolf`)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
 <span><span class="co">##  CoolFile object</span></span>
-<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/16dd6c5d5f_7752 </span></span>
+<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/17079abac61_7752 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -1650,7 +1650,7 @@ Going further
 <span><span class="co"># ----- This creates a connection to a `.hic` file (path stored in `hicf`)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/HicFile-class.html">HicFile</a></span><span class="op">(</span><span class="va">hicf</span><span class="op">)</span></span>
 <span><span class="co">##  HicFile object</span></span>
-<span><span class="co">##  .hic file: /root/.cache/R/ExperimentHub/16d160e6aeb_7836 </span></span>
+<span><span class="co">##  .hic file: /root/.cache/R/ExperimentHub/1705547bf02_7836 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -1659,8 +1659,8 @@ Going further
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/HicproFile-class.html">HicproFile</a></span><span class="op">(</span><span class="va">hicpromatrixf</span>, <span class="va">hicproregionsf</span><span class="op">)</span></span>
 <span><span class="co">##  HicproFile object</span></span>
 <span><span class="co">##  HiC-Pro files:</span></span>
-<span><span class="co">##    $ matrix:   /root/.cache/R/ExperimentHub/16dfa774ff_7837 </span></span>
-<span><span class="co">##    $ regions:  /root/.cache/R/ExperimentHub/16d75113d35_7838 </span></span>
+<span><span class="co">##    $ matrix:   /root/.cache/R/ExperimentHub/1702be84e86_7837 </span></span>
+<span><span class="co">##    $ regions:  /root/.cache/R/ExperimentHub/17012426551_7838 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -1668,7 +1668,7 @@ Going further
 <span><span class="co"># ----- This creates a connection to a pairs file</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/PairsFile-class.html">PairsFile</a></span><span class="op">(</span><span class="va">pairsf</span><span class="op">)</span></span>
 <span><span class="co">##  PairsFile object</span></span>
-<span><span class="co">##  resource: /root/.cache/R/ExperimentHub/16d2ae89407_7753</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  resource: /root/.cache/R/ExperimentHub/17041901072_7753</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="contactfile-slots" class="level3" data-number="2.3.3"><h3 data-number="2.3.3" class="anchored" data-anchor-id="contactfile-slots">
 <span class="header-section-number">2.3.3</span> <code>ContactFile</code> slots</h3>
@@ -1684,7 +1684,7 @@ Going further
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
 <span><span class="va">cf</span></span>
 <span><span class="co">##  CoolFile object</span></span>
-<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/16dd6c5d5f_7752 </span></span>
+<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/17079abac61_7752 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -1782,7 +1782,7 @@ Caution
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 8,757,906 contacts over 12,079 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/16dd6c5d5f_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/17079abac61_7752" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
@@ -1814,7 +1814,7 @@ Caution
 <p>These pieces of information are called <code>slots</code>. They can be directly accessed using <code>getter</code> functions, bearing the same name than the slot.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/fileName.html">fileName</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
-<span><span class="co">##  [1] "/root/.cache/R/ExperimentHub/16dd6c5d5f_7752"</span></span>
+<span><span class="co">##  [1] "/root/.cache/R/ExperimentHub/17079abac61_7752"</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">focus</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  NULL</span></span>
@@ -1881,7 +1881,7 @@ Caution
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 13,681,280 contacts over 12,165 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/16d160e6aeb_7836" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/1705547bf02_7836" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
@@ -2321,14 +2321,14 @@ Key <code>import</code> arguments:
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">yeast_hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 8,757,906 contacts over 763 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/16dd6c5d5f_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/17079abac61_7752" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 16000 </span></span>
 <span><span class="co">##  interactions: 267709 </span></span>
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) centromeres(16) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/16d2ae89407_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/17041901072_7753 </span></span>
 <span><span class="co">##  metadata(3): ID org date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="interactions" class="level4" data-number="2.4.2.1"><h4 data-number="2.4.2.1" class="anchored" data-anchor-id="interactions">
@@ -2621,7 +2621,7 @@ Difference between <code>bins</code> and <code>regions</code>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
 <span><span class="co">##                                           EH7703 </span></span>
-<span><span class="co">##  "/root/.cache/R/ExperimentHub/16d2ae89407_7753"</span></span>
+<span><span class="co">##  "/root/.cache/R/ExperimentHub/17041901072_7753"</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span></span>
 <span><span class="co">##   [1] "## pairs format v1.0"                                                             </span></span>
