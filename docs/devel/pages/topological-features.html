@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Orchestrating Hi-C analysis with Bioconductor - 7&nbsp; Finding topological features in Hi-C</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../pages/disseminating.html" rel="next">
+<link href="../pages/interactions-centric.html" rel="prev">
+<link href="../assets/cover.jpg" rel="icon" type="image/jpeg">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+</head>
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/matrix-centric.html">In-depth Hi-C analysis</a></li><li class="breadcrumb-item"><a href="../pages/topological-features.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Orchestrating Hi-C analysis with Bioconductor</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label=""><i class="bi bi-git"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+<li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/js2264/OHCA/">
+            Source Code
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://js2264.github.io/OHCA/devel/">
+            Browse version `devel`
+            </a>
+          </li>
+      </ul>
+</div>
+    <a href="../Orchestrating-Hi-C-analysis-with-Bioconductor.pdf" rel="" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/preamble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preamble</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Fundamentals concepts</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C pre-processing steps</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/data-representation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Hi-C data structures in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/parsing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulating Hi-C data in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hi-C data visualization</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">In-depth Hi-C analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/matrix-centric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matrix-centric analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/interactions-centric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/topological-features.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Advanced Hi-C topics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/disseminating.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data gateways: accessing public Hi-C data portals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/interoperability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Interoperability: using HiCExperiment with other R packages</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/workflow-yeast.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Workflow 1: Distance-dependent interactions across yeast mutants</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/workflow-chicken.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/workflow-centros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Workflow 3: Inter-centromere interactions in yeast</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#chromosome-compartments" id="toc-chromosome-compartments" class="nav-link active" data-scroll-target="#chromosome-compartments"><span class="header-section-number">7.1</span> Chromosome compartments</a>
+  <ul class="collapse">
+<li><a href="#importing-hi-c-data" id="toc-importing-hi-c-data" class="nav-link" data-scroll-target="#importing-hi-c-data"><span class="header-section-number">7.1.1</span> Importing Hi-C data</a></li>
+  <li><a href="#annotating-ab-compartments" id="toc-annotating-ab-compartments" class="nav-link" data-scroll-target="#annotating-ab-compartments"><span class="header-section-number">7.1.2</span> Annotating A/B compartments</a></li>
+  <li><a href="#exporting-compartment-tracks" id="toc-exporting-compartment-tracks" class="nav-link" data-scroll-target="#exporting-compartment-tracks"><span class="header-section-number">7.1.3</span> Exporting compartment tracks</a></li>
+  <li><a href="#visualizing-compartment-tracks" id="toc-visualizing-compartment-tracks" class="nav-link" data-scroll-target="#visualizing-compartment-tracks"><span class="header-section-number">7.1.4</span> Visualizing compartment tracks</a></li>
+  <li><a href="#saddle-plots" id="toc-saddle-plots" class="nav-link" data-scroll-target="#saddle-plots"><span class="header-section-number">7.1.5</span> Saddle plots</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#topological-domains" id="toc-topological-domains" class="nav-link" data-scroll-target="#topological-domains"><span class="header-section-number">7.2</span> Topological domains</a>
+  <ul class="collapse">
+<li><a href="#computing-diamond-insulation-score" id="toc-computing-diamond-insulation-score" class="nav-link" data-scroll-target="#computing-diamond-insulation-score"><span class="header-section-number">7.2.1</span> Computing diamond insulation score</a></li>
+  <li><a href="#exporting-insulation-scores-tracks" id="toc-exporting-insulation-scores-tracks" class="nav-link" data-scroll-target="#exporting-insulation-scores-tracks"><span class="header-section-number">7.2.2</span> Exporting insulation scores tracks</a></li>
+  <li><a href="#visualizing-chromatin-domains" id="toc-visualizing-chromatin-domains" class="nav-link" data-scroll-target="#visualizing-chromatin-domains"><span class="header-section-number">7.2.3</span> Visualizing chromatin domains</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#chromatin-loops" id="toc-chromatin-loops" class="nav-link" data-scroll-target="#chromatin-loops"><span class="header-section-number">7.3</span> Chromatin loops</a>
+  <ul class="collapse">
+<li><a href="#chromosight" id="toc-chromosight" class="nav-link" data-scroll-target="#chromosight"><span class="header-section-number">7.3.1</span> <code>chromosight</code></a></li>
+  <li><a href="#other-r-packages" id="toc-other-r-packages" class="nav-link" data-scroll-target="#other-r-packages"><span class="header-section-number">7.3.2</span> Other R packages</a></li>
+  </ul>
+</li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">
+<span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span>
+</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header><div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aims
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This chapter focuses on the annotation of topological features from Hi-C contact maps, including:</p>
+<ul>
+<li>Chromosome compartments</li>
+<li>Topologically associating domains</li>
+<li>Stable chromatin loops</li>
+</ul>
+</div>
+</div>
+<section id="chromosome-compartments" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="chromosome-compartments">
+<span class="header-section-number">7.1</span> Chromosome compartments</h2>
+<p>Chromosome compartments refer to the segregation of the chromatin into active euchromatin (A compartments) and regulated heterochromatin (B compartment).</p>
+<section id="importing-hi-c-data" class="level3" data-number="7.1.1"><h3 data-number="7.1.1" class="anchored" data-anchor-id="importing-hi-c-data">
+<span class="header-section-number">7.1.1</span> Importing Hi-C data</h3>
+<p>To investigate chromosome compartments, we will fetch a contact matrix generated from a micro-C experiment (from <span class="citation" data-cites="Krietenstein_2020">Krietenstein et al. (<a href="#ref-Krietenstein_2020" role="doc-biblioref">2020</a>)</span>). A subset of the genome-wide dataset is provided in the <code>OHCA</code> package. It contains intra-chromosomal interactions within <code>chr17</code>, binned at <code>5000</code>, <code>100000</code> and <code>250000</code> bp.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/OHCA">OHCA</a></span><span class="op">)</span></span>
+<span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path_package.html">path_package</a></span><span class="op">(</span><span class="st">'OHCA'</span>, <span class="st">'extdata'</span>, <span class="st">'chr17.mcool'</span><span class="op">)</span></span>
+<span><span class="va">microC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, resolution <span class="op">=</span> <span class="fl">250000</span><span class="op">)</span></span>
+<span><span class="va">microC</span></span>
+<span><span class="co">##  `HiCExperiment` object with 10,086,710 contacts over 334 regions </span></span>
+<span><span class="co">##  -------</span></span>
+<span><span class="co">##  fileName: "/tmp/RtmpixmP1F/Rinst529f91dd/OHCA/extdata/chr17.mcool" </span></span>
+<span><span class="co">##  focus: "whole genome" </span></span>
+<span><span class="co">##  resolutions(3): 5000 100000 250000</span></span>
+<span><span class="co">##  active resolution: 250000 </span></span>
+<span><span class="co">##  interactions: 52755 </span></span>
+<span><span class="co">##  scores(2): count balanced </span></span>
+<span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
+<span><span class="co">##  pairsFile: N/A </span></span>
+<span><span class="co">##  metadata(0):</span></span>
+<span></span>
+<span><span class="fu">seqinfo</span><span class="op">(</span><span class="va">microC</span><span class="op">)</span></span>
+<span><span class="co">##  Seqinfo object with 1 sequence from an unspecified genome:</span></span>
+<span><span class="co">##    seqnames seqlengths isCircular genome</span></span>
+<span><span class="co">##    chr17      83257441         NA   &lt;NA&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="annotating-ab-compartments" class="level3" data-number="7.1.2"><h3 data-number="7.1.2" class="anchored" data-anchor-id="annotating-ab-compartments">
+<span class="header-section-number">7.1.2</span> Annotating A/B compartments</h3>
+<p>The consensus approach to annotate A/B compartments is to compute the eigenvectors of a Hi-C contact matrix and identify the eigenvector representing the chromosome-wide bi-partite segmentation of the genome.</p>
+<p>The <code><a href="https://rdrr.io/pkg/HiContacts/man/getCompartments.html">getCompartments()</a></code> function performs several internal operations to achieve this:</p>
+<ol type="1">
+<li>Obtains cis interactions per chromosome</li>
+<li>Computes O/E contact matrix scores</li>
+<li>Computes 3 first eigenvectors of this Hi-C contact matrix</li>
+<li>Normalizes eigenvectors</li>
+<li>Picks the eigenvector that has the greatest absolute correlation with a phasing track (e.g.&nbsp;a GC% track automatically computed from a genome reference sequence, or a gene density track)</li>
+<li>Signs this eigenvector so that positive values represent the A compartment</li>
+</ol>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">phasing_track</span> <span class="op">&lt;-</span> <span class="fu">BSgenome.Hsapiens.UCSC.hg38</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg38/man/package.html">BSgenome.Hsapiens.UCSC.hg38</a></span></span>
+<span><span class="va">microC_compts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/getCompartments.html">getCompartments</a></span><span class="op">(</span><span class="va">microC</span>, genome <span class="op">=</span> <span class="va">phasing_track</span><span class="op">)</span></span>
+<span><span class="co">##  Going through preflight checklist...</span></span>
+<span><span class="co">##  Parsing intra-chromosomal contacts for each chromosome...</span></span>
+<span><span class="co">##  Computing eigenvectors for each chromosome...</span></span>
+<span></span>
+<span><span class="va">microC_compts</span></span>
+<span><span class="co">##  `HiCExperiment` object with 10,086,710 contacts over 334 regions </span></span>
+<span><span class="co">##  -------</span></span>
+<span><span class="co">##  fileName: "/tmp/RtmpixmP1F/Rinst529f91dd/OHCA/extdata/chr17.mcool" </span></span>
+<span><span class="co">##  focus: "whole genome" </span></span>
+<span><span class="co">##  resolutions(3): 5000 100000 250000</span></span>
+<span><span class="co">##  active resolution: 250000 </span></span>
+<span><span class="co">##  interactions: 52755 </span></span>
+<span><span class="co">##  scores(2): count balanced </span></span>
+<span><span class="co">##  topologicalFeatures: compartments(41) borders(0) loops(0) viewpoints(0) </span></span>
+<span><span class="co">##  pairsFile: N/A </span></span>
+<span><span class="co">##  metadata(1): eigens</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code><a href="https://rdrr.io/pkg/HiContacts/man/getCompartments.html">getCompartments()</a></code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
+<ul>
+<li>A <code>compartments</code> <code>topologicalFeatures</code>:</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">microC_compts</span>, <span class="st">"compartments"</span><span class="op">)</span></span>
+<span><span class="co">##  GRanges object with 41 ranges and 1 metadata column:</span></span>
+<span><span class="co">##         seqnames            ranges strand | compartment</span></span>
+<span><span class="co">##            &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;</span></span>
+<span><span class="co">##     [1]    chr17    250001-3000000      * |           A</span></span>
+<span><span class="co">##     [2]    chr17   3000001-3500000      * |           B</span></span>
+<span><span class="co">##     [3]    chr17   3500001-5500000      * |           A</span></span>
+<span><span class="co">##     [4]    chr17   5500001-6500000      * |           B</span></span>
+<span><span class="co">##     [5]    chr17   6500001-8500000      * |           A</span></span>
+<span><span class="co">##     ...      ...               ...    ... .         ...</span></span>
+<span><span class="co">##    [37]    chr17 72750001-73250000      * |           A</span></span>
+<span><span class="co">##    [38]    chr17 73250001-74750000      * |           B</span></span>
+<span><span class="co">##    [39]    chr17 74750001-79250000      * |           A</span></span>
+<span><span class="co">##    [40]    chr17 79250001-79750000      * |           B</span></span>
+<span><span class="co">##    [41]    chr17 79750001-83250000      * |           A</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 1 sequence from an unspecified genome</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>The calculated eigenvectors stored in <code>metadata</code>:</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">microC_compts</span><span class="op">)</span><span class="op">$</span><span class="va">eigens</span></span>
+<span><span class="co">##  GRanges object with 334 ranges and 9 metadata columns:</span></span>
+<span><span class="co">##                                  seqnames            ranges strand |</span></span>
+<span><span class="co">##                                     &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; |</span></span>
+<span><span class="co">##             chr17.chr17_1_250000    chr17          1-250000      * |</span></span>
+<span><span class="co">##        chr17.chr17_250001_500000    chr17     250001-500000      * |</span></span>
+<span><span class="co">##        chr17.chr17_500001_750000    chr17     500001-750000      * |</span></span>
+<span><span class="co">##       chr17.chr17_750001_1000000    chr17    750001-1000000      * |</span></span>
+<span><span class="co">##      chr17.chr17_1000001_1250000    chr17   1000001-1250000      * |</span></span>
+<span><span class="co">##                              ...      ...               ...    ... .</span></span>
+<span><span class="co">##    chr17.chr17_82250001_82500000    chr17 82250001-82500000      * |</span></span>
+<span><span class="co">##    chr17.chr17_82500001_82750000    chr17 82500001-82750000      * |</span></span>
+<span><span class="co">##    chr17.chr17_82750001_83000000    chr17 82750001-83000000      * |</span></span>
+<span><span class="co">##    chr17.chr17_83000001_83250000    chr17 83000001-83250000      * |</span></span>
+<span><span class="co">##    chr17.chr17_83250001_83257441    chr17 83250001-83257441      * |</span></span>
+<span><span class="co">##                                     bin_id     weight   chr    center</span></span>
+<span><span class="co">##                                  &lt;numeric&gt;  &lt;numeric&gt; &lt;Rle&gt; &lt;integer&gt;</span></span>
+<span><span class="co">##             chr17.chr17_1_250000         0        NaN chr17    125000</span></span>
+<span><span class="co">##        chr17.chr17_250001_500000         1 0.00626903 chr17    375000</span></span>
+<span><span class="co">##        chr17.chr17_500001_750000         2 0.00567190 chr17    625000</span></span>
+<span><span class="co">##       chr17.chr17_750001_1000000         3 0.00528588 chr17    875000</span></span>
+<span><span class="co">##      chr17.chr17_1000001_1250000         4 0.00464628 chr17   1125000</span></span>
+<span><span class="co">##                              ...       ...        ...   ...       ...</span></span>
+<span><span class="co">##    chr17.chr17_82250001_82500000       329 0.00463044 chr17  82375000</span></span>
+<span><span class="co">##    chr17.chr17_82500001_82750000       330 0.00486910 chr17  82625000</span></span>
+<span><span class="co">##    chr17.chr17_82750001_83000000       331 0.00561269 chr17  82875000</span></span>
+<span><span class="co">##    chr17.chr17_83000001_83250000       332 0.00546433 chr17  83125000</span></span>
+<span><span class="co">##    chr17.chr17_83250001_83257441       333        NaN chr17  83253721</span></span>
+<span><span class="co">##                                         E1        E2        E3   phasing</span></span>
+<span><span class="co">##                                  &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">##             chr17.chr17_1_250000  0.000000  0.000000  0.000000  0.383084</span></span>
+<span><span class="co">##        chr17.chr17_250001_500000  0.450991  0.653287  0.615300  0.433972</span></span>
+<span><span class="co">##        chr17.chr17_500001_750000  0.716784  0.707461  0.845033  0.465556</span></span>
+<span><span class="co">##       chr17.chr17_750001_1000000  0.904423  0.414952  0.864288  0.503592</span></span>
+<span><span class="co">##      chr17.chr17_1000001_1250000  0.913023  0.266287  0.759016  0.547712</span></span>
+<span><span class="co">##                              ...       ...       ...       ...       ...</span></span>
+<span><span class="co">##    chr17.chr17_82250001_82500000  1.147060  0.239112  1.133498  0.550872</span></span>
+<span><span class="co">##    chr17.chr17_82500001_82750000  1.106937  0.419647  1.169464  0.513212</span></span>
+<span><span class="co">##    chr17.chr17_82750001_83000000  0.818990  0.591955  0.850340  0.522432</span></span>
+<span><span class="co">##    chr17.chr17_83000001_83250000  0.874038  0.503175  0.847926  0.528448</span></span>
+<span><span class="co">##    chr17.chr17_83250001_83257441  0.000000  0.000000  0.000000  0.000000</span></span>
+<span><span class="co">##                                      eigen</span></span>
+<span><span class="co">##                                  &lt;numeric&gt;</span></span>
+<span><span class="co">##             chr17.chr17_1_250000  0.000000</span></span>
+<span><span class="co">##        chr17.chr17_250001_500000  0.450991</span></span>
+<span><span class="co">##        chr17.chr17_500001_750000  0.716784</span></span>
+<span><span class="co">##       chr17.chr17_750001_1000000  0.904423</span></span>
+<span><span class="co">##      chr17.chr17_1000001_1250000  0.913023</span></span>
+<span><span class="co">##                              ...       ...</span></span>
+<span><span class="co">##    chr17.chr17_82250001_82500000  1.147060</span></span>
+<span><span class="co">##    chr17.chr17_82500001_82750000  1.106937</span></span>
+<span><span class="co">##    chr17.chr17_82750001_83000000  0.818990</span></span>
+<span><span class="co">##    chr17.chr17_83000001_83250000  0.874038</span></span>
+<span><span class="co">##    chr17.chr17_83250001_83257441  0.000000</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 1 sequence from an unspecified genome</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="exporting-compartment-tracks" class="level3" data-number="7.1.3"><h3 data-number="7.1.3" class="anchored" data-anchor-id="exporting-compartment-tracks">
+<span class="header-section-number">7.1.3</span> Exporting compartment tracks</h3>
+<p>To save the eigenvector (as a <code>bigwig</code> file) and the compartments(as a <code>gff</code> file), the <code>export</code> function can be used:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rtracklayer</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">microC_compts</span><span class="op">)</span><span class="op">$</span><span class="va">eigens</span>, weight <span class="op">=</span> <span class="st">'eigen'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">export</a></span><span class="op">(</span><span class="st">'microC_eigen.bw'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">microC_compts</span>, <span class="st">"compartments"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">export</a></span><span class="op">(</span><span class="st">'microC_compartments.gff3'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="visualizing-compartment-tracks" class="level3" data-number="7.1.4"><h3 data-number="7.1.4" class="anchored" data-anchor-id="visualizing-compartment-tracks">
+<span class="header-section-number">7.1.4</span> Visualizing compartment tracks</h3>
+<p>Compartment tracks should be visualized in a dedicated genome browser, with the phasing track loaded as well, to ensure they are phased accordingly.<br>
+That being said, it is possible to visualize a genome track in R besides the matching Hi-C contact matrix.</p>
+<div class="cell" data-layout-align="center" data-fig.asp="1">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
+<span><span class="va">microC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/arithmetics.html">autocorrelate</a></span><span class="op">(</span><span class="va">microC</span><span class="op">)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">microC</span>, use.scores <span class="op">=</span> <span class="st">'autocorrelated'</span>, scale <span class="op">=</span> <span class="st">'linear'</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, caption <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">microC_compts</span><span class="op">)</span><span class="op">$</span><span class="va">eigens</span>, weight <span class="op">=</span> <span class="st">'eigen'</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">eigen_df</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runLength</a></span><span class="op">(</span><span class="va">eigen</span><span class="op">)</span><span class="op">)</span>, eigen <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runValue</a></span><span class="op">(</span><span class="va">eigen</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">eigen_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pos</span>, y <span class="op">=</span> <span class="va">eigen</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_area</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">coord_cartesian</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Genomic position"</span>, y <span class="op">=</span> <span class="st">"Eigenvector value"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, ncol <span class="op">=</span> <span class="fl">1</span>, heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="topological-features_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here, we clearly note the concordance between the Hi-C correlation matrix, highlighting correlated interactions between pairs of genomic segments, and the eigenvector representing chromosome segmentation into 2 compartments: A (for positive values) and B (for negative values).</p>
+</section><section id="saddle-plots" class="level3" data-number="7.1.5"><h3 data-number="7.1.5" class="anchored" data-anchor-id="saddle-plots">
+<span class="header-section-number">7.1.5</span> Saddle plots</h3>
+<p>Saddle plots are typically used to measure the <code>observed</code> vs.&nbsp;<code>expected</code> interaction scores within or between genomic loci belonging to A and B compartments.</p>
+<p>Non-overlapping genomic windows are grouped in <code>nbins</code> quantiles (typically between 10 and 50 quantiles) according to their A/B compartment eigenvector value, from lowest eigenvector values (i.e.&nbsp;strongest B compartments) to highest eigenvector values (i.e.&nbsp;strongest A compartments). The average <code>observed</code> vs.&nbsp;<code>expected</code> interaction scores are then computed for pairwise eigenvector quantiles and plotted in a 2D heatmap.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Bioconductor/BiocParallel">BiocParallel</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotSaddle.html">plotSaddle</a></span><span class="op">(</span><span class="va">microC_compts</span>, nbins <span class="op">=</span> <span class="fl">25</span>, BPPARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html">SerialParam</a></span><span class="op">(</span>progressbar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="topological-features_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here, the top-left small corner represents average O/E scores between strong B compartments and the bottom-right larger corner represents average O/E scores between strong A compartments. Note that only <code>chr17</code> interactions are contained in this dataset, explaining the grainy aspect of the saddle plot.</p>
+</section></section><section id="topological-domains" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="topological-domains">
+<span class="header-section-number">7.2</span> Topological domains</h2>
+<p>Topological <em>domains</em> (a.k.a. Topologically Associating Domains, TADs, isolated neighborhoods, contact domains, …) refer to local chromosomal segments (e.b. roughly ≤ 1Mb in mammal genomes) which preferentially self-interact, in a constrained manner. They are demarcated by domain <em>boundaries</em>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="images/20230403090000.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+<p>They are generally conserved across cell types and species (<span class="citation" data-cites="Schmitt_2016">Schmitt et al. (<a href="#ref-Schmitt_2016" role="doc-biblioref">2016</a>)</span>), typically correlate with units of DNA replication (<span class="citation" data-cites="Pope_2014">Pope et al. (<a href="#ref-Pope_2014" role="doc-biblioref">2014</a>)</span>), and could play a role during development (<span class="citation" data-cites="Stadhouders_2019">Stadhouders et al. (<a href="#ref-Stadhouders_2019" role="doc-biblioref">2019</a>)</span>).</p>
+<section id="computing-diamond-insulation-score" class="level3" data-number="7.2.1"><h3 data-number="7.2.1" class="anchored" data-anchor-id="computing-diamond-insulation-score">
+<span class="header-section-number">7.2.1</span> Computing diamond insulation score</h3>
+<p>Several approaches exist to annotate topological domains (<span class="citation" data-cites="Sefer_2022">Sefer (<a href="#ref-Sefer_2022" role="doc-biblioref">2022</a>)</span>). Several packages in R implement some of these functionalities, e.g.&nbsp;<code>spectralTAD</code> or <code>TADcompare</code>.</p>
+<p><code>HiContacts</code> offers a simple <code>getDiamondInsulation</code> function which computes the diamond insulation score (<span class="citation" data-cites="Crane_2015">Crane et al. (<a href="#ref-Crane_2015" role="doc-biblioref">2015</a>)</span>). This score quantifies average interaction frequency in an insulation window (of a certain <code>window_size</code>) sliding along contact matrices at a chosen <code>resolution</code>.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># - Compute insulation score</span></span>
+<span><span class="va">bpparam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html">SerialParam</a></span><span class="op">(</span>progressbar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">microC</span>, <span class="fl">5000</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">refocus</a></span><span class="op">(</span><span class="st">'chr17:60000001-83257441'</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getDiamondInsulation</a></span><span class="op">(</span>window_size <span class="op">=</span> <span class="fl">100000</span>, BPPARAM <span class="op">=</span> <span class="va">bpparam</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getBorders</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  Going through preflight checklist...</span></span>
+<span><span class="co">##  Scan each window and compute diamond insulation score...</span></span>
+<span><span class="co">##  Annotating diamond score prominence for each window...</span></span>
+<span></span>
+<span><span class="va">hic</span></span>
+<span><span class="co">##  `HiCExperiment` object with 2,156,222 contacts over 4,652 regions </span></span>
+<span><span class="co">##  -------</span></span>
+<span><span class="co">##  fileName: "/tmp/RtmpixmP1F/Rinst529f91dd/OHCA/extdata/chr17.mcool" </span></span>
+<span><span class="co">##  focus: "chr17:60,000,001-83,257,441" </span></span>
+<span><span class="co">##  resolutions(3): 5000 100000 250000</span></span>
+<span><span class="co">##  active resolution: 5000 </span></span>
+<span><span class="co">##  interactions: 2156044 </span></span>
+<span><span class="co">##  scores(2): count balanced </span></span>
+<span><span class="co">##  topologicalFeatures: compartments(0) borders(21) loops(0) viewpoints(0) </span></span>
+<span><span class="co">##  pairsFile: N/A </span></span>
+<span><span class="co">##  metadata(1): insulation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getDiamondInsulation()</a></code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
+<ul>
+<li>A <code>borders</code> <code>topologicalFeatures</code>:</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"borders"</span><span class="op">)</span></span>
+<span><span class="co">##  GRanges object with 21 ranges and 1 metadata column:</span></span>
+<span><span class="co">##           seqnames            ranges strand |     score</span></span>
+<span><span class="co">##              &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;</span></span>
+<span><span class="co">##    strong    chr17 60105001-60110000      * |  0.574760</span></span>
+<span><span class="co">##      weak    chr17 60210001-60215000      * |  0.414425</span></span>
+<span><span class="co">##      weak    chr17 61415001-61420000      * |  0.346668</span></span>
+<span><span class="co">##    strong    chr17 61500001-61505000      * |  0.544336</span></span>
+<span><span class="co">##      weak    chr17 62930001-62935000      * |  0.399794</span></span>
+<span><span class="co">##       ...      ...               ...    ... .       ...</span></span>
+<span><span class="co">##      weak    chr17 78395001-78400000      * |  0.235613</span></span>
+<span><span class="co">##      weak    chr17 79065001-79070000      * |  0.236535</span></span>
+<span><span class="co">##      weak    chr17 80155001-80160000      * |  0.284855</span></span>
+<span><span class="co">##      weak    chr17 81735001-81740000      * |  0.497478</span></span>
+<span><span class="co">##    strong    chr17 81840001-81845000      * |  1.395949</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 1 sequence from an unspecified genome</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>The calculated <code>insulation</code> scores stored in <code>metadata</code>:</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">insulation</span></span>
+<span><span class="co">##  GRanges object with 4611 ranges and 8 metadata columns:</span></span>
+<span><span class="co">##                            seqnames            ranges strand |    bin_id</span></span>
+<span><span class="co">##                               &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;</span></span>
+<span><span class="co">##    chr17_60100001_60105000    chr17 60100001-60105000      * |     12020</span></span>
+<span><span class="co">##    chr17_60105001_60110000    chr17 60105001-60110000      * |     12021</span></span>
+<span><span class="co">##    chr17_60110001_60115000    chr17 60110001-60115000      * |     12022</span></span>
+<span><span class="co">##    chr17_60115001_60120000    chr17 60115001-60120000      * |     12023</span></span>
+<span><span class="co">##    chr17_60120001_60125000    chr17 60120001-60125000      * |     12024</span></span>
+<span><span class="co">##                        ...      ...               ...    ... .       ...</span></span>
+<span><span class="co">##    chr17_83130001_83135000    chr17 83130001-83135000      * |     16626</span></span>
+<span><span class="co">##    chr17_83135001_83140000    chr17 83135001-83140000      * |     16627</span></span>
+<span><span class="co">##    chr17_83140001_83145000    chr17 83140001-83145000      * |     16628</span></span>
+<span><span class="co">##    chr17_83145001_83150000    chr17 83145001-83150000      * |     16629</span></span>
+<span><span class="co">##    chr17_83150001_83155000    chr17 83150001-83155000      * |     16630</span></span>
+<span><span class="co">##                               weight   chr    center     score insulation</span></span>
+<span><span class="co">##                            &lt;numeric&gt; &lt;Rle&gt; &lt;integer&gt; &lt;numeric&gt;  &lt;numeric&gt;</span></span>
+<span><span class="co">##    chr17_60100001_60105000 0.0406489 chr17  60102500  0.188061  -0.750142</span></span>
+<span><span class="co">##    chr17_60105001_60110000 0.0255539 chr17  60107500  0.180860  -0.806466</span></span>
+<span><span class="co">##    chr17_60110001_60115000       NaN chr17  60112500  0.196579  -0.686232</span></span>
+<span><span class="co">##    chr17_60115001_60120000       NaN chr17  60117500  0.216039  -0.550046</span></span>
+<span><span class="co">##    chr17_60120001_60125000       NaN chr17  60122500  0.230035  -0.459489</span></span>
+<span><span class="co">##                        ...       ...   ...       ...       ...        ...</span></span>
+<span><span class="co">##    chr17_83130001_83135000 0.0314684 chr17  83132500  0.262191  -0.270723</span></span>
+<span><span class="co">##    chr17_83135001_83140000 0.0307197 chr17  83137500  0.240779  -0.393632</span></span>
+<span><span class="co">##    chr17_83140001_83145000 0.0322810 chr17  83142500  0.219113  -0.529664</span></span>
+<span><span class="co">##    chr17_83145001_83150000 0.0280840 chr17  83147500  0.199645  -0.663900</span></span>
+<span><span class="co">##    chr17_83150001_83155000 0.0272775 chr17  83152500  0.180434  -0.809873</span></span>
+<span><span class="co">##                                  min prominence</span></span>
+<span><span class="co">##                            &lt;logical&gt;  &lt;numeric&gt;</span></span>
+<span><span class="co">##    chr17_60100001_60105000     FALSE         NA</span></span>
+<span><span class="co">##    chr17_60105001_60110000      TRUE    0.57476</span></span>
+<span><span class="co">##    chr17_60110001_60115000     FALSE         NA</span></span>
+<span><span class="co">##    chr17_60115001_60120000     FALSE         NA</span></span>
+<span><span class="co">##    chr17_60120001_60125000     FALSE         NA</span></span>
+<span><span class="co">##                        ...       ...        ...</span></span>
+<span><span class="co">##    chr17_83130001_83135000     FALSE         NA</span></span>
+<span><span class="co">##    chr17_83135001_83140000     FALSE         NA</span></span>
+<span><span class="co">##    chr17_83140001_83145000     FALSE         NA</span></span>
+<span><span class="co">##    chr17_83145001_83150000     FALSE         NA</span></span>
+<span><span class="co">##    chr17_83150001_83155000     FALSE         NA</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 1 sequence from an unspecified genome</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>getDiamondInsulation</code> function can be parallelized over multiple threads by specifying the Bioconductor generic <code>BPPARAM</code> argument.</p>
+</div>
+</div>
+</section><section id="exporting-insulation-scores-tracks" class="level3" data-number="7.2.2"><h3 data-number="7.2.2" class="anchored" data-anchor-id="exporting-insulation-scores-tracks">
+<span class="header-section-number">7.2.2</span> Exporting insulation scores tracks</h3>
+<p>To save the diamond insulation scores (as a <code>bigwig</code> file) and the borders (as a <code>bed</code> file), the <code>export</code> function can be used:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">insulation</span>, weight <span class="op">=</span> <span class="st">'insulation'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">export</a></span><span class="op">(</span><span class="st">'microC_insulation.bw'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"borders"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">export</a></span><span class="op">(</span><span class="st">'microC_borders.bed'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="visualizing-chromatin-domains" class="level3" data-number="7.2.3"><h3 data-number="7.2.3" class="anchored" data-anchor-id="visualizing-chromatin-domains">
+<span class="header-section-number">7.2.3</span> Visualizing chromatin domains</h3>
+<p>Insulation tracks should be visualized in a dedicated genome browser.<br>
+That being said, it is possible to visualize a genome track in R besides the matching Hi-C contact matrix.</p>
+<div class="cell" data-layout-align="center" data-fig.asp="1">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">100000</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span></span>
+<span>    <span class="va">hic</span>, </span>
+<span>    use.scores <span class="op">=</span> <span class="st">'balanced'</span>, </span>
+<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3.5</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>    borders <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"borders"</span><span class="op">)</span>,</span>
+<span>    caption <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">insulation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">insulation</span>, weight <span class="op">=</span> <span class="st">'insulation'</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">insulation_df</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runLength</a></span><span class="op">(</span><span class="va">insulation</span><span class="op">)</span><span class="op">)</span>, insulation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runValue</a></span><span class="op">(</span><span class="va">insulation</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">insulation_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pos</span>, y <span class="op">=</span> <span class="va">insulation</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_area</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">coord_cartesian</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Genomic position"</span>, y <span class="op">=</span> <span class="st">"Diamond insulation score"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html">wrap_plots</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, ncol <span class="op">=</span> <span class="fl">1</span>, heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="topological-features_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Local minima in the diamond insulation score displayed below the Hi-C contact matrix are identified using the <code><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getBorders()</a></code> function, which automatically estimates a minimum threshold. These local minima correspond to borders and are visually depicted on the Hi-C map by blue diamonds.</p>
+</section></section><section id="chromatin-loops" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="chromatin-loops">
+<span class="header-section-number">7.3</span> Chromatin loops</h2>
+<section id="chromosight" class="level3" data-number="7.3.1"><h3 data-number="7.3.1" class="anchored" data-anchor-id="chromosight">
+<span class="header-section-number">7.3.1</span> <code>chromosight</code>
+</h3>
+<p>Chromatin loops, dots, or contacts, refer to a strong increase of interaction frequency between a pair of two genomic loci. They correspond to focal “dots” on a Hi-C map. Relying on computer vision algorithms, <code>chromosight</code> uses this property to annotate chromatin loops in a Hi-C map (<span class="citation" data-cites="Matthey_Doret_2020">Matthey-Doret et al. (<a href="#ref-Matthey_Doret_2020" role="doc-biblioref">2020</a>)</span>). <code>chromosight</code> is a standalone <code>python</code> package and is made available in R through the <code>HiCool</code>-managed conda environment with the <code><a href="https://rdrr.io/pkg/HiCool/man/getLoops.html">getLoops()</a></code> function.</p>
+<section id="identifying-loops" class="level4" data-number="7.3.1.1"><h4 data-number="7.3.1.1" class="anchored" data-anchor-id="identifying-loops">
+<span class="header-section-number">7.3.1.1</span> Identifying loops</h4>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu">HiCool</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HiCool/man/getLoops.html">getLoops</a></span><span class="op">(</span><span class="va">microC</span>, resolution <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">hic</span></span>
+<span><span class="co">## `HiCExperiment` object with 917,156 contacts over 100 regions</span></span>
+<span><span class="co">## -------</span></span>
+<span><span class="co">## fileName: "/home/rsg/.cache/R/fourDNData/4d434d8538a0_4DNFI9FVHJZQ.mcool"</span></span>
+<span><span class="co">## focus: "chr17:63,000,001-63,500,000"</span></span>
+<span><span class="co">## resolutions(13): 1000 2000 ... 5000000 10000000</span></span>
+<span><span class="co">## active resolution: 5000</span></span>
+<span><span class="co">## interactions: 5047</span></span>
+<span><span class="co">## scores(2): count balanced</span></span>
+<span><span class="co">## topologicalFeatures: compartments(0) borders(0) loops(66411) viewpoints(0)</span></span>
+<span><span class="co">## pairsFile: N/A</span></span>
+<span><span class="co">## metadata(1): chromosight_args</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code><a href="https://rdrr.io/pkg/HiCool/man/getLoops.html">getLoops()</a></code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
+<ul>
+<li>A <code>loops</code> <code>topologicalFeatures</code>:</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"loops"</span><span class="op">)</span></span>
+<span><span class="co">## GInteractions object with 66411 interactions and 5 metadata columns:</span></span>
+<span><span class="co">##           seqnames1           ranges1     seqnames2           ranges2 |   bin_id1   bin_id2     score      ## pvalue    qvalue</span></span>
+<span><span class="co">##               &lt;Rle&gt;         &lt;IRanges&gt;         &lt;Rle&gt;         &lt;IRanges&gt; | &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   ## &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">##       [1]      chr1     775001-780000 ---      chr1     850001-855000 |       155       170  0.334586 2.## 15995e-05 2.162e-05</span></span>
+<span><span class="co">##       [2]      chr1     775001-780000 ---      chr1     865001-870000 |       155       173  0.403336 1.## 62900e-07 1.669e-07</span></span>
+<span><span class="co">##       [3]      chr1     865001-870000 ---      chr1     890001-895000 |       173       178  0.337344 1.## 91400e-07 1.957e-07</span></span>
+<span><span class="co">##       [4]      chr1     910001-915000 ---      chr1     955001-960000 |       182       191  0.639725 0.## 00000e+00 0.000e+00</span></span>
+<span><span class="co">##       [5]      chr1     910001-915000 ---      chr1   1055001-1060000 |       182       211  0.521699 0.## 00000e+00 0.000e+00</span></span>
+<span><span class="co">##       ...       ...               ... ...       ...               ... .       ...       ...       ...       ##   ...       ...</span></span>
+<span><span class="co">##   [66407]      chrY 19570001-19575000 ---      chrY 19720001-19725000 |    610133    610163  0.315529    3.## 30e-08  3.55e-08</span></span>
+<span><span class="co">##   [66408]      chrY 19705001-19710000 ---      chrY 19730001-19735000 |    610160    610165  0.708753    0.## 00e+00  0.00e+00</span></span>
+<span><span class="co">##   [66409]      chrY 19765001-19770000 ---      chrY 19800001-19805000 |    610172    610179  0.373635    1.## 10e-09  1.40e-09</span></span>
+<span><span class="co">##   [66410]      chrY 20555001-20560000 ---      chrY 20645001-20650000 |    610330    610348  0.603308    0.## 00e+00  0.00e+00</span></span>
+<span><span class="co">##   [66411]      chrY 21015001-21020000 ---      chrY 21055001-21060000 |    610422    610430  0.394614    9.## 12e-08  9.45e-08</span></span>
+<span><span class="co">##   -------</span></span>
+<span><span class="co">##   regions: 84171 ranges and 0 metadata columns</span></span>
+<span><span class="co">##   seqinfo: 24 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>The arguments used by <code>chromosight</code>, stored in <code>metadata</code>:</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">chromosight_args</span></span>
+<span><span class="co">## $`--pattern`</span></span>
+<span><span class="co">## [1] "loops"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--dump`</span></span>
+<span><span class="co">## [1] "/data/.cache/R//RtmpSaRwiZ"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--inter`</span></span>
+<span><span class="co">## [1] FALSE</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--iterations`</span></span>
+<span><span class="co">## [1] "auto"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--kernel-config`</span></span>
+<span><span class="co">## NULL</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--perc-zero`</span></span>
+<span><span class="co">## [1] "auto"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--perc-undetected`</span></span>
+<span><span class="co">## [1] "auto"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--tsvd`</span></span>
+<span><span class="co">## [1] FALSE</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--win-fmt`</span></span>
+<span><span class="co">## [1] "json"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--win-size`</span></span>
+<span><span class="co">## [1] "auto"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--no-plotting`</span></span>
+<span><span class="co">## [1] TRUE</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--smooth-trend`</span></span>
+<span><span class="co">## [1] FALSE</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--norm`</span></span>
+<span><span class="co">## [1] "auto"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`&lt;contact_map&gt;`</span></span>
+<span><span class="co">## [1] "/home/rsg/.cache/R/fourDNData/4d434d8538a0_4DNFI9FVHJZQ.mcool::/resolutions/5000"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--max-dist`</span></span>
+<span><span class="co">## [1] "auto"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--min-dist`</span></span>
+<span><span class="co">## [1] "auto"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--min-separation`</span></span>
+<span><span class="co">## [1] "auto"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--n-mads`</span></span>
+<span><span class="co">## [1] 5</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`&lt;prefix&gt;`</span></span>
+<span><span class="co">## [1] "chromosight/chromo"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--pearson`</span></span>
+<span><span class="co">## [1] "auto"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--subsample`</span></span>
+<span><span class="co">## [1] "no"</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## $`--threads`</span></span>
+<span><span class="co">## [1] 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="importing-loops-from-files" class="level4" data-number="7.3.1.2"><h4 data-number="7.3.1.2" class="anchored" data-anchor-id="importing-loops-from-files">
+<span class="header-section-number">7.3.1.2</span> Importing loops from files</h4>
+<p>If you are using <code>chromosight</code> directly from the terminal (i.e.&nbsp;outside <code>R</code>), you can import the annotated loops in <code>R</code> as follows:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="st">"..."</span><span class="op">)</span> <span class="co">## Here put your loops file</span></span>
+<span><span class="va">loops</span> <span class="op">&lt;-</span> <span class="fu">InteractionSet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/GInteractions-class.html">GInteractions</a></span><span class="op">(</span></span>
+<span>    anchor1 <span class="op">=</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span></span>
+<span>        <span class="va">df</span><span class="op">$</span><span class="va">chrom1</span>, <span class="fu">IRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/IRanges-constructor.html">IRanges</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">start1</span><span class="op">+</span><span class="fl">1</span>, <span class="va">df</span><span class="op">$</span><span class="va">end1</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    anchor2 <span class="op">=</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span></span>
+<span>        <span class="va">df</span><span class="op">$</span><span class="va">chrom2</span>, <span class="fu">IRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/IRanges-constructor.html">IRanges</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">start2</span><span class="op">+</span><span class="fl">1</span>, <span class="va">df</span><span class="op">$</span><span class="va">end2</span><span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    bin_id1 <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">bin1</span>, </span>
+<span>    bin_id2 <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">bin2</span>, </span>
+<span>    score <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">score</span>, </span>
+<span>    pvalue <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">pvalue</span>, </span>
+<span>    qvalue <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">qvalue</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="exporting-chromatin-loops" class="level4" data-number="7.3.1.3"><h4 data-number="7.3.1.3" class="anchored" data-anchor-id="exporting-chromatin-loops">
+<span class="header-section-number">7.3.1.3</span> Exporting chromatin loops</h4>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">loops</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"loops"</span><span class="op">)</span></span>
+<span><span class="va">loops</span> <span class="op">&lt;-</span> <span class="va">loops</span><span class="op">[</span><span class="va">loops</span><span class="op">$</span><span class="va">score</span> <span class="op">&gt;=</span> <span class="fl">0.4</span> <span class="op">&amp;</span> <span class="va">loops</span><span class="op">$</span><span class="va">qvalue</span> <span class="op">&lt;=</span> <span class="fl">1e-6</span><span class="op">]</span></span>
+<span><span class="fu">GenomicInteractions</span><span class="fu">::</span><span class="fu">export.bedpe</span><span class="op">(</span><span class="va">loops</span>, <span class="st">'loops.bedpe'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="visualizing-chromatin-loops" class="level4" data-number="7.3.1.4"><h4 data-number="7.3.1.4" class="anchored" data-anchor-id="visualizing-chromatin-loops">
+<span class="header-section-number">7.3.1.4</span> Visualizing chromatin loops</h4>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">refocus</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'chr17:62500001-63500000'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="fl">5000</span><span class="op">)</span>, </span>
+<span>    loops <span class="op">=</span> <span class="va">loops</span>,</span>
+<span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="op">-</span><span class="fl">1.2</span><span class="op">)</span>,</span>
+<span>    caption <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="images/20230403134800.png" class="img-fluid"></p>
+</section></section><section id="other-r-packages" class="level3" data-number="7.3.2"><h3 data-number="7.3.2" class="anchored" data-anchor-id="other-r-packages">
+<span class="header-section-number">7.3.2</span> Other R packages</h3>
+<p>A number of other R packages have been developed to identify focal chromatin loops, notably <code>fitHiC</code> (<span class="citation" data-cites="Ay_2014">Ay et al. (<a href="#ref-Ay_2014" role="doc-biblioref">2014</a>)</span>), <code>GOTHiC</code> (<span class="citation" data-cites="Mifsud_2017">Mifsud et al. (<a href="#ref-Mifsud_2017" role="doc-biblioref">2017</a>)</span>) or <code>idr2d</code> (<span class="citation" data-cites="Krismer_2020">Krismer et al. (<a href="#ref-Krismer_2020" role="doc-biblioref">2020</a>)</span>). Each fits a slightly different purpose, and we encourage the end user to read companion publications.</p>
+</section></section><section id="references" class="level1 unnumbered"><h1 class="unnumbered">References</h1>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="ref-Ay_2014" class="csl-entry" role="listitem">
+Ay, F., Bailey, T. L., &amp; Noble, W. S. (2014). Statistical confidence estimation for hi-c data reveals regulatory chromatin contacts. <em>Genome Research</em>, <em>24</em>(6), 999–1011. <a href="https://doi.org/10.1101/gr.160374.113">https://doi.org/10.1101/gr.160374.113</a>
+</div>
+<div id="ref-Crane_2015" class="csl-entry" role="listitem">
+Crane, E., Bian, Q., McCord, R. P., Lajoie, B. R., Wheeler, B. S., Ralston, E. J., Uzawa, S., Dekker, J., &amp; Meyer, B. J. (2015). Condensin-driven remodelling of x chromosome topology during dosage compensation. <em>Nature</em>, <em>523</em>(7559), 240–244. <a href="https://doi.org/10.1038/nature14450">https://doi.org/10.1038/nature14450</a>
+</div>
+<div id="ref-Krietenstein_2020" class="csl-entry" role="listitem">
+Krietenstein, N., Abraham, S., Venev, S. V., Abdennur, N., Gibcus, J., Hsieh, T.-H. S., Parsi, K. M., Yang, L., Maehr, R., Mirny, L. A., Dekker, J., &amp; Rando, O. J. (2020). Ultrastructural details of mammalian chromosome architecture. <em>Molecular Cell</em>, <em>78</em>(3), 554–565.e7. <a href="https://doi.org/10.1016/j.molcel.2020.03.003">https://doi.org/10.1016/j.molcel.2020.03.003</a>
+</div>
+<div id="ref-Krismer_2020" class="csl-entry" role="listitem">
+Krismer, K., Guo, Y., &amp; Gifford, D. K. (2020). <span>IDR</span>2D identifies reproducible genomic interactions. <em>Nucleic Acids Research</em>, <em>48</em>(6), e31–e31. <a href="https://doi.org/10.1093/nar/gkaa030">https://doi.org/10.1093/nar/gkaa030</a>
+</div>
+<div id="ref-Matthey_Doret_2020" class="csl-entry" role="listitem">
+Matthey-Doret, C., Baudry, L., Breuer, A., Montagne, R., Guiglielmoni, N., Scolari, V., Jean, E., Campeas, A., Chanut, P. H., Oriol, E., Méot, A., Politis, L., Vigouroux, A., Moreau, P., Koszul, R., &amp; Cournac, A. (2020). Computer vision for pattern detection in chromosome contact maps. <em>Nature Communications</em>, <em>11</em>(1). <a href="https://doi.org/10.1038/s41467-020-19562-7">https://doi.org/10.1038/s41467-020-19562-7</a>
+</div>
+<div id="ref-Mifsud_2017" class="csl-entry" role="listitem">
+Mifsud, B., Martincorena, I., Darbo, E., Sugar, R., Schoenfelder, S., Fraser, P., &amp; Luscombe, N. M. (2017). <span>GOTHiC</span>, a probabilistic model to resolve complex biases and to identify real interactions in hi-c data. <em><span>PLOS</span> <span>ONE</span></em>, <em>12</em>(4), e0174744. <a href="https://doi.org/10.1371/journal.pone.0174744">https://doi.org/10.1371/journal.pone.0174744</a>
+</div>
+<div id="ref-Pope_2014" class="csl-entry" role="listitem">
+Pope, B. D., Ryba, T., Dileep, V., Yue, F., Wu, W., Denas, O., Vera, D. L., Wang, Y., Hansen, R. S., Canfield, T. K., Thurman, R. E., Cheng, Y., Gülsoy, G., Dennis, J. H., Snyder, M. P., Stamatoyannopoulos, J. A., Taylor, J., Hardison, R. C., Kahveci, T., … Gilbert, D. M. (2014). Topologically associating domains are stable units of replication-timing regulation. <em>Nature</em>, <em>515</em>(7527), 402–405. <a href="https://doi.org/10.1038/nature13986">https://doi.org/10.1038/nature13986</a>
+</div>
+<div id="ref-Schmitt_2016" class="csl-entry" role="listitem">
+Schmitt, A. D., Hu, M., Jung, I., Xu, Z., Qiu, Y., Tan, C. L., Li, Y., Lin, S., Lin, Y., Barr, C. L., &amp; Ren, B. (2016). A compendium of chromatin contact maps reveals spatially active regions in the human genome. <em>Cell Reports</em>, <em>17</em>(8), 2042–2059. <a href="https://doi.org/10.1016/j.celrep.2016.10.061">https://doi.org/10.1016/j.celrep.2016.10.061</a>
+</div>
+<div id="ref-Sefer_2022" class="csl-entry" role="listitem">
+Sefer, E. (2022). A comparison of topologically associating domain callers over mammals at high resolution. <em><span>BMC</span> Bioinformatics</em>, <em>23</em>(1). <a href="https://doi.org/10.1186/s12859-022-04674-2">https://doi.org/10.1186/s12859-022-04674-2</a>
+</div>
+<div id="ref-Stadhouders_2019" class="csl-entry" role="listitem">
+Stadhouders, R., Filion, G. J., &amp; Graf, T. (2019). Transcription factors and 3D genome conformation in cell-fate decisions. <em>Nature</em>, <em>569</em>(7756), 345–354. <a href="https://doi.org/10.1038/s41586-019-1182-7">https://doi.org/10.1038/s41586-019-1182-7</a>
+</div>
+</div>
+</section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="../pages/interactions-centric.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../pages/disseminating.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data gateways: accessing public Hi-C data portals</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left"><i>OHCA: Orchestrating Hi-C analysis with Bioconductor</i> was written by J. Serizay</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">This book was built with <a href="https://github.com/js2264/BiocBook/">BiocBook</a> with <span class="emoji" data-emoji="heart">❤️</span></div>
+  </div>
+</footer>
+
+
+</body></html>

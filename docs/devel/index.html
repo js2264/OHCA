@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Orchestrating Hi-C analysis with Bioconductor</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./pages/preamble.html" rel="next">
+<link href="./assets/cover.jpg" rel="icon" type="image/jpeg">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+</head>
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Orchestrating Hi-C analysis with Bioconductor</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label=""><i class="bi bi-git"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+<li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/js2264/OHCA/">
+            Source Code
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://js2264.github.io/OHCA/devel/">
+            Browse version `devel`
+            </a>
+          </li>
+      </ul>
+</div>
+    <a href="./Orchestrating-Hi-C-analysis-with-Bioconductor.pdf" rel="" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/preamble.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preamble</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Fundamentals concepts</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/principles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Hi-C pre-processing steps</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/data-representation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Hi-C data structures in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/parsing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulating Hi-C data in R</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/visualization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hi-C data visualization</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">In-depth Hi-C analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/matrix-centric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matrix-centric analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/interactions-centric.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/topological-features.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Advanced Hi-C topics</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/disseminating.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Data gateways: accessing public Hi-C data portals</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/interoperability.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Interoperability: using HiCExperiment with other R packages</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/workflow-yeast.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Workflow 1: Distance-dependent interactions across yeast mutants</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/workflow-chicken.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./pages/workflow-centros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Workflow 3: Inter-centromere interactions in yeast</span></span></a>
+  </div>
+</li>
+      </ul>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a>
+  <ul class="collapse">
+<li><a href="#table-of-contents" id="toc-table-of-contents" class="nav-link" data-scroll-target="#table-of-contents">Table of contents</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#installation-requirements" id="toc-installation-requirements" class="nav-link" data-scroll-target="#installation-requirements">Installation &amp; requirements</a>
+  <ul class="collapse">
+<li><a href="#general-audience" id="toc-general-audience" class="nav-link" data-scroll-target="#general-audience">General audience</a></li>
+  <li><a href="#developers" id="toc-developers" class="nav-link" data-scroll-target="#developers">Developers</a></li>
+  <li><a href="#docker-image" id="toc-docker-image" class="nav-link" data-scroll-target="#docker-image">Docker image</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a>
+  <ul class="collapse">
+<li><a href="#building-book" id="toc-building-book" class="nav-link" data-scroll-target="#building-book">Building book</a></li>
+  </ul>
+</li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">Orchestrating Hi-C analysis with Bioconductor</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header><p><img src="assets/cover.jpg" title="Orchestrating Hi-C analysis with Bioconductor" class="quarto-cover-image img-fluid"></p>
+<p><strong>Package:</strong> OHCA<br><strong>Authors:</strong> Jacques Serizay [aut, cre]<br><strong>Compiled:</strong> 2023-11-07<br><strong>Package version:</strong> 0.98.1<br><strong>R version:</strong> <b style="color:red;">R Under development (unstable) (2023-11-02 r85465)</b><br><strong>BioC version:</strong> <b style="color:red;">3.19</b><br><strong>License:</strong> MIT + file LICENSE<br></p>
+<section id="welcome" class="level1 unnumbered"><h1 class="unnumbered">Welcome</h1>
+<p>This is the landing page of the <strong>“Orchestrating Hi-C analysis with Bioconductor”</strong> book. <strong>The primary aim of this book is to introduce the <code>R</code> user to Hi-C analysis</strong>. This book starts with key concepts important for the analysis of chromatin conformation capture and then presents <code>Bioconductor</code> tools that can be leveraged to process, analyze, explore and visualize Hi-C data.</p>
+<section id="table-of-contents" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="table-of-contents">Table of contents</h2>
+<p>This book is divided in three parts:</p>
+<p><strong>Part I: Introduction to Hi-C analysis</strong></p>
+<ul>
+<li><a href="principles.qmd">Chapter 1: General principles and Hi-C data pre-processing</a></li>
+<li><a href="data-representation.qmd">Chapter 2: The different R classes implemented to analyze Hi-C</a></li>
+<li><a href="parsing.qmd">Chapter 3: Manipulating Hi-C data in R</a></li>
+<li><a href="visualization.qmd">Chapter 4: Hi-C data visualization</a></li>
+</ul>
+<p><strong>Part II: In-depth Hi-C analysis</strong></p>
+<ul>
+<li><a href="matrix-centric.qmd">Chapter 5: Matrix-centric analysis</a></li>
+<li><a href="interactions-centric.qmd">Chapter 6: Interactions-centric analysis</a></li>
+<li><a href="topological-features.qmd">Chapter 7: Finding topological features from a Hi-C contact matrix</a></li>
+</ul>
+<p><strong>Part III: Hi-C analysis workflows</strong></p>
+<ul>
+<li><a href="disseminating.qmd">Data gateways: accessing public Hi-C data portals</a></li>
+<li><a href="interoperability.qmd">Interoperability: Using HiCExperiment with other R packages</a></li>
+<li><a href="workflow-yeast.qmd">Workflow 1: Distance-dependent interactions across yeast mutants</a></li>
+<li><a href="workflow-chicken.qmd">Workflow 2: Chromosome compartment cohesion upon mitosis entry</a></li>
+<li><a href="workflow-centros.qmd">Workflow 3: Inter-centromere interactions in yeast</a></li>
+</ul></section></section><section id="installation-requirements" class="level1 unnumbered"><h1 class="unnumbered">Installation &amp; requirements</h1>
+<section id="general-audience" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="general-audience">General audience</h2>
+<p>This books aims to demonstrate how to pre-process, parse and investigate Hi-C data in <code>R</code>. For this reason, a significant portion of this book consists of executable R code chunks. To be able to reproduce the examples demonstrated in this book and go further in the analysis of <em>your <strong>real</strong> datasets</em>, you will need to rely on several dependencies.</p>
+<ul>
+<li>
+<code>R &gt;= 4.3</code> is required. You can check R version by typing <code>version</code> in an R console or in RStudio. If you do not have <code>R &gt;= 4.3</code> installed, you will need to update your <code>R</code> version, as most extra dependencies will require <code>R &gt;= 4.3</code>.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Installing R 4.3 👇
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Detailed instructions are available <a href="https://github.com/js2264/setup_ubuntu">here</a> to install <code>R 4.3</code> on a Linux machine (Ubuntu 22.04).</p>
+<p>Briefly, to install pre-compiled version of <code>R 4.3.0</code>:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is adapted from Posit (https://docs.posit.co/resources/install-r/)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">R_VERSION</span><span class="op">=</span>4.3.0</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install curl and gdebi-core</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update <span class="at">-qq</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install curl gdebi-core <span class="at">-y</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Fetching the `.deb` install file from Posit repository</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-O</span> https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-<span class="va">${R_VERSION}</span>_1_amd64.deb</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Install R</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> gdebi r-<span class="va">${R_VERSION}</span>_1_amd64.deb <span class="at">--non-interactive</span> <span class="at">-q</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: create a symlink to add R to your PATH</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ln <span class="at">-s</span> /opt/R/<span class="va">${R_VERSION}</span>/bin/R /usr/local/bin/R</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you have some issues when installing the Hi-C packages listed below, you may need to install the following system libraries:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update <span class="at">-qq</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install <span class="at">-y</span> <span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    automake make cmake fort77 gfortran <span class="dt">\</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    bzip2 unzip ftp build-essential <span class="dt">\</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    libc6 libreadline-dev <span class="dt">\</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    libpng-dev libjpeg-dev libtiff-dev <span class="dt">\</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    libx11-dev libxt-dev x11-common <span class="dt">\</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    libharfbuzz-dev libfribidi-dev <span class="dt">\</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    libfreetype6-dev libfontconfig1-dev <span class="dt">\</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    libbz2-dev liblzma-dev libtool <span class="dt">\</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    libxml2 libxml2-dev <span class="dt">\</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    libzstd-dev zlib1g-dev <span class="dt">\</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    libdb-dev libglu1-mesa-dev <span class="dt">\</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    libncurses5-dev libghc-zlib-dev libncurses-dev <span class="dt">\</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    libpcre3-dev libxml2-dev libblas-dev libzmq3-dev <span class="dt">\</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    libssl-dev libcurl4-openssl-dev <span class="dt">\</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    libgsl-dev libeigen3-dev libboost-all-dev <span class="dt">\</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    libgtk2.0-dev xvfb xauth xfonts-base apt-transport-https <span class="dt">\</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    libhdf5-dev libudunits2-dev libgdal-dev libgeos-dev <span class="dt">\</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    libproj-dev libnode-dev libmagick++-dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li>
+<code>Bioconductor &gt;= 3.18</code> is also required. You can check whether <code>Bioconductor</code> is available and its version in <code>R</code> by typing <code><a href="https://bioconductor.github.io/BiocManager/reference/version.html">BiocManager::version()</a></code>. If you do not have <code>BiocManager</code> &gt;= 3.18 installed, you will need to update it as follows:</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/">"BiocManager"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html">install</a></span><span class="op">(</span>version <span class="op">=</span> <span class="st">"3.18"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>You will also need important packages, which will be described in length in this book. The following <code>R</code> code will set up most of the extra dependencies:</li>
+</ul>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html">install</a></span><span class="op">(</span><span class="st">"HiCExperiment"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html">install</a></span><span class="op">(</span><span class="st">"HiCool"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html">install</a></span><span class="op">(</span><span class="st">"HiContacts"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html">install</a></span><span class="op">(</span><span class="st">"HiContactsData"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html">install</a></span><span class="op">(</span><span class="st">"fourDNData"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html">install</a></span><span class="op">(</span><span class="st">"DNAZooData"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="developers" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="developers">Developers</h2>
+<p>For developers or advanced R users, the <code>devel</code> versions of these packages can be installed along with their dependencies:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span>, repos <span class="op">=</span> <span class="st">"https://r-lib.github.io/p/pak/devel/"</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="st">"js2264/HiCExperiment"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, dependencies <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Depends"</span>, <span class="st">"Imports"</span>, <span class="st">"Suggests"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="st">"js2264/HiCool"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, dependencies <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Depends"</span>, <span class="st">"Imports"</span>, <span class="st">"Suggests"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="st">"js2264/HiContacts"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, dependencies <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Depends"</span>, <span class="st">"Imports"</span>, <span class="st">"Suggests"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="st">"js2264/HiContactsData"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, dependencies <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Depends"</span>, <span class="st">"Imports"</span>, <span class="st">"Suggests"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="st">"js2264/fourDNData"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, dependencies <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Depends"</span>, <span class="st">"Imports"</span>, <span class="st">"Suggests"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="st">"js2264/DNAZooData"</span>, ask <span class="op">=</span> <span class="cn">FALSE</span>, dependencies <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Depends"</span>, <span class="st">"Imports"</span>, <span class="st">"Suggests"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="docker-image" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="docker-image">Docker image</h2>
+<p>If you have <code>docker</code> installed, the easiest approach would be to run the following command in a <code>shell</code> terminal:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> ghcr.io/js2264/ohca:latest R</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This will fetch a <code>docker</code> image with the latest development versions of the aforementioned packages pre-installed, and initiate an interactive R session.</p>
+</section></section><section id="reproducibility" class="level1 unnumbered"><h1 class="unnumbered">Reproducibility</h1>
+<section id="building-book" class="level2 unnumbered"><h2 class="unnumbered anchored" data-anchor-id="building-book">Building book</h2>
+<p>The OHCA book has been rendered in R thanks to a number of packages, including but not only:</p>
+<ul>
+<li><code>devtools</code></li>
+<li><code>quarto</code></li>
+<li><code>rebook</code></li>
+</ul>
+<p>To build this book locally, you can run:</p>
+<div class="cell" data-layout-align="center">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bash</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:js2264/OHCA.git <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> OHCA</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>All dependencies listed above will be required!</p>
+</div>
+</div>
+<p>The actual rendering of this book is done by GitHub Actions, and the rendered static website is hosted by GitHub Pages.</p>
+</section></section><section id="session-info" class="level1 unnumbered"><h1 class="unnumbered">Session info</h1>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click to expand 👇
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">session_info</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span>,<span class="st">"Package"</span><span class="op">]</span>, </span>
+<span>    include_base <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">##  ─ Session info ────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   setting  value</span></span>
+<span><span class="co">##   version  R Under development (unstable) (2023-11-02 r85465)</span></span>
+<span><span class="co">##   os       Ubuntu 22.04.3 LTS</span></span>
+<span><span class="co">##   system   x86_64, linux-gnu</span></span>
+<span><span class="co">##   ui       X11</span></span>
+<span><span class="co">##   language (EN)</span></span>
+<span><span class="co">##   collate  C</span></span>
+<span><span class="co">##   ctype    en_US.UTF-8</span></span>
+<span><span class="co">##   tz       Etc/UTC</span></span>
+<span><span class="co">##   date     2023-11-07</span></span>
+<span><span class="co">##   pandoc   3.1.1 @ /usr/local/bin/ (via rmarkdown)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ─ Packages ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   package                     * version    date (UTC) lib source</span></span>
+<span><span class="co">##   abind                         1.4-5      2016-07-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   aggregation                   1.0.1      2018-01-25 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   AnnotationDbi                 1.65.2     2023-11-03 [2] Bioconductor</span></span>
+<span><span class="co">##   AnnotationFilter              1.27.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   AnnotationHub                 3.11.0     2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   askpass                       1.2.0      2023-09-03 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   backports                     1.4.1      2021-12-13 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   base                        * 4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   base64enc                     0.1-3      2015-07-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   basilisk                      1.15.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   basilisk.utils                1.15.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   beeswarm                      0.4.0      2021-06-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   BH                            1.81.0-1   2023-01-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Biobase                       2.63.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocFileCache                 2.11.1     2023-10-26 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocGenerics                  0.49.1     2023-11-01 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocIO                        1.13.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocManager                   1.30.22    2023-08-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   BiocParallel                  1.37.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocStyle                     2.31.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocVersion                   3.19.1     2023-10-26 [2] Bioconductor</span></span>
+<span><span class="co">##   biomaRt                       2.59.0     2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   Biostrings                    2.71.1     2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   biovizBase                    1.51.0     2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   bit                           4.0.5      2022-11-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bit64                         4.0.5      2020-08-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bitops                        1.0-7      2021-04-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   blob                          1.2.4      2023-03-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bookdown                      0.36       2023-10-16 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   boot                          1.3-28.1   2022-11-22 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   brew                          1.0-8      2022-09-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   brio                          1.1.3      2021-11-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   BSgenome                      1.71.1     2023-11-01 [2] Bioconductor</span></span>
+<span><span class="co">##   BSgenome.Hsapiens.UCSC.hg38   1.4.5      2023-11-07 [2] Bioconductor</span></span>
+<span><span class="co">##   bslib                         0.5.1      2023-08-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cachem                        1.0.8      2023-05-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Cairo                         1.6-1      2023-08-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   calibrate                     1.7.7      2020-06-19 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   callr                         3.7.3      2022-11-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   checkmate                     2.3.0      2023-10-25 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   class                         7.3-22     2023-05-03 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cli                           3.6.1      2023-03-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   clipr                         0.8.0      2022-02-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cluster                       2.1.4      2022-08-22 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   CodeDepends                   0.6.5      2018-07-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   codetools                     0.2-19     2023-02-01 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   colorspace                    2.1-0      2023-01-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   commonmark                    1.9.0      2023-03-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   compiler                      4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   cowplot                       1.1.1      2020-12-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cpp11                         0.4.6      2023-08-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   crayon                        1.5.2      2022-09-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   credentials                   2.0.1      2023-09-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   crosstalk                     1.2.0      2021-11-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   csaw                          1.37.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   curl                          5.1.0      2023-10-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   data.table                    1.14.8     2023-02-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   datasets                    * 4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   DBI                           1.1.3      2022-06-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dbplyr                        2.4.0      2023-10-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   DelayedArray                  0.29.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   deldir                        1.0-9      2023-05-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   desc                          1.4.2      2022-09-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   devtools                      2.4.5      2022-10-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dichromat                     2.0-0.1    2022-05-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   diffHic                       1.35.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   diffobj                       0.3.5      2021-10-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   digest                        0.6.33     2023-07-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dir.expiry                    1.11.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   DNAZooData                    1.3.0      2023-10-31 [2] Bioconductor</span></span>
+<span><span class="co">##   docopt                        0.7.1      2020-06-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   doParallel                    1.0.17     2022-02-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   downlit                       0.4.3      2023-06-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dplyr                         1.1.3      2023-09-03 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   DT                            0.30       2023-10-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dynamicTreeCut                1.63-1     2016-03-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   edgeR                         4.1.1      2023-10-29 [2] Bioconductor</span></span>
+<span><span class="co">##   ellipsis                      0.3.2      2021-04-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ensembldb                     2.27.0     2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   evaluate                      0.23       2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ExperimentHub                 2.11.0     2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   fansi                         1.0.5      2023-10-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   farver                        2.1.1      2022-07-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fastcluster                   1.2.3      2021-05-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fastmap                       1.1.1      2023-02-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   filelock                      1.0.2      2018-10-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fontawesome                   0.5.2      2023-08-19 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   forcats                       1.0.0      2023-01-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   foreach                       1.5.2      2022-02-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   foreign                       0.8-85     2023-09-09 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   formatR                       1.14       2023-01-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Formula                       1.2-5      2023-02-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fourDNData                    1.3.0      2023-10-31 [2] Bioconductor</span></span>
+<span><span class="co">##   fs                            1.6.3      2023-07-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   futile.logger                 1.4.3      2016-07-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   futile.options                1.0.1      2018-04-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   generics                      0.1.3      2022-07-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   GenomeInfoDb                  1.39.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomeInfoDbData              1.2.11     2023-11-07 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomicAlignments             1.39.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomicFeatures               1.55.1     2023-10-29 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomicRanges                 1.55.1     2023-10-29 [2] Bioconductor</span></span>
+<span><span class="co">##   gert                          2.0.0      2023-09-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   GGally                        2.1.2      2021-06-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ggbeeswarm                    0.7.2      2023-04-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ggbio                         1.51.0     2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   ggplot2                       3.4.4      2023-10-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ggrastr                       1.0.2      2023-06-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   gh                            1.4.0      2023-02-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   gitcreds                      0.1.2      2022-09-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   glue                          1.6.2      2022-02-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   GO.db                         3.18.0     2023-11-07 [2] Bioconductor</span></span>
+<span><span class="co">##   GOTHiC                        1.39.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   graph                         1.81.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   graphics                    * 4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   grDevices                   * 4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   grid                          4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   gridExtra                     2.3        2017-09-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   gtable                        0.3.4      2023-08-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   gtools                        3.9.4      2022-11-27 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   here                          1.0.1      2020-12-13 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   HiCcompare                    1.25.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   HiCExperiment                 1.3.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   HiContacts                    1.5.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   HiContactsData                1.5.0      2023-10-31 [2] Bioconductor</span></span>
+<span><span class="co">##   HiCool                        1.3.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   hicrep                        1.12.2     2023-11-07 [2] Github (TaoYang-dev/hicrep@e485dfa)</span></span>
+<span><span class="co">##   highr                         0.10       2022-12-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Hmisc                         5.1-1      2023-09-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   hms                           1.1.3      2023-03-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmlTable                     2.4.2      2023-10-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmltools                     0.5.7      2023-11-03 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmlwidgets                   1.6.2      2023-03-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   httpuv                        1.6.12     2023-10-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   httr                          1.4.7      2023-08-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   httr2                         0.2.3      2023-05-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   hwriter                       1.3.2.1    2022-04-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   impute                        1.77.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   ini                           0.3.1      2018-05-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   InteractionSet                1.31.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   interactiveDisplayBase        1.41.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   interp                        1.1-4      2023-03-31 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   IRanges                       2.37.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   isoband                       0.2.7      2022-12-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   iterators                     1.0.14     2022-02-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   jpeg                          0.1-10     2022-11-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   jquerylib                     0.1.4      2021-04-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   jsonlite                      1.8.7      2023-06-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   KEGGREST                      1.43.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   KernSmooth                    2.23-22    2023-07-10 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   knitr                         1.45       2023-10-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   labeling                      0.4.3      2023-08-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lambda.r                      1.2.4      2019-09-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   later                         1.3.1      2023-05-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lattice                       0.22-5     2023-10-24 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   latticeExtra                  0.6-30     2022-07-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lazyeval                      0.2.2      2019-03-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lifecycle                     1.0.4      2023-11-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   limma                         3.59.1     2023-10-30 [2] Bioconductor</span></span>
+<span><span class="co">##   littler                       0.3.18     2023-03-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   locfit                        1.5-9.8    2023-06-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   magrittr                      2.0.3      2022-03-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   MASS                          7.3-60.1   2023-11-05 [3] local</span></span>
+<span><span class="co">##   Matrix                        1.6-1.1    2023-09-18 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   MatrixGenerics                1.15.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   matrixStats                   1.1.0      2023-11-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   memoise                       2.0.1      2021-11-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   metapod                       1.11.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   methods                     * 4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   mgcv                          1.9-0      2023-07-11 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   mime                          0.12       2021-09-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   miniUI                        0.1.1.1    2018-05-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   multiHiCcompare               1.21.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   munsell                       0.5.0      2018-06-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   nlme                          3.1-163    2023-08-09 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   nnet                          7.3-19     2023-05-03 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   OHCA                          0.98.1     2023-11-07 [1] Bioconductor</span></span>
+<span><span class="co">##   openssl                       2.1.1      2023-09-25 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   OrganismDbi                   1.45.0     2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   packrat                       0.9.2      2023-09-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   parallel                      4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   patchwork                     1.1.3      2023-08-14 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pbapply                       1.7-2      2023-06-27 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pheatmap                      1.0.12     2019-01-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pillar                        1.9.0      2023-03-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pkgbuild                      1.4.2      2023-06-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pkgconfig                     2.0.3      2019-09-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pkgdown                       2.0.7      2022-12-14 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pkgload                       1.3.3      2023-09-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   plogr                         0.2.0      2018-03-25 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   plotly                        4.10.3     2023-10-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   plyinteractions               1.1.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   plyr                          1.8.9      2023-10-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   plyranges                     1.23.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   png                           0.1-8      2022-11-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   praise                        1.0.0      2015-08-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   preprocessCore                1.65.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   prettyunits                   1.2.0      2023-09-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   processx                      3.8.2      2023-06-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   profvis                       0.3.8      2023-05-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   progress                      1.2.2      2019-05-16 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   promises                      1.2.1      2023-08-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ProtGenerics                  1.35.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   ps                            1.7.5      2023-04-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   purrr                         1.0.2      2023-08-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   qqman                         0.1.9      2023-08-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   quarto                        1.3        2023-09-19 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   R6                            2.5.1      2021-08-19 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ragg                          1.2.6      2023-10-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rappdirs                      0.3.3      2021-01-31 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RBGL                          1.79.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   rcmdcheck                     1.4.0      2021-09-27 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RColorBrewer                  1.1-3      2022-04-03 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Rcpp                          1.0.11     2023-07-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RcppArmadillo                 0.12.6.6.0 2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RcppEigen                     0.3.3.9.4  2023-11-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RcppGSL                       0.3.13     2023-01-13 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RcppParallel                  5.1.7      2023-02-27 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RcppTOML                      0.2.2      2023-01-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RcppZiggurat                  0.1.6      2020-10-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RCurl                         1.98-1.13  2023-11-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   readr                         2.1.4      2023-02-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rebook                        1.13.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   rematch2                      2.1.2      2020-05-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   remotes                       2.4.2.1    2023-07-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   renv                          1.0.3      2023-09-19 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   reshape                       0.8.9      2022-04-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   reshape2                      1.4.4      2020-04-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   restfulr                      0.0.15     2022-06-16 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   reticulate                    1.34.0     2023-10-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Rfast                         2.0.9      2023-10-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rhdf5                         2.47.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   rhdf5filters                  1.15.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   Rhdf5lib                      1.25.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   Rhtslib                       2.99.1     2023-11-02 [2] Bioconductor</span></span>
+<span><span class="co">##   rjson                         0.2.21     2022-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rlang                         1.1.2      2023-11-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rmarkdown                     2.25       2023-09-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rmdformats                    1.0.4      2022-05-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   roxygen2                      7.2.3      2022-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rpart                         4.1.21     2023-10-09 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rprojroot                     2.0.4      2023-11-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Rsamtools                     2.19.2     2023-11-05 [2] Bioconductor</span></span>
+<span><span class="co">##   rsconnect                     1.1.1      2023-10-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RSpectra                      0.16-1     2022-04-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RSQLite                       2.3.3      2023-11-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rstudioapi                    0.15.0     2023-07-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rtracklayer                   1.63.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   rversions                     2.1.2      2022-08-31 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   S4Arrays                      1.3.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   S4Vectors                     0.41.1     2023-10-26 [2] Bioconductor</span></span>
+<span><span class="co">##   sass                          0.4.7      2023-07-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   scales                        1.2.1      2022-08-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   sessioninfo                   1.2.2      2021-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   shiny                         1.7.5.1    2023-10-14 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ShortRead                     1.61.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   snow                          0.4-4      2021-10-27 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   sourcetools                   0.1.7-1    2023-02-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   SparseArray                   1.3.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   spatial                       7.3-17     2023-07-20 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   splines                       4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   statmod                       1.5.0      2023-01-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   stats                       * 4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   stats4                        4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   strawr                        0.0.91     2023-03-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   stringi                       1.7.12     2023-01-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   stringr                       1.5.0      2022-12-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   SummarizedExperiment          1.33.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   survival                      3.5-7      2023-08-14 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   sys                           3.4.2      2023-05-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   systemfonts                   1.0.5      2023-10-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tcltk                         4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   terra                         1.7-55     2023-10-13 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   testthat                      3.2.0      2023-10-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   textshaping                   0.3.7      2023-10-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tibble                        3.2.1      2023-03-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tidyr                         1.3.0      2023-01-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tidyselect                    1.2.0      2022-10-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tinytex                       0.48       2023-10-13 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tools                         4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   TopDom                        0.10.1     2021-05-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tzdb                          0.4.0      2023-05-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   urlchecker                    1.0.1      2021-11-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   usethis                       2.2.2      2023-07-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   utf8                          1.2.4      2023-10-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   utils                       * 4.4.0      2023-11-05 [3] local</span></span>
+<span><span class="co">##   VariantAnnotation             1.49.1     2023-10-31 [2] Bioconductor</span></span>
+<span><span class="co">##   vctrs                         0.6.4      2023-10-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   vipor                         0.4.5      2017-03-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   viridis                       0.6.4      2023-07-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   viridisLite                   0.4.2      2023-05-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   vroom                         1.6.4      2023-10-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   waldo                         0.5.2      2023-11-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   WGCNA                         1.72-1     2023-01-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   whisker                       0.4.1      2022-12-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   withr                         2.5.2      2023-10-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   xfun                          0.41       2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   XML                           3.99-0.15  2023-11-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   xml2                          1.3.5      2023-07-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   xopen                         1.0.0      2018-09-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   xtable                        1.8-4      2019-04-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   XVector                       0.43.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   yaml                          2.3.7      2023-01-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   zip                           2.3.0      2023-04-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   zlibbioc                      1.49.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##   [1] /tmp/RtmpixmP1F/Rinst529f91dd</span></span>
+<span><span class="co">##   [2] /usr/local/lib/R/site-library</span></span>
+<span><span class="co">##   [3] /usr/local/lib/R/library</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ─ Python configuration ────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   Python is not available</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ───────────────────────────────────────────────────────────────────────────</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./pages/preamble.html" class="pagination-link">
+        <span class="nav-page-text">Preamble</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left"><i>OHCA: Orchestrating Hi-C analysis with Bioconductor</i> was written by J. Serizay</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">This book was built with <a href="https://github.com/js2264/BiocBook/">BiocBook</a> with <span class="emoji" data-emoji="heart">❤️</span></div>
+  </div>
+</footer>
+
+
+</body></html>
