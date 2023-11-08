@@ -53,6 +53,12 @@ pre.sourceCode.r, code.sourceCode.r {
 
 }
 
+pre.sourceCode.sh {
+  background-color: #ffffff00;
+  border: 1px solid black;
+  border-radius: 8px;
+}
+
 /* Chapter label ---------------------------------------- */
 
 .chapter-number::before {

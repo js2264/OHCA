@@ -189,7 +189,7 @@ The OHCA book has been rendered in R thanks to a number of packages, including b
 
 To build this book locally, you can run: 
 
-```{sh eval = FALSE, filename="bash"}
+```{sh eval = FALSE}
 git clone git@github.com:js2264/OHCA.git && cd OHCA
 quarto render
 ```
