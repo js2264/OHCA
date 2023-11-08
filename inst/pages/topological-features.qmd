@@ -39,13 +39,13 @@ into active euchromatin (A compartments) and regulated heterochromatin
 
 To investigate chromosome compartments, we will fetch a contact matrix generated 
 from a micro-C experiment (from @Krietenstein_2020). A subset of the genome-wide
-dataset is provided in the `OHCA` package. It contains intra-chromosomal 
+dataset is provided in the `HiContactsData` package. It contains intra-chromosomal 
 interactions within `chr17`, binned at `5000`, `100000` and `250000` bp. 
 
 ```{r}
 library(HiCExperiment)
-library(OHCA)
-cf <- fs::path_package('OHCA', 'extdata', 'chr17.mcool')
+library(HiContactsData)
+cf <- HiContactsData('microC', 'mcool')
 microC <- import(cf, resolution = 250000)
 microC
 
