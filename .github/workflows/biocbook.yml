@@ -23,9 +23,9 @@ jobs:
         uses: runforesight/workflow-telemetry-action@v1
 
       - name: 🐳 Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
       - name: 🐳 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
   
       - name: 📝 Get book info
         id: info
@@ -41,7 +41,7 @@ jobs:
           echo pkgversion=$(grep -m1 -E '^Version: +' DESCRIPTION | sed -E 's/.*: +//') >> "${GITHUB_ENV}"
 
       - name: 🔐 Log in to the Github Container registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ env.owner }}
@@ -59,7 +59,7 @@ jobs:
 
       - name: 📦 Install, build and check package in local Docker image
         id: docker
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           load: true
@@ -68,7 +68,7 @@ jobs:
             BIOC_VERSION=${{ github.ref_name }}
 
       - name: 🚀 Push local Docker image to ghcr.io
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
@@ -85,7 +85,9 @@ jobs:
           tar --extract --gzip --file ${{ env.Pkgname }}_${{ env.pkgversion }}.tar.gz
           echo bundle_path=${{ env.Pkgname }}_${{ env.pkgversion }}.tar.gz >> "${GITHUB_ENV}"
           echo book_path=${{ env.Pkgname }}/inst/doc/book/ >> "${GITHUB_ENV}"
-          ls -l $(${{ env.Pkgname }}/inst/doc/book/)
+          ls -l ./
+          ls -l ${{ env.Pkgname }}
+          ls -l ${{ env.Pkgname }}/inst/doc/book/
 
       - name: 🏷 Get gh-branch directory to deploy to
         run: |
