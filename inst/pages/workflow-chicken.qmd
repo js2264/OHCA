@@ -1,4 +1,4 @@
-# Workflow 2: Chromosome compartment cohesion upon mitosis entry
+# Workflow 2: Chromosome compartment cohesion upon mitosis entry {-}
 
 ```{r}
 #| echo: false

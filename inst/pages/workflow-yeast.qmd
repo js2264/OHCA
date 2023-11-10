@@ -1,4 +1,4 @@
-# Workflow 1: Distance-dependent interactions across yeast mutants
+# Workflow 1: Distance-dependent interactions across yeast mutants {-}
 
 ```{r}
 #| echo: false

@@ -1,4 +1,4 @@
-# Workflow 3: Inter-centromere interactions in yeast
+# Workflow 3: Inter-centromere interactions in yeast {-}
 
 ```{r}
 #| echo: false
