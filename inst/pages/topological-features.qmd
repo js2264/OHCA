@@ -45,7 +45,7 @@ interactions within `chr17`, binned at `5000`, `100000` and `250000` bp.
 ```{r}
 library(HiCExperiment)
 library(HiContactsData)
-cf <- HiContactsData('microC', 'mcool')
+cf <- CoolFile(HiContactsData('microC', 'mcool'))
 microC <- import(cf, resolution = 250000)
 microC
 
