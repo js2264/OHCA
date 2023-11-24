@@ -257,19 +257,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-yeast.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Workflow 1: Distance-dependent interactions across yeast mutants</span></span></a>
+ <span class="menu-text">Workflow 1: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-chicken.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></span></a>
+ <span class="menu-text">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-centros.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Workflow 3: Inter-centromere interactions in yeast</span></span></a>
+ <span class="menu-text">Workflow 3: Inter-centromere interactions in yeast</span></a>
   </div>
 </li>
       </ul>
@@ -350,16 +350,20 @@ Aims
 <p>Chromosome compartments refer to the segregation of the chromatin into active euchromatin (A compartments) and regulated heterochromatin (B compartment).</p>
 <section id="importing-hi-c-data" class="level3" data-number="7.1.1"><h3 data-number="7.1.1" class="anchored" data-anchor-id="importing-hi-c-data">
 <span class="header-section-number">7.1.1</span> Importing Hi-C data</h3>
-<p>To investigate chromosome compartments, we will fetch a contact matrix generated from a micro-C experiment (from <span class="citation" data-cites="Krietenstein_2020">Krietenstein et al. (<a href="#ref-Krietenstein_2020" role="doc-biblioref">2020</a>)</span>). A subset of the genome-wide dataset is provided in the <code>OHCA</code> package. It contains intra-chromosomal interactions within <code>chr17</code>, binned at <code>5000</code>, <code>100000</code> and <code>250000</code> bp.</p>
+<p>To investigate chromosome compartments, we will fetch a contact matrix generated from a micro-C experiment (from <span class="citation" data-cites="Krietenstein_2020">Krietenstein et al. (<a href="#ref-Krietenstein_2020" role="doc-biblioref">2020</a>)</span>). A subset of the genome-wide dataset is provided in the <code>HiContactsData</code> package. It contains intra-chromosomal interactions within <code>chr17</code>, binned at <code>5000</code>, <code>100000</code> and <code>250000</code> bp.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/OHCA">OHCA</a></span><span class="op">)</span></span>
-<span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/path_package.html">path_package</a></span><span class="op">(</span><span class="st">'OHCA'</span>, <span class="st">'extdata'</span>, <span class="st">'chr17.mcool'</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
+<span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'microC'</span>, <span class="st">'mcool'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span>
 <span><span class="va">microC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, resolution <span class="op">=</span> <span class="fl">250000</span><span class="op">)</span></span>
 <span><span class="va">microC</span></span>
 <span><span class="co">##  `HiCExperiment` object with 10,086,710 contacts over 334 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/tmp/RtmpQLhNE0/Rinst526ac28ef2/OHCA/extdata/chr17.mcool" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/277925dad0b1_8601" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(3): 5000 100000 250000</span></span>
 <span><span class="co">##  active resolution: 250000 </span></span>
@@ -377,7 +381,7 @@ Aims
 </section><section id="annotating-ab-compartments" class="level3" data-number="7.1.2"><h3 data-number="7.1.2" class="anchored" data-anchor-id="annotating-ab-compartments">
 <span class="header-section-number">7.1.2</span> Annotating A/B compartments</h3>
 <p>The consensus approach to annotate A/B compartments is to compute the eigenvectors of a Hi-C contact matrix and identify the eigenvector representing the chromosome-wide bi-partite segmentation of the genome.</p>
-<p>The <code><a href="https://rdrr.io/pkg/HiContacts/man/getCompartments.html">getCompartments()</a></code> function performs several internal operations to achieve this:</p>
+<p>The <code>getCompartments()</code> function performs several internal operations to achieve this:</p>
 <ol type="1">
 <li>Obtains cis interactions per chromosome</li>
 <li>Computes O/E contact matrix scores</li>
@@ -388,7 +392,7 @@ Aims
 </ol>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">phasing_track</span> <span class="op">&lt;-</span> <span class="fu">BSgenome.Hsapiens.UCSC.hg38</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg38/man/package.html">BSgenome.Hsapiens.UCSC.hg38</a></span></span>
-<span><span class="va">microC_compts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/getCompartments.html">getCompartments</a></span><span class="op">(</span><span class="va">microC</span>, genome <span class="op">=</span> <span class="va">phasing_track</span><span class="op">)</span></span>
+<span><span class="va">microC_compts</span> <span class="op">&lt;-</span> <span class="fu">getCompartments</span><span class="op">(</span><span class="va">microC</span>, genome <span class="op">=</span> <span class="va">phasing_track</span><span class="op">)</span></span>
 <span><span class="co">##  Going through preflight checklist...</span></span>
 <span><span class="co">##  Parsing intra-chromosomal contacts for each chromosome...</span></span>
 <span><span class="co">##  Computing eigenvectors for each chromosome...</span></span>
@@ -396,7 +400,7 @@ Aims
 <span><span class="va">microC_compts</span></span>
 <span><span class="co">##  `HiCExperiment` object with 10,086,710 contacts over 334 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/tmp/RtmpQLhNE0/Rinst526ac28ef2/OHCA/extdata/chr17.mcool" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/277925dad0b1_8601" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(3): 5000 100000 250000</span></span>
 <span><span class="co">##  active resolution: 250000 </span></span>
@@ -406,7 +410,7 @@ Aims
 <span><span class="co">##  pairsFile: N/A </span></span>
 <span><span class="co">##  metadata(1): eigens</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code><a href="https://rdrr.io/pkg/HiContacts/man/getCompartments.html">getCompartments()</a></code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
+<p><code>getCompartments()</code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
 <ul>
 <li>A <code>compartments</code> <code>topologicalFeatures</code>:</li>
 </ul>
@@ -506,9 +510,9 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <div class="cell" data-layout-align="center" data-fig.asp="1">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
-<span><span class="va">microC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/arithmetics.html">autocorrelate</a></span><span class="op">(</span><span class="va">microC</span><span class="op">)</span></span>
+<span><span class="va">microC</span> <span class="op">&lt;-</span> <span class="fu">autocorrelate</span><span class="op">(</span><span class="va">microC</span><span class="op">)</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">microC</span>, use.scores <span class="op">=</span> <span class="st">'autocorrelated'</span>, scale <span class="op">=</span> <span class="st">'linear'</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, caption <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">plotMatrix</span><span class="op">(</span><span class="va">microC</span>, use.scores <span class="op">=</span> <span class="st">'autocorrelated'</span>, scale <span class="op">=</span> <span class="st">'linear'</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, caption <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">microC_compts</span><span class="op">)</span><span class="op">$</span><span class="va">eigens</span>, weight <span class="op">=</span> <span class="st">'eigen'</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="va">eigen_df</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runLength</a></span><span class="op">(</span><span class="va">eigen</span><span class="op">)</span><span class="op">)</span>, eigen <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runValue</a></span><span class="op">(</span><span class="va">eigen</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">eigen_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pos</span>, y <span class="op">=</span> <span class="va">eigen</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -531,7 +535,7 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <p>Non-overlapping genomic windows are grouped in <code>nbins</code> quantiles (typically between 10 and 50 quantiles) according to their A/B compartment eigenvector value, from lowest eigenvector values (i.e.&nbsp;strongest B compartments) to highest eigenvector values (i.e.&nbsp;strongest A compartments). The average <code>observed</code> vs.&nbsp;<code>expected</code> interaction scores are then computed for pairwise eigenvector quantiles and plotted in a 2D heatmap.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Bioconductor/BiocParallel">BiocParallel</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotSaddle.html">plotSaddle</a></span><span class="op">(</span><span class="va">microC_compts</span>, nbins <span class="op">=</span> <span class="fl">25</span>, BPPARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html">SerialParam</a></span><span class="op">(</span>progressbar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu">plotSaddle</span><span class="op">(</span><span class="va">microC_compts</span>, nbins <span class="op">=</span> <span class="fl">25</span>, BPPARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html">SerialParam</a></span><span class="op">(</span>progressbar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><img src="topological-features_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
@@ -557,8 +561,8 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <span><span class="va">bpparam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html">SerialParam</a></span><span class="op">(</span>progressbar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">microC</span>, <span class="fl">5000</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">refocus</a></span><span class="op">(</span><span class="st">'chr17:60000001-83257441'</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getDiamondInsulation</a></span><span class="op">(</span>window_size <span class="op">=</span> <span class="fl">100000</span>, BPPARAM <span class="op">=</span> <span class="va">bpparam</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getBorders</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu">getDiamondInsulation</span><span class="op">(</span>window_size <span class="op">=</span> <span class="fl">100000</span>, BPPARAM <span class="op">=</span> <span class="va">bpparam</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu">getBorders</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##  Going through preflight checklist...</span></span>
 <span><span class="co">##  Scan each window and compute diamond insulation score...</span></span>
 <span><span class="co">##  Annotating diamond score prominence for each window...</span></span>
@@ -566,7 +570,7 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 2,156,222 contacts over 4,652 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/tmp/RtmpQLhNE0/Rinst526ac28ef2/OHCA/extdata/chr17.mcool" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/277925dad0b1_8601" </span></span>
 <span><span class="co">##  focus: "chr17:60,000,001-83,257,441" </span></span>
 <span><span class="co">##  resolutions(3): 5000 100000 250000</span></span>
 <span><span class="co">##  active resolution: 5000 </span></span>
@@ -576,7 +580,7 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <span><span class="co">##  pairsFile: N/A </span></span>
 <span><span class="co">##  metadata(1): insulation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getDiamondInsulation()</a></code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
+<p><code>getDiamondInsulation()</code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
 <ul>
 <li>A <code>borders</code> <code>topologicalFeatures</code>:</li>
 </ul>
@@ -673,7 +677,7 @@ Note
 That being said, it is possible to visualize a genome track in R besides the matching Hi-C contact matrix.</p>
 <div class="cell" data-layout-align="center" data-fig.asp="1">
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">100000</span><span class="op">)</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">plotMatrix</span><span class="op">(</span></span>
 <span>    <span class="va">hic</span>, </span>
 <span>    use.scores <span class="op">=</span> <span class="st">'balanced'</span>, </span>
 <span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3.5</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span>
@@ -695,13 +699,13 @@ That being said, it is possible to visualize a genome track in R besides the mat
 </div>
 </div>
 </div>
-<p>Local minima in the diamond insulation score displayed below the Hi-C contact matrix are identified using the <code><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getBorders()</a></code> function, which automatically estimates a minimum threshold. These local minima correspond to borders and are visually depicted on the Hi-C map by blue diamonds.</p>
+<p>Local minima in the diamond insulation score displayed below the Hi-C contact matrix are identified using the <code>getBorders()</code> function, which automatically estimates a minimum threshold. These local minima correspond to borders and are visually depicted on the Hi-C map by blue diamonds.</p>
 </section></section><section id="chromatin-loops" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="chromatin-loops">
 <span class="header-section-number">7.3</span> Chromatin loops</h2>
 <section id="chromosight" class="level3" data-number="7.3.1"><h3 data-number="7.3.1" class="anchored" data-anchor-id="chromosight">
 <span class="header-section-number">7.3.1</span> <code>chromosight</code>
 </h3>
-<p>Chromatin loops, dots, or contacts, refer to a strong increase of interaction frequency between a pair of two genomic loci. They correspond to focal “dots” on a Hi-C map. Relying on computer vision algorithms, <code>chromosight</code> uses this property to annotate chromatin loops in a Hi-C map (<span class="citation" data-cites="Matthey_Doret_2020">Matthey-Doret et al. (<a href="#ref-Matthey_Doret_2020" role="doc-biblioref">2020</a>)</span>). <code>chromosight</code> is a standalone <code>python</code> package and is made available in R through the <code>HiCool</code>-managed conda environment with the <code><a href="https://rdrr.io/pkg/HiCool/man/getLoops.html">getLoops()</a></code> function.</p>
+<p>Chromatin loops, dots, or contacts, refer to a strong increase of interaction frequency between a pair of two genomic loci. They correspond to focal “dots” on a Hi-C map. Relying on computer vision algorithms, <code>chromosight</code> uses this property to annotate chromatin loops in a Hi-C map (<span class="citation" data-cites="Matthey_Doret_2020">Matthey-Doret et al. (<a href="#ref-Matthey_Doret_2020" role="doc-biblioref">2020</a>)</span>). <code>chromosight</code> is a standalone <code>python</code> package and is made available in R through the <code>HiCool</code>-managed conda environment with the <code>getLoops()</code> function.</p>
 <section id="identifying-loops" class="level4" data-number="7.3.1.1"><h4 data-number="7.3.1.1" class="anchored" data-anchor-id="identifying-loops">
 <span class="header-section-number">7.3.1.1</span> Identifying loops</h4>
 <div class="cell" data-layout-align="center">
@@ -720,7 +724,7 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <span><span class="co">## pairsFile: N/A</span></span>
 <span><span class="co">## metadata(1): chromosight_args</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code><a href="https://rdrr.io/pkg/HiCool/man/getLoops.html">getLoops()</a></code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
+<p><code>getLoops()</code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
 <ul>
 <li>A <code>loops</code> <code>topologicalFeatures</code>:</li>
 </ul>
@@ -844,7 +848,7 @@ That being said, it is possible to visualize a genome track in R besides the mat
 </section><section id="visualizing-chromatin-loops" class="level4" data-number="7.3.1.4"><h4 data-number="7.3.1.4" class="anchored" data-anchor-id="visualizing-chromatin-loops">
 <span class="header-section-number">7.3.1.4</span> Visualizing chromatin loops</h4>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">plotMatrix</span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">refocus</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'chr17:62500001-63500000'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="fl">5000</span><span class="op">)</span>, </span>
 <span>    loops <span class="op">=</span> <span class="va">loops</span>,</span>
 <span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="op">-</span><span class="fl">1.2</span><span class="op">)</span>,</span>

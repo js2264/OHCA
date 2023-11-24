@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.3.433">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Orchestrating Hi-C analysis with Bioconductor - 11&nbsp; Workflow 2: Chromosome compartment cohesion upon mitosis entry</title>
+<title>Orchestrating Hi-C analysis with Bioconductor - Workflow 2: Chromosome compartment cohesion upon mitosis entry</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,7 +118,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/disseminating.html">Advanced Hi-C topics</a></li><li class="breadcrumb-item"><a href="../pages/workflow-chicken.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/disseminating.html">Advanced Hi-C topics</a></li><li class="breadcrumb-item"><a href="../pages/workflow-chicken.html">Workflow 2: Chromosome compartment cohesion upon mitosis entry</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -257,19 +257,19 @@ div.csl-indent {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-yeast.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Workflow 1: Distance-dependent interactions across yeast mutants</span></span></a>
+ <span class="menu-text">Workflow 1: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-chicken.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></span></a>
+ <span class="menu-text">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-centros.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Workflow 3: Inter-centromere interactions in yeast</span></span></a>
+ <span class="menu-text">Workflow 3: Inter-centromere interactions in yeast</span></a>
   </div>
 </li>
       </ul>
@@ -282,19 +282,17 @@ div.csl-indent {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#importing-data" id="toc-importing-data" class="nav-link active" data-scroll-target="#importing-data"><span class="header-section-number">11.1</span> Importing data</a></li>
-  <li><a href="#plotting-whole-chromosome-matrices" id="toc-plotting-whole-chromosome-matrices" class="nav-link" data-scroll-target="#plotting-whole-chromosome-matrices"><span class="header-section-number">11.2</span> Plotting whole chromosome matrices</a></li>
-  <li><a href="#zooming-on-a-chromosome-section" id="toc-zooming-on-a-chromosome-section" class="nav-link" data-scroll-target="#zooming-on-a-chromosome-section"><span class="header-section-number">11.3</span> Zooming on a chromosome section</a></li>
-  <li><a href="#generating-saddle-plots" id="toc-generating-saddle-plots" class="nav-link" data-scroll-target="#generating-saddle-plots"><span class="header-section-number">11.4</span> Generating saddle plots</a></li>
-  <li><a href="#quantifying-interactions-within-and-between-compartments" id="toc-quantifying-interactions-within-and-between-compartments" class="nav-link" data-scroll-target="#quantifying-interactions-within-and-between-compartments"><span class="header-section-number">11.5</span> Quantifying interactions within and between compartments</a></li>
+<li><a href="#importing-data" id="toc-importing-data" class="nav-link active" data-scroll-target="#importing-data">Importing data</a></li>
+  <li><a href="#plotting-whole-chromosome-matrices" id="toc-plotting-whole-chromosome-matrices" class="nav-link" data-scroll-target="#plotting-whole-chromosome-matrices">Plotting whole chromosome matrices</a></li>
+  <li><a href="#zooming-on-a-chromosome-section" id="toc-zooming-on-a-chromosome-section" class="nav-link" data-scroll-target="#zooming-on-a-chromosome-section">Zooming on a chromosome section</a></li>
+  <li><a href="#generating-saddle-plots" id="toc-generating-saddle-plots" class="nav-link" data-scroll-target="#generating-saddle-plots">Generating saddle plots</a></li>
+  <li><a href="#quantifying-interactions-within-and-between-compartments" id="toc-quantifying-interactions-within-and-between-compartments" class="nav-link" data-scroll-target="#quantifying-interactions-within-and-between-compartments">Quantifying interactions within and between compartments</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></nav>
     </div>
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">
-<span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span>
-</h1>
+<h1 class="title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</h1>
 </div>
 
 
@@ -350,8 +348,7 @@ Datasets
 </ul>
 </div>
 </div>
-<section id="importing-data" class="level2" data-number="11.1"><h2 data-number="11.1" class="anchored" data-anchor-id="importing-data">
-<span class="header-section-number">11.1</span> Importing data</h2>
+<section id="importing-data" class="level2"><h2 class="anchored" data-anchor-id="importing-data">Importing data</h2>
 <p>The 4DN consortium provides access to the datasets published in <span class="citation" data-cites="Gibcus_2018">Gibcus et al. (<a href="#ref-Gibcus_2018" role="doc-biblioref">2018</a>)</span>. in <code>R</code>, they can be obtained thanks to the <code>fourDNData</code> gateway package.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -403,8 +400,7 @@ Beware
 <span><span class="co">## pairsFile: N/A</span></span>
 <span><span class="co">## metadata(3): 4DN_info eigens diamond_insulation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="plotting-whole-chromosome-matrices" class="level2 page-columns page-full" data-number="11.2"><h2 data-number="11.2" class="anchored" data-anchor-id="plotting-whole-chromosome-matrices">
-<span class="header-section-number">11.2</span> Plotting whole chromosome matrices</h2>
+</section><section id="plotting-whole-chromosome-matrices" class="level2 page-columns page-full"><h2 class="anchored" data-anchor-id="plotting-whole-chromosome-matrices">Plotting whole chromosome matrices</h2>
 <p>We can visualize the five different Hi-C maps on the entire chromosome <code>3</code> with <code>HiContacts</code> by iterating over each of the <code>HiCExperiment</code> objects.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/">purrr</a></span><span class="op">)</span></span>
@@ -421,8 +417,7 @@ Beware
 <p><img src="images/20230322181000.png" class="img-fluid"></p>
 </div>
 <p>This highlights the progressive remodeling of chromatin into condensed chromosomes, starting as soon as 5’ after release from G2 phase.</p>
-</section><section id="zooming-on-a-chromosome-section" class="level2 page-columns page-full" data-number="11.3"><h2 data-number="11.3" class="anchored" data-anchor-id="zooming-on-a-chromosome-section">
-<span class="header-section-number">11.3</span> Zooming on a chromosome section</h2>
+</section><section id="zooming-on-a-chromosome-section" class="level2 page-columns page-full"><h2 class="anchored" data-anchor-id="zooming-on-a-chromosome-section">Zooming on a chromosome section</h2>
 <p>Zooming on a chromosome section, we can plot the Hi-C autocorrelation matrix for each timepoint. These matrices are generally used to highlight the overall correlation of interaction profiles between different segments of a chromosome section (see <a href="../pages/matrix-centric.html#computing-autocorrelated-map">Chapter 5</a> for more details).</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## --- Format compartment positions of chr. 4 segment</span></span>
@@ -493,8 +488,7 @@ Beware
 <ol type="1">
 <li>Correlation scores between genomic bins within the compartment A remain positive 5’ after G2 release (albeit reduced compared to G2 block) and eventually become null 30’ after G2 release.</li>
 <li>Correlation scores between genomic bins within the compartment B are overall null as soon as 5’ after G2 release.</li>
-</ol></section><section id="generating-saddle-plots" class="level2 page-columns page-full" data-number="11.4"><h2 data-number="11.4" class="anchored" data-anchor-id="generating-saddle-plots">
-<span class="header-section-number">11.4</span> Generating saddle plots</h2>
+</ol></section><section id="generating-saddle-plots" class="level2 page-columns page-full"><h2 class="anchored" data-anchor-id="generating-saddle-plots">Generating saddle plots</h2>
 <p>Saddle plots are typically used to measure the <code>observed</code> vs.&nbsp;<code>expected</code> interaction scores within or between genomic loci belonging to A and B compartments. Here, they can be used to check whether the two regimes of chromatin compartment remodeling are observed genome-wide.</p>
 <p>Non-overlapping genomic windows are grouped by <code>nbins</code> quantiles (typically between 10 and 50 bins) according to their A/B compartment eigenvector value, from lowest eigenvector values (i.e.&nbsp;strongest B compartments) to highest eigenvector values (i.e.&nbsp;strongest A compartments). The average <code>observed</code> vs.&nbsp;<code>expected</code> interaction scores are computed for pairwise eigenvector quantiles and plotted in a 2D heatmap.</p>
 <div class="cell" data-layout-align="center">
@@ -518,8 +512,7 @@ Beware
 <p>The <code><a href="https://rdrr.io/pkg/HiContacts/man/plotSaddle.html">plotSaddle()</a></code> function requires an eigenvector corresponding to A/B compartments. In this example, this eigenvector is recovered from the 4DN data portal. If not already available, this eigenvector can be computed from the contact matrix using the <code><a href="https://rdrr.io/pkg/HiContacts/man/getCompartments.html">getCompartments()</a></code> function.</p>
 </div>
 </div>
-</section><section id="quantifying-interactions-within-and-between-compartments" class="level2" data-number="11.5"><h2 data-number="11.5" class="anchored" data-anchor-id="quantifying-interactions-within-and-between-compartments">
-<span class="header-section-number">11.5</span> Quantifying interactions within and between compartments</h2>
+</section><section id="quantifying-interactions-within-and-between-compartments" class="level2"><h2 class="anchored" data-anchor-id="quantifying-interactions-within-and-between-compartments">Quantifying interactions within and between compartments</h2>
 <p>We can leverage the replicate-merged contact matrices to quantify the interaction frequencies within A or B compartments or between A and B comaprtments, at different timepoints.</p>
 <p>We can use the A/B compartment annotations obtained at the <code>G2 block</code> timepoint and extract <code>O/E</code> (observed vs expected) scores for interactions within A or B compartments or between A and B compartments, at different timepoints.</p>
 <div class="cell" data-layout-align="center">
@@ -807,12 +800,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="../pages/workflow-yeast.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Workflow 1: Distance-dependent interactions across yeast mutants</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Workflow 1: Distance-dependent interactions across yeast mutants</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="../pages/workflow-centros.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Workflow 3: Inter-centromere interactions in yeast</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Workflow 3: Inter-centromere interactions in yeast</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

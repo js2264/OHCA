@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.3.433">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Orchestrating Hi-C analysis with Bioconductor - 10&nbsp; Workflow 1: Distance-dependent interactions across yeast mutants</title>
+<title>Orchestrating Hi-C analysis with Bioconductor - Workflow 1: Distance-dependent interactions across yeast mutants</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -99,7 +99,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/disseminating.html">Advanced Hi-C topics</a></li><li class="breadcrumb-item"><a href="../pages/workflow-yeast.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Workflow 1: Distance-dependent interactions across yeast mutants</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/disseminating.html">Advanced Hi-C topics</a></li><li class="breadcrumb-item"><a href="../pages/workflow-yeast.html">Workflow 1: Distance-dependent interactions across yeast mutants</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -238,19 +238,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-yeast.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Workflow 1: Distance-dependent interactions across yeast mutants</span></span></a>
+ <span class="menu-text">Workflow 1: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-chicken.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></span></a>
+ <span class="menu-text">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-centros.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Workflow 3: Inter-centromere interactions in yeast</span></span></a>
+ <span class="menu-text">Workflow 3: Inter-centromere interactions in yeast</span></a>
   </div>
 </li>
       </ul>
@@ -263,20 +263,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#recovering-data-from-sra" id="toc-recovering-data-from-sra" class="nav-link active" data-scroll-target="#recovering-data-from-sra"><span class="header-section-number">10.1</span> Recovering data from SRA</a></li>
-  <li><a href="#processing-reads-with-hicool" id="toc-processing-reads-with-hicool" class="nav-link" data-scroll-target="#processing-reads-with-hicool"><span class="header-section-number">10.2</span> Processing reads with HiCool</a></li>
-  <li><a href="#plotting-chromosome-wide-matrices-of-merged-replicates" id="toc-plotting-chromosome-wide-matrices-of-merged-replicates" class="nav-link" data-scroll-target="#plotting-chromosome-wide-matrices-of-merged-replicates"><span class="header-section-number">10.3</span> Plotting chromosome-wide matrices of merged replicates</a></li>
-  <li><a href="#compute-ps-per-replicate-and-plot-it" id="toc-compute-ps-per-replicate-and-plot-it" class="nav-link" data-scroll-target="#compute-ps-per-replicate-and-plot-it"><span class="header-section-number">10.4</span> Compute P(s) per replicate and plot it</a></li>
-  <li><a href="#correlation-between-replicates-with-hicrep" id="toc-correlation-between-replicates-with-hicrep" class="nav-link" data-scroll-target="#correlation-between-replicates-with-hicrep"><span class="header-section-number">10.5</span> Correlation between replicates with <code>hicrep</code></a></li>
-  <li><a href="#differential-interaction-di-analysis-with-multihiccompare" id="toc-differential-interaction-di-analysis-with-multihiccompare" class="nav-link" data-scroll-target="#differential-interaction-di-analysis-with-multihiccompare"><span class="header-section-number">10.6</span> Differential interaction (DI) analysis with <code>multiHiCcompare</code></a></li>
+<li><a href="#recovering-data-from-sra" id="toc-recovering-data-from-sra" class="nav-link active" data-scroll-target="#recovering-data-from-sra">Recovering data from SRA</a></li>
+  <li><a href="#processing-reads-with-hicool" id="toc-processing-reads-with-hicool" class="nav-link" data-scroll-target="#processing-reads-with-hicool">Processing reads with HiCool</a></li>
+  <li><a href="#plotting-chromosome-wide-matrices-of-merged-replicates" id="toc-plotting-chromosome-wide-matrices-of-merged-replicates" class="nav-link" data-scroll-target="#plotting-chromosome-wide-matrices-of-merged-replicates">Plotting chromosome-wide matrices of merged replicates</a></li>
+  <li><a href="#compute-ps-per-replicate-and-plot-it" id="toc-compute-ps-per-replicate-and-plot-it" class="nav-link" data-scroll-target="#compute-ps-per-replicate-and-plot-it">Compute P(s) per replicate and plot it</a></li>
+  <li><a href="#correlation-between-replicates-with-hicrep" id="toc-correlation-between-replicates-with-hicrep" class="nav-link" data-scroll-target="#correlation-between-replicates-with-hicrep">Correlation between replicates with <code>hicrep</code></a></li>
+  <li><a href="#differential-interaction-di-analysis-with-multihiccompare" id="toc-differential-interaction-di-analysis-with-multihiccompare" class="nav-link" data-scroll-target="#differential-interaction-di-analysis-with-multihiccompare">Differential interaction (DI) analysis with <code>multiHiCcompare</code></a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">
-<span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Workflow 1: Distance-dependent interactions across yeast mutants</span>
-</h1>
+<h1 class="title">Workflow 1: Distance-dependent interactions across yeast mutants</h1>
 </div>
 
 
@@ -338,8 +336,7 @@ Datasets
 </ul>
 </div>
 </div>
-<section id="recovering-data-from-sra" class="level2" data-number="10.1"><h2 data-number="10.1" class="anchored" data-anchor-id="recovering-data-from-sra">
-<span class="header-section-number">10.1</span> Recovering data from SRA</h2>
+<section id="recovering-data-from-sra" class="level2"><h2 class="anchored" data-anchor-id="recovering-data-from-sra">Recovering data from SRA</h2>
 <p>The easiest for this is to directly fetch files from SRA from their FTP server. We can do so using the base <code>download.file</code> function.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -372,8 +369,7 @@ Note
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/005/SRR8769555/SRR8769555_1.fastq.gz"</span>, <span class="st">"data/wpl1eco1_G2M_R1.fastq.gz"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR876/005/SRR8769555/SRR8769555_2.fastq.gz"</span>, <span class="st">"data/wpl1eco1_G2M_R2.fastq.gz"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="processing-reads-with-hicool" class="level2" data-number="10.2"><h2 data-number="10.2" class="anchored" data-anchor-id="processing-reads-with-hicool">
-<span class="header-section-number">10.2</span> Processing reads with HiCool</h2>
+</section><section id="processing-reads-with-hicool" class="level2"><h2 class="anchored" data-anchor-id="processing-reads-with-hicool">Processing reads with HiCool</h2>
 <p>We will map each pair of fastqs on the yeast genome reference (<code>R64-1-1</code>) using <code>HiCool</code>.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># !! This code is not actually executed !!</span></span>
@@ -445,8 +441,7 @@ Note
 <span><span class="co">## </span></span>
 <span><span class="co">## ... </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="plotting-chromosome-wide-matrices-of-merged-replicates" class="level2" data-number="10.3"><h2 data-number="10.3" class="anchored" data-anchor-id="plotting-chromosome-wide-matrices-of-merged-replicates">
-<span class="header-section-number">10.3</span> Plotting chromosome-wide matrices of merged replicates</h2>
+</section><section id="plotting-chromosome-wide-matrices-of-merged-replicates" class="level2"><h2 class="anchored" data-anchor-id="plotting-chromosome-wide-matrices-of-merged-replicates">Plotting chromosome-wide matrices of merged replicates</h2>
 <p>We can merge replicates with the <code>merge</code> function, and <code>map</code> the <code>plotMatrix</code> function over the resulting list of <code>HiCExperiment</code>s.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContacts">HiContacts</a></span><span class="op">)</span></span>
@@ -466,8 +461,7 @@ Note
 </div>
 <p><img src="images/20230321230247.png" class="img-fluid"></p>
 <p>We can already note that long-range contacts seem to increase in frequency, in G2/M vs G1, in <em>wpl1</em> vs WT and in <em>wpl1/eco1</em> vs <em>wpl1</em>.</p>
-</section><section id="compute-ps-per-replicate-and-plot-it" class="level2" data-number="10.4"><h2 data-number="10.4" class="anchored" data-anchor-id="compute-ps-per-replicate-and-plot-it">
-<span class="header-section-number">10.4</span> Compute P(s) per replicate and plot it</h2>
+</section><section id="compute-ps-per-replicate-and-plot-it" class="level2"><h2 class="anchored" data-anchor-id="compute-ps-per-replicate-and-plot-it">Compute P(s) per replicate and plot it</h2>
 <p>Still using the <code>map</code> function, we can compute average P(s) for each replicate.<br>
 Computation of the P(s) will take some time, as millions of pairs have to be imported in memory, but it will be accurate at the base resolution, rather than bin resolution from matrices.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -526,8 +520,7 @@ Note
 <span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><img src="images/20230321233026.png" class="img-fluid"></p>
-</section><section id="correlation-between-replicates-with-hicrep" class="level2" data-number="10.5"><h2 data-number="10.5" class="anchored" data-anchor-id="correlation-between-replicates-with-hicrep">
-<span class="header-section-number">10.5</span> Correlation between replicates with <code>hicrep</code>
+</section><section id="correlation-between-replicates-with-hicrep" class="level2"><h2 class="anchored" data-anchor-id="correlation-between-replicates-with-hicrep">Correlation between replicates with <code>hicrep</code>
 </h2>
 <p><code>hicrep</code> is a popular package to compute stratum-adjusted correlations between Hi-C datasets. “Stratum” refers to the distance from the main diagonal: with increase distance from the main diagonal, interactions of the DNA polymer are bound to decrease. <code>hicrep</code> computes a “per-stratum” correlation score and computes a weighted average correlation for entire chromosomes.</p>
 <p>We can check the documentation for <code>hicrep</code> main function, <code>get.scc</code>. This tells us that <code>mat1</code> and <code>mat2</code> <code>n*n</code> intrachromosomal contact maps of raw <code>counts</code> should be provided. Fortunately, <code>HiCExperiment</code> objects can easily be coerced into actual dense matrices using <code><a href="https://rdrr.io/r/base/matrix.html">as.matrix()</a></code> function.</p>
@@ -631,8 +624,7 @@ Parallelizing over chromosomes
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Stratum (genomic distance)"</span>, y <span class="op">=</span> <span class="st">'Stratum-corrected correlation'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><img src="images/20230322003342.png" class="img-fluid"></p>
-</section><section id="differential-interaction-di-analysis-with-multihiccompare" class="level2" data-number="10.6"><h2 data-number="10.6" class="anchored" data-anchor-id="differential-interaction-di-analysis-with-multihiccompare">
-<span class="header-section-number">10.6</span> Differential interaction (DI) analysis with <code>multiHiCcompare</code>
+</section><section id="differential-interaction-di-analysis-with-multihiccompare" class="level2"><h2 class="anchored" data-anchor-id="differential-interaction-di-analysis-with-multihiccompare">Differential interaction (DI) analysis with <code>multiHiCcompare</code>
 </h2>
 <p>We will now focus on the chromosome <code>XI</code> and identify differentially interacting (DI) loci between WT and <em>wpl1</em> mutant in G2/M.</p>
 <p>To do this, we can use the <code>multiHiCcompare</code> package. The required input for the main <code><a href="https://rdrr.io/pkg/multiHiCcompare/man/make_hicexp.html">make_hicexp()</a></code> function is a <code>list</code> of raw counts for different samples/replicates, stored in data frames with four columns (<code>chr</code>, <code>start1</code>, <code>start2</code>, <code>count</code>).<br>
@@ -975,7 +967,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="../pages/workflow-chicken.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

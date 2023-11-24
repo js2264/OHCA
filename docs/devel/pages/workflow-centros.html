@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.3.433">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Orchestrating Hi-C analysis with Bioconductor - 12&nbsp; Workflow 3: Inter-centromere interactions in yeast</title>
+<title>Orchestrating Hi-C analysis with Bioconductor - Workflow 3: Inter-centromere interactions in yeast</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -98,7 +98,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/disseminating.html">Advanced Hi-C topics</a></li><li class="breadcrumb-item"><a href="../pages/workflow-centros.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Workflow 3: Inter-centromere interactions in yeast</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/disseminating.html">Advanced Hi-C topics</a></li><li class="breadcrumb-item"><a href="../pages/workflow-centros.html">Workflow 3: Inter-centromere interactions in yeast</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -237,19 +237,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-yeast.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Workflow 1: Distance-dependent interactions across yeast mutants</span></span></a>
+ <span class="menu-text">Workflow 1: Distance-dependent interactions across yeast mutants</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-chicken.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></span></a>
+ <span class="menu-text">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/workflow-centros.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Workflow 3: Inter-centromere interactions in yeast</span></span></a>
+ <span class="menu-text">Workflow 3: Inter-centromere interactions in yeast</span></a>
   </div>
 </li>
       </ul>
@@ -262,19 +262,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#importing-hi-c-data-and-plotting-contact-matrices" id="toc-importing-hi-c-data-and-plotting-contact-matrices" class="nav-link active" data-scroll-target="#importing-hi-c-data-and-plotting-contact-matrices"><span class="header-section-number">12.1</span> Importing Hi-C data and plotting contact matrices</a></li>
-  <li><a href="#checking-ps-and-cistrans-interactions-ratio" id="toc-checking-ps-and-cistrans-interactions-ratio" class="nav-link" data-scroll-target="#checking-ps-and-cistrans-interactions-ratio"><span class="header-section-number">12.2</span> Checking P(s) and cis/trans interactions ratio</a></li>
-  <li><a href="#centromere-virtual-4c-profiles" id="toc-centromere-virtual-4c-profiles" class="nav-link" data-scroll-target="#centromere-virtual-4c-profiles"><span class="header-section-number">12.3</span> Centromere virtual 4C profiles</a></li>
-  <li><a href="#aggregated-2d-signal-over-all-pairs-of-centromeres" id="toc-aggregated-2d-signal-over-all-pairs-of-centromeres" class="nav-link" data-scroll-target="#aggregated-2d-signal-over-all-pairs-of-centromeres"><span class="header-section-number">12.4</span> Aggregated 2D signal over all pairs of centromeres</a></li>
-  <li><a href="#aggregated-1d-interaction-profile-of-centromeres" id="toc-aggregated-1d-interaction-profile-of-centromeres" class="nav-link" data-scroll-target="#aggregated-1d-interaction-profile-of-centromeres"><span class="header-section-number">12.5</span> Aggregated 1D interaction profile of centromeres</a></li>
+<li><a href="#importing-hi-c-data-and-plotting-contact-matrices" id="toc-importing-hi-c-data-and-plotting-contact-matrices" class="nav-link active" data-scroll-target="#importing-hi-c-data-and-plotting-contact-matrices">Importing Hi-C data and plotting contact matrices</a></li>
+  <li><a href="#checking-ps-and-cistrans-interactions-ratio" id="toc-checking-ps-and-cistrans-interactions-ratio" class="nav-link" data-scroll-target="#checking-ps-and-cistrans-interactions-ratio">Checking P(s) and cis/trans interactions ratio</a></li>
+  <li><a href="#centromere-virtual-4c-profiles" id="toc-centromere-virtual-4c-profiles" class="nav-link" data-scroll-target="#centromere-virtual-4c-profiles">Centromere virtual 4C profiles</a></li>
+  <li><a href="#aggregated-2d-signal-over-all-pairs-of-centromeres" id="toc-aggregated-2d-signal-over-all-pairs-of-centromeres" class="nav-link" data-scroll-target="#aggregated-2d-signal-over-all-pairs-of-centromeres">Aggregated 2D signal over all pairs of centromeres</a></li>
+  <li><a href="#aggregated-1d-interaction-profile-of-centromeres" id="toc-aggregated-1d-interaction-profile-of-centromeres" class="nav-link" data-scroll-target="#aggregated-1d-interaction-profile-of-centromeres">Aggregated 1D interaction profile of centromeres</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">
-<span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Workflow 3: Inter-centromere interactions in yeast</span>
-</h1>
+<h1 class="title">Workflow 3: Inter-centromere interactions in yeast</h1>
 </div>
 
 
@@ -317,8 +315,7 @@ Datasets
 </ul>
 </div>
 </div>
-<section id="importing-hi-c-data-and-plotting-contact-matrices" class="level2" data-number="12.1"><h2 data-number="12.1" class="anchored" data-anchor-id="importing-hi-c-data-and-plotting-contact-matrices">
-<span class="header-section-number">12.1</span> Importing Hi-C data and plotting contact matrices</h2>
+<section id="importing-hi-c-data-and-plotting-contact-matrices" class="level2"><h2 class="anchored" data-anchor-id="importing-hi-c-data-and-plotting-contact-matrices">Importing Hi-C data and plotting contact matrices</h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContacts">HiContacts</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://purrr.tidyverse.org/">purrr</a></span><span class="op">)</span></span>
@@ -333,8 +330,7 @@ Datasets
 </div>
 <p><img src="images/20230523141745.jpg" class="img-fluid"></p>
 <p>We can visually appreciate that inter-chromosomal interactions, notably between centromeres, are less prominent in G2/M.</p>
-</section><section id="checking-ps-and-cistrans-interactions-ratio" class="level2" data-number="12.2"><h2 data-number="12.2" class="anchored" data-anchor-id="checking-ps-and-cistrans-interactions-ratio">
-<span class="header-section-number">12.2</span> Checking P(s) and cis/trans interactions ratio</h2>
+</section><section id="checking-ps-and-cistrans-interactions-ratio" class="level2"><h2 class="anchored" data-anchor-id="checking-ps-and-cistrans-interactions-ratio">Checking P(s) and cis/trans interactions ratio</h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
 <span><span class="va">pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
@@ -361,8 +357,7 @@ Datasets
 </div>
 <p><img src="images/20230523152700.png" class="img-fluid"></p>
 <p>We can also highlight that trans (inter-chromosomal) interactions are proportionally decreasing in G2/M-synchronized cells.</p>
-</section><section id="centromere-virtual-4c-profiles" class="level2" data-number="12.3"><h2 data-number="12.3" class="anchored" data-anchor-id="centromere-virtual-4c-profiles">
-<span class="header-section-number">12.3</span> Centromere virtual 4C profiles</h2>
+</section><section id="centromere-virtual-4c-profiles" class="level2"><h2 class="anchored" data-anchor-id="centromere-virtual-4c-profiles">Centromere virtual 4C profiles</h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">centros_yeast</span><span class="op">)</span></span>
 <span><span class="va">v4c_centro</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">imap_dfr</a></span><span class="op">(</span><span class="va">hics</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/virtual4C.html">virtual4C</a></span><span class="op">(</span><span class="va">.x</span>, <span class="fu">resize</span><span class="op">(</span><span class="va">centros_yeast</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="fl">8000</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
@@ -380,8 +375,7 @@ Datasets
 <span>    <span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><img src="images/20230523153300.png" class="img-fluid"></p>
-</section><section id="aggregated-2d-signal-over-all-pairs-of-centromeres" class="level2" data-number="12.4"><h2 data-number="12.4" class="anchored" data-anchor-id="aggregated-2d-signal-over-all-pairs-of-centromeres">
-<span class="header-section-number">12.4</span> Aggregated 2D signal over all pairs of centromeres</h2>
+</section><section id="aggregated-2d-signal-over-all-pairs-of-centromeres" class="level2"><h2 class="anchored" data-anchor-id="aggregated-2d-signal-over-all-pairs-of-centromeres">Aggregated 2D signal over all pairs of centromeres</h2>
 <p>We can start by computing all possible pairs of centromeres.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">centros_pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">centros_yeast</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
@@ -435,8 +429,7 @@ Datasets
 <span><span class="fu">cowplot</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/cowplot/reference/plot_grid.html">plot_grid</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="va">aggr_maps</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><img src="images/20230523180300.png" class="img-fluid"></p>
-</section><section id="aggregated-1d-interaction-profile-of-centromeres" class="level2" data-number="12.5"><h2 data-number="12.5" class="anchored" data-anchor-id="aggregated-1d-interaction-profile-of-centromeres">
-<span class="header-section-number">12.5</span> Aggregated 1D interaction profile of centromeres</h2>
+</section><section id="aggregated-1d-interaction-profile-of-centromeres" class="level2"><h2 class="anchored" data-anchor-id="aggregated-1d-interaction-profile-of-centromeres">Aggregated 1D interaction profile of centromeres</h2>
 <p>One can generalize the previous virtual 4C plot, by extracting the interaction profile between all possible pairs of centromeres in each dataset.</p>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">map_dfr</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">centros_yeast</span><span class="op">)</span><span class="op">-</span><span class="fl">1</span><span class="op">}</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
@@ -704,7 +697,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="../pages/workflow-chicken.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Workflow 2: Chromosome compartment cohesion upon mitosis entry</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
