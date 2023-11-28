@@ -1,0 +1,89 @@
+## Aggregated maps (APA) over 2D coordinates
+
+```{r}
+# ~~~~~~~~~~~~~~ Import data ~~~~~~~~~~~~~~ #
+hic <- import('/home/rsg/repos/OHCA-data/S288c_G2M.mcool', resolution = 1000)
+peaks <- rtracklayer::import('~/Projects/20220309_Christophe_GC-paper/data/WT/ChIP/peaks/CH226/CH226_vs-CH227_genome-S288c_MTY44Z_peaks.narrowPeak') |> 
+    resize(width = 1, fix = 'center')
+
+# ~~~~~~~~~~~~~~ Make GInteractions from peak sets ~~~~~~~~~~~~~~ #
+peaks_gi <- GInteractions(
+    combn(length(peaks), 2)[1,], 
+    combn(length(peaks), 2)[2,], 
+    peaks
+) |> 
+    filter(seqnames1 == seqnames2) |> 
+    mutate(dist = start2-end1) |> 
+    mutate(group = cut(dist, c(0, 5000, 10000, 20000, 40000, 80000, 160000)) |> as.numeric()) |> 
+    filter(!is.na(group))
+
+# ~~~~~~~~~~~~~~ Aggregate HiC map over sets of GInteractions (grouped by distance) ~~~~~~~~~~~~~~ #
+pl <- map(1:6, ~ {
+    ahic <- aggregate(hic, peaks_gi[which(peaks_gi$group == .x)], flankingBins = 10)
+    p <- plotMatrix(ahic, use.scores = 'detrended', scale = 'linear', limits = c(-0.8, 0.8), cmap = rainbowColors()) + 
+        ggtitle(paste0("loops < ", c(5, 10, 20, 40, 80, 160)[.x], "kb"))
+    return(p)
+})
+p <- cowplot::plot_grid(plotlist = pl)
+ggsave('figures/APA-Scc1-peaks.pdf', w = 15, h = 15)
+```
+
+## Aggregated HiC coverage over 1D coordinates
+
+```{r}
+# ~~~~~~~~~~~~~~ Import HiC data ~~~~~~~~~~~~~~ #
+library(plyinteractions)
+pairs <- import("/home/rsg/repos/OHCA-data/S288c_G2M.pairs")
+cis <- filter(pairs, seqnames1 == seqnames2)
+tags <- c(
+    GRanges(seqnames1(cis), IRanges(start1(cis), width = 50)), 
+    GRanges(seqnames2(cis), IRanges(start2(cis), width = 50)) 
+) |> 
+    mutate(strand1 = c(strand1(cis), strand1(cis))) |> 
+    mutate(strand2 = c(strand2(cis), strand2(cis))) |> 
+    filter(strand1 == strand2)
+cov <- coverage(tags) / length(tags) * 1e6
+seqlengths(cov) <- lengths(cov)
+
+# ~~~~~~~~~~~~~~ Import ChIP data ~~~~~~~~~~~~~~ #
+library(plyranges)
+bin_size <- 20000
+peaks <- rtracklayer::import('~/Projects/20220309_Christophe_GC-paper/data/WT/ChIP/peaks/CH226/CH226_vs-CH227_genome-S288c_MTY44Z_peaks.narrowPeak')
+seqlevels(peaks) <- seqlevels(cov)
+seqinfo(peaks) <- seqinfo(cov)
+peaks <- peaks |> 
+    resize(width = 1, fix = 'center') |> 
+    resize(width = bin_size, fix = "center") |>
+    trim() |> filter(width == bin_size)
+
+# ~~~~~~~~~~~~~~ Recover HiC coverage signal over all Scc1 peaks ~~~~~~~~~~~~~~ #
+df <- cov[peaks] |> 
+    as.data.frame() |> as_tibble() |> 
+    group_by(group) |> 
+    mutate(distance = seq(-bin_size/2+0.5, bin_size/2-0.5, length.out = bin_size))
+
+# ~~~~~~~~~~~~~~ Aggregate HiC coverage signal over all Scc1 peaks ~~~~~~~~~~~~~~ #
+aggr_df <- df |> 
+    group_by(distance) |> 
+    summarize(
+        mean = mean(value), 
+        se = sd(value, na.rm=TRUE)/sqrt(dplyr::n()),
+        Q = stats::qt(0.950, dplyr::n()-1, lower.tail = FALSE),
+        ci_up = mean + Q*se, 
+        ci_down = mean - Q*se
+    ) |> 
+    mutate(across(c(mean, se, ci_up, ci_down), 
+        ~ slider::slide_dbl(
+            .x, 
+            .f = function(y) mean(y, na.rm = TRUE), .before = 200, .after = 200
+        )
+    ))
+
+# ~~~~~~~~~~~~~~ Plot result ~~~~~~~~~~~~~~ #
+p <- ggplot(aggr_df) + 
+    geom_line(mapping = aes(x = distance, y = mean)) +
+    geom_ribbon(mapping = aes(x = distance, ymin = ci_down, ymax = ci_up), col = NA, alpha = 0.4) +
+    theme_bw() +
+    ggtitle('HiC coverage @ WT Scc1 summits') +
+    labs(x = 'Distance from WT Scc1 peak summit', y = 'Scc1 coverage')
+```
