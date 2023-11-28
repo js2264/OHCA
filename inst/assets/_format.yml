@@ -13,6 +13,5 @@ format:
     # citation-location: margin
     bibliography: assets/bibliography.bib
     from: markdown+emoji
-  pdf: default
 
 csl: assets/apa.csl
