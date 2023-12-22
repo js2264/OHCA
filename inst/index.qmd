@@ -39,26 +39,26 @@ This book is divided in three parts:
 
 **Part I: Introduction to Hi-C analysis**
 
-- [Chapter 1: General principles and Hi-C data pre-processing](principles.qmd)
-- [Chapter 2: The different R classes implemented to analyze Hi-C](data-representation.qmd)
-- [Chapter 3: Manipulating Hi-C data in R](parsing.qmd)
-- [Chapter 4: Hi-C data visualization](visualization.qmd)
+- [Chapter 1: General principles and Hi-C data pre-processing](pages/principles.qmd)
+- [Chapter 2: The different R classes implemented to analyze Hi-C](pages/data-representation.qmd)
+- [Chapter 3: Manipulating Hi-C data in R](pages/parsing.qmd)
+- [Chapter 4: Hi-C data visualization](pages/visualization.qmd)
 
 
 **Part II: In-depth Hi-C analysis**
 
-- [Chapter 5: Matrix-centric analysis](matrix-centric.qmd)
-- [Chapter 6: Interactions-centric analysis](interactions-centric.qmd)
-- [Chapter 7: Finding topological features from a Hi-C contact matrix](topological-features.qmd)
+- [Chapter 5: Matrix-centric analysis](pages/matrix-centric.qmd)
+- [Chapter 6: Interactions-centric analysis](pages/interactions-centric.qmd)
+- [Chapter 7: Finding topological features from a Hi-C contact matrix](pages/topological-features.qmd)
 
 
 **Part III: Hi-C analysis workflows**
 
-- [Data gateways: accessing public Hi-C data portals](disseminating.qmd)
-- [Interoperability: Using HiCExperiment with other R packages](interoperability.qmd)
-- [Workflow 1: Distance-dependent interactions across yeast mutants](workflow-yeast.qmd)
-- [Workflow 2: Chromosome compartment cohesion upon mitosis entry](workflow-chicken.qmd)
-- [Workflow 3: Inter-centromere interactions in yeast](workflow-centros.qmd)
+- [Data gateways: accessing public Hi-C data portals](pages/disseminating.qmd)
+- [Interoperability: Using HiCExperiment with other R packages](pages/interoperability.qmd)
+- [Workflow 1: Distance-dependent interactions across yeast mutants](pages/workflow-yeast.qmd)
+- [Workflow 2: Chromosome compartment cohesion upon mitosis entry](pages/workflow-chicken.qmd)
+- [Workflow 3: Inter-centromere interactions in yeast](pages/workflow-centros.qmd)
 
 :::
 
