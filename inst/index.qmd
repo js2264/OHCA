@@ -153,16 +153,16 @@ BiocManager::install("DNAZooData", ask = FALSE)
 ## Developers {-}
 
 For developers or advanced R users, the `devel` versions of these packages 
-can be installed along with their dependencies: 
+can be installed by installing Bioc `devel` version prior to package installation: 
 
 ```{r eval = FALSE}
-install.packages("pak", repos = "https://r-lib.github.io/p/pak/devel/")
-pak::pkg_install("js2264/HiCExperiment", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
-pak::pkg_install("js2264/HiCool", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
-pak::pkg_install("js2264/HiContacts", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
-pak::pkg_install("js2264/HiContactsData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
-pak::pkg_install("js2264/fourDNData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
-pak::pkg_install("js2264/DNAZooData", ask = FALSE, dependencies = c("Depends", "Imports", "Suggests"))
+BiocManager::install(version = "devel")
+BiocManager::install("HiCExperiment", ask = FALSE)
+BiocManager::install("HiCool", ask = FALSE)
+BiocManager::install("HiContacts", ask = FALSE)
+BiocManager::install("HiContactsData", ask = FALSE)
+BiocManager::install("fourDNData", ask = FALSE)
+BiocManager::install("DNAZooData", ask = FALSE)
 ```
 
 ## Docker image {-}
