@@ -359,9 +359,33 @@ metadata(hicfile)$organism
 `HiCFile` metadata also points to a URL to directly fetch the genome assembly 
 corrected by the DNA Zoo consortium.
 
-```{r eval = FALSE}
+```{r}
 metadata(hicfile)$assemblyURL
-##  [1] "https://dnazoo.s3.wasabisys.com/Hypsibius_dujardini/nHd_3.1_HiC.fasta.gz"
 ```
+
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(include_base = TRUE)
+```
+
+:::
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(include_base = TRUE)
+```
+
+:::
 
 # References {-}

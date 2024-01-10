@@ -205,4 +205,17 @@ p <- ggplot(df, aes(x = center/1e3, y = balanced)) +
 
 ![](images/20230523180000.png)
 
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(include_base = TRUE)
+```
+
+:::
+
 # References {-}

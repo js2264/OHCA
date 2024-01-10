@@ -515,4 +515,17 @@ available `resolutions`, associated `metadata`, `pairsFile` or
 
 :::
 
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(include_base = TRUE)
+```
+
+:::
+
 # References {-}

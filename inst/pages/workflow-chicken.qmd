@@ -284,4 +284,17 @@ This visualization suggests that interactions between genomic loci belonging to
 the B compartment are lost more rapidly than those between genomic loci belonging 
 to the A compartment, when cells are released from G2 to enter mitosis. 
 
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(include_base = TRUE)
+```
+
+:::
+
 # References {-}

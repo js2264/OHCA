@@ -488,4 +488,17 @@ cowplot::plot_grid(
 
 ![](images/20230322102919.png)
 
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(include_base = TRUE)
+```
+
+:::
+
 # References {-}

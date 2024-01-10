@@ -435,4 +435,17 @@ notably `fitHiC` (@Ay_2014), `GOTHiC` (@Mifsud_2017) or `idr2d` (@Krismer_2020).
 Each fits a slightly different purpose, and we encourage the end user to read
 companion publications. 
 
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(include_base = TRUE)
+```
+
+:::
+
 # References {-}

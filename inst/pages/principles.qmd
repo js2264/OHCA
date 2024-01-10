@@ -462,4 +462,17 @@ selected from [this longer list](https://github.com/mdozmorov/HiC_tools).
 All references as well as many other softwares and references are available 
 [here](https://github.com/mdozmorov/HiC_tools). 
 
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(include_base = TRUE)
+```
+
+:::
+
 # References {-}

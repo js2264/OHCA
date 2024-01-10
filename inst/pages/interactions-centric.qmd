@@ -285,4 +285,17 @@ plotScalogram(merged_scalo |> filter(chr == 'II'), ylim = c(1e3, 1e5)) +
 This example points out the overall longer interactions within the long 
 arm of the chromosome `II` in an `eco1` mutant. 
 
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(include_base = TRUE)
+```
+
+:::
+
 # References {-}
