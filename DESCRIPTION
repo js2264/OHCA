@@ -17,13 +17,13 @@ URL: https://github.com/js2264/OHCA
 BugReports: https://github.com/js2264/OHCA/issues
 Depends:
     R (>= 4.3),
+Imports:
     HiCExperiment,
     HiCool,
     HiContacts,
     HiContactsData,
     DNAZooData,
-    fourDNData
-Imports:
+    fourDNData, 
     plyinteractions, 
     terra, 
     Rfast, 
@@ -39,8 +39,7 @@ Imports:
     patchwork, 
     fs,
     knitr,
-    rebook,
-    quarto,
+    BiocStyle, 
     sessioninfo 
 biocViews:
     HiC,
