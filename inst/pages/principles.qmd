@@ -376,6 +376,18 @@ HiCool(
 )
 ```
 
+::: {.callout-important icon='true'}
+
+##### Important note: 
+
+`HiCool` relies on `basilisk` R package to set up an underlying, 
+self-managed `python` environment. Some packages from this environment 
+are not yet available for ARM chips (e.g. M1/2/3 in newer on macbooks) 
+or Windows. For this reason, `HiCool`-supported features are not available 
+on these machines. 
+
+:::
+
 #### HiCool arguments 
 
 Several arguments can be passed to `HiCool` and some are worth mentioning them:   

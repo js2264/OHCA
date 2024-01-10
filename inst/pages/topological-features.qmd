@@ -260,6 +260,18 @@ annotate chromatin loops in a Hi-C map (@Matthey_Doret_2020). `chromosight` is
 a standalone `python` package and is made available in R through the `HiCool`-managed 
 conda environment with the `getLoops()` function. 
 
+::: {.callout-important icon='true'}
+
+##### Important note: 
+
+`HiCool` relies on `basilisk` R package to set up an underlying, 
+self-managed `python` environment. Packages from this environment, including `chromosight`,
+are not yet available for ARM chips (e.g. M1/2/3 in newer on macbooks) 
+or Windows. For this reason, `HiCool`-supported features are not available 
+on these machines. 
+
+:::
+
 #### Identifying loops
 
 ```{r}
