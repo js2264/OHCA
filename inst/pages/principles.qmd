@@ -162,7 +162,7 @@ For instance, here is a dummy `.pairs` file with a total of 5 pairs:
 ```
 
 Note that this genome reference is made of a single chromosome (`chr1`), very short (length of `389`). 
-By binning this chromosome in 100bp-wide bins (`100` bp is the *`resolution`*), one would optain the following four `bins`: 
+By binning this chromosome in 100bp-wide bins (`100` bp is the *`resolution`*), one would obtain the following four `bins`: 
 
 ```{filename="bins.bed"}
 <chr>  <pos> <bin>
@@ -205,7 +205,7 @@ By pasting side-to-side the left-hand and right-hand extremities of each pair, t
 3      3
 ```
 
-And if we now count the number of each `<bin1> <bin2>` combinaison, adding a third `<count>` column, we end up with a `count.matrix` text file: 
+And if we now count the number of each `<bin1> <bin2>` combination, adding a third `<count>` column, we end up with a `count.matrix` text file: 
 
 ```{filename="count.matrix"}
 <bin1> <bin2>  <count>
@@ -288,6 +288,7 @@ Fundamentally, the main steps performed to pre-process Hi-C are:
 In practice, a minimal workflow to pre-process Hi-C data is the following (adapted from @Open2C_2023): 
 
 ```{sh eval = FALSE}
+## This chunk of code is not executed when rendering this book. 
 ## Note these fields have to be replaced by appropriate variables: 
 ##    <index>
 ##    <input.R1.fq.gz>
@@ -329,6 +330,7 @@ and processes data into binned contact matrices with a single terminal command.
 process fastq reads into a binned contact matrix. 
 A processing pipeline can be launched using the standard command `pipeline` as follows: 
 
+## This chunk of code is not executed when rendering this book. 
 ```{sh eval = FALSE}
 ## Note these fields have to be replaced by appropriate variables: 
 ##    <hicstuff-options>
@@ -365,6 +367,7 @@ r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
 We then load the `HiCool` library and execute the main `HiCool` function. 
 
 ```{r hicool_run, eval = FALSE}
+## Note that HiCool processing is not actually performed when rendering this book 
 library(HiCool)
 HiCool(
     r1, 
@@ -406,6 +409,7 @@ Other `HiCool` arguments can be listed by checking `HiCool` documentation in R: 
 We can check the generated output files placed in the `HiCool/` directory. 
 
 ```{r, eval = FALSE}
+## This chunk of code is not executed when rendering this book. 
 fs::dir_tree('HiCool/')
 ```
 

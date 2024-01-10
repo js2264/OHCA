@@ -277,8 +277,8 @@ We can calculate the overall stratum-corrected correlation score over the chromo
 ```{r eval = FALSE}
 library(hicrep)
 scc <- get.scc(
-    hics[['WT_G2M_rep1']]["IV"] |> as.matrix(use.scores = 'count'), 
-    hics[['WT_G2M_rep2']]["IV"] |> as.matrix(use.scores = 'count'), 
+    hics[['WT_G2M_rep1']]["IV"] |> as.matrix(sparse = TRUE, use.scores = 'count'), 
+    hics[['WT_G2M_rep2']]["IV"] |> as.matrix(sparse = TRUE, use.scores = 'count'), 
     resol = 1000, h = 2, lbr = 5000, ubr = 50000
 )
 names(scc)

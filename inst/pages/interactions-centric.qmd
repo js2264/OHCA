@@ -51,7 +51,7 @@ This encompasses:
 
 ## Note
 - Contrary to functions presented in the previous chapter, the functions 
-described in this chapter are **not**: they 
+described in this chapter are **not** endomorphisms: they 
 take `HiCExperiment` objects as input and generally return data frames rather 
 than modified `HiCExperiment` objects. 
 - Internally, most of the functions presented in this chapter make a call to 

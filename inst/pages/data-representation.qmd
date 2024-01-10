@@ -49,7 +49,7 @@ to get a visual representation of these data structures.
 
 `GRanges` is a shorthand for `GenomicRanges`, a core class in `Bioconductor`. 
 This class is primarily used to describe genomic ranges of any nature, e.g. 
-sets of promoters, SNPs, chromatin loop anchors, ....  
+sets of promoters, SNPs, chromatin loop anchors, etc.  
 The data structure has been published in the seminal 2015 publication by 
 the `Bioconductor` team (@Huber_2015). 
 
@@ -732,7 +732,7 @@ gi3 <- GInteractions(
 gi %over% gi3
 ```
 
-> Case 3 : Spanning of the interaction "accross" a genomic range
+> Case 3 : Spanning of the interaction "across" a genomic range
 
 This requires a bit of wrangling, to mimic an overlap between two `GRanges` objects: 
 
@@ -766,7 +766,7 @@ Hi-C contacts can be stored in four different formats
 - As a `.(m)cool` matrix (multi-scores, multi-resolution, indexed)
 - As a `.hic` matrix (multi-scores, multi-resolution, indexed)
 - As a HiC-pro derived matrix (single-score, single-resolution, non-indexed)
-- Unbinned, Hi-C contacts can be stored in `.pairs` files
+- Un-binned, Hi-C contacts can be stored in `.pairs` files
 
 ### Accessing example Hi-C files 
 

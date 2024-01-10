@@ -403,6 +403,7 @@ If you are using `chromosight` directly from the terminal (i.e. outside `R`),
 you can import the annotated loops in `R` as follows: 
 
 ```{r eval = FALSE}
+## This code is not executed in this book
 df <- readr::read_tsv("...") ## Here put your loops file
 loops <- InteractionSet::GInteractions(
     anchor1 = GenomicRanges::GRanges(

@@ -227,7 +227,7 @@ contact matrix using the `getCompartments()` function.
 
 We can leverage the replicate-merged contact matrices to quantify the 
 interaction frequencies within A or B compartments or between A and B 
-comaprtments, at different timepoints. 
+compartments, at different timepoints. 
 
 We can use the A/B compartment annotations obtained at the `G2 block` timepoint and extract 
 `O/E` (observed vs expected) scores for interactions within A or B 

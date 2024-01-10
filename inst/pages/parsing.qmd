@@ -115,6 +115,8 @@ recommended approach to import Hi-C data in R.
 The `focus` argument can be set when `import`ing a `ContactFile` in R, as follows: 
 
 ```{r eval = FALSE}
+## This code is not evaluated
+## Change `focus = "..."` accordingly (see below)
 import(cf, focus = "...")
 ```
 
@@ -486,7 +488,7 @@ matrix (using the `sparse` logical argument, `TRUE` by default) and choosing spe
 of interest (using the `use.scores` argument, `"balanced"` by default). 
 
 ```{r}
-# ----- `as.matrix` coerces a `HiCExperiment` into a `sparseMatrix` by default 
+# ----- `as.matrix` coerces a `HiCExperiment` into a dense `matrix` by default 
 as.matrix(hic) |> class()
 
 as.matrix(hic) |> dim()
@@ -496,8 +498,8 @@ as.matrix(hic, use.scores = "balanced")[1:5, 1:5]
 
 as.matrix(hic, use.scores = "count")[1:5, 1:5]
 
-# ----- If **expressly required**, one can coerce a HiCExperiment into a dense matrix
-as.matrix(hic, use.scores = "count", sparse = FALSE)[1:5, 1:5]
+# ----- If needed, one can coerce a HiCExperiment into a sparse matrix
+as.matrix(hic, use.scores = "count", sparse = TRUE)[1:5, 1:5]
 ```
 
 - `as.data.frame()`: simply coercing `interactions` into a rectangular data frame
