@@ -79,8 +79,8 @@ gr[1:3]
 ```
 
 `GenomicRanges` objects aim to provide a natural description of genomic 
-intervals (ranges) and are incredibly versatile. They extend the 
-`data.frame` object and have four required pieces of information: 
+intervals (ranges) and are incredibly versatile. They have four required 
+pieces of information: 
 
 - `seqnames` (i.e. chromosome names) (accessible with `seqnames()`)
 - `start` (accessible with `start()`)
