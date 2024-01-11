@@ -11,6 +11,7 @@ library(InteractionSet)
 library(HiCExperiment)
 library(fourDNData)
 library(DNAZooData)
+library(rtracklayer)
 ```
 
 ::: {.callout-note}
@@ -51,16 +52,9 @@ including contact matrices (in `.hic` or `.mcool`) and other Hi-C derived
 files such as annotated compartments, domains, insulation scores, or 
 `.pairs` files.
 
-```{r eval = FALSE}
+```{r}
 library(fourDNData)
 head(fourDNData())
-##  experimentSetAccession     fileType     size organism experimentType details                              dataset                                                       condition               biosource biosourceType             publication                                                                                                                                 URL
-##            4DNES18BMU79        pairs 10151.53    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019) https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/49504f97-904e-48c1-8c20-1033680b66da/4DNFIC5AHBPV.pairs.gz
-##            4DNES18BMU79          hic  5285.82    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019)      https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/6cd4378a-8f51-4e65-99eb-15f5c80abf8d/4DNFIT4I5C6Z.hic
-##            4DNES18BMU79        mcool  6110.75    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019)    https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/01fb704f-2fd7-48c6-91af-c5f4584529ed/4DNFIVPAXJO8.mcool
-##            4DNES18BMU79   boundaries     0.12    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019)   https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/5c07cdee-53e2-43e0-8853-cfe5f057b3f1/4DNFIR3XCIMA.bed.gz
-##            4DNES18BMU79   insulation     7.18    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019)       https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/d1f4beb9-701f-4188-abe2-6271fe658770/4DNFIXKKNMS7.bw
-##            4DNES18BMU79 compartments     0.18    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019)       https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/3d429647-51c8-4e3a-a18b-eec0b1480905/4DNFIN13N8C1.bw
 ```
 
 ### Querying individual files
@@ -68,47 +62,20 @@ head(fourDNData())
 The `fourDNData()` function can be used to directly fetch specific files 
 from the 4DN data portal: 
 
-```{r eval = FALSE}
-cf <- fourDNData(experimentSetAccession = '4DNES25ABNZ1', type = 'mcool')
-##  |===================================|  100%
+```{r}
+cf <- fourDNData(experimentSetAccession = '4DNESJNPEKZD', type = 'mcool')
 ```
 
 This effectively downloads and caches the queried file locally. 
 
-```{r eval = FALSE}
+```{r}
 cf
-## [1] "/home/rsg/.cache/R/fourDNData/698470d302f0_4DNFI4988896.mcool"
 
 availableChromosomes(cf)
-## Seqinfo object with 24 sequences from an unspecified genome:
-##   seqnames seqlengths isCircular genome
-##   chr1      248956422       <NA>   <NA>
-##   chr2      242193529       <NA>   <NA>
-##   chr3      198295559       <NA>   <NA>
-##   chr4      190214555       <NA>   <NA>
-##   chr5      181538259       <NA>   <NA>
-##   ...             ...        ...    ...
-##   chr20      64444167       <NA>   <NA>
-##   chr21      46709983       <NA>   <NA>
-##   chr22      50818468       <NA>   <NA>
-##   chrX      156040895       <NA>   <NA>
-##   chrY       57227415       <NA>   <NA>
 
 availableResolutions(cf)
-## resolutions(13): 1000 2000 ... 5000000 10000000
 
 import(cf, focus = "chr4:10000001-20000000", resolution = 5000)
-## `HiCExperiment` object with 14,682 contacts over 2,000 regions
-## -------
-## fileName: "/home/rsg/.cache/R/fourDNData/29051ff3104c_4DNFINSF15ZM.mcool"
-## focus: "chr4:10,000,001-20,000,000"
-## resolutions(13): 1000 2000 ... 5000000 10000000
-## active resolution: 5000
-## interactions: 12016
-## scores(2): count balanced
-## topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0)
-## pairsFile: N/A
-## metadata(0):
 ```
 
 Different Hi-C related genomic files are provided by the 4DN consortium. The 
@@ -117,23 +84,9 @@ type of file to fetch can be specified with the `type` argument:
 - `type = 'pairs'` will fetch the pairs file which was generated by the 4DN consortium and binned 
 into a contact matrix. Once fetched from the 4DN data portal, the local file can be imported in `R` using the `import` function, which will generate a `GInteractions` object. 
 
-```{r eval = FALSE}
-fourDNData(experimentSetAccession = '4DNES25ABNZ1', type = 'pairs') |> 
+```{r}
+fourDNData(experimentSetAccession = '4DNESJNPEKZD', type = 'pairs') |> 
     import()
-## GInteractions object with 13821669 interactions and 3 metadata columns:
-##              seqnames1   ranges1     seqnames2   ranges2 |       frag1     frag2  distance
-##                  <Rle> <IRanges>         <Rle> <IRanges> | <character> <numeric> <integer>
-##          [1]      chr1   3000003 ---      chr1  88307603 |          UU        22  85307600
-##          [2]      chr1   3000022 ---      chr1  28227919 |          UU        50  25227897
-##          [3]      chr1   3000023 ---      chr1  50187758 |          RU        35  47187735
-##          [4]      chr1   3000024 ---      chr1   4090828 |          RU         9   1090804
-##          [5]      chr1   3000024 ---      chr1  35080614 |          UU         3  32080590
-##          ...       ...       ... ...       ...       ... .         ...       ...       ...
-##   [13821665]      chr1  24472292 ---      chr1  24472986 |          UU        60       694
-##   [13821666]      chr1  24472292 ---      chr1  24805552 |          RU        60    333260
-##   [13821667]      chr1  24472292 ---      chr1  24874144 |          UU        60    401852
-##   [13821668]      chr1  24472294 ---      chr1 115668400 |          UU        60  91196106
-##   [13821669]      chr1  24472295 ---      chr1  43307467 |          UU        60  18835172
 ```
 
 ::: {.callout-warning}
@@ -146,73 +99,25 @@ a large storage footprint.
 
 - `type = 'insulation'` will fetch a `.bigwig` track file precomputed by the 4DN consortium. This track corresponds to the genome-wide insulation score computed by `cooltools` as described in @Crane_2015. To know more about this, read [the excerpt from 4DN data portal](https://data.4dnucleome.org/resources/data-analysis/insulation_compartment_scores#insulation_scores_and_boundaries_page_all). Once fetched from the 4DN data portal, the local file can be imported in `R` using the `import` function, which will generate a `RleList` object. 
 
-```{r eval = FALSE}
+```{r}
+library(rtracklayer)
 fourDNData(experimentSetAccession = '4DNES25ABNZ1', type = 'insulation') |> 
     import(as = 'Rle')
-##  |===================================|  100%
-##  RleList of length 21
-##  $chr1
-##  numeric-Rle of length 195471971 with 38145 runs
-##    Lengths:      3065000         5000 ...         5000       171971
-##    Values :  0.00000e+00  1.01441e-01 ...     0.807009     0.000000
-##  
-##  $chr10
-##  numeric-Rle of length 130694993 with 25100 runs
-##    Lengths:     3175000        5000        5000 ...        5000      169993
-##    Values :  0.00000000  0.37584546  0.33597839 ...    0.628601    0.000000
-##  
-##  $chr11
-##  numeric-Rle of length 122082543 with 23536 runs
-##    Lengths:    3165000       5000       5000 ...       5000     162543
-##    Values :  0.0000000 -0.7906257 -0.7930040 ...   0.515919   0.000000
-##
-##  ...
 ```
 
 - `type = 'boundaries'` will fetch a `.bed` file precomputed by the 4DN consortium, listing the annotated borders between topological domains. These borders correspond to local minima identified from the genome-wide insulation track. It can also be imported in `R` using the `import` function, which will 
 generate a `GRanges` object. 
 
-```{r eval = FALSE}
+```{r}
 fourDNData(experimentSetAccession = '4DNES25ABNZ1', type = 'boundaries') |> 
     import()
-##  |===================================|  100%
-##  GRanges object with 6103 ranges and 2 metadata columns:
-##           seqnames            ranges strand |        name     score
-##              <Rle>         <IRanges>  <Rle> | <character> <numeric>
-##       [1]     chr1   4380001-4385000      * |      Strong  0.695274
-##       [2]     chr1   4760001-4765000      * |        Weak  0.444476
-##       [3]     chr1   4910001-4915000      * |        Weak  0.353184
-##       [4]     chr1   5180001-5185000      * |      Strong  0.565763
-##       [5]     chr1   6170001-6175000      * |      Strong  1.644911
-##       ...      ...               ...    ... .         ...       ...
-##    [6099]     chrY 89725001-89730000      * |        Weak  0.258094
-##    [6100]     chrY 89790001-89795000      * |        Weak  0.442186
-##    [6101]     chrY 89895001-89900000      * |        Weak  0.279879
-##    [6102]     chrY 90025001-90030000      * |      Strong  0.660699
-##    [6103]     chrY 90410001-90415000      * |      Strong  1.160018
 ```
 
 - `type = 'compartments'` will fetch a `.bigwig` track file precomputed by the 4DN consortium. This track corresponds to the selected genome-wide eigenvector computed by `cooltools` and representing A/B compartments. To know more about this, read [the excerpt from 4DN data portal](https://data.4dnucleome.org/resources/data-analysis/insulation_compartment_scores#compartments_page_all). Once fetched from the 4DN data portal, the local file can be imported in `R` using the `import` function, which will generate a `RleList` object. The score represents the eigenvector values, and by convention a genomic bin with a positive score is associated with the A compartment whereas a genomic bin with a negative score is associated with the B compartment. 
 
-```{r eval = FALSE}
+```{r}
 fourDNData(experimentSetAccession = '4DNES25ABNZ1', type = 'compartments') |> 
     import()
-##  |===================================|  100%
-##  RleList of length 21
-##  $chr1
-##  numeric-Rle of length 195471971 with 771 runs
-##    Lengths:     3000000      250000      250000 ...      250000      221971
-##    Values :         NaN -0.83457172 -0.98202854 ...  0.45792237         NaN
-##  
-##  $chr10
-##  numeric-Rle of length 130694993 with 512 runs
-##    Lengths:     3000000      250000      250000 ...      250000      194993
-##    Values :         NaN -0.99524581 -0.76405841 ...   0.0583894         NaN
-##  
-##  $chr11
-##  numeric-Rle of length 122082543 with 478 runs
-##    Lengths:     3000000      250000      250000 ...      250000       82543
-##    Values :         NaN -0.00653325  0.26659977 ...  0.25900587         NaN
 ```
 
 ### Querying a complete experiment dataset
@@ -222,61 +127,20 @@ accession ID one by one, one can import all the available files associated with
 a experimentSet accession ID into a `HiCExperiment` object by using the 
 `fourDNHiCExperiment()` function.
 
-```{r eval = FALSE}
-hic <- fourDNHiCExperiment('4DNESSS7VU57')
-## Fetching Hi-C contact map from 4DN portal
-##   |===================================================================| 100%
-## 
-## Compartments not found for the provided experimentSet accession.
-## Fetching insulation bigwig file from 4DN portal
-##   |===================================================================| 100%
-## 
-## Fetching borders bed file from 4DN portal
-##   |===================================================================| 100%
+```{r}
+hic <- fourDNHiCExperiment('4DNESJNPEKZD')
 ```
 
 This is a more efficient way to import datasets, as it aggregates the different 
 bits together into a single `HiCExperiment` object with populated `topologicalFeatures` 
 and `metadata` slots. 
 
-```{r eval = FALSE}
+```{r}
 hic
-## `HiCExperiment` object with 544,370,135 contacts over 286 regions
-## -------
-## fileName: "/home/rsg/.cache/R/fourDNData/392eba3a587_4DNFIZ59STGB.mcool"
-## focus: "whole genome"
-## resolutions(13): 1000 2000 ... 5000000 10000000
-## active resolution: 10000000
-## interactions: 40088
-## scores(2): count balanced
-## topologicalFeatures: compartments(0) borders(7887)
-## pairsFile: N/A
-## metadata(2): 4DN_info diamond_insulation
 ```
 
-```{r eval = FALSE}
+```{r}
 metadata(hic)
-##  $`4DN_info`
-##  experimentSetAccession   fileType    size organism experimentType        details                             dataset               condition      biosource biosourceType                publication  URL
-##            4DNESSS7VU57      pairs 9731.58    mouse   in situ Hi-C Arima - A1, A2 Hi-C on mouse somatic gonadal cells  female granulosa cells granulosa cell  primary cell  Lindeman RE et al. (2021)  https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/b7da6d89-9e24-48a7-b3a6-f30a49c843e3/4DNFI2PHVZ5S.pairs.gz
-##            4DNESSS7VU57        hic 4160.17    mouse   in situ Hi-C Arima - A1, A2 Hi-C on mouse somatic gonadal cells  female granulosa cells granulosa cell  primary cell  Lindeman RE et al. (2021)  https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/327f091d-6a63-47c4-9752-2dff303a13d9/4DNFI6GFHB6G.hic
-##            4DNESSS7VU57      mcool 2863.90    mouse   in situ Hi-C Arima - A1, A2 Hi-C on mouse somatic gonadal cells  female granulosa cells granulosa cell  primary cell  Lindeman RE et al. (2021)  https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/2fed1cf8-b334-4165-a32f-df3f9ae4d6d7/4DNFIZ59STGB.mcool
-##            4DNESSS7VU57 insulation    7.25    mouse   in situ Hi-C Arima - A1, A2 Hi-C on mouse somatic gonadal cells  female granulosa cells granulosa cell  primary cell  Lindeman RE et al. (2021)  https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/88e1d2ad-4d59-4c6f-9793-4fd8afc74762/4DNFI65DQZJ7.bw
-##            4DNESSS7VU57 boundaries    0.12    mouse   in situ Hi-C Arima - A1, A2 Hi-C on mouse somatic gonadal cells  female granulosa cells granulosa cell  primary cell  Lindeman RE et al. (2021)  https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/2a29eec0-f551-4d50-8c0a-f4d4c2acd0db/4DNFIV519AWN.bed.gz
-##  
-##  $diamond_insulation
-##  RleList of length 20
-##      $chr1
-##      numeric-Rle of length 195471971 with 37959 runs
-##        Lengths:    3085000       5000       5000 ...       5000     186971
-##        Values :  0.0000000  0.3967191  0.3961740 ...  0.8223819  0.0000000
-##      
-##      $chr10
-##      numeric-Rle of length 130694993 with 24994 runs
-##        Lengths:      3180000         5000 ...         5000       179993
-##        Values :  0.00000e+00  5.35871e-01 ...   0.60626638   0.00000000
-## 
-##      ...
 ```
 
 ## DNA Zoo 
@@ -295,65 +159,25 @@ fetching and caching relevant contact matrices in `.hic` format
 It returns a `HicFile` object, which can then be imported in memory using 
 `import()`. 
 
-```{r eval = FALSE}
+```{r}
 library(DNAZooData)
 head(DNAZooData())
-##                  species                              readme                                                         readme_link original_assembly     new_assembly                                                             new_assembly_link new_assembly_link_status                                                                 hic_link
-##         Acinonyx_jubatus        Acinonyx_jubatus/README.json        https://dnazoo.s3.wasabisys.com/Acinonyx_jubatus/README.json           aciJub1      aciJub1_HiC         https://dnazoo.s3.wasabisys.com/Acinonyx_jubatus/aciJub1_HiC.fasta.gz                      200    https://dnazoo.s3.wasabisys.com/Acinonyx_jubatus/aciJub1.rawchrom.hic
-##       Acropora_millepora      Acropora_millepora/README.json      https://dnazoo.s3.wasabisys.com/Acropora_millepora/README.json       amil_sf_1.1  amil_sf_1.1_HiC   https://dnazoo.s3.wasabisys.com/Acropora_millepora/amil_sf_1.1_HiC.fasta.gz                      200   https://dnazoo.s3.wasabisys.com/Acropora_millepora/amil_sf_1.1_HiC.hic
-##      Addax_nasomaculatus     Addax_nasomaculatus/README.json     https://dnazoo.s3.wasabisys.com/Addax_nasomaculatus/README.json      ASM1959352v1 ASM1959352v1_HiC https://dnazoo.s3.wasabisys.com/Addax_nasomaculatus/ASM1959352v1_HiC.fasta.gz                      200 https://dnazoo.s3.wasabisys.com/Addax_nasomaculatus/ASM1959352v1_HiC.hic
-##            Aedes_aegypti           Aedes_aegypti/README.json           https://dnazoo.s3.wasabisys.com/Aedes_aegypti/README.json        AGWG.draft         AaegL5.0               https://dnazoo.s3.wasabisys.com/Aedes_aegypti/AaegL5.0.fasta.gz                      404                                                                     <NA>
-##    Aedes_aegypti__AaegL4   Aedes_aegypti__AaegL4/README.json   https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL4/README.json            AaegL3           AaegL4         https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL4/AaegL4.fasta.gz                      200         https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL4/AaegL4.hic
-##  Aedes_aegypti__AaegL5.0 Aedes_aegypti__AaegL5.0/README.json https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL5.0/README.json        AGWG.draft         AaegL5.0     https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL5.0/AaegL5.0.fasta.gz                      200     https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL5.0/AaegL5.0.hic
 ```
 
 For example, we can directly fetch a Hi-C dataset generated from a tardigrade sample 
 by specifying the right `species` argument. 
 
-```{r eval = FALSE}
+```{r}
 hicfile <- DNAZooData(species = 'Hypsibius_dujardini')
-##  Fetching Hi-C data from DNAZoo
-##  |===================================|  100%
+
 hicfile
-##  HicFile object
-##  .hic file: /home/rsg/.cache/R/DNAZooData/400d7e2b0145_nHd_3.1_HiC.hic
-##  resolution: 5000
-##  pairs file:
-##  metadata(6): organism draftAssembly ... credits assemblyURL
 ```
 
 Here again, the resulting `HicFile` is populated with metadata parsed from the 
 DNA Zoo data portal. 
 
-```{r eval = FALSE}
+```{r}
 metadata(hicfile)$organism
-##  $vernacular
-##  [1] "Tardigrade"
-##  
-##  $binomial
-##  [1] "Hypsibius dujardini"
-##  
-##  $funFact
-##  [1] "<i>Hypsibius dujardini</i> is a species of tardigrade, a tiny microscopic organism. They are also commonly called water bears. This species is found world-wide!"
-##  
-##  $extraInfo
-##  [1] "on BioKIDS website"
-##  
-##  $extraInfoLink
-##  [1] "http://www.biokids.umich.edu/critters/Hypsibius_dujardini/"
-##  
-##  $image
-##  [1] "https://static.wixstatic.com/media/2b9330_82db39c219f24b20a75cb38943aad1fb~mv2.jpg"
-##  
-##  $imageCredit
-##  [1] "By Willow Gabriel, Goldstein Lab - https://www.flickr.com/photos/waterbears/1614095719/ Template:Uploader Transferred from en.wikipedia to Commons., CC BY-SA 2.5, https://commons.wikimedia.org/w/index.php?curi
-##  d=2261992"
-##  
-##  $isChromognomes
-##  [1] "FALSE"
-##  
-##  $taxonomy
-##  [1] "Species:202423-914154-914155-914158-155166-155362-710171-710179-710192-155390-155420"
 ```
 
 `HiCFile` metadata also points to a URL to directly fetch the genome assembly 
@@ -363,18 +187,6 @@ corrected by the DNA Zoo consortium.
 metadata(hicfile)$assemblyURL
 ```
 
-# Session info {-}
-
-::: {.callout-note collapse="true"}
-
-## Click to expand 👇 {-}
-
-```{r "session info"}
-#| cache: false
-sessioninfo::session_info(include_base = TRUE)
-```
-
-:::
 # Session info {-}
 
 ::: {.callout-note collapse="true"}

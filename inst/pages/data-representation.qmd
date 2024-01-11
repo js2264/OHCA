@@ -585,7 +585,7 @@ One can add metadata columns directly to a `GInteractions` object.
 mcols(gi)
 mcols(gi) <- data.frame(
     idx = seq(1, length(gi)),
-    type = c("cis", "cis", "cis", "trans", "cis")
+    type = c("cis", "cis", "cis", "cis", "trans")
 )
 gi
 

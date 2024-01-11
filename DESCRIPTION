@@ -25,6 +25,7 @@ Imports:
     DNAZooData,
     fourDNData, 
     plyinteractions, 
+    GenomicInteractions, 
     terra, 
     Rfast, 
     WGCNA, 
