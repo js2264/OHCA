@@ -33,9 +33,6 @@ library(plyinteractions)
 library(multiHiCcompare)
 library(dplyr)
 library(tidyr)
-
-coolf_wt <- HiContactsData('yeast_wt', 'mcool')
-coolf_eco1 <- HiContactsData('yeast_eco1', 'mcool')
 ```
 
 ## diffHic
@@ -141,6 +138,8 @@ Manipulate a `HiCExperiment` object to coerce it into such structure is straight
 library(dplyr)
 library(tidyr)
 library(purrr)
+coolf_wt <- HiContactsData('yeast_wt', 'mcool')
+coolf_eco1 <- HiContactsData('yeast_eco1', 'mcool')
 hics <- list(
     "wt" = import(coolf_wt, format = 'cool'),
     "eco1" = import(coolf_eco1, format = 'cool')

@@ -275,12 +275,12 @@ on these machines.
 #### Identifying loops
 
 ```{r eval = FALSE}
-## Due to HiCool limitations, this code is not executed here
+## Due to HiCool limitations when rendering the book, this code is not executed here
 hic <- HiCool::getLoops(microC, resolution = 5000)
 ```
 
 ```{r eval = TRUE}
-## Instead we load data from a backed up object
+## Instead we load pre-computed data from a backed-up object
 hic_rds <- system.file('extdata', 'microC_with-loops.rds', package = 'OHCA')
 hic <- readRDS(hic_rds)
 ```
@@ -314,10 +314,10 @@ you can import the annotated loops in `R` as follows:
 df <- readr::read_tsv(system.file('extdata', 'chromo.tsv', package = 'OHCA')) 
 loops <- InteractionSet::GInteractions(
     anchor1 = GenomicRanges::GRanges(
-        df$chrom1, IRanges::IRanges(df$start1+1, df$end1)
+        df$chrom1, IRanges::IRanges(df$start1, df$end1)
     ),
     anchor2 = GenomicRanges::GRanges(
-        df$chrom2, IRanges::IRanges(df$start2+1, df$end2)
+        df$chrom2, IRanges::IRanges(df$start2, df$end2)
     ),
     bin_id1 = df$bin1, 
     bin_id2 = df$bin2, 
@@ -340,7 +340,7 @@ GenomicInteractions::export.bedpe(loops, 'loops.bedpe')
 #### Visualizing chromatin loops
 
 ```{r}
-plotMatrix(
+p <- plotMatrix(
     refocus(hic, 'chr17:62500001-63500000') |> zoom(5000), 
     loops = loops,
     limits = c(-4, -1.2),

@@ -12,16 +12,6 @@ library(HiCExperiment)
 library(HiContactsData)
 library(HiContacts)
 library(rtracklayer)
-coolf <- HiContactsData('yeast_wt', 'mcool')
-cf <- CoolFile(coolf)
-hic <- import(cf, focus = 'II', resolution = 2000)
-data(centros_yeast)
-topologicalFeatures(hic, 'centromeres') <- centros_yeast
-hic_eco1 <- import(
-    CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
-    focus = 'II', 
-    resolution = 2000
-)
 ```
 
 ::: {.callout-note}
@@ -78,7 +68,7 @@ To demonstrate `HiContacts` functionalities, we will create
 an `HiCExperiment` object from an example `.cool` file provided 
 in the `HiContactsData` package. 
 
-```{r eval = FALSE}
+```{r}
 library(HiCExperiment)
 library(HiContactsData)
 
@@ -131,7 +121,7 @@ from the disk-stored contact matrix.
 :::{.column-body-outset-right}
 
 ```{r out.width = '100%', fig.asp = .33}
-patchwork::wrap_plots(
+cowplot::plot_grid(
     plotMatrix(normalized_hic, use.scores = 'count', caption = FALSE),
     plotMatrix(normalized_hic, use.scores = 'balanced', caption = FALSE),
     plotMatrix(normalized_hic, use.scores = 'ICE', caption = FALSE), 
@@ -171,7 +161,7 @@ Topological features will be visually more prominent in the O/E `detrended` Hi-C
 :::{.column-page-right}
 
 ```{r out.width = '100%', fig.asp = .33}
-patchwork::wrap_plots(
+cowplot::plot_grid(
     plotMatrix(detrended_hic, use.scores = 'balanced', scale = 'log10', limits = c(-3.5, -1.2), caption = FALSE),
     plotMatrix(detrended_hic, use.scores = 'expected', scale = 'log10', limits = c(-3.5, -1.2), caption = FALSE),
     plotMatrix(detrended_hic, use.scores = 'detrended', scale = 'linear', limits = c(-1, 1), cmap = bwrColors(), caption = FALSE), 
@@ -281,7 +271,7 @@ loops <- system.file('extdata', 'S288C-loops.bedpe', package = 'HiCExperiment') 
     makeGInteractionsFromGRangesPairs()
 borders <- system.file('extdata', 'S288C-borders.bed', package = 'HiCExperiment') |> 
     import()
-patchwork::wrap_plots(
+cowplot::plot_grid(
     plotMatrix(hic2, caption = FALSE),
     plotMatrix(hic2, use.scores = 'detrended', scale = 'linear', limits = c(-1, 1), caption = FALSE),
     plotMatrix(
@@ -335,7 +325,7 @@ two `HiCExperiment` objects can be done in `R` using the `divide` function.
 For example, we can divide the *eco1* mutant Hi-C data by wild-type Hi-C 
 dataset using the `divide` function. 
 
-```{r eval = FALSE}
+```{r}
 hic_eco1 <- import(
     CoolFile(HiContactsData('yeast_eco1', 'mcool')), 
     focus = 'II', 

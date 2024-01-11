@@ -6,8 +6,6 @@
 #| message: false
 #| warning: false
 library(HiContactsData)
-r1 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R1')
-r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
 ```
 
 ::: {.callout-note}
@@ -330,8 +328,8 @@ and processes data into binned contact matrices with a single terminal command.
 process fastq reads into a binned contact matrix. 
 A processing pipeline can be launched using the standard command `pipeline` as follows: 
 
-## This chunk of code is not executed when rendering this book. 
 ```{sh eval = FALSE}
+## This chunk of code is not executed when rendering this book. 
 ## Note these fields have to be replaced by appropriate variables: 
 ##    <hicstuff-options>
 ##    <genome.fa>
@@ -358,10 +356,14 @@ directly within an R console.
 
 To demonstrate this, we first fetch example `.fastq` files: 
 
-```{r fastqfiles, eval = FALSE}
+```{r fastqfiles}
 library(HiContactsData)
 r1 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R1')
 r2 <- HiContactsData(sample = 'yeast_wt', format = 'fastq_R2')
+
+r1
+
+r2
 ```
 
 We then load the `HiCool` library and execute the main `HiCool` function. 

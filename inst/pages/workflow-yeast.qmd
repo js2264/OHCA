@@ -294,7 +294,7 @@ This can be generalized to all pairwise combinations of Hi-C datasets.
 library(purrr)
 library(dplyr)
 library(ggplot2)
-mats <- map(hics, ~ .x["IV"] |> as.matrix(use.scores = 'count'))
+mats <- map(hics, ~ .x["IV"] |> as.matrix(use.scores = 'count', sparse = TRUE))
 df <- map(1:7, function(i) {
     map(1:7, function(j) {
         data.frame(
