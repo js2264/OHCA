@@ -51,7 +51,7 @@ amount of data (mostly consisting of contact matrices stored in `.mcool` files).
 
 :::
 
-```{r eval = FALSE}
+```{r}
 library(HiCExperiment)
 library(fourDNData)
 library(BiocParallel)
@@ -64,30 +64,12 @@ samples <- list(
 )
 bpparam <- MulticoreParam(workers = 5, progressbar = TRUE)
 hics <- bplapply(names(samples), fourDNHiCExperiment, BPPARAM = bpparam)
-## Fetching local Hi-C contact map from Bioc cache
-## Fetching local compartments bigwig file from Bioc cache
-## Fetching local insulation bigwig file from Bioc cache
-## Fetching local borders bed file from Bioc cache
-## Importing contacts in memory
-## |===================================================| 100% 
-##
-## ...
 ```
 
-```{r eval = FALSE}
+```{r}
 names(hics) <- samples
+
 hics[["G2 block"]]
-## `HiCExperiment` object with 150,494,008 contacts over 4,109 regions
-## -------
-## fileName: "/home/rsg/.cache/R/fourDNData/25c33c9d826f_4DNFIT479GDR.mcool"
-## focus: "whole genome"
-## resolutions(13): 1000 2000 ... 5000000 10000000
-## active resolution: 250000
-## interactions: 7262748
-## scores(2): count balanced
-## topologicalFeatures: compartments(891) borders(3465)
-## pairsFile: N/A
-## metadata(3): 4DN_info eigens diamond_insulation
 ```
 
 ## Plotting whole chromosome matrices
@@ -95,9 +77,10 @@ hics[["G2 block"]]
 We can visualize the five different Hi-C maps on the entire chromosome `3` with 
 `HiContacts` by iterating over each of the `HiCExperiment` objects. 
 
-```{r eval = FALSE}
+```{r}
 library(purrr)
 library(HiContacts)
+library(ggplot2)
 pl <- imap(hics, ~ .x['chr3'] |> 
     zoom(100000) |> 
     plotMatrix(use.scores = 'balanced', limits = c(-4, -1), caption = FALSE) + 
@@ -107,12 +90,6 @@ library(cowplot)
 plot_grid(plotlist = pl, nrow = 1)
 ```
 
-:::{.column-page-inset-right}
-
-![](images/20230322181000.png)
-
-:::
-
 This highlights the progressive remodeling of chromatin into condensed 
 chromosomes, starting as soon as 5' after release from G2 phase. 
 
@@ -120,7 +97,7 @@ chromosomes, starting as soon as 5' after release from G2 phase.
 
 Zooming on a chromosome section, we can plot the Hi-C autocorrelation matrix for each timepoint. These matrices are generally used to highlight the overall correlation of interaction profiles between different segments of a chromosome section (see [Chapter 5](matrix-centric.qmd#computing-autocorrelated-map) for more details). 
 
-```{r eval = FALSE}
+```{r}
 ## --- Format compartment positions of chr. 4 segment
 .chr <- 'chr4'
 .start <- 59000000L
@@ -138,22 +115,22 @@ compts_gg <- geom_rect(
 
 ## --- Subset contact matrices to chr. 4 segment and computing autocorrelation scores
 g2 <- hics[["G2 block"]] |> 
-    subsetByOverlaps(coords) |>
     zoom(100000) |> 
+    subsetByOverlaps(coords) |>
     autocorrelate()
 pro5 <- hics[["prophase (5m)"]] |> 
-    subsetByOverlaps(coords) |>
     zoom(100000) |> 
+    subsetByOverlaps(coords) |>
     autocorrelate()
 pro30 <- hics[["prometaphase (30m)"]] |> 
-    subsetByOverlaps(coords) |>
     zoom(100000) |> 
+    subsetByOverlaps(coords) |>
     autocorrelate()
 
 ## --- Plot autocorrelation matrices
 plot_grid(
     plotMatrix(
-        g2,
+        subsetByOverlaps(g2, coords),
         use.scores = 'autocorrelated', 
         scale = 'linear', 
         limits = c(-1, 1), 
@@ -162,7 +139,7 @@ plot_grid(
         caption = FALSE
     ) + ggtitle('G2') + compts_gg,
     plotMatrix(
-        pro5,
+        subsetByOverlaps(pro5, coords),
         use.scores = 'autocorrelated', 
         scale = 'linear', 
         limits = c(-1, 1), 
@@ -171,7 +148,7 @@ plot_grid(
         caption = FALSE
     ) + ggtitle('Prophase 5min') + compts_gg,
     plotMatrix(
-        pro30,
+        subsetByOverlaps(pro30, coords),
         use.scores = 'autocorrelated', 
         scale = 'linear', 
         limits = c(-1, 1), 
@@ -182,12 +159,6 @@ plot_grid(
     nrow = 1
 )
 ```
-
-:::{.column-page-right}
-
-![](images/20230324125800.png)
-
-:::
 
 These correlation matrices suggest that there are two different regimes of chromatin compartment remodeling in this chromosome section: 
 
@@ -200,16 +171,10 @@ Saddle plots are typically used to measure the `observed` vs. `expected` interac
 
 Non-overlapping genomic windows are grouped by `nbins` quantiles (typically between 10 and 50 bins) according to their A/B compartment eigenvector value, from lowest eigenvector values (i.e. strongest B compartments) to highest eigenvector values (i.e. strongest A compartments). The average `observed` vs. `expected` interaction scores are computed for pairwise eigenvector quantiles and plotted in a 2D heatmap. 
 
-```{r eval = FALSE}
+```{r}
 pl <- imap(hics, ~ plotSaddle(.x, nbins = 38, BPPARAM = bpparam) + ggtitle(.y)) 
 plot_grid(plotlist = pl, nrow = 1)
 ```
-
-:::{.column-page-right}
-
-![](images/20230322181300.png)
-
-:::
 
 These plots confirm the previous observation made on chr. `4` and reveal that intra-B compartment interactions are generally lost 5' after G2 release, while intra-A interactions take up to 15' after G2 release to disappear.
 
@@ -233,13 +198,14 @@ We can use the A/B compartment annotations obtained at the `G2 block` timepoint 
 `O/E` (observed vs expected) scores for interactions within A or B 
 compartments or between A and B compartments, at different timepoints. 
 
-```{r eval = FALSE}
+```{r}
 ## --- Extract the A/B compartments identified in G2 block
 compts <- topologicalFeatures(hics[["G2 block"]], "compartments")
 compts$ID <- paste0(compts$compartment, seq_along(compts))
 
 ## --- Iterate over timepoints to extract `detrended` (O/E) scores and 
 ##     compartment annotations
+library(tibble)
 library(plyranges)
 df <- imap(hics[c(1, 2, 5)], ~ {
     ints <- cis(.x) |> ## Filter out trans interactions
@@ -251,11 +217,11 @@ df <- imap(hics[c(1, 2, 5)], ~ {
         sample = .y, 
         bin1 = ints$comp_first, 
         bin2 = ints$comp_second, 
-        dist = pairdist(ints), 
+        dist = InteractionSet::pairdist(ints), 
         OE = ints$detrended 
     ) |> 
         filter(dist > 5e6) |>
-        mutate(type = case_when(
+        mutate(type = dplyr::case_when(
             grepl('A', bin1) & grepl('A', bin2) ~ 'AA',
             grepl('B', bin1) & grepl('B', bin2) ~ 'BB',
             grepl('A', bin1) & grepl('B', bin2) ~ 'AB',
@@ -270,15 +236,13 @@ df <- imap(hics[c(1, 2, 5)], ~ {
 We can now plot the changes in O/E scores for intra-A, intra-B, A-B 
 or B-A interactions, splitting boxplots by timepoint. 
 
-```{r eval = FALSE}
+```{r}
 ggplot(df, aes(x = type, y = OE, group = type, fill = type)) + 
     geom_boxplot(outlier.shape = NA) + 
     facet_grid(~sample) + 
     theme_bw() + 
     ylim(c(-2, 2))
 ```
-
-![](images/20230327182802.png)
 
 This visualization suggests that interactions between genomic loci belonging to 
 the B compartment are lost more rapidly than those between genomic loci belonging 
