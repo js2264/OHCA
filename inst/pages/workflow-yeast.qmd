@@ -40,17 +40,16 @@ We leverage seven yeast datasets in this notebook. They are all available from S
 
 :::
 
+::: {.callout-note}
+
+This notebook does not execute code when it's rendered. Instead, the results 
+and the plots have been locally computed and manually embedded in the notebook. 
+
+:::
+
 ## Recovering data from SRA
 
 The easiest for this is to directly fetch files from SRA from their FTP server. We can do so using the base `download.file` function. 
-
-::: {.callout-note}
-
-The next two code chunks illustrate how to do download and process Hi-C reads from SRA, but 
-they are not actually executed when rendering this website as it would take a 
-significant amount of time. 
-
-:::
 
 ```{r eval = FALSE}
 # !! This code is not actually executed !!
@@ -413,7 +412,7 @@ results
 ```
 
 The `results()` output is not very informative as it is. It requires a little 
-bit of reformating to be able to extract valuable insights from it. 
+bit of reformatting to be able to extract valuable insights from it. 
 
 ```{r eval = FALSE}
 df <- left_join(results@hic_table, results(results)) |> 
