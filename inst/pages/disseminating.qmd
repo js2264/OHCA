@@ -87,8 +87,9 @@ type of file to fetch can be specified with the `type` argument:
 into a contact matrix. Once fetched from the 4DN data portal, the local file can be imported in `R` using the `import` function, which will generate a `GInteractions` object. 
 
 ```{r}
-fourDNData(experimentSetAccession = '4DNESJNPEKZD', type = 'pairs') |> 
-    import()
+pairs_f <- fourDNData(experimentSetAccession = '4DNESJNPEKZD', type = 'pairs') 
+print(pairs_f)
+import(pairs_f)
 ```
 
 ::: {.callout-warning}
