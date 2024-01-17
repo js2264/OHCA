@@ -1,16 +1,18 @@
 # Manipulating Hi-C data in R
 
+::: {.callout-note collapse="true"}
+
+## Pre-loading packages and objects 📦 {-}
+
 ```{r}
-#| echo: false
-#| results: "hide"
-#| message: false
-#| warning: false
 library(ggplot2)
 library(GenomicRanges)
 library(InteractionSet)
 library(HiCExperiment)
 library(HiContactsData)
 ```
+
+:::
 
 ::: {.callout-note}
 

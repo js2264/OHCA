@@ -1,10 +1,10 @@
 # Hi-C data structures in R
 
+::: {.callout-note collapse="true"}
+
+## Pre-loading packages and objects 📦 {-}
+
 ```{r}
-#| echo: false
-#| results: "hide"
-#| message: false
-#| warning: false
 library(ggplot2)
 library(GenomicRanges)
 library(InteractionSet)
@@ -14,8 +14,10 @@ coolf <- HiContactsData('yeast_wt', 'mcool')
 hicf <- HiContactsData('yeast_wt', 'hic')
 hicpromatrixf <- HiContactsData('yeast_wt', 'hicpro_matrix')
 hicproregionsf <- HiContactsData('yeast_wt', 'hicpro_bed')
-pairsf <- HiContactsData('yeast_wt', 'pairs.gz')2024-01-112024-01-11
+pairsf <- HiContactsData('yeast_wt', 'pairs.gz')
 ```
+
+:::
 
 ::: {.callout-note}
 

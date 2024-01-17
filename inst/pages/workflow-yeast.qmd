@@ -1,10 +1,10 @@
 # Workflow 1: Distance-dependent interactions across yeast mutants {-}
 
+::: {.callout-note collapse="true"}
+
+## Pre-loading packages and objects 📦 {-}
+
 ```{r}
-#| echo: false
-#| results: "hide"
-#| message: false
-#| warning: false
 library(ggplot2)
 library(purrr)
 library(GenomicRanges)
@@ -13,6 +13,8 @@ library(HiCExperiment)
 library(HiContactsData)
 library(multiHiCcompare)
 ```
+
+:::
 
 ::: {.callout-note}
 

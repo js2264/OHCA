@@ -1,10 +1,10 @@
 # Workflow 2: Chromosome compartment cohesion upon mitosis entry {-}
 
+::: {.callout-note collapse="true"}
+
+## Pre-loading packages and objects 📦 {-}
+
 ```{r}
-#| echo: false
-#| results: "hide"
-#| message: false
-#| warning: false
 library(ggplot2)
 library(cowplot)
 library(purrr)
@@ -12,6 +12,8 @@ library(HiCExperiment)
 library(HiContactsData)
 library(fourDNData)
 ```
+
+:::
 
 ::: {.callout-note}
 

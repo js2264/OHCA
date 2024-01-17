@@ -1,12 +1,14 @@
 # Hi-C pre-processing steps
 
+::: {.callout-note collapse="true"}
+
+## Pre-loading packages 📦 {-}
+
 ```{r}
-#| echo: false
-#| results: "hide"
-#| message: false
-#| warning: false
 library(HiContactsData)
 ```
+
+:::
 
 ::: {.callout-note}
 ## Aims

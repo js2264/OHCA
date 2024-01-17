@@ -1,10 +1,10 @@
 # Data gateways: accessing public Hi-C data portals
 
+::: {.callout-note collapse="true"}
+
+## Pre-loading packages and objects 📦 {-}
+
 ```{r}
-#| echo: false
-#| results: "hide"
-#| message: false
-#| warning: false
 library(ggplot2)
 library(GenomicRanges)
 library(InteractionSet)
@@ -13,6 +13,8 @@ library(fourDNData)
 library(DNAZooData)
 library(rtracklayer)
 ```
+
+:::
 
 ::: {.callout-note}
 
