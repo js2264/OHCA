@@ -5,6 +5,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---    
 
+# OHCA
+
 ```{r, echo=FALSE}
 # This is adapted from Aaron Lun's approach in OSCA.* books
 link <- BiocStyle::Biocbook(
