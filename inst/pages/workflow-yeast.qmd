@@ -331,7 +331,7 @@ parallelization of independent correlation computation runs over multiple CPUs.
 ```{r eval = FALSE}
 # Some chromosomes will be ignored as they are too small for this analysis 
 chrs <- c('II', 'IV', 'V', 'VII', 'VIII', 'IX', 'X', 'XI', 'XIII', 'XIV', 'XVI')
-bpparam <- BiocParallel::MulticoreParam(workers = 6, progressbar = TRUE)
+bpparam <- BiocParallel::MulticoreParam(workers = 6, progressbar = FALSE)
 df <- BiocParallel::bplapply(chrs, function(CHR) {
     mats <- map(hics, ~ .x[CHR] |> interactions() |> gi2cm('count') |> cm2matrix())
 

@@ -64,7 +64,7 @@ samples <- list(
     '4DNESIR416OW' = 'prometaphase (15m)', 
     '4DNESS8PTK6F' = 'prometaphase (30m)' 
 )
-bpparam <- MulticoreParam(workers = 5, progressbar = TRUE)
+bpparam <- MulticoreParam(workers = 5, progressbar = FALSE)
 hics <- bplapply(names(samples), fourDNHiCExperiment, BPPARAM = bpparam)
 ```
 
