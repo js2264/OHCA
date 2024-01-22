@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.3.450">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Orchestrating Hi-C analysis with Bioconductor - 8&nbsp; Data gateways: accessing public Hi-C data portals</title>
 <style>
@@ -290,6 +290,7 @@ div.csl-indent {
   </ul>
 </li>
   <li><a href="#dna-zoo" id="toc-dna-zoo" class="nav-link" data-scroll-target="#dna-zoo"><span class="header-section-number">8.2</span> DNA Zoo</a></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></nav>
     </div>
@@ -311,6 +312,109 @@ div.csl-indent {
   
 
 </header><div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pre-loading packages and objects 📦
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: stats4</span></span>
+<span><span class="co">##  Loading required package: BiocGenerics</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'BiocGenerics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      IQR, mad, sd, var, xtabs</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      Filter, Find, Map, Position, Reduce, anyDuplicated, aperm,</span></span>
+<span><span class="co">##      append, as.data.frame, basename, cbind, colnames, dirname,</span></span>
+<span><span class="co">##      do.call, duplicated, eval, evalq, get, grep, grepl, intersect,</span></span>
+<span><span class="co">##      is.unsorted, lapply, mapply, match, mget, order, paste, pmax,</span></span>
+<span><span class="co">##      pmax.int, pmin, pmin.int, rank, rbind, rownames, sapply,</span></span>
+<span><span class="co">##      setdiff, table, tapply, union, unique, unsplit, which.max,</span></span>
+<span><span class="co">##      which.min</span></span>
+<span><span class="co">##  Loading required package: S4Vectors</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'S4Vectors'</span></span>
+<span><span class="co">##  The following object is masked from 'package:utils':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      findMatches</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      I, expand.grid, unname</span></span>
+<span><span class="co">##  Loading required package: IRanges</span></span>
+<span><span class="co">##  Loading required package: GenomeInfoDb</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">InteractionSet</span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: SummarizedExperiment</span></span>
+<span><span class="co">##  Loading required package: MatrixGenerics</span></span>
+<span><span class="co">##  Loading required package: matrixStats</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'MatrixGenerics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:matrixStats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span></span>
+<span><span class="co">##      colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span></span>
+<span><span class="co">##      colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span></span>
+<span><span class="co">##      colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span></span>
+<span><span class="co">##      colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span></span>
+<span><span class="co">##      colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span></span>
+<span><span class="co">##      colWeightedMeans, colWeightedMedians, colWeightedSds,</span></span>
+<span><span class="co">##      colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span></span>
+<span><span class="co">##      rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span></span>
+<span><span class="co">##      rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span></span>
+<span><span class="co">##      rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span></span>
+<span><span class="co">##      rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span></span>
+<span><span class="co">##      rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs,</span></span>
+<span><span class="co">##      rowVars, rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span></span>
+<span><span class="co">##      rowWeightedSds, rowWeightedVars</span></span>
+<span><span class="co">##  Loading required package: Biobase</span></span>
+<span><span class="co">##  Welcome to Bioconductor</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      Vignettes contain introductory material; view with</span></span>
+<span><span class="co">##      'browseVignettes()'. To cite Bioconductor, see</span></span>
+<span><span class="co">##      'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'Biobase'</span></span>
+<span><span class="co">##  The following object is masked from 'package:MatrixGenerics':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      rowMedians</span></span>
+<span><span class="co">##  The following objects are masked from 'package:matrixStats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      anyMissing, rowMedians</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<span><span class="co">##  Consider using the `HiContacts` package to perform advanced genomic operations </span></span>
+<span><span class="co">##  on `HiCExperiment` objects.</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Read "Orchestrating Hi-C analysis with Bioconductor" online book to learn more:</span></span>
+<span><span class="co">##  https://js2264.github.io/OHCA/</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'HiCExperiment'</span></span>
+<span><span class="co">##  The following object is masked from 'package:SummarizedExperiment':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      metadata&lt;-</span></span>
+<span><span class="co">##  The following object is masked from 'package:S4Vectors':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      metadata&lt;-</span></span>
+<span><span class="co">##  The following object is masked from 'package:ggplot2':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      resolution</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/fourDNData">fourDNData</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/DNAZooData">DNAZooData</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rtracklayer</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -330,62 +434,90 @@ Aims
 <p>The Hi-C experimental approach has gained significant traction across multiple fields related to genome biology, and several consortia developed large-scale programs based on this technique. The <code>fourDNData</code> and <code>DNAZooData</code> R packages were designed to accelerate the investigation of chromatin structure using these public resources.</p>
 <section id="dn-data-portal" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="dn-data-portal">
 <span class="header-section-number">8.1</span> 4DN data portal</h2>
-<p>The 4D Nucleome Data Coordination and Integration Center (<a href="http://dcic.4dnucleome.org/">DCIC</a>) has developed and actively maintains a <a href="https://data.4dnucleome.org/browse">data portal</a> providing public access to a wealth of resources to investigate 3D chromatin architecture. Notably, 3D chromatin conformation libraries relying on different technologies (“in situ” or “dilution” Hi-C, Capture Hi-C, Micro-C, DNase Hi-C, …), generated by 50+ collaborating labs, were homogenously processed, yielding more than 350 sets of processed files.</p>
+<p>The 4D Nucleome Data Coordination and Integration Center (<a href="http://dcic.4dnucleome.org/">DCIC</a>) has developed and actively maintains a <a href="https://data.4dnucleome.org/browse">data portal</a> providing public access to a wealth of resources to investigate 3D chromatin architecture. Notably, 3D chromatin conformation libraries relying on different technologies (“in situ” or “dilution” Hi-C, Capture Hi-C, Micro-C, DNase Hi-C, …), generated by 50+ collaborating labs, were homogeneously processed, yielding more than 350 sets of processed files.</p>
 <p><code>fourDNData</code> (read <em>4DN-Data</em>) is a package giving programmatic access to these uniformly processed Hi-C contact files.</p>
 <p>The <code><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData()</a></code> function provides a gateway to 4DN-hosted Hi-C files, including contact matrices (in <code>.hic</code> or <code>.mcool</code>) and other Hi-C derived files such as annotated compartments, domains, insulation scores, or <code>.pairs</code> files.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/fourDNData">fourDNData</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/fourDNData">fourDNData</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  experimentSetAccession     fileType     size organism experimentType details                              dataset                                                       condition               biosource biosourceType             publication                                                                                                                                 URL</span></span>
-<span><span class="co">##            4DNES18BMU79        pairs 10151.53    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019) https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/49504f97-904e-48c1-8c20-1033680b66da/4DNFIC5AHBPV.pairs.gz</span></span>
-<span><span class="co">##            4DNES18BMU79          hic  5285.82    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019)      https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/6cd4378a-8f51-4e65-99eb-15f5c80abf8d/4DNFIT4I5C6Z.hic</span></span>
-<span><span class="co">##            4DNES18BMU79        mcool  6110.75    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019)    https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/01fb704f-2fd7-48c6-91af-c5f4584529ed/4DNFIVPAXJO8.mcool</span></span>
-<span><span class="co">##            4DNES18BMU79   boundaries     0.12    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019)   https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/5c07cdee-53e2-43e0-8853-cfe5f057b3f1/4DNFIR3XCIMA.bed.gz</span></span>
-<span><span class="co">##            4DNES18BMU79   insulation     7.18    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019)       https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/d1f4beb9-701f-4188-abe2-6271fe658770/4DNFIXKKNMS7.bw</span></span>
-<span><span class="co">##            4DNES18BMU79 compartments     0.18    mouse   in situ Hi-C   DpnII Hi-C on Mouse Olfactory System cells Mature olfactory sensory neurons with conditional Ldb1 knockout olfactory receptor cell  primary cell Monahan K et al. (2019)       https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/3d429647-51c8-4e3a-a18b-eec0b1480905/4DNFIN13N8C1.bw</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##    experimentSetAccession     fileType     size organism experimentType</span></span>
+<span><span class="co">##  1           4DNES18BMU79        pairs 10151.53    mouse   in situ Hi-C</span></span>
+<span><span class="co">##  3           4DNES18BMU79          hic  5285.82    mouse   in situ Hi-C</span></span>
+<span><span class="co">##  4           4DNES18BMU79        mcool  6110.75    mouse   in situ Hi-C</span></span>
+<span><span class="co">##  5           4DNES18BMU79   boundaries     0.12    mouse   in situ Hi-C</span></span>
+<span><span class="co">##  6           4DNES18BMU79   insulation     7.18    mouse   in situ Hi-C</span></span>
+<span><span class="co">##  7           4DNES18BMU79 compartments     0.18    mouse   in situ Hi-C</span></span>
+<span><span class="co">##    details                              dataset</span></span>
+<span><span class="co">##  1   DpnII Hi-C on Mouse Olfactory System cells</span></span>
+<span><span class="co">##  3   DpnII Hi-C on Mouse Olfactory System cells</span></span>
+<span><span class="co">##  4   DpnII Hi-C on Mouse Olfactory System cells</span></span>
+<span><span class="co">##  5   DpnII Hi-C on Mouse Olfactory System cells</span></span>
+<span><span class="co">##  6   DpnII Hi-C on Mouse Olfactory System cells</span></span>
+<span><span class="co">##  7   DpnII Hi-C on Mouse Olfactory System cells</span></span>
+<span><span class="co">##                                                          condition</span></span>
+<span><span class="co">##  1 Mature olfactory sensory neurons with conditional Ldb1 knockout</span></span>
+<span><span class="co">##  3 Mature olfactory sensory neurons with conditional Ldb1 knockout</span></span>
+<span><span class="co">##  4 Mature olfactory sensory neurons with conditional Ldb1 knockout</span></span>
+<span><span class="co">##  5 Mature olfactory sensory neurons with conditional Ldb1 knockout</span></span>
+<span><span class="co">##  6 Mature olfactory sensory neurons with conditional Ldb1 knockout</span></span>
+<span><span class="co">##  7 Mature olfactory sensory neurons with conditional Ldb1 knockout</span></span>
+<span><span class="co">##                  biosource biosourceType             publication</span></span>
+<span><span class="co">##  1 olfactory receptor cell  primary cell Monahan K et al. (2019)</span></span>
+<span><span class="co">##  3 olfactory receptor cell  primary cell Monahan K et al. (2019)</span></span>
+<span><span class="co">##  4 olfactory receptor cell  primary cell Monahan K et al. (2019)</span></span>
+<span><span class="co">##  5 olfactory receptor cell  primary cell Monahan K et al. (2019)</span></span>
+<span><span class="co">##  6 olfactory receptor cell  primary cell Monahan K et al. (2019)</span></span>
+<span><span class="co">##  7 olfactory receptor cell  primary cell Monahan K et al. (2019)</span></span>
+<span><span class="co">##                                                                                                                                    URL</span></span>
+<span><span class="co">##  1 https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/49504f97-904e-48c1-8c20-1033680b66da/4DNFIC5AHBPV.pairs.gz</span></span>
+<span><span class="co">##  3      https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/6cd4378a-8f51-4e65-99eb-15f5c80abf8d/4DNFIT4I5C6Z.hic</span></span>
+<span><span class="co">##  4    https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/01fb704f-2fd7-48c6-91af-c5f4584529ed/4DNFIVPAXJO8.mcool</span></span>
+<span><span class="co">##  5   https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/5c07cdee-53e2-43e0-8853-cfe5f057b3f1/4DNFIR3XCIMA.bed.gz</span></span>
+<span><span class="co">##  6       https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/d1f4beb9-701f-4188-abe2-6271fe658770/4DNFIXKKNMS7.bw</span></span>
+<span><span class="co">##  7       https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/3d429647-51c8-4e3a-a18b-eec0b1480905/4DNFIN13N8C1.bw</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="querying-individual-files" class="level3" data-number="8.1.1"><h3 data-number="8.1.1" class="anchored" data-anchor-id="querying-individual-files">
 <span class="header-section-number">8.1.1</span> Querying individual files</h3>
 <p>The <code><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData()</a></code> function can be used to directly fetch specific files from the 4DN data portal:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span>experimentSetAccession <span class="op">=</span> <span class="st">'4DNES25ABNZ1'</span>, type <span class="op">=</span> <span class="st">'mcool'</span><span class="op">)</span></span>
-<span><span class="co">##  |===================================|  100%</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span>experimentSetAccession <span class="op">=</span> <span class="st">'4DNESJNPEKZD'</span>, type <span class="op">=</span> <span class="st">'mcool'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This effectively downloads and caches the queried file locally.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cf</span></span>
-<span><span class="co">## [1] "/home/rsg/.cache/R/fourDNData/698470d302f0_4DNFI4988896.mcool"</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cf</span></span>
+<span><span class="co">##  [1] "/root/.cache/R/fourDNData/150e1af5f115_4DNFIZL8OZE1.mcool"</span></span>
 <span></span>
-<span><span class="fu">availableChromosomes</span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
-<span><span class="co">## Seqinfo object with 24 sequences from an unspecified genome:</span></span>
-<span><span class="co">##   seqnames seqlengths isCircular genome</span></span>
-<span><span class="co">##   chr1      248956422       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##   chr2      242193529       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##   chr3      198295559       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##   chr4      190214555       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##   chr5      181538259       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##   ...             ...        ...    ...</span></span>
-<span><span class="co">##   chr20      64444167       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##   chr21      46709983       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##   chr22      50818468       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##   chrX      156040895       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##   chrY       57227415       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">availableChromosomes</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
+<span><span class="co">##  Seqinfo object with 24 sequences from an unspecified genome:</span></span>
+<span><span class="co">##    seqnames seqlengths isCircular genome</span></span>
+<span><span class="co">##    chr1      248956422       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    chr2      242193529       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    chr3      198295559       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    chr4      190214555       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    chr5      181538259       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    ...             ...        ...    ...</span></span>
+<span><span class="co">##    chr20      64444167       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    chr21      46709983       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    chr22      50818468       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    chrX      156040895       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    chrY       57227415       &lt;NA&gt;   &lt;NA&gt;</span></span>
 <span></span>
-<span><span class="fu">availableResolutions</span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
-<span><span class="co">## resolutions(13): 1000 2000 ... 5000000 10000000</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">availableResolutions</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
+<span><span class="co">##  resolutions(13): 1000 2000 ... 5e+06 1e+07</span></span>
+<span><span class="co">##  </span></span>
 <span></span>
-<span><span class="fu">import</span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">"chr4:10000001-20000000"</span>, resolution <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span>
-<span><span class="co">## `HiCExperiment` object with 14,682 contacts over 2,000 regions</span></span>
-<span><span class="co">## -------</span></span>
-<span><span class="co">## fileName: "/home/rsg/.cache/R/fourDNData/29051ff3104c_4DNFINSF15ZM.mcool"</span></span>
-<span><span class="co">## focus: "chr4:10,000,001-20,000,000"</span></span>
-<span><span class="co">## resolutions(13): 1000 2000 ... 5000000 10000000</span></span>
-<span><span class="co">## active resolution: 5000</span></span>
-<span><span class="co">## interactions: 12016</span></span>
-<span><span class="co">## scores(2): count balanced</span></span>
-<span><span class="co">## topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0)</span></span>
-<span><span class="co">## pairsFile: N/A</span></span>
-<span><span class="co">## metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">"chr4:10000001-20000000"</span>, resolution <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span>
+<span><span class="co">##  `HiCExperiment` object with 656 contacts over 2,000 regions </span></span>
+<span><span class="co">##  -------</span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/fourDNData/150e1af5f115_4DNFIZL8OZE1.mcool" </span></span>
+<span><span class="co">##  focus: "chr4:10,000,001-20,000,000" </span></span>
+<span><span class="co">##  resolutions(13): 1000 2000 ... 5000000 10000000</span></span>
+<span><span class="co">##  active resolution: 5000 </span></span>
+<span><span class="co">##  interactions: 614 </span></span>
+<span><span class="co">##  scores(2): count balanced </span></span>
+<span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
+<span><span class="co">##  pairsFile: N/A </span></span>
+<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Different Hi-C related genomic files are provided by the 4DN consortium. The type of file to fetch can be specified with the <code>type</code> argument:</p>
 <ul>
@@ -393,22 +525,10 @@ Aims
 <code>type = 'pairs'</code> will fetch the pairs file which was generated by the 4DN consortium and binned into a contact matrix. Once fetched from the 4DN data portal, the local file can be imported in <code>R</code> using the <code>import</code> function, which will generate a <code>GInteractions</code> object.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span>experimentSetAccession <span class="op">=</span> <span class="st">'4DNES25ABNZ1'</span>, type <span class="op">=</span> <span class="st">'pairs'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu">import</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## GInteractions object with 13821669 interactions and 3 metadata columns:</span></span>
-<span><span class="co">##              seqnames1   ranges1     seqnames2   ranges2 |       frag1     frag2  distance</span></span>
-<span><span class="co">##                  &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt; &lt;IRanges&gt; | &lt;character&gt; &lt;numeric&gt; &lt;integer&gt;</span></span>
-<span><span class="co">##          [1]      chr1   3000003 ---      chr1  88307603 |          UU        22  85307600</span></span>
-<span><span class="co">##          [2]      chr1   3000022 ---      chr1  28227919 |          UU        50  25227897</span></span>
-<span><span class="co">##          [3]      chr1   3000023 ---      chr1  50187758 |          RU        35  47187735</span></span>
-<span><span class="co">##          [4]      chr1   3000024 ---      chr1   4090828 |          RU         9   1090804</span></span>
-<span><span class="co">##          [5]      chr1   3000024 ---      chr1  35080614 |          UU         3  32080590</span></span>
-<span><span class="co">##          ...       ...       ... ...       ...       ... .         ...       ...       ...</span></span>
-<span><span class="co">##   [13821665]      chr1  24472292 ---      chr1  24472986 |          UU        60       694</span></span>
-<span><span class="co">##   [13821666]      chr1  24472292 ---      chr1  24805552 |          RU        60    333260</span></span>
-<span><span class="co">##   [13821667]      chr1  24472292 ---      chr1  24874144 |          UU        60    401852</span></span>
-<span><span class="co">##   [13821668]      chr1  24472294 ---      chr1 115668400 |          UU        60  91196106</span></span>
-<span><span class="co">##   [13821669]      chr1  24472295 ---      chr1  43307467 |          UU        60  18835172</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Not evaluated for now</span></span>
+<span><span class="va">pairs_f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span>experimentSetAccession <span class="op">=</span> <span class="st">'4DNESJNPEKZD'</span>, type <span class="op">=</span> <span class="st">'pairs'</span><span class="op">)</span> </span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">pairs_f</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">pairs_f</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -428,9 +548,9 @@ Watch out
 <code>type = 'insulation'</code> will fetch a <code>.bigwig</code> track file precomputed by the 4DN consortium. This track corresponds to the genome-wide insulation score computed by <code>cooltools</code> as described in <span class="citation" data-cites="Crane_2015">Crane et al. (<a href="#ref-Crane_2015" role="doc-biblioref">2015</a>)</span>. To know more about this, read <a href="https://data.4dnucleome.org/resources/data-analysis/insulation_compartment_scores#insulation_scores_and_boundaries_page_all">the excerpt from 4DN data portal</a>. Once fetched from the 4DN data portal, the local file can be imported in <code>R</code> using the <code>import</code> function, which will generate a <code>RleList</code> object.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span>experimentSetAccession <span class="op">=</span> <span class="st">'4DNES25ABNZ1'</span>, type <span class="op">=</span> <span class="st">'insulation'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu">import</span><span class="op">(</span>as <span class="op">=</span> <span class="st">'Rle'</span><span class="op">)</span></span>
-<span><span class="co">##  |===================================|  100%</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rtracklayer</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span>experimentSetAccession <span class="op">=</span> <span class="st">'4DNES25ABNZ1'</span>, type <span class="op">=</span> <span class="st">'insulation'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span>as <span class="op">=</span> <span class="st">'Rle'</span><span class="op">)</span></span>
 <span><span class="co">##  RleList of length 21</span></span>
 <span><span class="co">##  $chr1</span></span>
 <span><span class="co">##  numeric-Rle of length 195471971 with 38145 runs</span></span>
@@ -446,17 +566,27 @@ Watch out
 <span><span class="co">##  numeric-Rle of length 122082543 with 23536 runs</span></span>
 <span><span class="co">##    Lengths:    3165000       5000       5000 ...       5000     162543</span></span>
 <span><span class="co">##    Values :  0.0000000 -0.7906257 -0.7930040 ...   0.515919   0.000000</span></span>
-<span><span class="co">##</span></span>
-<span><span class="co">##  ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $chr12</span></span>
+<span><span class="co">##  numeric-Rle of length 120129022 with 22578 runs</span></span>
+<span><span class="co">##    Lengths:   3075000      5000      5000 ...      5000      5000    164022</span></span>
+<span><span class="co">##    Values :  0.000000  0.411216  0.400357 ... 0.1650951 0.2175749 0.0000000</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $chr13</span></span>
+<span><span class="co">##  numeric-Rle of length 120421639 with 22807 runs</span></span>
+<span><span class="co">##    Lengths:     3080000        5000        5000 ...        5000      171639</span></span>
+<span><span class="co">##    Values :  0.00000000  0.17005745  0.10652249 ...  1.14856148  0.00000000</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ...</span></span>
+<span><span class="co">##  &lt;16 more elements&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>
 <code>type = 'boundaries'</code> will fetch a <code>.bed</code> file precomputed by the 4DN consortium, listing the annotated borders between topological domains. These borders correspond to local minima identified from the genome-wide insulation track. It can also be imported in <code>R</code> using the <code>import</code> function, which will generate a <code>GRanges</code> object.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span>experimentSetAccession <span class="op">=</span> <span class="st">'4DNES25ABNZ1'</span>, type <span class="op">=</span> <span class="st">'boundaries'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu">import</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">##  |===================================|  100%</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span>experimentSetAccession <span class="op">=</span> <span class="st">'4DNES25ABNZ1'</span>, type <span class="op">=</span> <span class="st">'boundaries'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 6103 ranges and 2 metadata columns:</span></span>
 <span><span class="co">##           seqnames            ranges strand |        name     score</span></span>
 <span><span class="co">##              &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt; &lt;numeric&gt;</span></span>
@@ -470,85 +600,106 @@ Watch out
 <span><span class="co">##    [6100]     chrY 89790001-89795000      * |        Weak  0.442186</span></span>
 <span><span class="co">##    [6101]     chrY 89895001-89900000      * |        Weak  0.279879</span></span>
 <span><span class="co">##    [6102]     chrY 90025001-90030000      * |      Strong  0.660699</span></span>
-<span><span class="co">##    [6103]     chrY 90410001-90415000      * |      Strong  1.160018</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##    [6103]     chrY 90410001-90415000      * |      Strong  1.160018</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 21 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>
 <code>type = 'compartments'</code> will fetch a <code>.bigwig</code> track file precomputed by the 4DN consortium. This track corresponds to the selected genome-wide eigenvector computed by <code>cooltools</code> and representing A/B compartments. To know more about this, read <a href="https://data.4dnucleome.org/resources/data-analysis/insulation_compartment_scores#compartments_page_all">the excerpt from 4DN data portal</a>. Once fetched from the 4DN data portal, the local file can be imported in <code>R</code> using the <code>import</code> function, which will generate a <code>RleList</code> object. The score represents the eigenvector values, and by convention a genomic bin with a positive score is associated with the A compartment whereas a genomic bin with a negative score is associated with the B compartment.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span>experimentSetAccession <span class="op">=</span> <span class="st">'4DNES25ABNZ1'</span>, type <span class="op">=</span> <span class="st">'compartments'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu">import</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">##  |===================================|  100%</span></span>
-<span><span class="co">##  RleList of length 21</span></span>
-<span><span class="co">##  $chr1</span></span>
-<span><span class="co">##  numeric-Rle of length 195471971 with 771 runs</span></span>
-<span><span class="co">##    Lengths:     3000000      250000      250000 ...      250000      221971</span></span>
-<span><span class="co">##    Values :         NaN -0.83457172 -0.98202854 ...  0.45792237         NaN</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  $chr10</span></span>
-<span><span class="co">##  numeric-Rle of length 130694993 with 512 runs</span></span>
-<span><span class="co">##    Lengths:     3000000      250000      250000 ...      250000      194993</span></span>
-<span><span class="co">##    Values :         NaN -0.99524581 -0.76405841 ...   0.0583894         NaN</span></span>
-<span><span class="co">##  </span></span>
-<span><span class="co">##  $chr11</span></span>
-<span><span class="co">##  numeric-Rle of length 122082543 with 478 runs</span></span>
-<span><span class="co">##    Lengths:     3000000      250000      250000 ...      250000       82543</span></span>
-<span><span class="co">##    Values :         NaN -0.00653325  0.26659977 ...  0.25900587         NaN</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNData</a></span><span class="op">(</span>experimentSetAccession <span class="op">=</span> <span class="st">'4DNES25ABNZ1'</span>, type <span class="op">=</span> <span class="st">'compartments'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">##  GRanges object with 10911 ranges and 1 metadata column:</span></span>
+<span><span class="co">##            seqnames            ranges strand |     score</span></span>
+<span><span class="co">##               &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;</span></span>
+<span><span class="co">##        [1]     chr1          1-250000      * |       NaN</span></span>
+<span><span class="co">##        [2]     chr1     250001-500000      * |       NaN</span></span>
+<span><span class="co">##        [3]     chr1     500001-750000      * |       NaN</span></span>
+<span><span class="co">##        [4]     chr1    750001-1000000      * |       NaN</span></span>
+<span><span class="co">##        [5]     chr1   1000001-1250000      * |       NaN</span></span>
+<span><span class="co">##        ...      ...               ...    ... .       ...</span></span>
+<span><span class="co">##    [10907]     chrY 90500001-90750000      * | 0.0237907</span></span>
+<span><span class="co">##    [10908]     chrY 90750001-91000000      * |       NaN</span></span>
+<span><span class="co">##    [10909]     chrY 91000001-91250000      * |       NaN</span></span>
+<span><span class="co">##    [10910]     chrY 91250001-91500000      * |       NaN</span></span>
+<span><span class="co">##    [10911]     chrY 91500001-91744698      * |       NaN</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 21 sequences from an unspecified genome</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="querying-a-complete-experiment-dataset" class="level3" data-number="8.1.2"><h3 data-number="8.1.2" class="anchored" data-anchor-id="querying-a-complete-experiment-dataset">
 <span class="header-section-number">8.1.2</span> Querying a complete experiment dataset</h3>
 <p>Rather than importing multiple files corresponding to a single experimentSet accession ID one by one, one can import all the available files associated with a experimentSet accession ID into a <code>HiCExperiment</code> object by using the <code><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNHiCExperiment()</a></code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNHiCExperiment</a></span><span class="op">(</span><span class="st">'4DNESSS7VU57'</span><span class="op">)</span></span>
-<span><span class="co">## Fetching Hi-C contact map from 4DN portal</span></span>
-<span><span class="co">##   |===================================================================| 100%</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Compartments not found for the provided experimentSet accession.</span></span>
-<span><span class="co">## Fetching insulation bigwig file from 4DN portal</span></span>
-<span><span class="co">##   |===================================================================| 100%</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Fetching borders bed file from 4DN portal</span></span>
-<span><span class="co">##   |===================================================================| 100%</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fourDNData/man/fourDNData.html">fourDNHiCExperiment</a></span><span class="op">(</span><span class="st">'4DNESJNPEKZD'</span><span class="op">)</span></span>
+<span><span class="co">##  Fetching local Hi-C contact map from Bioc cache</span></span>
+<span><span class="co">##  Fetching compartments bigwig file from 4DN portal</span></span>
+<span><span class="co">##  Insulation not found for the provided experimentSet accession.</span></span>
+<span><span class="co">##  Borders not found for the provided experimentSet accession.</span></span>
+<span><span class="co">##  Importing contacts in memory</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is a more efficient way to import datasets, as it aggregates the different bits together into a single <code>HiCExperiment</code> object with populated <code>topologicalFeatures</code> and <code>metadata</code> slots.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
-<span><span class="co">## `HiCExperiment` object with 544,370,135 contacts over 286 regions</span></span>
-<span><span class="co">## -------</span></span>
-<span><span class="co">## fileName: "/home/rsg/.cache/R/fourDNData/392eba3a587_4DNFIZ59STGB.mcool"</span></span>
-<span><span class="co">## focus: "whole genome"</span></span>
-<span><span class="co">## resolutions(13): 1000 2000 ... 5000000 10000000</span></span>
-<span><span class="co">## active resolution: 10000000</span></span>
-<span><span class="co">## interactions: 40088</span></span>
-<span><span class="co">## scores(2): count balanced</span></span>
-<span><span class="co">## topologicalFeatures: compartments(0) borders(7887)</span></span>
-<span><span class="co">## pairsFile: N/A</span></span>
-<span><span class="co">## metadata(2): 4DN_info diamond_insulation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
+<span><span class="co">##  `HiCExperiment` object with 453,301 contacts over 12,366 regions </span></span>
+<span><span class="co">##  -------</span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/fourDNData/150e1af5f115_4DNFIZL8OZE1.mcool" </span></span>
+<span><span class="co">##  focus: "whole genome" </span></span>
+<span><span class="co">##  resolutions(13): 1000 2000 ... 5000000 10000000</span></span>
+<span><span class="co">##  active resolution: 250000 </span></span>
+<span><span class="co">##  interactions: 289086 </span></span>
+<span><span class="co">##  scores(2): count balanced </span></span>
+<span><span class="co">##  topologicalFeatures: compartments(5437) borders(0) </span></span>
+<span><span class="co">##  pairsFile: N/A </span></span>
+<span><span class="co">##  metadata(2): 4DN_info eigens</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">metadata</span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  $`4DN_info`</span></span>
-<span><span class="co">##  experimentSetAccession   fileType    size organism experimentType        details                             dataset               condition      biosource biosourceType                publication  URL</span></span>
-<span><span class="co">##            4DNESSS7VU57      pairs 9731.58    mouse   in situ Hi-C Arima - A1, A2 Hi-C on mouse somatic gonadal cells  female granulosa cells granulosa cell  primary cell  Lindeman RE et al. (2021)  https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/b7da6d89-9e24-48a7-b3a6-f30a49c843e3/4DNFI2PHVZ5S.pairs.gz</span></span>
-<span><span class="co">##            4DNESSS7VU57        hic 4160.17    mouse   in situ Hi-C Arima - A1, A2 Hi-C on mouse somatic gonadal cells  female granulosa cells granulosa cell  primary cell  Lindeman RE et al. (2021)  https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/327f091d-6a63-47c4-9752-2dff303a13d9/4DNFI6GFHB6G.hic</span></span>
-<span><span class="co">##            4DNESSS7VU57      mcool 2863.90    mouse   in situ Hi-C Arima - A1, A2 Hi-C on mouse somatic gonadal cells  female granulosa cells granulosa cell  primary cell  Lindeman RE et al. (2021)  https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/2fed1cf8-b334-4165-a32f-df3f9ae4d6d7/4DNFIZ59STGB.mcool</span></span>
-<span><span class="co">##            4DNESSS7VU57 insulation    7.25    mouse   in situ Hi-C Arima - A1, A2 Hi-C on mouse somatic gonadal cells  female granulosa cells granulosa cell  primary cell  Lindeman RE et al. (2021)  https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/88e1d2ad-4d59-4c6f-9793-4fd8afc74762/4DNFI65DQZJ7.bw</span></span>
-<span><span class="co">##            4DNESSS7VU57 boundaries    0.12    mouse   in situ Hi-C Arima - A1, A2 Hi-C on mouse somatic gonadal cells  female granulosa cells granulosa cell  primary cell  Lindeman RE et al. (2021)  https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/2a29eec0-f551-4d50-8c0a-f4d4c2acd0db/4DNFIV519AWN.bed.gz</span></span>
+<span><span class="co">##       experimentSetAccession     fileType   size organism experimentType</span></span>
+<span><span class="co">##  1376           4DNESJNPEKZD        pairs   6.67    human   in situ Hi-C</span></span>
+<span><span class="co">##  1378           4DNESJNPEKZD          hic 179.51    human   in situ Hi-C</span></span>
+<span><span class="co">##  1379           4DNESJNPEKZD        mcool  30.17    human   in situ Hi-C</span></span>
+<span><span class="co">##  1380           4DNESJNPEKZD compartments   0.21    human   in situ Hi-C</span></span>
+<span><span class="co">##       details                                     dataset</span></span>
+<span><span class="co">##  1376    MboI Hi-C on GM12878 cells - protocol variations</span></span>
+<span><span class="co">##  1378    MboI Hi-C on GM12878 cells - protocol variations</span></span>
+<span><span class="co">##  1379    MboI Hi-C on GM12878 cells - protocol variations</span></span>
+<span><span class="co">##  1380    MboI Hi-C on GM12878 cells - protocol variations</span></span>
+<span><span class="co">##                                                       condition biosource</span></span>
+<span><span class="co">##  1376 in situ Hi-C on GM12878 with MboI and bio-dUTP (Tri-Link)   GM12878</span></span>
+<span><span class="co">##  1378 in situ Hi-C on GM12878 with MboI and bio-dUTP (Tri-Link)   GM12878</span></span>
+<span><span class="co">##  1379 in situ Hi-C on GM12878 with MboI and bio-dUTP (Tri-Link)   GM12878</span></span>
+<span><span class="co">##  1380 in situ Hi-C on GM12878 with MboI and bio-dUTP (Tri-Link)   GM12878</span></span>
+<span><span class="co">##                biosourceType          publication</span></span>
+<span><span class="co">##  1376 immortalized cell line Rao SS et al. (2014)</span></span>
+<span><span class="co">##  1378 immortalized cell line Rao SS et al. (2014)</span></span>
+<span><span class="co">##  1379 immortalized cell line Rao SS et al. (2014)</span></span>
+<span><span class="co">##  1380 immortalized cell line Rao SS et al. (2014)</span></span>
+<span><span class="co">##                                                                                                                                       URL</span></span>
+<span><span class="co">##  1376 https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/0bdd4745-7203-49d0-adf6-291cef1a96b7/4DNFIOZ7D1OQ.pairs.gz</span></span>
+<span><span class="co">##  1378      https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/1201682a-a223-482d-913d-3c3972b8eb65/4DNFIIRIHBR2.hic</span></span>
+<span><span class="co">##  1379    https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/356fab42-5562-4cfd-a3f8-592aa060b992/4DNFIZL8OZE1.mcool</span></span>
+<span><span class="co">##  1380       https://4dn-open-data-public.s3.amazonaws.com/fourfront-webprod/wfoutput/333aabfd-b747-447c-b93a-8138f9488fad/4DNFIO9V5G93.bw</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="co">##  $diamond_insulation</span></span>
-<span><span class="co">##  RleList of length 20</span></span>
-<span><span class="co">##      $chr1</span></span>
-<span><span class="co">##      numeric-Rle of length 195471971 with 37959 runs</span></span>
-<span><span class="co">##        Lengths:    3085000       5000       5000 ...       5000     186971</span></span>
-<span><span class="co">##        Values :  0.0000000  0.3967191  0.3961740 ...  0.8223819  0.0000000</span></span>
-<span><span class="co">##      </span></span>
-<span><span class="co">##      $chr10</span></span>
-<span><span class="co">##      numeric-Rle of length 130694993 with 24994 runs</span></span>
-<span><span class="co">##        Lengths:      3180000         5000 ...         5000       179993</span></span>
-<span><span class="co">##        Values :  0.00000e+00  5.35871e-01 ...   0.60626638   0.00000000</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##      ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  $eigens</span></span>
+<span><span class="co">##  GRanges object with 11280 ranges and 2 metadata columns:</span></span>
+<span><span class="co">##            seqnames              ranges strand |       score       eigen</span></span>
+<span><span class="co">##               &lt;Rle&gt;           &lt;IRanges&gt;  &lt;Rle&gt; |   &lt;numeric&gt;   &lt;numeric&gt;</span></span>
+<span><span class="co">##        [1]     chr1      750001-1000000      * |   1.6911879   1.6911879</span></span>
+<span><span class="co">##        [2]     chr1     1000001-1250000      * |   0.0809129   0.0809129</span></span>
+<span><span class="co">##        [3]     chr1     1250001-1500000      * |   0.0690173   0.0690173</span></span>
+<span><span class="co">##        [4]     chr1     1500001-1750000      * |  -0.1903324  -0.1903324</span></span>
+<span><span class="co">##        [5]     chr1     1750001-2000000      * |   0.3283633   0.3283633</span></span>
+<span><span class="co">##        ...      ...                 ...    ... .         ...         ...</span></span>
+<span><span class="co">##    [11276]     chrX 154750001-155000000      * | -0.10909061 -0.10909061</span></span>
+<span><span class="co">##    [11277]     chrX 155000001-155250000      * | -1.39655280 -1.39655280</span></span>
+<span><span class="co">##    [11278]     chrX 155250001-155500000      * |  0.00264734  0.00264734</span></span>
+<span><span class="co">##    [11279]     chrX 155500001-155750000      * | -0.15279847 -0.15279847</span></span>
+<span><span class="co">##    [11280]     chrX 155750001-156000000      * | -1.41699576 -1.41699576</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    seqinfo: 24 sequences from an unspecified genome</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section><section id="dna-zoo" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="dna-zoo">
 <span class="header-section-number">8.2</span> DNA Zoo</h2>
@@ -556,31 +707,67 @@ Watch out
 <p><code>DNAZooData</code> is a package giving programmatic access to these uniformly processed Hi-C contact files, as well as the refined genome assemblies.</p>
 <p>The <code><a href="https://rdrr.io/pkg/DNAZooData/man/DNAZooData.html">DNAZooData()</a></code> function provides a gateway to DNA Zoo-hosted Hi-C files, fetching and caching relevant contact matrices in <code>.hic</code> format It returns a <code>HicFile</code> object, which can then be imported in memory using <code><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import()</a></code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/DNAZooData">DNAZooData</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/DNAZooData">DNAZooData</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/DNAZooData/man/DNAZooData.html">DNAZooData</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##                  species                              readme                                                         readme_link original_assembly     new_assembly                                                             new_assembly_link new_assembly_link_status                                                                 hic_link</span></span>
-<span><span class="co">##         Acinonyx_jubatus        Acinonyx_jubatus/README.json        https://dnazoo.s3.wasabisys.com/Acinonyx_jubatus/README.json           aciJub1      aciJub1_HiC         https://dnazoo.s3.wasabisys.com/Acinonyx_jubatus/aciJub1_HiC.fasta.gz                      200    https://dnazoo.s3.wasabisys.com/Acinonyx_jubatus/aciJub1.rawchrom.hic</span></span>
-<span><span class="co">##       Acropora_millepora      Acropora_millepora/README.json      https://dnazoo.s3.wasabisys.com/Acropora_millepora/README.json       amil_sf_1.1  amil_sf_1.1_HiC   https://dnazoo.s3.wasabisys.com/Acropora_millepora/amil_sf_1.1_HiC.fasta.gz                      200   https://dnazoo.s3.wasabisys.com/Acropora_millepora/amil_sf_1.1_HiC.hic</span></span>
-<span><span class="co">##      Addax_nasomaculatus     Addax_nasomaculatus/README.json     https://dnazoo.s3.wasabisys.com/Addax_nasomaculatus/README.json      ASM1959352v1 ASM1959352v1_HiC https://dnazoo.s3.wasabisys.com/Addax_nasomaculatus/ASM1959352v1_HiC.fasta.gz                      200 https://dnazoo.s3.wasabisys.com/Addax_nasomaculatus/ASM1959352v1_HiC.hic</span></span>
-<span><span class="co">##            Aedes_aegypti           Aedes_aegypti/README.json           https://dnazoo.s3.wasabisys.com/Aedes_aegypti/README.json        AGWG.draft         AaegL5.0               https://dnazoo.s3.wasabisys.com/Aedes_aegypti/AaegL5.0.fasta.gz                      404                                                                     &lt;NA&gt;</span></span>
-<span><span class="co">##    Aedes_aegypti__AaegL4   Aedes_aegypti__AaegL4/README.json   https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL4/README.json            AaegL3           AaegL4         https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL4/AaegL4.fasta.gz                      200         https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL4/AaegL4.hic</span></span>
-<span><span class="co">##  Aedes_aegypti__AaegL5.0 Aedes_aegypti__AaegL5.0/README.json https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL5.0/README.json        AGWG.draft         AaegL5.0     https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL5.0/AaegL5.0.fasta.gz                      200     https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL5.0/AaegL5.0.hic</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##                    species                              readme</span></span>
+<span><span class="co">##  1        Acinonyx_jubatus        Acinonyx_jubatus/README.json</span></span>
+<span><span class="co">##  2      Acropora_millepora      Acropora_millepora/README.json</span></span>
+<span><span class="co">##  3     Addax_nasomaculatus     Addax_nasomaculatus/README.json</span></span>
+<span><span class="co">##  4           Aedes_aegypti           Aedes_aegypti/README.json</span></span>
+<span><span class="co">##  5   Aedes_aegypti__AaegL4   Aedes_aegypti__AaegL4/README.json</span></span>
+<span><span class="co">##  6 Aedes_aegypti__AaegL5.0 Aedes_aegypti__AaegL5.0/README.json</span></span>
+<span><span class="co">##                                                            readme_link</span></span>
+<span><span class="co">##  1        https://dnazoo.s3.wasabisys.com/Acinonyx_jubatus/README.json</span></span>
+<span><span class="co">##  2      https://dnazoo.s3.wasabisys.com/Acropora_millepora/README.json</span></span>
+<span><span class="co">##  3     https://dnazoo.s3.wasabisys.com/Addax_nasomaculatus/README.json</span></span>
+<span><span class="co">##  4           https://dnazoo.s3.wasabisys.com/Aedes_aegypti/README.json</span></span>
+<span><span class="co">##  5   https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL4/README.json</span></span>
+<span><span class="co">##  6 https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL5.0/README.json</span></span>
+<span><span class="co">##    original_assembly     new_assembly</span></span>
+<span><span class="co">##  1           aciJub1      aciJub1_HiC</span></span>
+<span><span class="co">##  2       amil_sf_1.1  amil_sf_1.1_HiC</span></span>
+<span><span class="co">##  3      ASM1959352v1 ASM1959352v1_HiC</span></span>
+<span><span class="co">##  4        AGWG.draft         AaegL5.0</span></span>
+<span><span class="co">##  5            AaegL3           AaegL4</span></span>
+<span><span class="co">##  6        AGWG.draft         AaegL5.0</span></span>
+<span><span class="co">##                                                                new_assembly_link</span></span>
+<span><span class="co">##  1         https://dnazoo.s3.wasabisys.com/Acinonyx_jubatus/aciJub1_HiC.fasta.gz</span></span>
+<span><span class="co">##  2   https://dnazoo.s3.wasabisys.com/Acropora_millepora/amil_sf_1.1_HiC.fasta.gz</span></span>
+<span><span class="co">##  3 https://dnazoo.s3.wasabisys.com/Addax_nasomaculatus/ASM1959352v1_HiC.fasta.gz</span></span>
+<span><span class="co">##  4               https://dnazoo.s3.wasabisys.com/Aedes_aegypti/AaegL5.0.fasta.gz</span></span>
+<span><span class="co">##  5         https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL4/AaegL4.fasta.gz</span></span>
+<span><span class="co">##  6     https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL5.0/AaegL5.0.fasta.gz</span></span>
+<span><span class="co">##    new_assembly_link_status</span></span>
+<span><span class="co">##  1                      200</span></span>
+<span><span class="co">##  2                      200</span></span>
+<span><span class="co">##  3                      200</span></span>
+<span><span class="co">##  4                      404</span></span>
+<span><span class="co">##  5                      200</span></span>
+<span><span class="co">##  6                      200</span></span>
+<span><span class="co">##                                                                    hic_link</span></span>
+<span><span class="co">##  1    https://dnazoo.s3.wasabisys.com/Acinonyx_jubatus/aciJub1.rawchrom.hic</span></span>
+<span><span class="co">##  2   https://dnazoo.s3.wasabisys.com/Acropora_millepora/amil_sf_1.1_HiC.hic</span></span>
+<span><span class="co">##  3 https://dnazoo.s3.wasabisys.com/Addax_nasomaculatus/ASM1959352v1_HiC.hic</span></span>
+<span><span class="co">##  4                                                                     &lt;NA&gt;</span></span>
+<span><span class="co">##  5         https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL4/AaegL4.hic</span></span>
+<span><span class="co">##  6     https://dnazoo.s3.wasabisys.com/Aedes_aegypti__AaegL5.0/AaegL5.0.hic</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>For example, we can directly fetch a Hi-C dataset generated from a tardigrade sample by specifying the right <code>species</code> argument.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hicfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DNAZooData/man/DNAZooData.html">DNAZooData</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Hypsibius_dujardini'</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hicfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/DNAZooData/man/DNAZooData.html">DNAZooData</a></span><span class="op">(</span>species <span class="op">=</span> <span class="st">'Hypsibius_dujardini'</span><span class="op">)</span></span>
 <span><span class="co">##  Fetching Hi-C data from DNAZoo</span></span>
-<span><span class="co">##  |===================================|  100%</span></span>
+<span><span class="co">##  Fetching Hi-C metadata from DNAZoo</span></span>
+<span></span>
 <span><span class="va">hicfile</span></span>
 <span><span class="co">##  HicFile object</span></span>
-<span><span class="co">##  .hic file: /home/rsg/.cache/R/DNAZooData/400d7e2b0145_nHd_3.1_HiC.hic</span></span>
-<span><span class="co">##  resolution: 5000</span></span>
-<span><span class="co">##  pairs file:</span></span>
+<span><span class="co">##  .hic file: /root/.cache/R/DNAZooData/150e4f424ece_nHd_3.1_HiC.hic </span></span>
+<span><span class="co">##  resolution: 5000 </span></span>
+<span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(6): organism draftAssembly ... credits assemblyURL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here again, the resulting <code>HicFile</code> is populated with metadata parsed from the DNA Zoo data portal.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hicfile</span><span class="op">)</span><span class="op">$</span><span class="va">organism</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hicfile</span><span class="op">)</span><span class="op">$</span><span class="va">organism</span></span>
 <span><span class="co">##  $vernacular</span></span>
 <span><span class="co">##  [1] "Tardigrade"</span></span>
 <span><span class="co">##  </span></span>
@@ -600,8 +787,7 @@ Watch out
 <span><span class="co">##  [1] "https://static.wixstatic.com/media/2b9330_82db39c219f24b20a75cb38943aad1fb~mv2.jpg"</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  $imageCredit</span></span>
-<span><span class="co">##  [1] "By Willow Gabriel, Goldstein Lab - https://www.flickr.com/photos/waterbears/1614095719/ Template:Uploader Transferred from en.wikipedia to Commons., CC BY-SA 2.5, https://commons.wikimedia.org/w/index.php?curi</span></span>
-<span><span class="co">##  d=2261992"</span></span>
+<span><span class="co">##  [1] "By Willow Gabriel, Goldstein Lab - https://www.flickr.com/photos/waterbears/1614095719/ Template:Uploader Transferred from en.wikipedia to Commons., CC BY-SA 2.5, https://commons.wikimedia.org/w/index.php?curid=2261992"</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  $isChromognomes</span></span>
 <span><span class="co">##  [1] "FALSE"</span></span>
@@ -611,8 +797,147 @@ Watch out
 </div>
 <p><code>HiCFile</code> metadata also points to a URL to directly fetch the genome assembly corrected by the DNA Zoo consortium.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hicfile</span><span class="op">)</span><span class="op">$</span><span class="va">assemblyURL</span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hicfile</span><span class="op">)</span><span class="op">$</span><span class="va">assemblyURL</span></span>
 <span><span class="co">##  [1] "https://dnazoo.s3.wasabisys.com/Hypsibius_dujardini/nHd_3.1_HiC.fasta.gz"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="session-info" class="level1 unnumbered"><h1 class="unnumbered">Session info</h1>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click to expand 👇
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">session_info</a></span><span class="op">(</span>include_base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">##  ─ Session info ────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   setting  value</span></span>
+<span><span class="co">##   version  R Under development (unstable) (2024-01-17 r85813)</span></span>
+<span><span class="co">##   os       Ubuntu 22.04.3 LTS</span></span>
+<span><span class="co">##   system   x86_64, linux-gnu</span></span>
+<span><span class="co">##   ui       X11</span></span>
+<span><span class="co">##   language (EN)</span></span>
+<span><span class="co">##   collate  C</span></span>
+<span><span class="co">##   ctype    en_US.UTF-8</span></span>
+<span><span class="co">##   tz       Etc/UTC</span></span>
+<span><span class="co">##   date     2024-01-22</span></span>
+<span><span class="co">##   pandoc   3.1.1 @ /usr/local/bin/ (via rmarkdown)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ─ Packages ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   package              * version     date (UTC) lib source</span></span>
+<span><span class="co">##   abind                  1.4-5       2016-07-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   base                 * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   Biobase              * 2.63.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocFileCache          2.11.1      2023-10-26 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocGenerics         * 0.49.1      2023-11-01 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocIO                 1.13.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocParallel           1.37.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   Biostrings             2.71.1      2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   bit                    4.0.5       2022-11-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bit64                  4.0.5       2020-08-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bitops                 1.0-7       2021-04-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   blob                   1.2.4       2023-03-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cachem                 1.0.8       2023-05-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cli                    3.6.2       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   codetools              0.2-19      2023-02-01 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   colorspace             2.1-0       2023-01-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   compiler               4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   crayon                 1.5.2       2022-09-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   curl                   5.2.0       2023-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   datasets             * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   DBI                    1.2.1       2024-01-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dbplyr                 2.4.0       2023-10-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   DelayedArray           0.29.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   digest                 0.6.34      2024-01-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   DNAZooData           * 1.3.0       2023-10-31 [2] Bioconductor</span></span>
+<span><span class="co">##   dplyr                  1.1.4       2023-11-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   evaluate               0.23        2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fansi                  1.0.6       2023-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fastmap                1.1.1       2023-02-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   filelock               1.0.3       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fourDNData           * 1.3.0       2023-10-31 [2] Bioconductor</span></span>
+<span><span class="co">##   generics               0.1.3       2022-07-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   GenomeInfoDb         * 1.39.5      2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   GenomeInfoDbData       1.2.11      2024-01-22 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomicAlignments      1.39.2      2024-01-16 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   GenomicRanges        * 1.55.1      2023-10-29 [2] Bioconductor</span></span>
+<span><span class="co">##   ggplot2              * 3.4.4       2023-10-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   glue                   1.7.0       2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   graphics             * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   grDevices            * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   grid                   4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   gtable                 0.3.4       2023-08-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   HiCExperiment        * 1.3.0       2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   htmltools              0.5.7       2023-11-03 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmlwidgets            1.6.4       2023-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   httr                   1.4.7       2023-08-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   InteractionSet       * 1.31.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   IRanges              * 2.37.1      2024-01-19 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   jsonlite               1.8.8       2023-12-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   knitr                  1.45        2023-10-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lattice                0.22-5      2023-10-24 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lifecycle              1.0.4       2023-11-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   magrittr               2.0.3       2022-03-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Matrix                 1.6-5       2024-01-11 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   MatrixGenerics       * 1.15.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   matrixStats          * 1.2.0       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   memoise                2.0.1       2021-11-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   methods              * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   munsell                0.5.0       2018-06-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   parallel               4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   pillar                 1.9.0       2023-03-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pkgconfig              2.0.3       2019-09-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   purrr                  1.0.2       2023-08-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   R6                     2.5.1       2021-08-19 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Rcpp                   1.0.12      2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RCurl                  1.98-1.14   2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   restfulr               0.0.15      2022-06-16 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rhdf5                  2.47.2      2024-01-15 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   rhdf5filters           1.15.1      2023-11-06 [2] Bioconductor</span></span>
+<span><span class="co">##   Rhdf5lib               1.25.1      2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   rjson                  0.2.21      2022-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rlang                  1.1.3       2024-01-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rmarkdown              2.25        2023-09-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Rsamtools              2.19.3      2024-01-17 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   RSQLite                2.3.5       2024-01-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rtracklayer          * 1.63.0      2024-01-22 [2] Github (lawremi/rtracklayer@86407bb)</span></span>
+<span><span class="co">##   S4Arrays               1.3.2       2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   S4Vectors            * 0.41.3      2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   scales                 1.3.0       2023-11-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   sessioninfo            1.2.2       2021-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   SparseArray            1.3.3       2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   stats                * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   stats4               * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   strawr                 0.0.91      2023-03-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   SummarizedExperiment * 1.33.2      2024-01-07 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   tibble                 3.2.1       2023-03-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tidyselect             1.2.0       2022-10-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tools                  4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   tzdb                   0.4.0       2023-05-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   utf8                   1.2.4       2023-10-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   utils                * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   vctrs                  0.6.5       2023-12-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   vroom                  1.6.5       2023-12-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   withr                  3.0.0       2024-01-16 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   xfun                   0.41        2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   XML                    3.99-0.16.1 2024-01-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   XVector                0.43.1      2024-01-10 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   yaml                   2.3.8       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   zlibbioc               1.49.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##   [1] /tmp/Rtmp4kTMSb/Rinstb104d8a34</span></span>
+<span><span class="co">##   [2] /usr/local/lib/R/site-library</span></span>
+<span><span class="co">##   [3] /usr/local/lib/R/library</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ───────────────────────────────────────────────────────────────────────────</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 </div>
 </section><section id="references" class="level1 unnumbered"><h1 class="unnumbered">References</h1>
 

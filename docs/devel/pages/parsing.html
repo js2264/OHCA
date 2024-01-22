@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.3.450">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Orchestrating Hi-C analysis with Bioconductor - 3&nbsp; Manipulating Hi-C data in R</title>
 <style>
@@ -279,6 +279,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul>
 </li>
   <li><a href="#coercing-hicexperiment-objects" id="toc-coercing-hicexperiment-objects" class="nav-link" data-scroll-target="#coercing-hicexperiment-objects"><span class="header-section-number">3.3</span> Coercing <code>HiCExperiment</code> objects</a></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></nav>
     </div>
@@ -300,6 +301,116 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 </header><div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pre-loading packages and objects 📦
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: stats4</span></span>
+<span><span class="co">##  Loading required package: BiocGenerics</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'BiocGenerics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      IQR, mad, sd, var, xtabs</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      Filter, Find, Map, Position, Reduce, anyDuplicated, aperm,</span></span>
+<span><span class="co">##      append, as.data.frame, basename, cbind, colnames, dirname,</span></span>
+<span><span class="co">##      do.call, duplicated, eval, evalq, get, grep, grepl, intersect,</span></span>
+<span><span class="co">##      is.unsorted, lapply, mapply, match, mget, order, paste, pmax,</span></span>
+<span><span class="co">##      pmax.int, pmin, pmin.int, rank, rbind, rownames, sapply,</span></span>
+<span><span class="co">##      setdiff, table, tapply, union, unique, unsplit, which.max,</span></span>
+<span><span class="co">##      which.min</span></span>
+<span><span class="co">##  Loading required package: S4Vectors</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'S4Vectors'</span></span>
+<span><span class="co">##  The following object is masked from 'package:utils':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      findMatches</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      I, expand.grid, unname</span></span>
+<span><span class="co">##  Loading required package: IRanges</span></span>
+<span><span class="co">##  Loading required package: GenomeInfoDb</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">InteractionSet</span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: SummarizedExperiment</span></span>
+<span><span class="co">##  Loading required package: MatrixGenerics</span></span>
+<span><span class="co">##  Loading required package: matrixStats</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'MatrixGenerics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:matrixStats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span></span>
+<span><span class="co">##      colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span></span>
+<span><span class="co">##      colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span></span>
+<span><span class="co">##      colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span></span>
+<span><span class="co">##      colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span></span>
+<span><span class="co">##      colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span></span>
+<span><span class="co">##      colWeightedMeans, colWeightedMedians, colWeightedSds,</span></span>
+<span><span class="co">##      colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span></span>
+<span><span class="co">##      rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span></span>
+<span><span class="co">##      rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span></span>
+<span><span class="co">##      rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span></span>
+<span><span class="co">##      rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span></span>
+<span><span class="co">##      rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs,</span></span>
+<span><span class="co">##      rowVars, rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span></span>
+<span><span class="co">##      rowWeightedSds, rowWeightedVars</span></span>
+<span><span class="co">##  Loading required package: Biobase</span></span>
+<span><span class="co">##  Welcome to Bioconductor</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      Vignettes contain introductory material; view with</span></span>
+<span><span class="co">##      'browseVignettes()'. To cite Bioconductor, see</span></span>
+<span><span class="co">##      'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'Biobase'</span></span>
+<span><span class="co">##  The following object is masked from 'package:MatrixGenerics':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      rowMedians</span></span>
+<span><span class="co">##  The following objects are masked from 'package:matrixStats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      anyMissing, rowMedians</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<span><span class="co">##  Consider using the `HiContacts` package to perform advanced genomic operations </span></span>
+<span><span class="co">##  on `HiCExperiment` objects.</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Read "Orchestrating Hi-C analysis with Bioconductor" online book to learn more:</span></span>
+<span><span class="co">##  https://js2264.github.io/OHCA/</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'HiCExperiment'</span></span>
+<span><span class="co">##  The following object is masked from 'package:SummarizedExperiment':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      metadata&lt;-</span></span>
+<span><span class="co">##  The following object is masked from 'package:S4Vectors':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      metadata&lt;-</span></span>
+<span><span class="co">##  The following object is masked from 'package:ggplot2':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      resolution</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: ExperimentHub</span></span>
+<span><span class="co">##  Loading required package: AnnotationHub</span></span>
+<span><span class="co">##  Loading required package: BiocFileCache</span></span>
+<span><span class="co">##  Loading required package: dbplyr</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'AnnotationHub'</span></span>
+<span><span class="co">##  The following object is masked from 'package:Biobase':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -334,7 +445,7 @@ Important reminder
 </div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -343,28 +454,45 @@ Recap on <code>HiCExperiment</code> objects 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>Creating a connection to a disk-stored contact matrix:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># coolf &lt;- "&lt;path-to-disk-stored-contact-matrix.cool&gt;"</span></span>
-<span><span class="va">coolf</span> <span class="op">&lt;-</span> <span class="fu">HiContactsData</span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'mcool'</span><span class="op">)</span></span>
-<span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu">CoolFile</span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
-<span><span class="fu">availableResolutions</span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># coolf &lt;- "&lt;path-to-disk-stored-contact-matrix.cool&gt;"</span></span>
+<span><span class="va">coolf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'mcool'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">availableResolutions</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
+<span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
+<span><span class="co">##  </span></span>
 <span></span>
-<span><span class="fu">availableChromosomes</span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">availableChromosomes</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
+<span><span class="co">##  Seqinfo object with 16 sequences from an unspecified genome:</span></span>
+<span><span class="co">##    seqnames seqlengths isCircular genome</span></span>
+<span><span class="co">##    I            230218       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    II           813184       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    III          316620       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    IV          1531933       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    V            576874       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    ...             ...        ...    ...</span></span>
+<span><span class="co">##    XII         1078177       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    XIII         924431       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    XIV          784333       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    XV          1091291       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    XVI          948066       &lt;NA&gt;   &lt;NA&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>Importing a contact matrix over a specific genomic location, at a given resolution:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu">import</span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:10000-50000'</span>, resolution <span class="op">=</span> <span class="fl">4000</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:10000-50000'</span>, resolution <span class="op">=</span> <span class="fl">4000</span><span class="op">)</span></span>
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 10,801 contacts over 11 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:10,000-50,000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 4000 </span></span>
@@ -378,7 +506,7 @@ Recap on <code>HiCExperiment</code> objects 👇
 <li>Recovering genomic interactions stored in a <code>HiCExperiment</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">interactions</span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  GInteractions object with 45 interactions and 4 metadata columns:</span></span>
 <span><span class="co">##         seqnames1     ranges1     seqnames2     ranges2 |   bin_id1   bin_id2</span></span>
 <span><span class="co">##             &lt;Rle&gt;   &lt;IRanges&gt;         &lt;Rle&gt;   &lt;IRanges&gt; | &lt;numeric&gt; &lt;numeric&gt;</span></span>
@@ -414,7 +542,7 @@ Recap on <code>HiCExperiment</code> objects 👇
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -423,11 +551,11 @@ Generating the example <code>hic</code> object 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>To demonstrate how to manipulate a <code>HiCExperiment</code> object, we will create an <code>HiCExperiment</code> object from an example <code>.cool</code> file provided in the <code>HiContactsData</code> package.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ---- This downloads an example `.mcool` file and caches it locally </span></span>
@@ -439,7 +567,7 @@ Generating the example <code>hic</code> object 👇
 <span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
 <span><span class="va">cf</span></span>
 <span><span class="co">##  CoolFile object</span></span>
-<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/f564f8aa26_7752 </span></span>
+<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/f725e39d5_7752 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -449,7 +577,7 @@ Generating the example <code>hic</code> object 👇
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -476,19 +604,21 @@ Generating the example <code>hic</code> object 👇
 <p>Specifying a <code>focus</code> <strong>when</strong> importing a dataset in R (i.e.&nbsp;<code>"Subset first, then parse"</code>) is generally the recommended approach to import Hi-C data in R.</p>
 <p>The <code>focus</code> argument can be set when <code>import</code>ing a <code>ContactFile</code> in R, as follows:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">"..."</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## This code is not evaluated</span></span>
+<span><span class="co">## Change `focus = "..."` accordingly (see below)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">"..."</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This ensures that only the needed data is parsed in R, reducing memory load and accelerating the import. Thus, this should be the preferred way of parsing <code>HiCExperiment</code> data, as disk-stored contact matrices allow <strong>efficient random access to indexed data</strong>.</p>
 <p><code>focus</code> can be any of the following string types:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#   "II"                                  --&gt; import contacts over an entire chromosome</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#   "II"                                  --&gt; import contacts over an entire chromosome</span></span>
 <span><span class="co">#   "II:300001-800000"                    --&gt; import on-diagonal contacts within a chromosome</span></span>
 <span><span class="co">#   "II:300001-400000|II:600001-700000"   --&gt; import off-diagonal contacts within a chromosome</span></span>
 <span><span class="co">#   "II|III"                              --&gt; import contacts between two chromosomes</span></span>
 <span><span class="co">#   "II:300001-800000|V:1-500000"         --&gt; import contacts between segments of two chromosomes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -497,16 +627,16 @@ More examples for import with <code>focus</code> argument 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>Subsetting to a specific <strong>on-diagonal</strong> genomic location using standard UCSC coordinates query:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-800000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-800000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 301,018 contacts over 250 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-800,000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -520,10 +650,10 @@ More examples for import with <code>focus</code> argument 👇
 <li>Subsetting to a specific <strong>off-diagonal</strong> genomic location using pairs of coordinates query:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-400000|II:600001-700000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-400000|II:600001-700000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 402 contacts over 100 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300001-400000|II:600001-700000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -537,10 +667,10 @@ More examples for import with <code>focus</code> argument 👇
 <li>Subsetting interactions to retain those constrained within a single chromosome:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 471,364 contacts over 407 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -554,10 +684,10 @@ More examples for import with <code>focus</code> argument 👇
 <li>Subsetting interactions to retain those between two chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II|III'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II|III'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 9,092 contacts over 566 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II|III" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -571,10 +701,10 @@ More examples for import with <code>focus</code> argument 👇
 <li>Subsetting interactions to retain those between parts of two chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-800000|V:1-500000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-800000|V:1-500000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 7,147 contacts over 500 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300001-800000|V:1-500000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -606,7 +736,7 @@ as well as a `focus`.
 hic 
 ##  `HiCExperiment` object with 306,212 contacts over 257 regions 
 ##  -------
-##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" 
+##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" 
 ##  focus: "II:300,001-813,184" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 2000 
@@ -621,7 +751,7 @@ hic
 import(cf, focus = 'III', resolution = 2000)
 ##  `HiCExperiment` object with 151,990 contacts over 159 regions 
 ##  -------
-##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" 
+##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" 
 ##  focus: "III" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 2000 
@@ -636,7 +766,7 @@ import(cf, focus = 'III', resolution = 2000)
 refocus(hic, 'III')
 ##  `HiCExperiment` object with 151,990 contacts over 159 regions 
 ##  -------
-##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" 
+##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" 
 ##  focus: "III" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 2000 
@@ -658,8 +788,8 @@ refocus(hic, 'III')
 </h4>
 <p><code>subsetByOverlaps</code> can take a <code>HiCExperiment</code> as a <code>query</code> and a <code>GRanges</code> as a query. In this case, the <code>GRanges</code> is used to extract a subset of a <code>HiCExperiment</code> <strong>constrained</strong> within a specific genomic location.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">telomere</span> <span class="op">&lt;-</span> <span class="fu">GRanges</span><span class="op">(</span><span class="st">"II:700001-813184"</span><span class="op">)</span></span>
-<span><span class="fu">subsetByOverlaps</span><span class="op">(</span><span class="va">hic</span>, <span class="va">telomere</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">interactions</span><span class="op">(</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">telomere</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="st">"II:700001-813184"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">subsetByOverlaps</a></span><span class="op">(</span><span class="va">hic</span>, <span class="va">telomere</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##  GInteractions object with 1540 interactions and 4 metadata columns:</span></span>
 <span><span class="co">##           seqnames1       ranges1     seqnames2       ranges2 |   bin_id1</span></span>
 <span><span class="co">##               &lt;Rle&gt;     &lt;IRanges&gt;         &lt;Rle&gt;     &lt;IRanges&gt; | &lt;numeric&gt;</span></span>
@@ -694,7 +824,7 @@ refocus(hic, 'III')
 <p>By default, <code>subsetByOverlaps(hic, telomere)</code> will only recover interactions <strong>constrained</strong> within <code>telomere</code>, i.e.&nbsp;interactions for which both ends are in <code>telomere</code>.</p>
 <p>Alternatively, <code>type = "any"</code> can be specified to get all interactions with at least one of their anchors within <code>telomere</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">subsetByOverlaps</span><span class="op">(</span><span class="va">hic</span>, <span class="va">telomere</span>, type <span class="op">=</span> <span class="st">"any"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">interactions</span><span class="op">(</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">subsetByOverlaps</a></span><span class="op">(</span><span class="va">hic</span>, <span class="va">telomere</span>, type <span class="op">=</span> <span class="st">"any"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##  GInteractions object with 6041 interactions and 4 metadata columns:</span></span>
 <span><span class="co">##           seqnames1       ranges1     seqnames2       ranges2 |   bin_id1</span></span>
 <span><span class="co">##               &lt;Rle&gt;     &lt;IRanges&gt;         &lt;Rle&gt;     &lt;IRanges&gt; | &lt;numeric&gt;</span></span>
@@ -733,7 +863,7 @@ refocus(hic, 'III')
 <p><strong>This ensures that only the needed data is parsed in R, reducing memory load and accelerating the import.</strong> Thus, this should be the preferred way of parsing <code>HiCExperiment</code> data, as disk-stored contact matrices allow efficient random access to indexed data.</p>
 <p>The following string types can be used to subset a <code>HiCExperiment</code> object with the <code>[</code> notation:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#   "II"                                  --&gt; import contacts over an entire chromosome</span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#   "II"                                  --&gt; import contacts over an entire chromosome</span></span>
 <span><span class="co">#   "II:300001-800000"                    --&gt; import on-diagonal contacts within a chromosome</span></span>
 <span><span class="co">#   "II:300001-400000|II:600001-700000"   --&gt; import off-diagonal contacts within a chromosome</span></span>
 <span><span class="co">#   "II|III"                              --&gt; import contacts between two chromosomes</span></span>
@@ -741,7 +871,7 @@ refocus(hic, 'III')
 <span><span class="co">#   c("II", "III", "IV")                  --&gt; import contacts within and between several chromosomes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -750,16 +880,16 @@ More examples for subsetting with <code>[</code> 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
 <li>Subsetting to a specific <strong>on-diagonal</strong> genomic location using standard UCSC coordinates query:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:800001-813184"</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:800001-813184"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 1,040 contacts over 6 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:800,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -773,10 +903,10 @@ More examples for subsetting with <code>[</code> 👇
 <li>Subsetting to a specific <strong>off-diagonal</strong> genomic location using pairs of coordinates query:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:300001-320000|II:800001-813184"</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:300001-320000|II:800001-813184"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 3 contacts over 6 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300001-320000|II:800001-813184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -790,10 +920,10 @@ More examples for subsetting with <code>[</code> 👇
 <li>Subsetting interactions to retain those constrained within a single chromosome:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II"</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -807,10 +937,10 @@ More examples for subsetting with <code>[</code> 👇
 <li>Subsetting interactions to retain those between two chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II|IV"</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II|IV"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 0 contacts over 0 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:1-813184|IV:1-1531933" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -824,10 +954,10 @@ More examples for subsetting with <code>[</code> 👇
 <li>Subsetting interactions to retain those between segments of two chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:300001-320000|IV:1-100000"</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:300001-320000|IV:1-100000"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 0 contacts over 0 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300001-320000|IV:1-100000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -841,10 +971,10 @@ More examples for subsetting with <code>[</code> 👇
 <li>Subsetting interactions to retain those constrained within several chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'II'</span>, <span class="st">'III'</span>, <span class="st">'IV'</span><span class="op">)</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'II'</span>, <span class="st">'III'</span>, <span class="st">'IV'</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II, III, IV" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -868,10 +998,10 @@ More examples for subsetting with <code>[</code> 👇
 </h3>
 <p>“Zooming” refers to dynamically changing the <strong>resolution</strong> of a <code>HiCExperiment</code>. By <code>zoom</code>ing a <code>HiCExperiment</code>, one can refine or coarsen the contact matrix. This operation takes a<code>ContactFile</code> and <code>focus</code> from an existing <code>HiCExperiment</code> input and re-generates a new <code>HiCExperiment</code> with updated <code>resolution</code>, <code>interactions</code> and <code>scores</code>. Note that <code>zoom</code> will preserve existing <code>metadata</code>, <code>topologicalFeatures</code> and <code>pairsFile</code> information.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -884,7 +1014,7 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">4000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 129 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 4000 </span></span>
@@ -897,7 +1027,7 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 514 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
@@ -919,7 +1049,7 @@ Note
 <div class="callout-body-container callout-body">
 <p>The sum of raw counts do not change after <code>zoom</code>ing, however the number of individual <code>interactions</code> and <code>regions</code> changes.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  [1] 18513</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##  [1] 44363</span></span>
@@ -1000,7 +1130,7 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 </h4>
 <p>We have seen in the previous chapter that scores are stored in a <code>list</code> and are available using the <code>scores</code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  List of length 2</span></span>
 <span><span class="co">##  names(2): count balanced</span></span>
 <span></span>
@@ -1012,21 +1142,21 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 </div>
 <p>Extra scores can be added to this list, e.g.&nbsp;to describe the “expected” interaction frequency for each interaction stored in the <code>HiCExperiment</code> object). This can be achieved using the <code>scores()&lt;-</code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"random"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"random"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  List of length 3</span></span>
 <span><span class="co">##  names(3): count balanced random</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"random"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  [1] 0.6058332 0.7817516 0.2200311 0.4265605 0.2796573 0.6073113</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  [1] 0.9215828 0.7212626 0.2517023 0.6383770 0.5132897 0.8489170</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="topologicalfeatures" class="level4" data-number="3.2.2.2"><h4 data-number="3.2.2.2" class="anchored" data-anchor-id="topologicalfeatures">
 <span class="header-section-number">3.2.2.2</span> <code>topologicalFeatures</code>
 </h4>
 <p>The end-user can create additional <code>topologicalFeatures</code> or modify the existing ones using the <code>topologicalFeatures()&lt;-</code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'CTCF'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">GRanges</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'CTCF'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"II:340-352"</span>, </span>
 <span>    <span class="st">"II:3520-3532"</span>, </span>
 <span>    <span class="st">"II:7980-7992"</span>, </span>
@@ -1043,7 +1173,7 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'loops'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">GInteractions</span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'loops'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/GInteractions-class.html">GInteractions</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'CTCF'</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, each <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">]</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'CTCF'</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="op">)</span></span>
@@ -1067,7 +1197,7 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -1079,9 +1209,9 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 </div>
 <p>All these objects can be used in <code>*Overlap</code> methods, as they all extend the <code>GRanges</code> class of objects.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ---- This counts the number of times `CTCF` anchors are being used in the </span></span>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ---- This counts the number of times `CTCF` anchors are being used in the </span></span>
 <span><span class="co">#      `loops` `GInteractions` object</span></span>
-<span><span class="fu">countOverlaps</span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">countOverlaps</a></span><span class="op">(</span></span>
 <span>    query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'CTCF'</span><span class="op">)</span>, </span>
 <span>    subject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'loops'</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -1092,21 +1222,23 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 </h4>
 <p>If <code>pairsFile</code> is not specified when importing the <code>ContactFile</code> into a <code>HiCExperiment</code> object, one can add it later.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  loading from cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pairsf</span></span>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pairsf</span></span>
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 18513 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/f57db44961_7753 </span></span>
+<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/f73dff9842_7753 </span></span>
 <span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="metadata" class="level4" data-number="3.2.2.4"><h4 data-number="3.2.2.4" class="anchored" data-anchor-id="metadata">
@@ -1114,7 +1246,7 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 </h4>
 <p>Metadata associated with a <code>HiCExperiment</code> can be updated at any point.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
 <span>    info <span class="op">=</span> <span class="st">"HiCExperiment created from an example .mcool file from `HiContactsData`"</span>, </span>
 <span>    date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/date.html">date</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -1123,7 +1255,7 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="co">##  [1] "HiCExperiment created from an example .mcool file from `HiContactsData`"</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  $date</span></span>
-<span><span class="co">##  [1] "Tue Nov 28 08:08:12 2023"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  [1] "Mon Jan 22 17:32:46 2024"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section></section></section><section id="coercing-hicexperiment-objects" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="coercing-hicexperiment-objects">
 <span class="header-section-number">3.3</span> Coercing <code>HiCExperiment</code> objects</h2>
@@ -1133,7 +1265,7 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <code><a href="https://rdrr.io/r/base/matrix.html">as.matrix()</a></code>: allows to coerce the <code>HiCExperiment</code> into a <code>sparse</code> or <code>dense</code> matrix (using the <code>sparse</code> logical argument, <code>TRUE</code> by default) and choosing specific <code>scores</code> of interest (using the <code>use.scores</code> argument, <code>"balanced"</code> by default).</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ----- `as.matrix` coerces a `HiCExperiment` into a `sparseMatrix` by default </span></span>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ----- `as.matrix` coerces a `HiCExperiment` into a dense `matrix` by default </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##  [1] "dgTMatrix"</span></span>
 <span><span class="co">##  attr(,"package")</span></span>
@@ -1161,21 +1293,22 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="co">##  [4,] 61 163 237 103 153</span></span>
 <span><span class="co">##  [5,] 38  81 130 153  57</span></span>
 <span></span>
-<span><span class="co"># ----- If **expressly required**, one can coerce a HiCExperiment into a dense matrix</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic</span>, use.scores <span class="op">=</span> <span class="st">"count"</span>, sparse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
-<span><span class="co">##       [,1] [,2] [,3] [,4] [,5]</span></span>
-<span><span class="co">##  [1,]    7   92   75   61   38</span></span>
-<span><span class="co">##  [2,]   92  102  226  163   81</span></span>
-<span><span class="co">##  [3,]   75  226  150  237  130</span></span>
-<span><span class="co">##  [4,]   61  163  237  103  153</span></span>
-<span><span class="co">##  [5,]   38   81  130  153   57</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co"># ----- If needed, one can coerce a HiCExperiment into a sparse matrix</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic</span>, use.scores <span class="op">=</span> <span class="st">"count"</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
+<span><span class="co">##  5 x 5 sparse Matrix of class "dgTMatrix"</span></span>
+<span><span class="co">##                         </span></span>
+<span><span class="co">##  [1,]  7  92  75  61  38</span></span>
+<span><span class="co">##  [2,] 92 102 226 163  81</span></span>
+<span><span class="co">##  [3,] 75 226 150 237 130</span></span>
+<span><span class="co">##  [4,] 61 163 237 103 153</span></span>
+<span><span class="co">##  [5,] 38  81 130 153  57</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>
-<code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code>: simply coercing <code>interactions</code> into a rectangular data frame</li>
+<code><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html">as.data.frame()</a></code>: simply coercing <code>interactions</code> into a rectangular data frame</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##    seqnames1 start1   end1 width1 strand1 bin_id1    weight1 center1</span></span>
 <span><span class="co">##  1        II 300001 302000   2000       *     266 0.03714342  301000</span></span>
 <span><span class="co">##  2        II 300001 302000   2000       *     266 0.03714342  301000</span></span>
@@ -1191,12 +1324,12 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="co">##  5        II 308001 310000   2000       *     270 0.02898098  309000    38</span></span>
 <span><span class="co">##  6        II 310001 312000   2000       *     271 0.01834118  311000    43</span></span>
 <span><span class="co">##       balanced    random</span></span>
-<span><span class="co">##  1 0.009657438 0.6058332</span></span>
-<span><span class="co">##  2 0.076622340 0.7817516</span></span>
-<span><span class="co">##  3 0.054101992 0.2200311</span></span>
-<span><span class="co">##  4 0.042940512 0.4265605</span></span>
-<span><span class="co">##  5 0.040905212 0.2796573</span></span>
-<span><span class="co">##  6 0.029293930 0.6073113</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  1 0.009657438 0.9215828</span></span>
+<span><span class="co">##  2 0.076622340 0.7212626</span></span>
+<span><span class="co">##  3 0.054101992 0.2517023</span></span>
+<span><span class="co">##  4 0.042940512 0.6383770</span></span>
+<span><span class="co">##  5 0.040905212 0.5132897</span></span>
+<span><span class="co">##  6 0.029293930 0.8489170</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1209,6 +1342,147 @@ Warning
 </div>
 <div class="callout-body-container callout-body">
 <p>These coercing methods only operate on <code>interactions</code> and <code>scores</code>, and discard all other information, e.g.&nbsp;regarding genomic <code>regions</code>, available <code>resolutions</code>, associated <code>metadata</code>, <code>pairsFile</code> or <code>topologicalFeatures</code>.</p>
+</div>
+</div>
+</section><section id="session-info" class="level1 unnumbered"><h1 class="unnumbered">Session info</h1>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click to expand 👇
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">session_info</a></span><span class="op">(</span>include_base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">##  ─ Session info ────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   setting  value</span></span>
+<span><span class="co">##   version  R Under development (unstable) (2024-01-17 r85813)</span></span>
+<span><span class="co">##   os       Ubuntu 22.04.3 LTS</span></span>
+<span><span class="co">##   system   x86_64, linux-gnu</span></span>
+<span><span class="co">##   ui       X11</span></span>
+<span><span class="co">##   language (EN)</span></span>
+<span><span class="co">##   collate  C</span></span>
+<span><span class="co">##   ctype    en_US.UTF-8</span></span>
+<span><span class="co">##   tz       Etc/UTC</span></span>
+<span><span class="co">##   date     2024-01-22</span></span>
+<span><span class="co">##   pandoc   3.1.1 @ /usr/local/bin/ (via rmarkdown)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ─ Packages ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   package              * version   date (UTC) lib source</span></span>
+<span><span class="co">##   abind                  1.4-5     2016-07-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   AnnotationDbi          1.65.2    2023-11-03 [2] Bioconductor</span></span>
+<span><span class="co">##   AnnotationHub        * 3.11.1    2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   base                 * 4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   Biobase              * 2.63.0    2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocFileCache        * 2.11.1    2023-10-26 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocGenerics         * 0.49.1    2023-11-01 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocIO                 1.13.0    2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocManager            1.30.22   2023-08-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   BiocParallel           1.37.0    2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocVersion            3.19.1    2023-10-26 [2] Bioconductor</span></span>
+<span><span class="co">##   Biostrings             2.71.1    2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   bit                    4.0.5     2022-11-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bit64                  4.0.5     2020-08-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bitops                 1.0-7     2021-04-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   blob                   1.2.4     2023-03-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cachem                 1.0.8     2023-05-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cli                    3.6.2     2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   codetools              0.2-19    2023-02-01 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   colorspace             2.1-0     2023-01-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   compiler               4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   crayon                 1.5.2     2022-09-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   curl                   5.2.0     2023-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   datasets             * 4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   DBI                    1.2.1     2024-01-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dbplyr               * 2.4.0     2023-10-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   DelayedArray           0.29.0    2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   digest                 0.6.34    2024-01-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dplyr                  1.1.4     2023-11-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   evaluate               0.23      2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ExperimentHub        * 2.11.1    2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   fansi                  1.0.6     2023-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fastmap                1.1.1     2023-02-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   filelock               1.0.3     2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   generics               0.1.3     2022-07-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   GenomeInfoDb         * 1.39.5    2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   GenomeInfoDbData       1.2.11    2024-01-22 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomicRanges        * 1.55.1    2023-10-29 [2] Bioconductor</span></span>
+<span><span class="co">##   ggplot2              * 3.4.4     2023-10-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   glue                   1.7.0     2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   graphics             * 4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   grDevices            * 4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   grid                   4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   gtable                 0.3.4     2023-08-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   HiCExperiment        * 1.3.0     2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   HiContactsData       * 1.5.3     2024-01-22 [2] Github (js2264/HiContactsData@d5bebe7)</span></span>
+<span><span class="co">##   htmltools              0.5.7     2023-11-03 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmlwidgets            1.6.4     2023-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   httr                   1.4.7     2023-08-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   InteractionSet       * 1.31.0    2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   IRanges              * 2.37.1    2024-01-19 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   jsonlite               1.8.8     2023-12-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   KEGGREST               1.43.0    2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   knitr                  1.45      2023-10-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lattice                0.22-5    2023-10-24 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lifecycle              1.0.4     2023-11-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   magrittr               2.0.3     2022-03-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Matrix                 1.6-5     2024-01-11 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   MatrixGenerics       * 1.15.0    2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   matrixStats          * 1.2.0     2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   memoise                2.0.1     2021-11-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   methods              * 4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   mime                   0.12      2021-09-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   munsell                0.5.0     2018-06-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   parallel               4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   pillar                 1.9.0     2023-03-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pkgconfig              2.0.3     2019-09-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   png                    0.1-8     2022-11-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   purrr                  1.0.2     2023-08-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   R6                     2.5.1     2021-08-19 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rappdirs               0.3.3     2021-01-31 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Rcpp                   1.0.12    2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RCurl                  1.98-1.14 2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rhdf5                  2.47.2    2024-01-15 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   rhdf5filters           1.15.1    2023-11-06 [2] Bioconductor</span></span>
+<span><span class="co">##   Rhdf5lib               1.25.1    2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   rlang                  1.1.3     2024-01-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rmarkdown              2.25      2023-09-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RSQLite                2.3.5     2024-01-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   S4Arrays               1.3.2     2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   S4Vectors            * 0.41.3    2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   scales                 1.3.0     2023-11-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   sessioninfo            1.2.2     2021-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   SparseArray            1.3.3     2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   stats                * 4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   stats4               * 4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   strawr                 0.0.91    2023-03-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   SummarizedExperiment * 1.33.2    2024-01-07 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   tibble                 3.2.1     2023-03-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tidyselect             1.2.0     2022-10-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tools                  4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   tzdb                   0.4.0     2023-05-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   utf8                   1.2.4     2023-10-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   utils                * 4.4.0     2024-01-18 [3] local</span></span>
+<span><span class="co">##   vctrs                  0.6.5     2023-12-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   vroom                  1.6.5     2023-12-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   withr                  3.0.0     2024-01-16 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   xfun                   0.41      2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   XVector                0.43.1    2024-01-10 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   yaml                   2.3.8     2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   zlibbioc               1.49.0    2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##   [1] /tmp/Rtmp4kTMSb/Rinstb104d8a34</span></span>
+<span><span class="co">##   [2] /usr/local/lib/R/site-library</span></span>
+<span><span class="co">##   [3] /usr/local/lib/R/library</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ───────────────────────────────────────────────────────────────────────────</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 </div>
 </div>
 </section><section id="references" class="level1 unnumbered"><h1 class="unnumbered">References</h1>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.3.450">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Orchestrating Hi-C analysis with Bioconductor - 7&nbsp; Finding topological features in Hi-C</title>
 <style>
@@ -307,6 +307,7 @@ div.csl-indent {
   <li><a href="#other-r-packages" id="toc-other-r-packages" class="nav-link" data-scroll-target="#other-r-packages"><span class="header-section-number">7.3.2</span> Other R packages</a></li>
   </ul>
 </li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></nav>
     </div>
@@ -328,6 +329,165 @@ div.csl-indent {
   
 
 </header><div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pre-loading packages and objects 📦
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'dplyr'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      filter, lag</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      intersect, setdiff, setequal, union</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: stats4</span></span>
+<span><span class="co">##  Loading required package: BiocGenerics</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'BiocGenerics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:dplyr':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      combine, intersect, setdiff, union</span></span>
+<span><span class="co">##  The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      IQR, mad, sd, var, xtabs</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      Filter, Find, Map, Position, Reduce, anyDuplicated, aperm,</span></span>
+<span><span class="co">##      append, as.data.frame, basename, cbind, colnames, dirname,</span></span>
+<span><span class="co">##      do.call, duplicated, eval, evalq, get, grep, grepl, intersect,</span></span>
+<span><span class="co">##      is.unsorted, lapply, mapply, match, mget, order, paste, pmax,</span></span>
+<span><span class="co">##      pmax.int, pmin, pmin.int, rank, rbind, rownames, sapply,</span></span>
+<span><span class="co">##      setdiff, table, tapply, union, unique, unsplit, which.max,</span></span>
+<span><span class="co">##      which.min</span></span>
+<span><span class="co">##  Loading required package: S4Vectors</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'S4Vectors'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:dplyr':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      first, rename</span></span>
+<span><span class="co">##  The following object is masked from 'package:utils':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      findMatches</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      I, expand.grid, unname</span></span>
+<span><span class="co">##  Loading required package: IRanges</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'IRanges'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:dplyr':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      collapse, desc, slice</span></span>
+<span><span class="co">##  Loading required package: GenomeInfoDb</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">InteractionSet</span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: SummarizedExperiment</span></span>
+<span><span class="co">##  Loading required package: MatrixGenerics</span></span>
+<span><span class="co">##  Loading required package: matrixStats</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'matrixStats'</span></span>
+<span><span class="co">##  The following object is masked from 'package:dplyr':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      count</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'MatrixGenerics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:matrixStats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span></span>
+<span><span class="co">##      colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span></span>
+<span><span class="co">##      colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span></span>
+<span><span class="co">##      colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span></span>
+<span><span class="co">##      colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span></span>
+<span><span class="co">##      colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span></span>
+<span><span class="co">##      colWeightedMeans, colWeightedMedians, colWeightedSds,</span></span>
+<span><span class="co">##      colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span></span>
+<span><span class="co">##      rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span></span>
+<span><span class="co">##      rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span></span>
+<span><span class="co">##      rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span></span>
+<span><span class="co">##      rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span></span>
+<span><span class="co">##      rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs,</span></span>
+<span><span class="co">##      rowVars, rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span></span>
+<span><span class="co">##      rowWeightedSds, rowWeightedVars</span></span>
+<span><span class="co">##  Loading required package: Biobase</span></span>
+<span><span class="co">##  Welcome to Bioconductor</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      Vignettes contain introductory material; view with</span></span>
+<span><span class="co">##      'browseVignettes()'. To cite Bioconductor, see</span></span>
+<span><span class="co">##      'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'Biobase'</span></span>
+<span><span class="co">##  The following object is masked from 'package:MatrixGenerics':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      rowMedians</span></span>
+<span><span class="co">##  The following objects are masked from 'package:matrixStats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      anyMissing, rowMedians</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<span><span class="co">##  Consider using the `HiContacts` package to perform advanced genomic operations </span></span>
+<span><span class="co">##  on `HiCExperiment` objects.</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Read "Orchestrating Hi-C analysis with Bioconductor" online book to learn more:</span></span>
+<span><span class="co">##  https://js2264.github.io/OHCA/</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'HiCExperiment'</span></span>
+<span><span class="co">##  The following object is masked from 'package:SummarizedExperiment':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      metadata&lt;-</span></span>
+<span><span class="co">##  The following object is masked from 'package:S4Vectors':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      metadata&lt;-</span></span>
+<span><span class="co">##  The following object is masked from 'package:ggplot2':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      resolution</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: ExperimentHub</span></span>
+<span><span class="co">##  Loading required package: AnnotationHub</span></span>
+<span><span class="co">##  Loading required package: BiocFileCache</span></span>
+<span><span class="co">##  Loading required package: dbplyr</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'dbplyr'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:dplyr':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      ident, sql</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'AnnotationHub'</span></span>
+<span><span class="co">##  The following object is masked from 'package:Biobase':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      cache</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/fourDNData">fourDNData</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContacts">HiContacts</a></span><span class="op">)</span></span>
+<span><span class="co">##  Registered S3 methods overwritten by 'readr':</span></span>
+<span><span class="co">##    method                    from </span></span>
+<span><span class="co">##    as.data.frame.spec_tbl_df vroom</span></span>
+<span><span class="co">##    as_tibble.spec_tbl_df     vroom</span></span>
+<span><span class="co">##    format.col_spec           vroom</span></span>
+<span><span class="co">##    print.col_spec            vroom</span></span>
+<span><span class="co">##    print.collector           vroom</span></span>
+<span><span class="co">##    print.date_names          vroom</span></span>
+<span><span class="co">##    print.locale              vroom</span></span>
+<span><span class="co">##    str.col_spec              vroom</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rtracklayer</span><span class="op">)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'rtracklayer'</span></span>
+<span><span class="co">##  The following object is masked from 'package:AnnotationHub':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      hubUrl</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/OHCA">OHCA</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -352,7 +512,7 @@ Aims
 <span class="header-section-number">7.1.1</span> Importing Hi-C data</h3>
 <p>To investigate chromosome compartments, we will fetch a contact matrix generated from a micro-C experiment (from <span class="citation" data-cites="Krietenstein_2020">Krietenstein et al. (<a href="#ref-Krietenstein_2020" role="doc-biblioref">2020</a>)</span>). A subset of the genome-wide dataset is provided in the <code>HiContactsData</code> package. It contains intra-chromosomal interactions within <code>chr17</code>, binned at <code>5000</code>, <code>100000</code> and <code>250000</code> bp.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
 <span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'microC'</span>, <span class="st">'mcool'</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
@@ -363,7 +523,7 @@ Aims
 <span><span class="va">microC</span></span>
 <span><span class="co">##  `HiCExperiment` object with 10,086,710 contacts over 334 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/145c1451bdc6_8601" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/147f7f61e92b_8601" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(3): 5000 100000 250000</span></span>
 <span><span class="co">##  active resolution: 250000 </span></span>
@@ -373,7 +533,7 @@ Aims
 <span><span class="co">##  pairsFile: N/A </span></span>
 <span><span class="co">##  metadata(0):</span></span>
 <span></span>
-<span><span class="fu">seqinfo</span><span class="op">(</span><span class="va">microC</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqinfo.html">seqinfo</a></span><span class="op">(</span><span class="va">microC</span><span class="op">)</span></span>
 <span><span class="co">##  Seqinfo object with 1 sequence from an unspecified genome:</span></span>
 <span><span class="co">##    seqnames seqlengths isCircular genome</span></span>
 <span><span class="co">##    chr17      83257441         NA   &lt;NA&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -381,7 +541,7 @@ Aims
 </section><section id="annotating-ab-compartments" class="level3" data-number="7.1.2"><h3 data-number="7.1.2" class="anchored" data-anchor-id="annotating-ab-compartments">
 <span class="header-section-number">7.1.2</span> Annotating A/B compartments</h3>
 <p>The consensus approach to annotate A/B compartments is to compute the eigenvectors of a Hi-C contact matrix and identify the eigenvector representing the chromosome-wide bi-partite segmentation of the genome.</p>
-<p>The <code>getCompartments()</code> function performs several internal operations to achieve this:</p>
+<p>The <code><a href="https://rdrr.io/pkg/HiContacts/man/getCompartments.html">getCompartments()</a></code> function performs several internal operations to achieve this:</p>
 <ol type="1">
 <li>Obtains cis interactions per chromosome</li>
 <li>Computes O/E contact matrix scores</li>
@@ -391,8 +551,8 @@ Aims
 <li>Signs this eigenvector so that positive values represent the A compartment</li>
 </ol>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">phasing_track</span> <span class="op">&lt;-</span> <span class="fu">BSgenome.Hsapiens.UCSC.hg38</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg38/man/package.html">BSgenome.Hsapiens.UCSC.hg38</a></span></span>
-<span><span class="va">microC_compts</span> <span class="op">&lt;-</span> <span class="fu">getCompartments</span><span class="op">(</span><span class="va">microC</span>, genome <span class="op">=</span> <span class="va">phasing_track</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">phasing_track</span> <span class="op">&lt;-</span> <span class="fu">BSgenome.Hsapiens.UCSC.hg38</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg38/man/package.html">BSgenome.Hsapiens.UCSC.hg38</a></span></span>
+<span><span class="va">microC_compts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/getCompartments.html">getCompartments</a></span><span class="op">(</span><span class="va">microC</span>, genome <span class="op">=</span> <span class="va">phasing_track</span><span class="op">)</span></span>
 <span><span class="co">##  Going through preflight checklist...</span></span>
 <span><span class="co">##  Parsing intra-chromosomal contacts for each chromosome...</span></span>
 <span><span class="co">##  Computing eigenvectors for each chromosome...</span></span>
@@ -400,7 +560,7 @@ Aims
 <span><span class="va">microC_compts</span></span>
 <span><span class="co">##  `HiCExperiment` object with 10,086,710 contacts over 334 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/145c1451bdc6_8601" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/147f7f61e92b_8601" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(3): 5000 100000 250000</span></span>
 <span><span class="co">##  active resolution: 250000 </span></span>
@@ -410,12 +570,12 @@ Aims
 <span><span class="co">##  pairsFile: N/A </span></span>
 <span><span class="co">##  metadata(1): eigens</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>getCompartments()</code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
+<p><code><a href="https://rdrr.io/pkg/HiContacts/man/getCompartments.html">getCompartments()</a></code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
 <ul>
 <li>A <code>compartments</code> <code>topologicalFeatures</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">microC_compts</span>, <span class="st">"compartments"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">microC_compts</span>, <span class="st">"compartments"</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 41 ranges and 1 metadata column:</span></span>
 <span><span class="co">##         seqnames            ranges strand | compartment</span></span>
 <span><span class="co">##            &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;</span></span>
@@ -437,7 +597,7 @@ Aims
 <li>The calculated eigenvectors stored in <code>metadata</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">microC_compts</span><span class="op">)</span><span class="op">$</span><span class="va">eigens</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">microC_compts</span><span class="op">)</span><span class="op">$</span><span class="va">eigens</span></span>
 <span><span class="co">##  GRanges object with 334 ranges and 9 metadata columns:</span></span>
 <span><span class="co">##                                  seqnames            ranges strand |</span></span>
 <span><span class="co">##                                     &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; |</span></span>
@@ -498,7 +658,7 @@ Aims
 <span class="header-section-number">7.1.3</span> Exporting compartment tracks</h3>
 <p>To save the eigenvector (as a <code>bigwig</code> file) and the compartments(as a <code>gff</code> file), the <code>export</code> function can be used:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">rtracklayer</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">microC_compts</span><span class="op">)</span><span class="op">$</span><span class="va">eigens</span>, weight <span class="op">=</span> <span class="st">'eigen'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">export</a></span><span class="op">(</span><span class="st">'microC_eigen.bw'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">microC_compts</span>, <span class="st">"compartments"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">export</a></span><span class="op">(</span><span class="st">'microC_compartments.gff3'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -508,13 +668,13 @@ Aims
 <p>Compartment tracks should be visualized in a dedicated genome browser, with the phasing track loaded as well, to ensure they are phased accordingly.<br>
 That being said, it is possible to visualize a genome track in R besides the matching Hi-C contact matrix.</p>
 <div class="cell" data-layout-align="center" data-fig.asp="1">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span></span>
-<span><span class="va">microC</span> <span class="op">&lt;-</span> <span class="fu">autocorrelate</span><span class="op">(</span><span class="va">microC</span><span class="op">)</span></span>
+<span><span class="va">microC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/arithmetics.html">autocorrelate</a></span><span class="op">(</span><span class="va">microC</span><span class="op">)</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">plotMatrix</span><span class="op">(</span><span class="va">microC</span>, use.scores <span class="op">=</span> <span class="st">'autocorrelated'</span>, scale <span class="op">=</span> <span class="st">'linear'</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, caption <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span><span class="va">microC</span>, use.scores <span class="op">=</span> <span class="st">'autocorrelated'</span>, scale <span class="op">=</span> <span class="st">'linear'</span>, limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, caption <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">microC_compts</span><span class="op">)</span><span class="op">$</span><span class="va">eigens</span>, weight <span class="op">=</span> <span class="st">'eigen'</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">eigen_df</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runLength</a></span><span class="op">(</span><span class="va">eigen</span><span class="op">)</span><span class="op">)</span>, eigen <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runValue</a></span><span class="op">(</span><span class="va">eigen</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">eigen_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runLength</a></span><span class="op">(</span><span class="va">eigen</span><span class="op">)</span><span class="op">)</span>, eigen <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runValue</a></span><span class="op">(</span><span class="va">eigen</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">eigen_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pos</span>, y <span class="op">=</span> <span class="va">eigen</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_area</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -534,8 +694,8 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <p>Saddle plots are typically used to measure the <code>observed</code> vs.&nbsp;<code>expected</code> interaction scores within or between genomic loci belonging to A and B compartments.</p>
 <p>Non-overlapping genomic windows are grouped in <code>nbins</code> quantiles (typically between 10 and 50 quantiles) according to their A/B compartment eigenvector value, from lowest eigenvector values (i.e.&nbsp;strongest B compartments) to highest eigenvector values (i.e.&nbsp;strongest A compartments). The average <code>observed</code> vs.&nbsp;<code>expected</code> interaction scores are then computed for pairwise eigenvector quantiles and plotted in a 2D heatmap.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Bioconductor/BiocParallel">BiocParallel</a></span><span class="op">)</span></span>
-<span><span class="fu">plotSaddle</span><span class="op">(</span><span class="va">microC_compts</span>, nbins <span class="op">=</span> <span class="fl">25</span>, BPPARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html">SerialParam</a></span><span class="op">(</span>progressbar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Bioconductor/BiocParallel">BiocParallel</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotSaddle.html">plotSaddle</a></span><span class="op">(</span><span class="va">microC_compts</span>, nbins <span class="op">=</span> <span class="fl">25</span>, BPPARAM <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html">SerialParam</a></span><span class="op">(</span>progressbar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure"><p><img src="topological-features_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
@@ -557,12 +717,12 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <p>Several approaches exist to annotate topological domains (<span class="citation" data-cites="Sefer_2022">Sefer (<a href="#ref-Sefer_2022" role="doc-biblioref">2022</a>)</span>). Several packages in R implement some of these functionalities, e.g.&nbsp;<code>spectralTAD</code> or <code>TADcompare</code>.</p>
 <p><code>HiContacts</code> offers a simple <code>getDiamondInsulation</code> function which computes the diamond insulation score (<span class="citation" data-cites="Crane_2015">Crane et al. (<a href="#ref-Crane_2015" role="doc-biblioref">2015</a>)</span>). This score quantifies average interaction frequency in an insulation window (of a certain <code>window_size</code>) sliding along contact matrices at a chosen <code>resolution</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># - Compute insulation score</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># - Compute insulation score</span></span>
 <span><span class="va">bpparam</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html">SerialParam</a></span><span class="op">(</span>progressbar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">microC</span>, <span class="fl">5000</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">refocus</a></span><span class="op">(</span><span class="st">'chr17:60000001-83257441'</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu">getDiamondInsulation</span><span class="op">(</span>window_size <span class="op">=</span> <span class="fl">100000</span>, BPPARAM <span class="op">=</span> <span class="va">bpparam</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>    <span class="fu">getBorders</span><span class="op">(</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getDiamondInsulation</a></span><span class="op">(</span>window_size <span class="op">=</span> <span class="fl">100000</span>, BPPARAM <span class="op">=</span> <span class="va">bpparam</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getBorders</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##  Going through preflight checklist...</span></span>
 <span><span class="co">##  Scan each window and compute diamond insulation score...</span></span>
 <span><span class="co">##  Annotating diamond score prominence for each window...</span></span>
@@ -570,7 +730,7 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 2,156,222 contacts over 4,652 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/145c1451bdc6_8601" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/147f7f61e92b_8601" </span></span>
 <span><span class="co">##  focus: "chr17:60,000,001-83,257,441" </span></span>
 <span><span class="co">##  resolutions(3): 5000 100000 250000</span></span>
 <span><span class="co">##  active resolution: 5000 </span></span>
@@ -580,12 +740,12 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <span><span class="co">##  pairsFile: N/A </span></span>
 <span><span class="co">##  metadata(1): insulation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>getDiamondInsulation()</code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
+<p><code><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getDiamondInsulation()</a></code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
 <ul>
 <li>A <code>borders</code> <code>topologicalFeatures</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"borders"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"borders"</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 21 ranges and 1 metadata column:</span></span>
 <span><span class="co">##           seqnames            ranges strand |     score</span></span>
 <span><span class="co">##              &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;</span></span>
@@ -607,7 +767,7 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <li>The calculated <code>insulation</code> scores stored in <code>metadata</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">insulation</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">insulation</span></span>
 <span><span class="co">##  GRanges object with 4611 ranges and 8 metadata columns:</span></span>
 <span><span class="co">##                            seqnames            ranges strand |    bin_id</span></span>
 <span><span class="co">##                               &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;</span></span>
@@ -668,7 +828,7 @@ Note
 <span class="header-section-number">7.2.2</span> Exporting insulation scores tracks</h3>
 <p>To save the diamond insulation scores (as a <code>bigwig</code> file) and the borders (as a <code>bed</code> file), the <code>export</code> function can be used:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">insulation</span>, weight <span class="op">=</span> <span class="st">'insulation'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">export</a></span><span class="op">(</span><span class="st">'microC_insulation.bw'</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">insulation</span>, weight <span class="op">=</span> <span class="st">'insulation'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">export</a></span><span class="op">(</span><span class="st">'microC_insulation.bw'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"borders"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">export</a></span><span class="op">(</span><span class="st">'microC_borders.bed'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="visualizing-chromatin-domains" class="level3" data-number="7.2.3"><h3 data-number="7.2.3" class="anchored" data-anchor-id="visualizing-chromatin-domains">
@@ -676,8 +836,8 @@ Note
 <p>Insulation tracks should be visualized in a dedicated genome browser.<br>
 That being said, it is possible to visualize a genome track in R besides the matching Hi-C contact matrix.</p>
 <div class="cell" data-layout-align="center" data-fig.asp="1">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">100000</span><span class="op">)</span></span>
-<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">plotMatrix</span><span class="op">(</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">100000</span><span class="op">)</span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span></span>
 <span>    <span class="va">hic</span>, </span>
 <span>    use.scores <span class="op">=</span> <span class="st">'balanced'</span>, </span>
 <span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3.5</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>,</span>
@@ -685,7 +845,7 @@ That being said, it is possible to visualize a genome track in R besides the mat
 <span>    caption <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">insulation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">insulation</span>, weight <span class="op">=</span> <span class="st">'insulation'</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">insulation_df</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="op">(</span>pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runLength</a></span><span class="op">(</span><span class="va">insulation</span><span class="op">)</span><span class="op">)</span>, insulation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runValue</a></span><span class="op">(</span><span class="va">insulation</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">insulation_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cumsum.html">cumsum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runLength</a></span><span class="op">(</span><span class="va">insulation</span><span class="op">)</span><span class="op">)</span>, insulation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Rle-class.html">runValue</a></span><span class="op">(</span><span class="va">insulation</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">insulation_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pos</span>, y <span class="op">=</span> <span class="va">insulation</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_area</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -699,167 +859,475 @@ That being said, it is possible to visualize a genome track in R besides the mat
 </div>
 </div>
 </div>
-<p>Local minima in the diamond insulation score displayed below the Hi-C contact matrix are identified using the <code>getBorders()</code> function, which automatically estimates a minimum threshold. These local minima correspond to borders and are visually depicted on the Hi-C map by blue diamonds.</p>
+<p>Local minima in the diamond insulation score displayed below the Hi-C contact matrix are identified using the <code><a href="https://rdrr.io/pkg/HiContacts/man/getDiamondInsulation.html">getBorders()</a></code> function, which automatically estimates a minimum threshold. These local minima correspond to borders and are visually depicted on the Hi-C map by blue diamonds.</p>
 </section></section><section id="chromatin-loops" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="chromatin-loops">
 <span class="header-section-number">7.3</span> Chromatin loops</h2>
 <section id="chromosight" class="level3" data-number="7.3.1"><h3 data-number="7.3.1" class="anchored" data-anchor-id="chromosight">
 <span class="header-section-number">7.3.1</span> <code>chromosight</code>
 </h3>
-<p>Chromatin loops, dots, or contacts, refer to a strong increase of interaction frequency between a pair of two genomic loci. They correspond to focal “dots” on a Hi-C map. Relying on computer vision algorithms, <code>chromosight</code> uses this property to annotate chromatin loops in a Hi-C map (<span class="citation" data-cites="Matthey_Doret_2020">Matthey-Doret et al. (<a href="#ref-Matthey_Doret_2020" role="doc-biblioref">2020</a>)</span>). <code>chromosight</code> is a standalone <code>python</code> package and is made available in R through the <code>HiCool</code>-managed conda environment with the <code>getLoops()</code> function.</p>
+<p>Chromatin loops, dots, or contacts, refer to a strong increase of interaction frequency between a pair of two genomic loci. They correspond to focal “dots” on a Hi-C map. Relying on computer vision algorithms, <code>chromosight</code> uses this property to annotate chromatin loops in a Hi-C map (<span class="citation" data-cites="Matthey_Doret_2020">Matthey-Doret et al. (<a href="#ref-Matthey_Doret_2020" role="doc-biblioref">2020</a>)</span>). <code>chromosight</code> is a standalone <code>python</code> package and is made available in R through the <code>HiCool</code>-managed conda environment with the <code><a href="https://rdrr.io/pkg/HiContacts/man/getLoops.html">getLoops()</a></code> function.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important note:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>HiCool</code> relies on <code>basilisk</code> R package to set up an underlying, self-managed <code>python</code> environment. Packages from this environment, including <code>chromosight</code>, are not yet available for ARM chips (e.g.&nbsp;M1/2/3 in newer on macbooks) or Windows. For this reason, <code>HiCool</code>-supported features are not available on these machines.</p>
+</div>
+</div>
 <section id="identifying-loops" class="level4" data-number="7.3.1.1"><h4 data-number="7.3.1.1" class="anchored" data-anchor-id="identifying-loops">
 <span class="header-section-number">7.3.1.1</span> Identifying loops</h4>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu">HiCool</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HiCool/man/getLoops.html">getLoops</a></span><span class="op">(</span><span class="va">microC</span>, resolution <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">hic</span></span>
-<span><span class="co">## `HiCExperiment` object with 917,156 contacts over 100 regions</span></span>
-<span><span class="co">## -------</span></span>
-<span><span class="co">## fileName: "/home/rsg/.cache/R/fourDNData/4d434d8538a0_4DNFI9FVHJZQ.mcool"</span></span>
-<span><span class="co">## focus: "chr17:63,000,001-63,500,000"</span></span>
-<span><span class="co">## resolutions(13): 1000 2000 ... 5000000 10000000</span></span>
-<span><span class="co">## active resolution: 5000</span></span>
-<span><span class="co">## interactions: 5047</span></span>
-<span><span class="co">## scores(2): count balanced</span></span>
-<span><span class="co">## topologicalFeatures: compartments(0) borders(0) loops(66411) viewpoints(0)</span></span>
-<span><span class="co">## pairsFile: N/A</span></span>
-<span><span class="co">## metadata(1): chromosight_args</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Due to HiCool limitations when rendering the book, this code is not executed here</span></span>
+<span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu">HiCool</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HiCool/man/getLoops.html">getLoops</a></span><span class="op">(</span><span class="va">microC</span>, resolution <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>getLoops()</code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Instead we load pre-computed data from a backed-up object</span></span>
+<span><span class="va">hic_rds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>, <span class="st">'microC_with-loops.rds'</span>, package <span class="op">=</span> <span class="st">'OHCA'</span><span class="op">)</span></span>
+<span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="va">hic_rds</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
+<span><span class="co">##  `HiCExperiment` object with 2,103,634 contacts over 200 regions </span></span>
+<span><span class="co">##  -------</span></span>
+<span><span class="co">##  fileName: "../4d434d8538a0_4DNFI9FVHJZQ_subset.mcool" </span></span>
+<span><span class="co">##  focus: "chr17:62,500,001-63,500,000" </span></span>
+<span><span class="co">##  resolutions(1): 5000</span></span>
+<span><span class="co">##  active resolution: 5000 </span></span>
+<span><span class="co">##  interactions: 19667 </span></span>
+<span><span class="co">##  scores(2): count balanced </span></span>
+<span><span class="co">##  topologicalFeatures: loops(2419) </span></span>
+<span><span class="co">##  pairsFile: N/A </span></span>
+<span><span class="co">##  metadata(1): chromosight_args</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code><a href="https://rdrr.io/pkg/HiContacts/man/getLoops.html">getLoops()</a></code> is an endomorphism: it returns the original object, enriched with two new pieces of information:</p>
 <ul>
 <li>A <code>loops</code> <code>topologicalFeatures</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"loops"</span><span class="op">)</span></span>
-<span><span class="co">## GInteractions object with 66411 interactions and 5 metadata columns:</span></span>
-<span><span class="co">##           seqnames1           ranges1     seqnames2           ranges2 |   bin_id1   bin_id2     score      ## pvalue    qvalue</span></span>
-<span><span class="co">##               &lt;Rle&gt;         &lt;IRanges&gt;         &lt;Rle&gt;         &lt;IRanges&gt; | &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;   ## &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">##       [1]      chr1     775001-780000 ---      chr1     850001-855000 |       155       170  0.334586 2.## 15995e-05 2.162e-05</span></span>
-<span><span class="co">##       [2]      chr1     775001-780000 ---      chr1     865001-870000 |       155       173  0.403336 1.## 62900e-07 1.669e-07</span></span>
-<span><span class="co">##       [3]      chr1     865001-870000 ---      chr1     890001-895000 |       173       178  0.337344 1.## 91400e-07 1.957e-07</span></span>
-<span><span class="co">##       [4]      chr1     910001-915000 ---      chr1     955001-960000 |       182       191  0.639725 0.## 00000e+00 0.000e+00</span></span>
-<span><span class="co">##       [5]      chr1     910001-915000 ---      chr1   1055001-1060000 |       182       211  0.521699 0.## 00000e+00 0.000e+00</span></span>
-<span><span class="co">##       ...       ...               ... ...       ...               ... .       ...       ...       ...       ##   ...       ...</span></span>
-<span><span class="co">##   [66407]      chrY 19570001-19575000 ---      chrY 19720001-19725000 |    610133    610163  0.315529    3.## 30e-08  3.55e-08</span></span>
-<span><span class="co">##   [66408]      chrY 19705001-19710000 ---      chrY 19730001-19735000 |    610160    610165  0.708753    0.## 00e+00  0.00e+00</span></span>
-<span><span class="co">##   [66409]      chrY 19765001-19770000 ---      chrY 19800001-19805000 |    610172    610179  0.373635    1.## 10e-09  1.40e-09</span></span>
-<span><span class="co">##   [66410]      chrY 20555001-20560000 ---      chrY 20645001-20650000 |    610330    610348  0.603308    0.## 00e+00  0.00e+00</span></span>
-<span><span class="co">##   [66411]      chrY 21015001-21020000 ---      chrY 21055001-21060000 |    610422    610430  0.394614    9.## 12e-08  9.45e-08</span></span>
-<span><span class="co">##   -------</span></span>
-<span><span class="co">##   regions: 84171 ranges and 0 metadata columns</span></span>
-<span><span class="co">##   seqinfo: 24 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"loops"</span><span class="op">)</span></span>
+<span><span class="co">##  GInteractions object with 2419 interactions and 7 metadata columns:</span></span>
+<span><span class="co">##           seqnames1           ranges1     seqnames2           ranges2 |</span></span>
+<span><span class="co">##               &lt;Rle&gt;         &lt;IRanges&gt;         &lt;Rle&gt;         &lt;IRanges&gt; |</span></span>
+<span><span class="co">##       [1]     chr17     150000-155000 ---     chr17     390000-395000 |</span></span>
+<span><span class="co">##       [2]     chr17     145000-150000 ---     chr17     755000-760000 |</span></span>
+<span><span class="co">##       [3]     chr17     145000-150000 ---     chr17   1050000-1055000 |</span></span>
+<span><span class="co">##       [4]     chr17     145000-150000 ---     chr17     510000-515000 |</span></span>
+<span><span class="co">##       [5]     chr17     150000-155000 ---     chr17     990000-995000 |</span></span>
+<span><span class="co">##       ...       ...               ... ...       ...               ... .</span></span>
+<span><span class="co">##    [2415]     chr17 82870000-82875000 ---     chr17 83075000-83080000 |</span></span>
+<span><span class="co">##    [2416]     chr17 82880000-82885000 ---     chr17 82925000-82930000 |</span></span>
+<span><span class="co">##    [2417]     chr17 82960000-82965000 ---     chr17 83080000-83085000 |</span></span>
+<span><span class="co">##    [2418]     chr17 82975000-82980000 ---     chr17 83000000-83005000 |</span></span>
+<span><span class="co">##    [2419]     chr17 83100000-83105000 ---     chr17 83200000-83205000 |</span></span>
+<span><span class="co">##                bin1      bin2 kernel_id iteration     score    pvalue</span></span>
+<span><span class="co">##           &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">##       [1]    498194    498242         0         0  0.666651         0</span></span>
+<span><span class="co">##       [2]    498193    498315         0         0  0.452903         0</span></span>
+<span><span class="co">##       [3]    498193    498374         0         0  0.518936         0</span></span>
+<span><span class="co">##       [4]    498193    498266         0         0  0.536020         0</span></span>
+<span><span class="co">##       [5]    498194    498362         0         0  0.573763         0</span></span>
+<span><span class="co">##       ...       ...       ...       ...       ...       ...       ...</span></span>
+<span><span class="co">##    [2415]    514738    514779         0         0  0.478653   0.0e+00</span></span>
+<span><span class="co">##    [2416]    514740    514749         0         0  0.369344   5.0e-10</span></span>
+<span><span class="co">##    [2417]    514756    514780         0         0  0.690669   0.0e+00</span></span>
+<span><span class="co">##    [2418]    514759    514764         0         0  0.374722   5.1e-09</span></span>
+<span><span class="co">##    [2419]    514784    514804         0         0  0.768593   0.0e+00</span></span>
+<span><span class="co">##              qvalue</span></span>
+<span><span class="co">##           &lt;numeric&gt;</span></span>
+<span><span class="co">##       [1]         0</span></span>
+<span><span class="co">##       [2]         0</span></span>
+<span><span class="co">##       [3]         0</span></span>
+<span><span class="co">##       [4]         0</span></span>
+<span><span class="co">##       [5]         0</span></span>
+<span><span class="co">##       ...       ...</span></span>
+<span><span class="co">##    [2415]     0e+00</span></span>
+<span><span class="co">##    [2416]     6e-10</span></span>
+<span><span class="co">##    [2417]     0e+00</span></span>
+<span><span class="co">##    [2418]     6e-09</span></span>
+<span><span class="co">##    [2419]     0e+00</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    regions: 3169 ranges and 0 metadata columns</span></span>
+<span><span class="co">##    seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li>The arguments used by <code>chromosight</code>, stored in <code>metadata</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">chromosight_args</span></span>
-<span><span class="co">## $`--pattern`</span></span>
-<span><span class="co">## [1] "loops"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--dump`</span></span>
-<span><span class="co">## [1] "/data/.cache/R//RtmpSaRwiZ"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--inter`</span></span>
-<span><span class="co">## [1] FALSE</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--iterations`</span></span>
-<span><span class="co">## [1] "auto"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--kernel-config`</span></span>
-<span><span class="co">## NULL</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--perc-zero`</span></span>
-<span><span class="co">## [1] "auto"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--perc-undetected`</span></span>
-<span><span class="co">## [1] "auto"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--tsvd`</span></span>
-<span><span class="co">## [1] FALSE</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--win-fmt`</span></span>
-<span><span class="co">## [1] "json"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--win-size`</span></span>
-<span><span class="co">## [1] "auto"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--no-plotting`</span></span>
-<span><span class="co">## [1] TRUE</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--smooth-trend`</span></span>
-<span><span class="co">## [1] FALSE</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--norm`</span></span>
-<span><span class="co">## [1] "auto"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`&lt;contact_map&gt;`</span></span>
-<span><span class="co">## [1] "/home/rsg/.cache/R/fourDNData/4d434d8538a0_4DNFI9FVHJZQ.mcool::/resolutions/5000"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--max-dist`</span></span>
-<span><span class="co">## [1] "auto"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--min-dist`</span></span>
-<span><span class="co">## [1] "auto"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--min-separation`</span></span>
-<span><span class="co">## [1] "auto"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--n-mads`</span></span>
-<span><span class="co">## [1] 5</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`&lt;prefix&gt;`</span></span>
-<span><span class="co">## [1] "chromosight/chromo"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--pearson`</span></span>
-<span><span class="co">## [1] "auto"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--subsample`</span></span>
-<span><span class="co">## [1] "no"</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## $`--threads`</span></span>
-<span><span class="co">## [1] 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">$</span><span class="va">chromosight_args</span></span>
+<span><span class="co">##  $`--pattern`</span></span>
+<span><span class="co">##  [1] "loops"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--dump`</span></span>
+<span><span class="co">##  [1] "/tmp/RtmpUN0slk"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--inter`</span></span>
+<span><span class="co">##  [1] FALSE</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--iterations`</span></span>
+<span><span class="co">##  [1] "auto"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--kernel-config`</span></span>
+<span><span class="co">##  NULL</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--perc-zero`</span></span>
+<span><span class="co">##  [1] "auto"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--perc-undetected`</span></span>
+<span><span class="co">##  [1] "auto"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--tsvd`</span></span>
+<span><span class="co">##  [1] FALSE</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--win-fmt`</span></span>
+<span><span class="co">##  [1] "json"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--win-size`</span></span>
+<span><span class="co">##  [1] "auto"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--no-plotting`</span></span>
+<span><span class="co">##  [1] TRUE</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--smooth-trend`</span></span>
+<span><span class="co">##  [1] FALSE</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--norm`</span></span>
+<span><span class="co">##  [1] "auto"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`&lt;contact_map&gt;`</span></span>
+<span><span class="co">##  [1] "/root/.cache/R/fourDNData/913914662_4DNFI9FVHJZQ.mcool::/resolutions/5000"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--max-dist`</span></span>
+<span><span class="co">##  [1] "auto"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--min-dist`</span></span>
+<span><span class="co">##  [1] "auto"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--min-separation`</span></span>
+<span><span class="co">##  [1] "auto"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--n-mads`</span></span>
+<span><span class="co">##  [1] 5</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`&lt;prefix&gt;`</span></span>
+<span><span class="co">##  [1] "chromosight/chromo"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--pearson`</span></span>
+<span><span class="co">##  [1] "auto"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--subsample`</span></span>
+<span><span class="co">##  [1] "no"</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  $`--threads`</span></span>
+<span><span class="co">##  [1] 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="importing-loops-from-files" class="level4" data-number="7.3.1.2"><h4 data-number="7.3.1.2" class="anchored" data-anchor-id="importing-loops-from-files">
 <span class="header-section-number">7.3.1.2</span> Importing loops from files</h4>
 <p>If you are using <code>chromosight</code> directly from the terminal (i.e.&nbsp;outside <code>R</code>), you can import the annotated loops in <code>R</code> as follows:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="st">"..."</span><span class="op">)</span> <span class="co">## Here put your loops file</span></span>
-<span><span class="va">loops</span> <span class="op">&lt;-</span> <span class="fu">InteractionSet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/GInteractions-class.html">GInteractions</a></span><span class="op">(</span></span>
-<span>    anchor1 <span class="op">=</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span></span>
-<span>        <span class="va">df</span><span class="op">$</span><span class="va">chrom1</span>, <span class="fu">IRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/IRanges-constructor.html">IRanges</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">start1</span><span class="op">+</span><span class="fl">1</span>, <span class="va">df</span><span class="op">$</span><span class="va">end1</span><span class="op">)</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    anchor2 <span class="op">=</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span></span>
-<span>        <span class="va">df</span><span class="op">$</span><span class="va">chrom2</span>, <span class="fu">IRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/IRanges-constructor.html">IRanges</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">start2</span><span class="op">+</span><span class="fl">1</span>, <span class="va">df</span><span class="op">$</span><span class="va">end2</span><span class="op">)</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    bin_id1 <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">bin1</span>, </span>
-<span>    bin_id2 <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">bin2</span>, </span>
-<span>    score <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">score</span>, </span>
-<span>    pvalue <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">pvalue</span>, </span>
-<span>    qvalue <span class="op">=</span> <span class="va">df</span><span class="op">$</span><span class="va">qvalue</span></span>
-<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## Change the `.tsv` file to the local output file from chromosight</span></span>
+<span><span class="va">loops</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">'extdata'</span>, <span class="st">'chromo.tsv'</span>, package <span class="op">=</span> <span class="st">'OHCA'</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>    <span class="fu">plyinteractions</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/plyinteractions/man/ginteractions-construct.html">as_ginteractions</a></span><span class="op">(</span>seqnames1 <span class="op">=</span> <span class="va">chrom1</span>, seqnames2 <span class="op">=</span> <span class="va">chrom2</span><span class="op">)</span></span>
+<span><span class="co">##  Rows: 2419 Columns: 13</span></span>
+<span><span class="co">##  ── Column specification ─────────────────────────────────────────────────────</span></span>
+<span><span class="co">##  Delimiter: "\t"</span></span>
+<span><span class="co">##  chr  (2): chrom1, chrom2</span></span>
+<span><span class="co">##  dbl (11): start1, end1, start2, end2, bin1, bin2, kernel_id, iteration, s...</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
+<span><span class="co">##  ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span>
+<span></span>
+<span><span class="va">loops</span></span>
+<span><span class="co">##  GInteractions object with 2419 interactions and 7 metadata columns:</span></span>
+<span><span class="co">##           seqnames1           ranges1 strand1     seqnames2           ranges2</span></span>
+<span><span class="co">##               &lt;Rle&gt;         &lt;IRanges&gt;   &lt;Rle&gt;         &lt;Rle&gt;         &lt;IRanges&gt;</span></span>
+<span><span class="co">##       [1]     chr17     150000-155000       * ---     chr17     390000-395000</span></span>
+<span><span class="co">##       [2]     chr17     145000-150000       * ---     chr17     755000-760000</span></span>
+<span><span class="co">##       [3]     chr17     145000-150000       * ---     chr17   1050000-1055000</span></span>
+<span><span class="co">##       [4]     chr17     145000-150000       * ---     chr17     510000-515000</span></span>
+<span><span class="co">##       [5]     chr17     150000-155000       * ---     chr17     990000-995000</span></span>
+<span><span class="co">##       ...       ...               ...     ... ...       ...               ...</span></span>
+<span><span class="co">##    [2415]     chr17 82870000-82875000       * ---     chr17 83075000-83080000</span></span>
+<span><span class="co">##    [2416]     chr17 82880000-82885000       * ---     chr17 82925000-82930000</span></span>
+<span><span class="co">##    [2417]     chr17 82960000-82965000       * ---     chr17 83080000-83085000</span></span>
+<span><span class="co">##    [2418]     chr17 82975000-82980000       * ---     chr17 83000000-83005000</span></span>
+<span><span class="co">##    [2419]     chr17 83100000-83105000       * ---     chr17 83200000-83205000</span></span>
+<span><span class="co">##           strand2 |      bin1      bin2 kernel_id iteration     score</span></span>
+<span><span class="co">##             &lt;Rle&gt; | &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">##       [1]       * |    498194    498242         0         0  0.666651</span></span>
+<span><span class="co">##       [2]       * |    498193    498315         0         0  0.452903</span></span>
+<span><span class="co">##       [3]       * |    498193    498374         0         0  0.518936</span></span>
+<span><span class="co">##       [4]       * |    498193    498266         0         0  0.536020</span></span>
+<span><span class="co">##       [5]       * |    498194    498362         0         0  0.573763</span></span>
+<span><span class="co">##       ...     ... .       ...       ...       ...       ...       ...</span></span>
+<span><span class="co">##    [2415]       * |    514738    514779         0         0  0.478653</span></span>
+<span><span class="co">##    [2416]       * |    514740    514749         0         0  0.369344</span></span>
+<span><span class="co">##    [2417]       * |    514756    514780         0         0  0.690669</span></span>
+<span><span class="co">##    [2418]       * |    514759    514764         0         0  0.374722</span></span>
+<span><span class="co">##    [2419]       * |    514784    514804         0         0  0.768593</span></span>
+<span><span class="co">##              pvalue    qvalue</span></span>
+<span><span class="co">##           &lt;numeric&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">##       [1]         0         0</span></span>
+<span><span class="co">##       [2]         0         0</span></span>
+<span><span class="co">##       [3]         0         0</span></span>
+<span><span class="co">##       [4]         0         0</span></span>
+<span><span class="co">##       [5]         0         0</span></span>
+<span><span class="co">##       ...       ...       ...</span></span>
+<span><span class="co">##    [2415]   0.0e+00     0e+00</span></span>
+<span><span class="co">##    [2416]   5.0e-10     6e-10</span></span>
+<span><span class="co">##    [2417]   0.0e+00     0e+00</span></span>
+<span><span class="co">##    [2418]   5.1e-09     6e-09</span></span>
+<span><span class="co">##    [2419]   0.0e+00     0e+00</span></span>
+<span><span class="co">##    -------</span></span>
+<span><span class="co">##    regions: 3169 ranges and 0 metadata columns</span></span>
+<span><span class="co">##    seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="exporting-chromatin-loops" class="level4" data-number="7.3.1.3"><h4 data-number="7.3.1.3" class="anchored" data-anchor-id="exporting-chromatin-loops">
 <span class="header-section-number">7.3.1.3</span> Exporting chromatin loops</h4>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">loops</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"loops"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">loops</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"loops"</span><span class="op">)</span></span>
 <span><span class="va">loops</span> <span class="op">&lt;-</span> <span class="va">loops</span><span class="op">[</span><span class="va">loops</span><span class="op">$</span><span class="va">score</span> <span class="op">&gt;=</span> <span class="fl">0.4</span> <span class="op">&amp;</span> <span class="va">loops</span><span class="op">$</span><span class="va">qvalue</span> <span class="op">&lt;=</span> <span class="fl">1e-6</span><span class="op">]</span></span>
-<span><span class="fu">GenomicInteractions</span><span class="fu">::</span><span class="fu">export.bedpe</span><span class="op">(</span><span class="va">loops</span>, <span class="st">'loops.bedpe'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu">GenomicInteractions</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicInteractions/man/export.bedpe.html">export.bedpe</a></span><span class="op">(</span><span class="va">loops</span>, <span class="st">'loops.bedpe'</span><span class="op">)</span></span>
+<span><span class="co">##  Warning in interactionCounts(x): 'counts' not in mcols of object; will</span></span>
+<span><span class="co">##  return NULL</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="visualizing-chromatin-loops" class="level4" data-number="7.3.1.4"><h4 data-number="7.3.1.4" class="anchored" data-anchor-id="visualizing-chromatin-loops">
 <span class="header-section-number">7.3.1.4</span> Visualizing chromatin loops</h4>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">plotMatrix</span><span class="op">(</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">refocus</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'chr17:62500001-63500000'</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="fl">5000</span><span class="op">)</span>, </span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotMatrix.html">plotMatrix</a></span><span class="op">(</span></span>
+<span>    <span class="va">hic</span>, </span>
 <span>    loops <span class="op">=</span> <span class="va">loops</span>,</span>
 <span>    limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="op">-</span><span class="fl">1.2</span><span class="op">)</span>,</span>
 <span>    caption <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="topological-features_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
-<p><img src="images/20230403134800.png" class="img-fluid"></p>
+</div>
+</div>
 </section></section><section id="other-r-packages" class="level3" data-number="7.3.2"><h3 data-number="7.3.2" class="anchored" data-anchor-id="other-r-packages">
 <span class="header-section-number">7.3.2</span> Other R packages</h3>
 <p>A number of other R packages have been developed to identify focal chromatin loops, notably <code>fitHiC</code> (<span class="citation" data-cites="Ay_2014">Ay et al. (<a href="#ref-Ay_2014" role="doc-biblioref">2014</a>)</span>), <code>GOTHiC</code> (<span class="citation" data-cites="Mifsud_2017">Mifsud et al. (<a href="#ref-Mifsud_2017" role="doc-biblioref">2017</a>)</span>) or <code>idr2d</code> (<span class="citation" data-cites="Krismer_2020">Krismer et al. (<a href="#ref-Krismer_2020" role="doc-biblioref">2020</a>)</span>). Each fits a slightly different purpose, and we encourage the end user to read companion publications.</p>
-</section></section><section id="references" class="level1 unnumbered"><h1 class="unnumbered">References</h1>
+</section></section><section id="session-info" class="level1 unnumbered"><h1 class="unnumbered">Session info</h1>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click to expand 👇
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">session_info</a></span><span class="op">(</span>include_base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">##  ─ Session info ────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   setting  value</span></span>
+<span><span class="co">##   version  R Under development (unstable) (2024-01-17 r85813)</span></span>
+<span><span class="co">##   os       Ubuntu 22.04.3 LTS</span></span>
+<span><span class="co">##   system   x86_64, linux-gnu</span></span>
+<span><span class="co">##   ui       X11</span></span>
+<span><span class="co">##   language (EN)</span></span>
+<span><span class="co">##   collate  C</span></span>
+<span><span class="co">##   ctype    en_US.UTF-8</span></span>
+<span><span class="co">##   tz       Etc/UTC</span></span>
+<span><span class="co">##   date     2024-01-22</span></span>
+<span><span class="co">##   pandoc   3.1.1 @ /usr/local/bin/ (via rmarkdown)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ─ Packages ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   package                     * version     date (UTC) lib source</span></span>
+<span><span class="co">##   abind                         1.4-5       2016-07-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   AnnotationDbi                 1.65.2      2023-11-03 [2] Bioconductor</span></span>
+<span><span class="co">##   AnnotationFilter              1.27.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   AnnotationHub               * 3.11.1      2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   backports                     1.4.1       2021-12-13 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   base                        * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   base64enc                     0.1-3       2015-07-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   beeswarm                      0.4.0       2021-06-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Biobase                     * 2.63.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocFileCache               * 2.11.1      2023-10-26 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocGenerics                * 0.49.1      2023-11-01 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocIO                        1.13.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocManager                   1.30.22     2023-08-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   BiocParallel                * 1.37.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocVersion                   3.19.1      2023-10-26 [2] Bioconductor</span></span>
+<span><span class="co">##   biomaRt                       2.59.0      2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   Biostrings                    2.71.1      2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   biovizBase                    1.51.0      2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   bit                           4.0.5       2022-11-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bit64                         4.0.5       2020-08-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bitops                        1.0-7       2021-04-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   blob                          1.2.4       2023-03-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   BSgenome                      1.71.1      2023-11-01 [2] Bioconductor</span></span>
+<span><span class="co">##   BSgenome.Hsapiens.UCSC.hg38   1.4.5       2024-01-22 [2] Bioconductor</span></span>
+<span><span class="co">##   cachem                        1.0.8       2023-05-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Cairo                         1.6-2       2023-11-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   checkmate                     2.3.1       2023-12-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cli                           3.6.2       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cluster                       2.1.6       2023-12-01 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   codetools                     0.2-19      2023-02-01 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   colorspace                    2.1-0       2023-01-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   compiler                      4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   crayon                        1.5.2       2022-09-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   curl                          5.2.0       2023-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   data.table                    1.14.10     2023-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   datasets                    * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   DBI                           1.2.1       2024-01-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dbplyr                      * 2.4.0       2023-10-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   DelayedArray                  0.29.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   deldir                        2.0-2       2023-11-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dichromat                     2.0-0.1     2022-05-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   digest                        0.6.34      2024-01-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   doParallel                    1.0.17      2022-02-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dplyr                       * 1.1.4       2023-11-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dynamicTreeCut                1.63-1      2016-03-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ensembldb                     2.27.1      2023-11-20 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   evaluate                      0.23        2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ExperimentHub               * 2.11.1      2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   fansi                         1.0.6       2023-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   farver                        2.1.1       2022-07-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fastcluster                   1.2.6       2024-01-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fastmap                       1.1.1       2023-02-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   filelock                      1.0.3       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   foreach                       1.5.2       2022-02-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   foreign                       0.8-86      2023-11-28 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Formula                       1.2-5       2023-02-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fourDNData                  * 1.3.0       2023-10-31 [2] Bioconductor</span></span>
+<span><span class="co">##   generics                      0.1.3       2022-07-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   GenomeInfoDb                * 1.39.5      2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   GenomeInfoDbData              1.2.11      2024-01-22 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomicAlignments             1.39.2      2024-01-16 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   GenomicFeatures               1.55.1      2023-10-29 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomicInteractions           1.37.0      2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomicRanges               * 1.55.1      2023-10-29 [2] Bioconductor</span></span>
+<span><span class="co">##   ggbeeswarm                    0.7.2       2023-04-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ggplot2                     * 3.4.4       2023-10-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ggrastr                       1.0.2       2023-06-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   glue                          1.7.0       2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   GO.db                         3.18.0      2024-01-22 [2] Bioconductor</span></span>
+<span><span class="co">##   graphics                    * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   grDevices                   * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   grid                          4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   gridExtra                     2.3         2017-09-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   gtable                        0.3.4       2023-08-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Gviz                          1.47.1      2023-11-16 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   HiCExperiment               * 1.3.0       2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   HiContacts                  * 1.5.0       2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   HiContactsData              * 1.5.3       2024-01-22 [2] Github (js2264/HiContactsData@d5bebe7)</span></span>
+<span><span class="co">##   Hmisc                         5.1-1       2023-09-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   hms                           1.1.3       2023-03-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmlTable                     2.4.2       2023-10-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmltools                     0.5.7       2023-11-03 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmlwidgets                   1.6.4       2023-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   httr                          1.4.7       2023-08-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   igraph                        1.6.0       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   impute                        1.77.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   InteractionSet              * 1.31.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   interp                        1.1-5       2023-11-27 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   IRanges                     * 2.37.1      2024-01-19 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   iterators                     1.0.14      2022-02-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   jpeg                          0.1-10      2022-11-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   jsonlite                      1.8.8       2023-12-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   KEGGREST                      1.43.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   knitr                         1.45        2023-10-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   labeling                      0.4.3       2023-08-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lattice                       0.22-5      2023-10-24 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   latticeExtra                  0.6-30      2022-07-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lazyeval                      0.2.2       2019-03-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lifecycle                     1.0.4       2023-11-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   magrittr                      2.0.3       2022-03-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Matrix                        1.6-5       2024-01-11 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   MatrixGenerics              * 1.15.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   matrixStats                 * 1.2.0       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   memoise                       2.0.1       2021-11-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   methods                     * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   mime                          0.12        2021-09-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   munsell                       0.5.0       2018-06-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   nnet                          7.3-19      2023-05-03 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   OHCA                        * 0.99.7      2024-01-22 [1] Bioconductor</span></span>
+<span><span class="co">##   parallel                      4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   patchwork                   * 1.2.0       2024-01-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pillar                        1.9.0       2023-03-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pkgconfig                     2.0.3       2019-09-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   plyinteractions               1.1.0       2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   plyranges                     1.23.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   png                           0.1-8       2022-11-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   preprocessCore                1.65.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   prettyunits                   1.2.0       2023-09-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   progress                      1.2.3       2023-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ProtGenerics                  1.35.1      2024-01-17 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   purrr                         1.0.2       2023-08-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   R6                            2.5.1       2021-08-19 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rappdirs                      0.3.3       2021-01-31 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RColorBrewer                  1.1-3       2022-04-03 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Rcpp                          1.0.12      2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RCurl                         1.98-1.14   2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   readr                         2.1.5       2024-01-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   restfulr                      0.0.15      2022-06-16 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rhdf5                         2.47.2      2024-01-15 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   rhdf5filters                  1.15.1      2023-11-06 [2] Bioconductor</span></span>
+<span><span class="co">##   Rhdf5lib                      1.25.1      2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   rjson                         0.2.21      2022-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rlang                         1.1.3       2024-01-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rmarkdown                     2.25        2023-09-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rpart                         4.1.23      2023-12-05 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Rsamtools                     2.19.3      2024-01-17 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   RSpectra                      0.16-1      2022-04-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RSQLite                       2.3.5       2024-01-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rstudioapi                    0.15.0      2023-07-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rtracklayer                 * 1.63.0      2024-01-22 [2] Github (lawremi/rtracklayer@86407bb)</span></span>
+<span><span class="co">##   S4Arrays                      1.3.2       2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   S4Vectors                   * 0.41.3      2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   scales                        1.3.0       2023-11-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   sessioninfo                   1.2.2       2021-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   SparseArray                   1.3.3       2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   splines                       4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   stats                       * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   stats4                      * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   strawr                        0.0.91      2023-03-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   stringi                       1.8.3       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   stringr                       1.5.1       2023-11-14 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   SummarizedExperiment        * 1.33.2      2024-01-07 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   survival                      3.5-7       2023-08-14 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tibble                        3.2.1       2023-03-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tidyr                         1.3.0       2023-01-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tidyselect                    1.2.0       2022-10-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tools                         4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   tzdb                          0.4.0       2023-05-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   utf8                          1.2.4       2023-10-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   utils                       * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   VariantAnnotation             1.49.5      2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   vctrs                         0.6.5       2023-12-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   vipor                         0.4.7       2023-12-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   vroom                         1.6.5       2023-12-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   WGCNA                         1.72-5      2023-12-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   withr                         3.0.0       2024-01-16 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   xfun                          0.41        2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   XML                           3.99-0.16.1 2024-01-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   xml2                          1.3.6       2023-12-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   XVector                       0.43.1      2024-01-10 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   yaml                          2.3.8       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   zlibbioc                      1.49.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##   [1] /tmp/Rtmp4kTMSb/Rinstb104d8a34</span></span>
+<span><span class="co">##   [2] /usr/local/lib/R/site-library</span></span>
+<span><span class="co">##   [3] /usr/local/lib/R/library</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ───────────────────────────────────────────────────────────────────────────</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section><section id="references" class="level1 unnumbered"><h1 class="unnumbered">References</h1>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">

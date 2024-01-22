@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.3.450">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Orchestrating Hi-C analysis with Bioconductor - 2&nbsp; Hi-C data structures in R</title>
 <style>
@@ -316,6 +316,7 @@ div.csl-indent {
   </ul>
 </li>
   <li><a href="#visual-summary-of-the-hicexperiment-data-structure" id="toc-visual-summary-of-the-hicexperiment-data-structure" class="nav-link" data-scroll-target="#visual-summary-of-the-hicexperiment-data-structure"><span class="header-section-number">2.5</span> Visual summary of the <code>HiCExperiment</code> data structure</a></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info">Session info</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></nav>
     </div>
@@ -337,6 +338,141 @@ div.csl-indent {
   
 
 </header><div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Pre-loading packages and objects 📦
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: stats4</span></span>
+<span><span class="co">##  Loading required package: BiocGenerics</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'BiocGenerics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      IQR, mad, sd, var, xtabs</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      Filter, Find, Map, Position, Reduce, anyDuplicated, aperm,</span></span>
+<span><span class="co">##      append, as.data.frame, basename, cbind, colnames, dirname,</span></span>
+<span><span class="co">##      do.call, duplicated, eval, evalq, get, grep, grepl, intersect,</span></span>
+<span><span class="co">##      is.unsorted, lapply, mapply, match, mget, order, paste, pmax,</span></span>
+<span><span class="co">##      pmax.int, pmin, pmin.int, rank, rbind, rownames, sapply,</span></span>
+<span><span class="co">##      setdiff, table, tapply, union, unique, unsplit, which.max,</span></span>
+<span><span class="co">##      which.min</span></span>
+<span><span class="co">##  Loading required package: S4Vectors</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'S4Vectors'</span></span>
+<span><span class="co">##  The following object is masked from 'package:utils':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      findMatches</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      I, expand.grid, unname</span></span>
+<span><span class="co">##  Loading required package: IRanges</span></span>
+<span><span class="co">##  Loading required package: GenomeInfoDb</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">InteractionSet</span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: SummarizedExperiment</span></span>
+<span><span class="co">##  Loading required package: MatrixGenerics</span></span>
+<span><span class="co">##  Loading required package: matrixStats</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'MatrixGenerics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:matrixStats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,</span></span>
+<span><span class="co">##      colCounts, colCummaxs, colCummins, colCumprods, colCumsums,</span></span>
+<span><span class="co">##      colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,</span></span>
+<span><span class="co">##      colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,</span></span>
+<span><span class="co">##      colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,</span></span>
+<span><span class="co">##      colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,</span></span>
+<span><span class="co">##      colWeightedMeans, colWeightedMedians, colWeightedSds,</span></span>
+<span><span class="co">##      colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,</span></span>
+<span><span class="co">##      rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,</span></span>
+<span><span class="co">##      rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,</span></span>
+<span><span class="co">##      rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,</span></span>
+<span><span class="co">##      rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,</span></span>
+<span><span class="co">##      rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs,</span></span>
+<span><span class="co">##      rowVars, rowWeightedMads, rowWeightedMeans, rowWeightedMedians,</span></span>
+<span><span class="co">##      rowWeightedSds, rowWeightedVars</span></span>
+<span><span class="co">##  Loading required package: Biobase</span></span>
+<span><span class="co">##  Welcome to Bioconductor</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      Vignettes contain introductory material; view with</span></span>
+<span><span class="co">##      'browseVignettes()'. To cite Bioconductor, see</span></span>
+<span><span class="co">##      'citation("Biobase")', and for packages 'citation("pkgname")'.</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'Biobase'</span></span>
+<span><span class="co">##  The following object is masked from 'package:MatrixGenerics':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      rowMedians</span></span>
+<span><span class="co">##  The following objects are masked from 'package:matrixStats':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      anyMissing, rowMedians</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<span><span class="co">##  Consider using the `HiContacts` package to perform advanced genomic operations </span></span>
+<span><span class="co">##  on `HiCExperiment` objects.</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Read "Orchestrating Hi-C analysis with Bioconductor" online book to learn more:</span></span>
+<span><span class="co">##  https://js2264.github.io/OHCA/</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'HiCExperiment'</span></span>
+<span><span class="co">##  The following object is masked from 'package:SummarizedExperiment':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      metadata&lt;-</span></span>
+<span><span class="co">##  The following object is masked from 'package:S4Vectors':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      metadata&lt;-</span></span>
+<span><span class="co">##  The following object is masked from 'package:ggplot2':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      resolution</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
+<span><span class="co">##  Loading required package: ExperimentHub</span></span>
+<span><span class="co">##  Loading required package: AnnotationHub</span></span>
+<span><span class="co">##  Loading required package: BiocFileCache</span></span>
+<span><span class="co">##  Loading required package: dbplyr</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'AnnotationHub'</span></span>
+<span><span class="co">##  The following object is masked from 'package:Biobase':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      cache</span></span>
+<span><span class="va">coolf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'mcool'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">hicf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'hic'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">hicpromatrixf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'hicpro_matrix'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">hicproregionsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'hicpro_bed'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  downloading 1 resources</span></span>
+<span><span class="co">##  retrieving 1 resource</span></span>
+<span><span class="co">##  loading from cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -377,13 +513,13 @@ TL;DR
 </div>
 <section id="granges-class" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="granges-class">
 <span class="header-section-number">2.1</span> <code>GRanges</code> class</h2>
-<p><code>GRanges</code> is a shorthand for <code>GenomicRanges</code>, a core class in <code>Bioconductor</code>. This class is primarily used to describe genomic ranges of any nature, e.g.&nbsp; sets of promoters, SNPs, chromatin loop anchors, ….<br>
+<p><code>GRanges</code> is a shorthand for <code>GenomicRanges</code>, a core class in <code>Bioconductor</code>. This class is primarily used to describe genomic ranges of any nature, e.g.&nbsp; sets of promoters, SNPs, chromatin loop anchors, etc.<br>
 The data structure has been published in the seminal 2015 publication by the <code>Bioconductor</code> team (<span class="citation" data-cites="Huber_2015">Huber et al. (<a href="#ref-Huber_2015" role="doc-biblioref">2015</a>)</span>).</p>
 <section id="granges-fundamentals" class="level3" data-number="2.1.1"><h3 data-number="2.1.1" class="anchored" data-anchor-id="granges-fundamentals">
 <span class="header-section-number">2.1.1</span> <code>GRanges</code> fundamentals</h3>
 <p>The easiest way to generate a <code>GRanges</code> object is to coerce it from a vector of genomic coordinates in the UCSC format (e.g.&nbsp;<code>"chr2:2004-4853"</code>):</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
 <span><span class="va">gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"chr2:2004-7853:+"</span>, </span>
 <span>    <span class="st">"chr4:4482-9873:-"</span>, </span>
@@ -403,7 +539,7 @@ The data structure has been published in the seminal 2015 publication by the <co
 </div>
 <p>A single <code>GRanges</code> object can contain one or several <strong>“ranges”</strong>, or genomic intervals. To navigate between these ranges, <code>GRanges</code> can be subset using the standard <code>R</code> single bracket notation <code>[</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span><span class="co">##  GRanges object with 1 range and 0 metadata columns:</span></span>
 <span><span class="co">##        seqnames    ranges strand</span></span>
 <span><span class="co">##           &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;</span></span>
@@ -421,7 +557,7 @@ The data structure has been published in the seminal 2015 publication by the <co
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    seqinfo: 3 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><code>GenomicRanges</code> objects aim to provide a natural description of genomic intervals (ranges) and are incredibly versatile. They extend the <code>data.frame</code> object and have four required pieces of information:</p>
+<p><code>GenomicRanges</code> objects aim to provide a natural description of genomic intervals (ranges) and are incredibly versatile. They have four required pieces of information:</p>
 <ul>
 <li>
 <code>seqnames</code> (i.e.&nbsp;chromosome names) (accessible with <code><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqinfo.html">seqnames()</a></code>)</li>
@@ -433,7 +569,7 @@ The data structure has been published in the seminal 2015 publication by the <co
 <code>strand</code> (accessible with <code><a href="https://rdrr.io/pkg/BiocGenerics/man/strand.html">strand()</a></code>)</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqinfo.html">seqnames</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqinfo.html">seqnames</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span>
 <span><span class="co">##  factor-Rle of length 4 with 3 runs</span></span>
 <span><span class="co">##    Lengths:    1    1    2</span></span>
 <span><span class="co">##    Values : chr2 chr4 chr5</span></span>
@@ -459,7 +595,7 @@ The data structure has been published in the seminal 2015 publication by the <co
 <p>An important aspect of <code>GRanges</code> objects is that each entry (range) can have extra optional metadata. This metadata is stored in a rectangular <code>DataFrame</code>. Each column can contain a different type of information, e.g.&nbsp;a <code>numerical</code> vector, a <code>factor</code>, a list, …</p>
 <p>One can directly access this <code>DataFrame</code> using the <code><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html">mcols()</a></code> function, and individual columns of metadata using the <code>$</code> notation:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html">mcols</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html">mcols</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span>
 <span><span class="co">##  DataFrame with 4 rows and 0 columns</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html">mcols</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span><span class="op">$</span><span class="va">GC</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.45</span>, <span class="fl">0.43</span>, <span class="fl">0.44</span>, <span class="fl">0.42</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html">mcols</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span><span class="op">$</span><span class="va">annotation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="st">'promoter'</span>, <span class="st">'enhancer'</span>, <span class="st">'centromere'</span><span class="op">)</span><span class="op">)</span></span>
@@ -480,7 +616,7 @@ The data structure has been published in the seminal 2015 publication by the <co
 </div>
 <p>When metadata columns are defined for a <code>GRanges</code> object, they are pasted next to the minimal 4 required <code>GRanges</code> fields, separated by a <code>|</code> character.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
 <span><span class="co">##  GRanges object with 4 ranges and 3 metadata columns:</span></span>
 <span><span class="co">##        seqnames    ranges strand |        GC annotation extended.info</span></span>
 <span><span class="co">##           &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;   &lt;factor&gt;        &lt;list&gt;</span></span>
@@ -517,7 +653,7 @@ Note
 <li>Shifting each genomic range in a <code>GRanges</code> object by a certain number of bases:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
 <span><span class="co">##  GRanges object with 4 ranges and 3 metadata columns:</span></span>
 <span><span class="co">##        seqnames    ranges strand |        GC annotation extended.info</span></span>
 <span><span class="co">##           &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;   &lt;factor&gt;        &lt;list&gt;</span></span>
@@ -556,7 +692,7 @@ Note
 <li>Narrowing each genomic range in a <code>GRanges</code> object by a certain number of bases:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
 <span><span class="co">##  GRanges object with 4 ranges and 3 metadata columns:</span></span>
 <span><span class="co">##        seqnames    ranges strand |        GC annotation extended.info</span></span>
 <span><span class="co">##           &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;   &lt;factor&gt;        &lt;list&gt;</span></span>
@@ -586,7 +722,7 @@ Note
 <li>Resizing each genomic range in a <code>GRanges</code> object to a certain number of bases:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
 <span><span class="co">##  GRanges object with 4 ranges and 3 metadata columns:</span></span>
 <span><span class="co">##        seqnames    ranges strand |        GC annotation extended.info</span></span>
 <span><span class="co">##           &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;   &lt;factor&gt;        &lt;list&gt;</span></span>
@@ -637,7 +773,7 @@ Note
 <li>Extracting flanking coordinates for each entry in <code>gr</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
 <span><span class="co">##  GRanges object with 4 ranges and 3 metadata columns:</span></span>
 <span><span class="co">##        seqnames    ranges strand |        GC annotation extended.info</span></span>
 <span><span class="co">##           &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;   &lt;factor&gt;        &lt;list&gt;</span></span>
@@ -677,7 +813,7 @@ Note
 <li>Several arithmetics operators can also directly work with <code>GRanges</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span></span>
 <span><span class="co">##  GRanges object with 4 ranges and 3 metadata columns:</span></span>
 <span><span class="co">##        seqnames    ranges strand |        GC annotation extended.info</span></span>
 <span><span class="co">##           &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;   &lt;factor&gt;        &lt;list&gt;</span></span>
@@ -754,7 +890,7 @@ Note
 <li>Computing the “inverse” genomic ranges, i.e.&nbsp;ranges in-between the input ranges:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/inter-range-methods.html">gaps</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/inter-range-methods.html">gaps</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 3 ranges and 0 metadata columns:</span></span>
 <span><span class="co">##        seqnames    ranges strand</span></span>
 <span><span class="co">##           &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt;</span></span>
@@ -768,7 +904,7 @@ Note
 <li>For each entry in a <code>GRanges</code>, finding the index of the preceding/following/nearest genomic range:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/nearest-methods.html">precede</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/nearest-methods.html">precede</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span>
 <span><span class="co">##  [1] NA NA NA NA</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/nearest-methods.html">follow</a></span><span class="op">(</span><span class="va">gr</span><span class="op">)</span></span>
@@ -781,7 +917,7 @@ Note
 <li>Computing a coverage over a genome, optionally indicated a “score” column from metadata:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="va">gr</span>, weight <span class="op">=</span> <span class="st">'GC'</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/coverage-methods.html">coverage</a></span><span class="op">(</span><span class="va">gr</span>, weight <span class="op">=</span> <span class="st">'GC'</span><span class="op">)</span></span>
 <span><span class="co">##  RleList of length 3</span></span>
 <span><span class="co">##  $chr2</span></span>
 <span><span class="co">##  numeric-Rle of length 7853 with 2 runs</span></span>
@@ -820,7 +956,7 @@ Going further
 <code>peaks</code> represents dummy 8 ChIP-seq peaks</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">peaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">peaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">'chr1:320-418'</span>,</span>
 <span>    <span class="st">'chr1:512-567'</span>,</span>
 <span>    <span class="st">'chr1:843-892'</span>,</span>
@@ -850,7 +986,7 @@ Going further
 <code>TSSs</code> represents dummy 3 gene promoters (± 10bp around the TSS)</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">'chr1:358-1292:+'</span>,</span>
 <span>    <span class="st">'chr1:1324-2343:+'</span>, </span>
 <span>    <span class="st">'chr1:2732-2751:+'</span></span>
@@ -868,7 +1004,7 @@ Going further
 </div>
 <p>Let’s see how they overlap by plotting them:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="va">peaks</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">'peaks'</span></span>
 <span><span class="va">TSSs</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="st">'TSSs'</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
@@ -899,7 +1035,7 @@ Going further
 <p>In our case, we want to identify which ChIP-seq peaks overlap with a TSS: the query is the set of peaks and the subject is the set of TSSs.</p>
 <p><code>findOverlaps</code> returns a <code>Hits</code> object listing which <code>query</code> ranges overlap with which <code>subject</code> ranges.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">findOverlaps</a></span><span class="op">(</span>query <span class="op">=</span> <span class="va">peaks</span>, subject <span class="op">=</span> <span class="va">TSSs</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ov</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">findOverlaps</a></span><span class="op">(</span>query <span class="op">=</span> <span class="va">peaks</span>, subject <span class="op">=</span> <span class="va">TSSs</span><span class="op">)</span></span>
 <span><span class="va">ov</span></span>
 <span><span class="co">##  Hits object with 3 hits and 0 metadata columns:</span></span>
 <span><span class="co">##        queryHits subjectHits</span></span>
@@ -935,7 +1071,7 @@ Note
 </ul>
 <p>To directly <strong>subset</strong> ranges from <code>query</code> overlapping with ranges from a <code>subject</code> (e.g.&nbsp;to only keep <em>peaks</em> overlapping a <em>TSS</em>), we can use the <code>subsetByOverlaps</code> function. The output of <code>subsetByOverlaps</code> is a subset of the original <code>GRanges</code> object provided as a <code>query</code>, with retained ranges being unmodified.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">subsetByOverlaps</a></span><span class="op">(</span><span class="va">peaks</span>, <span class="va">TSSs</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">subsetByOverlaps</a></span><span class="op">(</span><span class="va">peaks</span>, <span class="va">TSSs</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 3 ranges and 1 metadata column:</span></span>
 <span><span class="co">##        seqnames    ranges strand |        type</span></span>
 <span><span class="co">##           &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;</span></span>
@@ -950,7 +1086,7 @@ Note
 </ul>
 <p>Finally, the <code>countOverlaps</code> is used to count, for each range in a <code>query</code>, how many ranges in the <code>subject</code> it overlaps with.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">countOverlaps</a></span><span class="op">(</span>query <span class="op">=</span> <span class="va">peaks</span>, subject <span class="op">=</span> <span class="va">TSSs</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">countOverlaps</a></span><span class="op">(</span>query <span class="op">=</span> <span class="va">peaks</span>, subject <span class="op">=</span> <span class="va">TSSs</span><span class="op">)</span></span>
 <span><span class="co">##  [1] 1 0 0 1 1 0 0 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -966,12 +1102,12 @@ Note
 <p>Note that which <code>GRanges</code> goes in <code>query</code> or <code>subject</code> is crucial! Counting <strong>for each peak, the number of TSSs it overlaps with</strong> is very different from <strong>for each TSS, how many peaks it overlaps with</strong>.</p>
 <p>In our case example, it would also be informative to count how many peaks overlap with each TSS, so we’d need to swap <code>query</code> and <code>subject</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">countOverlaps</a></span><span class="op">(</span>query <span class="op">=</span> <span class="va">TSSs</span>, subject <span class="op">=</span> <span class="va">peaks</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">countOverlaps</a></span><span class="op">(</span>query <span class="op">=</span> <span class="va">TSSs</span>, subject <span class="op">=</span> <span class="va">peaks</span><span class="op">)</span></span>
 <span><span class="co">##  [1] 1 2 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can add these counts to the original <code>query</code> object:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">TSSs</span><span class="op">$</span><span class="va">n_peaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">countOverlaps</a></span><span class="op">(</span>query <span class="op">=</span> <span class="va">TSSs</span>, subject <span class="op">=</span> <span class="va">peaks</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">TSSs</span><span class="op">$</span><span class="va">n_peaks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">countOverlaps</a></span><span class="op">(</span>query <span class="op">=</span> <span class="va">TSSs</span>, subject <span class="op">=</span> <span class="va">peaks</span><span class="op">)</span></span>
 <span><span class="va">TSSs</span></span>
 <span><span class="co">##  GRanges object with 3 ranges and 2 metadata columns:</span></span>
 <span><span class="co">##        seqnames    ranges strand |        type   n_peaks</span></span>
@@ -991,7 +1127,7 @@ Note
 <p>Handy operators exist that return logical vectors (same length as the <code>query</code>). They essentially are short-hands for specific <code><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">findOverlaps()</a></code> cases.</p>
 <p><code>&lt;query&gt; %over% &lt;subject&gt;</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">peaks</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%over%</a></span> <span class="va">TSSs</span></span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">peaks</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%over%</a></span> <span class="va">TSSs</span></span>
 <span><span class="co">##  [1]  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE</span></span>
 <span></span>
 <span><span class="va">peaks</span><span class="op">[</span><span class="va">peaks</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%over%</a></span> <span class="va">TSSs</span><span class="op">]</span> <span class="co"># ----- Equivalent to `subsetByOverlaps(peaks, TSSs)`</span></span>
@@ -1006,7 +1142,7 @@ Note
 </div>
 <p><code>&lt;query&gt; %within% &lt;subject&gt;</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">peaks</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%within%</a></span> <span class="va">TSSs</span></span>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">peaks</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%within%</a></span> <span class="va">TSSs</span></span>
 <span><span class="co">##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span></span>
 <span></span>
 <span><span class="va">TSSs</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%within%</a></span> <span class="va">peaks</span></span>
@@ -1014,7 +1150,7 @@ Note
 </div>
 <p><code>&lt;query&gt; %outside% &lt;subject&gt;</code>:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">peaks</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%outside%</a></span> <span class="va">TSSs</span></span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">peaks</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%outside%</a></span> <span class="va">TSSs</span></span>
 <span><span class="co">##  [1] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled">
@@ -1034,7 +1170,7 @@ Going further
 <span class="header-section-number">2.1.4.2</span> Find nearest range from a subject for each range in a query</h4>
 <p><code>*Overlaps</code> methods are not always enough to match a <code>query</code> to a <code>subject</code>. For instance, some peaks in the <code>query</code> might be very near to some TSSs in the <code>subject</code>, but not quite overlapping.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">peaks</span><span class="op">[</span><span class="fl">8</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">peaks</span><span class="op">[</span><span class="fl">8</span><span class="op">]</span></span>
 <span><span class="co">##  GRanges object with 1 range and 1 metadata column:</span></span>
 <span><span class="co">##        seqnames    ranges strand |        type</span></span>
 <span><span class="co">##           &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;</span></span>
@@ -1056,7 +1192,7 @@ Going further
 <p>Rather than finding the <em>overlapping</em> range in a <code>subject</code> for each range in a <code>query</code>, we can find the <code>nearest</code> range.</p>
 <p>For each range in the <code>query</code>, this returns the <em>index</em> of the range in the <code>subject</code> to which the <code>query</code> is the nearest.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/nearest-methods.html">nearest</a></span><span class="op">(</span><span class="va">peaks</span>, <span class="va">TSSs</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/nearest-methods.html">nearest</a></span><span class="op">(</span><span class="va">peaks</span>, <span class="va">TSSs</span><span class="op">)</span></span>
 <span><span class="co">##  [1] 1 1 2 2 2 2 3 3</span></span>
 <span></span>
 <span><span class="va">TSSs</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/nearest-methods.html">nearest</a></span><span class="op">(</span><span class="va">peaks</span>, <span class="va">TSSs</span><span class="op">)</span><span class="op">]</span></span>
@@ -1079,7 +1215,7 @@ Going further
 </ul>
 <p>Alternatively, one can simply ask to calculate the <code>distanceToNearest</code> between ranges in a <code>query</code> and ranges in a <code>subject</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/nearest-methods.html">distanceToNearest</a></span><span class="op">(</span><span class="va">peaks</span>, <span class="va">TSSs</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/nearest-methods.html">distanceToNearest</a></span><span class="op">(</span><span class="va">peaks</span>, <span class="va">TSSs</span><span class="op">)</span></span>
 <span><span class="co">##  Hits object with 8 hits and 1 metadata column:</span></span>
 <span><span class="co">##        queryHits subjectHits |  distance</span></span>
 <span><span class="co">##        &lt;integer&gt;   &lt;integer&gt; | &lt;integer&gt;</span></span>
@@ -1105,7 +1241,7 @@ Going further
 <span class="header-section-number">2.2.1</span> Building a <code>GInteractions</code> object from scratch</h3>
 <p>Let’s first define two parallel <code>GRanges</code> objects (i.e.&nbsp;two <code>GRanges</code> of same length). Each <code>GRanges</code> will contain 5 ranges.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr_first</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr_first</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">'chr1:1-100'</span>, </span>
 <span>    <span class="st">'chr1:1001-2000'</span>, </span>
 <span>    <span class="st">'chr1:5001-6000'</span>, </span>
@@ -1122,7 +1258,7 @@ Going further
 </div>
 <p>Because these two <code>GRanges</code> objects are of same length (5), one can “bind” them together by using the <code>GInteractions</code>function. This effectively associate each entry from one <code>GRanges</code> to the entry aligned in the other <code>GRanges</code> object.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">InteractionSet</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">InteractionSet</span><span class="op">)</span></span>
 <span><span class="va">gi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/GInteractions-class.html">GInteractions</a></span><span class="op">(</span><span class="va">gr_first</span>, <span class="va">gr_second</span><span class="op">)</span></span>
 <span><span class="va">gi</span></span>
 <span><span class="co">##  GInteractions object with 5 interactions and 0 metadata columns:</span></span>
@@ -1142,7 +1278,7 @@ Going further
 <li>Note that it is possible to have interactions joining two identical anchors.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span><span class="co">##  GInteractions object with 1 interaction and 0 metadata columns:</span></span>
 <span><span class="co">##        seqnames1   ranges1     seqnames2   ranges2</span></span>
 <span><span class="co">##            &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt; &lt;IRanges&gt;</span></span>
@@ -1155,7 +1291,7 @@ Going further
 <li>It is also technically possible (though not advised) to have interactions for which the “first” end is located after the “second” end along the chromosome.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span></span>
 <span><span class="co">##  GInteractions object with 1 interaction and 0 metadata columns:</span></span>
 <span><span class="co">##        seqnames1   ranges1     seqnames2   ranges2</span></span>
 <span><span class="co">##            &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt; &lt;IRanges&gt;</span></span>
@@ -1168,7 +1304,7 @@ Going further
 <li>Finally, it is possible to define inter-chromosomal interactions (a.k.a. trans interactions).</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span><span class="op">[</span><span class="fl">5</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span><span class="op">[</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="co">##  GInteractions object with 1 interaction and 0 metadata columns:</span></span>
 <span><span class="co">##        seqnames1   ranges1     seqnames2     ranges2</span></span>
 <span><span class="co">##            &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt;   &lt;IRanges&gt;</span></span>
@@ -1184,7 +1320,7 @@ Going further
 <span class="header-section-number">2.2.2.1</span> Anchors</h4>
 <p>“Anchors” of a single genomic interaction refer to the two ends of this interaction. These anchors can be extracted from a <code>GInteractions</code> object using the <code><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">anchors()</a></code> function. This outputs a list of two <code>GRanges</code>, the first corresponding to the “left” end of interactions (when printed to the console) and the second corresponding to the “right” end of interactions (when printed to the console).</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ----- This extracts the two sets of anchors ("first" and "second") from a GInteractions object</span></span>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ----- This extracts the two sets of anchors ("first" and "second") from a GInteractions object</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">anchors</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span></span>
 <span><span class="co">##  $first</span></span>
 <span><span class="co">##  GRanges object with 5 ranges and 0 metadata columns:</span></span>
@@ -1240,7 +1376,7 @@ Going further
 <p>“Regions” of a <em>set</em> of interactions refer to the universe of unique anchors represented in a set of interactions. Therefore, the length of the <code>regions</code> can only be equal to or strictly lower than twice the length of <code>anchors</code>.</p>
 <p>The <code>regions</code> function returns the regions associated with a <code>GInteractions</code> object, stored as a <code>GRanges</code> object.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">regions</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">regions</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 7 ranges and 0 metadata columns:</span></span>
 <span><span class="co">##        seqnames      ranges strand</span></span>
 <span><span class="co">##           &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt;</span></span>
@@ -1267,11 +1403,11 @@ Going further
 <span class="header-section-number">2.2.3.1</span> Metadata</h4>
 <p>One can add metadata columns directly to a <code>GInteractions</code> object.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html">mcols</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html">mcols</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span></span>
 <span><span class="co">##  DataFrame with 5 rows and 0 columns</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Vector-class.html">mcols</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
 <span>    idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cis"</span>, <span class="st">"cis"</span>, <span class="st">"cis"</span>, <span class="st">"trans"</span>, <span class="st">"cis"</span><span class="op">)</span></span>
+<span>    type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"cis"</span>, <span class="st">"cis"</span>, <span class="st">"cis"</span>, <span class="st">"cis"</span>, <span class="st">"trans"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">gi</span></span>
 <span><span class="co">##  GInteractions object with 5 interactions and 2 metadata columns:</span></span>
@@ -1280,18 +1416,18 @@ Going further
 <span><span class="co">##    [1]      chr1     1-100 ---      chr1       1-100 |         1         cis</span></span>
 <span><span class="co">##    [2]      chr1 1001-2000 ---      chr1   3001-4000 |         2         cis</span></span>
 <span><span class="co">##    [3]      chr1 5001-6000 ---      chr1   8001-9000 |         3         cis</span></span>
-<span><span class="co">##    [4]      chr1 8001-9000 ---      chr1   7001-8000 |         4       trans</span></span>
-<span><span class="co">##    [5]      chr1 7001-8000 ---      chr2 13000-14000 |         5         cis</span></span>
+<span><span class="co">##    [4]      chr1 8001-9000 ---      chr1   7001-8000 |         4         cis</span></span>
+<span><span class="co">##    [5]      chr1 7001-8000 ---      chr2 13000-14000 |         5       trans</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 7 ranges and 0 metadata columns</span></span>
 <span><span class="co">##    seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span>
 <span></span>
 <span><span class="va">gi</span><span class="op">$</span><span class="va">type</span></span>
-<span><span class="co">##  [1] "cis"   "cis"   "cis"   "trans" "cis"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  [1] "cis"   "cis"   "cis"   "cis"   "trans"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Importantly, metadata columns can also be directly added to <strong>regions</strong> of a <code>GInteractions</code> object, since these <code>regions</code> are a <code>GRanges</code> object themselves!</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">regions</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">regions</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 7 ranges and 0 metadata columns:</span></span>
 <span><span class="co">##        seqnames      ranges strand</span></span>
 <span><span class="co">##           &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt;</span></span>
@@ -1325,15 +1461,15 @@ Going further
 </h4>
 <p>The <code>sort</code> function works seamlessly with <code>GInteractions</code> objects. It sorts the interactions using a similar approach to that performed by <code>pairtools sort ...</code> for disk-stored <code>.pairs</code> files, sorting on the “first” anchor first, then for interactions with the same “first” anchors, sorting on the “second” anchor.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span></span>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span></span>
 <span><span class="co">##  GInteractions object with 5 interactions and 2 metadata columns:</span></span>
 <span><span class="co">##        seqnames1   ranges1     seqnames2     ranges2 |       idx        type</span></span>
 <span><span class="co">##            &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt;   &lt;IRanges&gt; | &lt;integer&gt; &lt;character&gt;</span></span>
 <span><span class="co">##    [1]      chr1     1-100 ---      chr1       1-100 |         1         cis</span></span>
 <span><span class="co">##    [2]      chr1 1001-2000 ---      chr1   3001-4000 |         2         cis</span></span>
 <span><span class="co">##    [3]      chr1 5001-6000 ---      chr1   8001-9000 |         3         cis</span></span>
-<span><span class="co">##    [4]      chr1 8001-9000 ---      chr1   7001-8000 |         4       trans</span></span>
-<span><span class="co">##    [5]      chr1 7001-8000 ---      chr2 13000-14000 |         5         cis</span></span>
+<span><span class="co">##    [4]      chr1 8001-9000 ---      chr1   7001-8000 |         4         cis</span></span>
+<span><span class="co">##    [5]      chr1 7001-8000 ---      chr2 13000-14000 |         5       trans</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 7 ranges and 2 metadata columns</span></span>
 <span><span class="co">##    seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span>
@@ -1345,8 +1481,8 @@ Going further
 <span><span class="co">##    [1]      chr1     1-100 ---      chr1       1-100 |         1         cis</span></span>
 <span><span class="co">##    [2]      chr1 1001-2000 ---      chr1   3001-4000 |         2         cis</span></span>
 <span><span class="co">##    [3]      chr1 5001-6000 ---      chr1   8001-9000 |         3         cis</span></span>
-<span><span class="co">##    [4]      chr1 7001-8000 ---      chr2 13000-14000 |         5         cis</span></span>
-<span><span class="co">##    [5]      chr1 8001-9000 ---      chr1   7001-8000 |         4       trans</span></span>
+<span><span class="co">##    [4]      chr1 7001-8000 ---      chr2 13000-14000 |         5       trans</span></span>
+<span><span class="co">##    [5]      chr1 8001-9000 ---      chr1   7001-8000 |         4         cis</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 7 ranges and 2 metadata columns</span></span>
 <span><span class="co">##    seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1355,15 +1491,15 @@ Going further
 <span class="header-section-number">2.2.3.3</span> Swapping <code>GInteractions</code> anchors</h4>
 <p>For an individual interaction contained in a <code>GInteractions</code> object, the “first” and “second” anchors themselves can be sorted as well. This is called “pairs swapping”, and it is performed similarly to <code>pairtools flip ...</code> for disk-stored <code>.pairs</code> files. This ensures that interactions, when represented as a contact matrix, generate an upper-triangular matrix.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span></span>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span></span>
 <span><span class="co">##  GInteractions object with 5 interactions and 2 metadata columns:</span></span>
 <span><span class="co">##        seqnames1   ranges1     seqnames2     ranges2 |       idx        type</span></span>
 <span><span class="co">##            &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt;   &lt;IRanges&gt; | &lt;integer&gt; &lt;character&gt;</span></span>
 <span><span class="co">##    [1]      chr1     1-100 ---      chr1       1-100 |         1         cis</span></span>
 <span><span class="co">##    [2]      chr1 1001-2000 ---      chr1   3001-4000 |         2         cis</span></span>
 <span><span class="co">##    [3]      chr1 5001-6000 ---      chr1   8001-9000 |         3         cis</span></span>
-<span><span class="co">##    [4]      chr1 8001-9000 ---      chr1   7001-8000 |         4       trans</span></span>
-<span><span class="co">##    [5]      chr1 7001-8000 ---      chr2 13000-14000 |         5         cis</span></span>
+<span><span class="co">##    [4]      chr1 8001-9000 ---      chr1   7001-8000 |         4         cis</span></span>
+<span><span class="co">##    [5]      chr1 7001-8000 ---      chr2 13000-14000 |         5       trans</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 7 ranges and 2 metadata columns</span></span>
 <span><span class="co">##    seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span>
@@ -1375,8 +1511,8 @@ Going further
 <span><span class="co">##    [1]      chr1     1-100 ---      chr1       1-100 |         1         cis</span></span>
 <span><span class="co">##    [2]      chr1 1001-2000 ---      chr1   3001-4000 |         2         cis</span></span>
 <span><span class="co">##    [3]      chr1 5001-6000 ---      chr1   8001-9000 |         3         cis</span></span>
-<span><span class="co">##    [4]      chr1 7001-8000 ---      chr1   8001-9000 |         4       trans</span></span>
-<span><span class="co">##    [5]      chr1 7001-8000 ---      chr2 13000-14000 |         5         cis</span></span>
+<span><span class="co">##    [4]      chr1 7001-8000 ---      chr1   8001-9000 |         4         cis</span></span>
+<span><span class="co">##    [5]      chr1 7001-8000 ---      chr2 13000-14000 |         5       trans</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 7 ranges and 2 metadata columns</span></span>
 <span><span class="co">##    seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1402,15 +1538,15 @@ Note
 <span class="header-section-number">2.2.3.4</span> <code>GInteractions</code> distance method</h4>
 <p>“Distance”, when applied to genomic interactions, typically refers to the genomic distance between the two anchors of a single interaction. For <code>GInteractions</code>, this is computed using the <code>pairdist</code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span></span>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span></span>
 <span><span class="co">##  GInteractions object with 5 interactions and 2 metadata columns:</span></span>
 <span><span class="co">##        seqnames1   ranges1     seqnames2     ranges2 |       idx        type</span></span>
 <span><span class="co">##            &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt;   &lt;IRanges&gt; | &lt;integer&gt; &lt;character&gt;</span></span>
 <span><span class="co">##    [1]      chr1     1-100 ---      chr1       1-100 |         1         cis</span></span>
 <span><span class="co">##    [2]      chr1 1001-2000 ---      chr1   3001-4000 |         2         cis</span></span>
 <span><span class="co">##    [3]      chr1 5001-6000 ---      chr1   8001-9000 |         3         cis</span></span>
-<span><span class="co">##    [4]      chr1 8001-9000 ---      chr1   7001-8000 |         4       trans</span></span>
-<span><span class="co">##    [5]      chr1 7001-8000 ---      chr2 13000-14000 |         5         cis</span></span>
+<span><span class="co">##    [4]      chr1 8001-9000 ---      chr1   7001-8000 |         4         cis</span></span>
+<span><span class="co">##    [5]      chr1 7001-8000 ---      chr2 13000-14000 |         5       trans</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 7 ranges and 2 metadata columns</span></span>
 <span><span class="co">##    seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span>
@@ -1442,7 +1578,7 @@ Note
 </blockquote>
 <p>This is the default behavior of <code>findOverlaps</code> when providing a <code>GInteractions</code> object as <code>query</code> and a <code>GRanges</code> as a <code>subject</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"chr1:7501-7600"</span>, <span class="st">"chr1:8501-8600"</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"chr1:7501-7600"</span>, <span class="st">"chr1:8501-8600"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">findOverlaps</a></span><span class="op">(</span>query <span class="op">=</span> <span class="va">gi</span>, subject <span class="op">=</span> <span class="va">gr</span><span class="op">)</span></span>
 <span><span class="co">##  Hits object with 4 hits and 0 metadata columns:</span></span>
 <span><span class="co">##        queryHits subjectHits</span></span>
@@ -1462,20 +1598,20 @@ Note
 <span><span class="co">##        seqnames1   ranges1     seqnames2     ranges2 |       idx        type</span></span>
 <span><span class="co">##            &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt;   &lt;IRanges&gt; | &lt;integer&gt; &lt;character&gt;</span></span>
 <span><span class="co">##    [1]      chr1 5001-6000 ---      chr1   8001-9000 |         3         cis</span></span>
-<span><span class="co">##    [2]      chr1 8001-9000 ---      chr1   7001-8000 |         4       trans</span></span>
-<span><span class="co">##    [3]      chr1 7001-8000 ---      chr2 13000-14000 |         5         cis</span></span>
+<span><span class="co">##    [2]      chr1 8001-9000 ---      chr1   7001-8000 |         4         cis</span></span>
+<span><span class="co">##    [3]      chr1 7001-8000 ---      chr2 13000-14000 |         5       trans</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 7 ranges and 2 metadata columns</span></span>
 <span><span class="co">##    seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here again, the order matters!</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">countOverlaps</a></span><span class="op">(</span><span class="va">gr</span>, <span class="va">gi</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">countOverlaps</a></span><span class="op">(</span><span class="va">gr</span>, <span class="va">gi</span><span class="op">)</span></span>
 <span><span class="co">##  [1] 2 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And again, the <code>%over%</code> operator can be used here:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%over%</a></span> <span class="va">gr</span></span>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%over%</a></span> <span class="va">gr</span></span>
 <span><span class="co">##  [1] FALSE FALSE  TRUE  TRUE  TRUE</span></span>
 <span></span>
 <span><span class="va">gi</span><span class="op">[</span><span class="va">gi</span> <span class="op"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">%over%</a></span> <span class="va">gr</span><span class="op">]</span> <span class="co"># ----- Equivalent to `subsetByOverlaps(gi, gr)`</span></span>
@@ -1483,8 +1619,8 @@ Note
 <span><span class="co">##        seqnames1   ranges1     seqnames2     ranges2 |       idx        type</span></span>
 <span><span class="co">##            &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt;   &lt;IRanges&gt; | &lt;integer&gt; &lt;character&gt;</span></span>
 <span><span class="co">##    [1]      chr1 5001-6000 ---      chr1   8001-9000 |         3         cis</span></span>
-<span><span class="co">##    [2]      chr1 8001-9000 ---      chr1   7001-8000 |         4       trans</span></span>
-<span><span class="co">##    [3]      chr1 7001-8000 ---      chr2 13000-14000 |         5         cis</span></span>
+<span><span class="co">##    [2]      chr1 8001-9000 ---      chr1   7001-8000 |         4         cis</span></span>
+<span><span class="co">##    [3]      chr1 7001-8000 ---      chr2 13000-14000 |         5       trans</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 7 ranges and 2 metadata columns</span></span>
 <span><span class="co">##    seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1494,7 +1630,7 @@ Note
 </blockquote>
 <p>This slightly different scenario involves overlapping two sets of interactions, to see whether any interaction in <code>Set-1</code> has its two anchors overlapping anchors from an interaction in <code>Set-2</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/GInteractions-class.html">GInteractions</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/GInteractions-class.html">GInteractions</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="st">"chr1:1081-1090"</span><span class="op">)</span>, </span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="st">"chr1:3401-3501"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -1503,7 +1639,7 @@ Note
 </div>
 <p>Note that both anchors of an interaction from a <code>query</code> have to overlap to a pair of anchors of a single interaction from a <code>subject</code> with this method!</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/GInteractions-class.html">GInteractions</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/GInteractions-class.html">GInteractions</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="st">"chr1:1-1000"</span><span class="op">)</span>, </span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="st">"chr1:3401-3501"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -1511,11 +1647,11 @@ Note
 <span><span class="co">##  [1] FALSE FALSE FALSE FALSE FALSE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <blockquote class="blockquote">
-<p>Case 3 : Spanning of the interaction “accross” a genomic range</p>
+<p>Case 3 : Spanning of the interaction “across” a genomic range</p>
 </blockquote>
 <p>This requires a bit of wrangling, to mimic an overlap between two <code>GRanges</code> objects:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-compare.html">swapAnchors</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span> <span class="co"># ----- Make sure anchors are correctly sorted</span></span>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">gi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-compare.html">swapAnchors</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span> <span class="co"># ----- Make sure anchors are correctly sorted</span></span>
 <span><span class="va">gi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sort.html">sort</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span> <span class="co"># ----- Make sure interactions are correctly sorted</span></span>
 <span><span class="va">gi</span> <span class="op">&lt;-</span> <span class="va">gi</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/distances.html">pairdist</a></span><span class="op">(</span><span class="va">gi</span><span class="op">)</span><span class="op">)</span><span class="op">]</span> <span class="co"># ----- Remove inter-chromosomal interactions</span></span>
 <span><span class="va">spanning_gi</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span></span>
@@ -1559,31 +1695,41 @@ Going further
 <li>As a <code>.(m)cool</code> matrix (multi-scores, multi-resolution, indexed)</li>
 <li>As a <code>.hic</code> matrix (multi-scores, multi-resolution, indexed)</li>
 <li>As a HiC-pro derived matrix (single-score, single-resolution, non-indexed)</li>
-<li>Unbinned, Hi-C contacts can be stored in <code>.pairs</code> files</li>
+<li>Un-binned, Hi-C contacts can be stored in <code>.pairs</code> files</li>
 </ul>
 <section id="accessing-example-hi-c-files" class="level3" data-number="2.3.1"><h3 data-number="2.3.1" class="anchored" data-anchor-id="accessing-example-hi-c-files">
 <span class="header-section-number">2.3.1</span> Accessing example Hi-C files</h3>
 <p>Example contact files can be downloaded using <code>HiContactsData</code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
-<span><span class="va">coolf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'mcool'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
+<span><span class="va">coolf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'mcool'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  loading from cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This fetches files from the cloud, download them locally and returns the path of the local file.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">coolf</span></span>
-<span><span class="co">##                                          EH7702 </span></span>
-<span><span class="co">##  "/root/.cache/R/ExperimentHub/f564f8aa26_7752"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">coolf</span></span>
+<span><span class="co">##                                         EH7702 </span></span>
+<span><span class="co">##  "/root/.cache/R/ExperimentHub/f725e39d5_7752"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Similarly, example files are available for other file formats:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hicf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'hic'</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hicf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'hic'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  loading from cache</span></span>
 <span><span class="va">hicpromatrixf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'hicpro_matrix'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  loading from cache</span></span>
 <span><span class="va">hicproregionsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'hicpro_bed'</span><span class="op">)</span></span>
-<span><span class="va">pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  loading from cache</span></span>
+<span><span class="va">pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  loading from cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can even check the content of some of these files to make sure they are actually what they are:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ---- HiC-Pro generates a tab-separated `regions.bed` file</span></span>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ---- HiC-Pro generates a tab-separated `regions.bed` file</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="va">hicproregionsf</span>, <span class="fl">25</span><span class="op">)</span></span>
 <span><span class="co">##   [1] "I\t0\t1000"      "I\t1000\t2000"   "I\t2000\t3000"   "I\t3000\t4000"  </span></span>
 <span><span class="co">##   [5] "I\t4000\t5000"   "I\t5000\t6000"   "I\t6000\t7000"   "I\t7000\t8000"  </span></span>
@@ -1637,12 +1783,12 @@ Going further
 </ul>
 <p>To create each flavor of <code>ContactFile</code>, one can use the corresponding function:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ----- This creates a connection to a `.(m)cool` file (path stored in `coolf`)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
 <span><span class="co">##  CoolFile object</span></span>
-<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/f564f8aa26_7752 </span></span>
+<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/f725e39d5_7752 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -1650,7 +1796,7 @@ Going further
 <span><span class="co"># ----- This creates a connection to a `.hic` file (path stored in `hicf`)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/HicFile-class.html">HicFile</a></span><span class="op">(</span><span class="va">hicf</span><span class="op">)</span></span>
 <span><span class="co">##  HicFile object</span></span>
-<span><span class="co">##  .hic file: /root/.cache/R/ExperimentHub/f54fd4a958_7836 </span></span>
+<span><span class="co">##  .hic file: /root/.cache/R/ExperimentHub/f71e4b3539_7836 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -1659,8 +1805,8 @@ Going further
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/HicproFile-class.html">HicproFile</a></span><span class="op">(</span><span class="va">hicpromatrixf</span>, <span class="va">hicproregionsf</span><span class="op">)</span></span>
 <span><span class="co">##  HicproFile object</span></span>
 <span><span class="co">##  HiC-Pro files:</span></span>
-<span><span class="co">##    $ matrix:   /root/.cache/R/ExperimentHub/f5a4c921e_7837 </span></span>
-<span><span class="co">##    $ regions:  /root/.cache/R/ExperimentHub/f5387b5a9f_7838 </span></span>
+<span><span class="co">##    $ matrix:   /root/.cache/R/ExperimentHub/f738f34432_7837 </span></span>
+<span><span class="co">##    $ regions:  /root/.cache/R/ExperimentHub/f7569470a7_7838 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -1668,7 +1814,7 @@ Going further
 <span><span class="co"># ----- This creates a connection to a pairs file</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/PairsFile-class.html">PairsFile</a></span><span class="op">(</span><span class="va">pairsf</span><span class="op">)</span></span>
 <span><span class="co">##  PairsFile object</span></span>
-<span><span class="co">##  resource: /root/.cache/R/ExperimentHub/f57db44961_7753</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  resource: /root/.cache/R/ExperimentHub/f73dff9842_7753</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="contactfile-slots" class="level3" data-number="2.3.3"><h3 data-number="2.3.3" class="anchored" data-anchor-id="contactfile-slots">
 <span class="header-section-number">2.3.3</span> <code>ContactFile</code> slots</h3>
@@ -1681,10 +1827,10 @@ Going further
 </ul>
 <p>Slots of a <code>CoolFile</code> object can be accessed as follow:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
 <span><span class="va">cf</span></span>
 <span><span class="co">##  CoolFile object</span></span>
-<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/f564f8aa26_7752 </span></span>
+<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/f725e39d5_7752 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -1719,7 +1865,7 @@ Important!
 <code>availableResolutions</code> checks which resolutions are available in a <code>ContactFile</code>.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">availableResolutions</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">availableResolutions</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1728,7 +1874,7 @@ Important!
 <code>availableChromosomes</code> checks which chromosomes are available in a <code>ContactFile</code>, along with their length.</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">availableChromosomes</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">availableChromosomes</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
 <span><span class="co">##  Seqinfo object with 16 sequences from an unspecified genome:</span></span>
 <span><span class="co">##    seqnames seqlengths isCircular genome</span></span>
 <span><span class="co">##    I            230218       &lt;NA&gt;   &lt;NA&gt;</span></span>
@@ -1777,12 +1923,12 @@ Caution
 </div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
 <span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 8,757,906 contacts over 12,079 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
@@ -1813,8 +1959,8 @@ Caution
 </ul>
 <p>These pieces of information are called <code>slots</code>. They can be directly accessed using <code>getter</code> functions, bearing the same name than the slot.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/fileName.html">fileName</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
-<span><span class="co">##  [1] "/root/.cache/R/ExperimentHub/f564f8aa26_7752"</span></span>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/fileName.html">fileName</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
+<span><span class="co">##  [1] "/root/.cache/R/ExperimentHub/f725e39d5_7752"</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">focus</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  NULL</span></span>
@@ -1876,12 +2022,12 @@ Caution
 <li>For <code>HicFile</code> and <code>HicproFile</code>, <code>import</code> seamlessly returns a <code>HiCExperiment</code> as well:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/HicFile-class.html">HicFile</a></span><span class="op">(</span><span class="va">hicf</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/HicFile-class.html">HicFile</a></span><span class="op">(</span><span class="va">hicf</span><span class="op">)</span></span>
 <span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">hf</span><span class="op">)</span></span>
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 13,681,280 contacts over 12,165 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f54fd4a958_7836" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f71e4b3539_7836" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
@@ -1896,7 +2042,7 @@ Caution
 </li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/PairsFile-class.html">PairsFile</a></span><span class="op">(</span><span class="va">pairsf</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/PairsFile-class.html">PairsFile</a></span><span class="op">(</span><span class="va">pairsf</span><span class="op">)</span></span>
 <span><span class="va">pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">pf</span><span class="op">)</span></span>
 <span><span class="va">pairs</span></span>
 <span><span class="co">##  GInteractions object with 471364 interactions and 3 metadata columns:</span></span>
@@ -1956,7 +2102,7 @@ Key <code>import</code> arguments:
 <li>Import interactions within a single chromosome:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">regions</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="co"># ---- `regions()` work on `HiCExperiment` the same way than on `GInteractions`</span></span>
 <span><span class="co">##  GRanges object with 407 ranges and 4 metadata columns:</span></span>
@@ -2063,7 +2209,7 @@ Key <code>import</code> arguments:
 <li>Import interactions within a segment of a chromosome:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:40000-60000'</span>, resolution <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:40000-60000'</span>, resolution <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">regions</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> </span>
 <span><span class="co">##  GRanges object with 21 ranges and 4 metadata columns:</span></span>
@@ -2137,7 +2283,7 @@ Key <code>import</code> arguments:
 <li>Import interactions between two chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II|XV'</span>, resolution <span class="op">=</span> <span class="fl">4000</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II|XV'</span>, resolution <span class="op">=</span> <span class="fl">4000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">regions</a></span><span class="op">(</span><span class="va">hic2</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 477 ranges and 4 metadata columns:</span></span>
@@ -2237,7 +2383,7 @@ Key <code>import</code> arguments:
 <li>Import interactions between segments of two chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'III:10000-40000|XV:10000-40000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'III:10000-40000|XV:10000-40000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">regions</a></span><span class="op">(</span><span class="va">hic3</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 32 ranges and 4 metadata columns:</span></span>
@@ -2315,27 +2461,29 @@ Key <code>import</code> arguments:
 </ul>
 <p>We will use the <code>yeast_hic</code> <code>HiCExperiment</code> object to demonstrate how to parse information from a <code>HiCExperiment</code> object.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">yeast_hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/data.html">contacts_yeast</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">yeast_hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/data.html">contacts_yeast</a></span><span class="op">(</span>full <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
+<span><span class="co">##  loading from cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">yeast_hic</span></span>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">yeast_hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 8,757,906 contacts over 763 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f564f8aa26_7752" </span></span>
+<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f725e39d5_7752" </span></span>
 <span><span class="co">##  focus: "whole genome" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 16000 </span></span>
 <span><span class="co">##  interactions: 267709 </span></span>
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) centromeres(16) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/f57db44961_7753 </span></span>
-<span><span class="co">##  metadata(3): ID org date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  pairsFile: N/A </span></span>
+<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="interactions" class="level4" data-number="2.4.2.1"><h4 data-number="2.4.2.1" class="anchored" data-anchor-id="interactions">
 <span class="header-section-number">2.4.2.1</span> Interactions</h4>
 <p>The imported genomic interactions can be directly <strong>exposed</strong> using the <code>interactions</code> function and are returned as a <code>GInteractions</code> object.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
 <span><span class="co">##  GInteractions object with 267709 interactions and 4 metadata columns:</span></span>
 <span><span class="co">##             seqnames1       ranges1     seqnames2       ranges2 |   bin_id1</span></span>
 <span><span class="co">##                 &lt;Rle&gt;     &lt;IRanges&gt;         &lt;Rle&gt;     &lt;IRanges&gt; | &lt;numeric&gt;</span></span>
@@ -2369,7 +2517,7 @@ Key <code>import</code> arguments:
 </div>
 <p>Because genomic interactions are actually stored as <code>GInteractions</code>, <code>regions</code> and <code>anchors</code> work on <code>HiCExperiment</code> objects just as they work with <code>GInteractions</code>!</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">regions</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">regions</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 763 ranges and 4 metadata columns:</span></span>
 <span><span class="co">##                      seqnames        ranges strand |    bin_id     weight</span></span>
 <span><span class="co">##                         &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;  &lt;numeric&gt;</span></span>
@@ -2470,7 +2618,7 @@ Key <code>import</code> arguments:
 <li>The <code>seqinfo</code> of the <code>HiCExperiment</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqinfo.html">seqinfo</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqinfo.html">seqinfo</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
 <span><span class="co">##  Seqinfo object with 16 sequences from an unspecified genome:</span></span>
 <span><span class="co">##    seqnames seqlengths isCircular genome</span></span>
 <span><span class="co">##    I            230218       &lt;NA&gt;   &lt;NA&gt;</span></span>
@@ -2490,7 +2638,7 @@ Key <code>import</code> arguments:
 <li>The <code>bins</code> of the <code>HiCExperiment</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">bins</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">bins</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
 <span><span class="co">##  GRanges object with 763 ranges and 2 metadata columns:</span></span>
 <span><span class="co">##                      seqnames        ranges strand |    bin_id     weight</span></span>
 <span><span class="co">##                         &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;numeric&gt;  &lt;numeric&gt;</span></span>
@@ -2532,7 +2680,7 @@ Difference between <code>bins</code> and <code>regions</code>
 <span class="header-section-number">2.4.2.3</span> Scores</h4>
 <p>Of course, what the end-user would be looking for is the <strong>frequency</strong> for each genomic interaction. Such frequency scores are available using the <code>scores</code> function. <code>scores</code> returns a list with a number of different types of scores.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##  List of length 2</span></span>
 <span><span class="co">##  names(2): count balanced</span></span>
 <span></span>
@@ -2544,7 +2692,7 @@ Difference between <code>bins</code> and <code>regions</code>
 </div>
 <p>Calling <code>interactions(hic)</code> returns a <code>GInteractions</code> with <code>scores</code> already stored in extra columns. This short-hand allows one to dynamically check <code>scores</code> directly from the <code>interactions</code> output.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
 <span><span class="co">##  GInteractions object with 267709 interactions and 4 metadata columns:</span></span>
 <span><span class="co">##             seqnames1       ranges1     seqnames2       ranges2 |   bin_id1</span></span>
 <span><span class="co">##                 &lt;Rle&gt;     &lt;IRanges&gt;         &lt;Rle&gt;     &lt;IRanges&gt; | &lt;numeric&gt;</span></span>
@@ -2591,7 +2739,7 @@ Difference between <code>bins</code> and <code>regions</code>
 </ul>
 <p>Additional <code>topologicalFeatures</code> can be added to this list (read <a href="parsing.html">next chapter</a> for more detail).</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
 <span><span class="co">##  List of length 5</span></span>
 <span><span class="co">##  names(5): compartments borders loops viewpoints centromeres</span></span>
 <span></span>
@@ -2617,11 +2765,11 @@ Difference between <code>bins</code> and <code>regions</code>
 <span class="header-section-number">2.4.2.5</span> pairsFile</h4>
 <p>As a contact matrix is typically obtained from binning a <code>.pairs</code> file, it is often the case that the matching <code>.pairs</code> file is available to then end-user. A <code>PairsFile</code> can thus be created and associated to the corresponding <code>HiCExperiment</code> object. This allows more accurate estimation of contact distribution, e.g.&nbsp;when calculating distance-dependent genomic interaction frequency.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pairsf</span></span>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pairsf</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span></span>
 <span><span class="co">##                                          EH7703 </span></span>
-<span><span class="co">##  "/root/.cache/R/ExperimentHub/f57db44961_7753"</span></span>
+<span><span class="co">##  "/root/.cache/R/ExperimentHub/f73dff9842_7753"</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span>, <span class="fl">25</span><span class="op">)</span></span>
 <span><span class="co">##   [1] "## pairs format v1.0"                                                             </span></span>
@@ -2655,7 +2803,7 @@ Difference between <code>bins</code> and <code>regions</code>
 </h4>
 <p>The <code>.pairs</code> file linked to a <code>HiCExperiment</code> object can itself be imported in a <code>GInteractions</code> object:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">'pairs'</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">yeast_hic</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">'pairs'</span><span class="op">)</span></span>
 <span><span class="co">##  GInteractions object with 471364 interactions and 3 metadata columns:</span></span>
 <span><span class="co">##             seqnames1   ranges1     seqnames2   ranges2 |     frag1     frag2</span></span>
 <span><span class="co">##                 &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt; &lt;IRanges&gt; | &lt;numeric&gt; &lt;numeric&gt;</span></span>
@@ -2692,6 +2840,194 @@ Difference between <code>bins</code> and <code>regions</code>
 <span class="header-section-number">2.5</span> Visual summary of the <code>HiCExperiment</code> data structure</h2>
 <p>The <code>HiCExperiment</code> data structure provided by the <code>HiCExperiment</code> package inherits methods from core <code>GInteractions</code> and <code>BiocFile</code> classes to provide a flexible representation of Hi-C data in <code>R</code>. It allows random access-based queries to seamlessly import parts or all the data contained in disk-stored Hi-C contact matrices in a variety of formats.</p>
 <p><img src="images/20230309114202.png" class="img-fluid"></p>
+</section><section id="session-info" class="level1 unnumbered"><h1 class="unnumbered">Session info</h1>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Click to expand 👇
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="center">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">session_info</a></span><span class="op">(</span>include_base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">##  ─ Session info ────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   setting  value</span></span>
+<span><span class="co">##   version  R Under development (unstable) (2024-01-17 r85813)</span></span>
+<span><span class="co">##   os       Ubuntu 22.04.3 LTS</span></span>
+<span><span class="co">##   system   x86_64, linux-gnu</span></span>
+<span><span class="co">##   ui       X11</span></span>
+<span><span class="co">##   language (EN)</span></span>
+<span><span class="co">##   collate  C</span></span>
+<span><span class="co">##   ctype    en_US.UTF-8</span></span>
+<span><span class="co">##   tz       Etc/UTC</span></span>
+<span><span class="co">##   date     2024-01-22</span></span>
+<span><span class="co">##   pandoc   3.1.1 @ /usr/local/bin/ (via rmarkdown)</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ─ Packages ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">##   package              * version     date (UTC) lib source</span></span>
+<span><span class="co">##   abind                  1.4-5       2016-07-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   AnnotationDbi          1.65.2      2023-11-03 [2] Bioconductor</span></span>
+<span><span class="co">##   AnnotationFilter       1.27.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   AnnotationHub        * 3.11.1      2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   backports              1.4.1       2021-12-13 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   base                 * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   base64enc              0.1-3       2015-07-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Biobase              * 2.63.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocFileCache        * 2.11.1      2023-10-26 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocGenerics         * 0.49.1      2023-11-01 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocIO                 1.13.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocManager            1.30.22     2023-08-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   BiocParallel           1.37.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   BiocVersion            3.19.1      2023-10-26 [2] Bioconductor</span></span>
+<span><span class="co">##   biomaRt                2.59.0      2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   Biostrings             2.71.1      2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   biovizBase             1.51.0      2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   bit                    4.0.5       2022-11-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bit64                  4.0.5       2020-08-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   bitops                 1.0-7       2021-04-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   blob                   1.2.4       2023-03-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   BSgenome               1.71.1      2023-11-01 [2] Bioconductor</span></span>
+<span><span class="co">##   cachem                 1.0.8       2023-05-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   checkmate              2.3.1       2023-12-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cli                    3.6.2       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   cluster                2.1.6       2023-12-01 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   codetools              0.2-19      2023-02-01 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   colorspace             2.1-0       2023-01-23 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   compiler               4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   crayon                 1.5.2       2022-09-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   curl                   5.2.0       2023-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   data.table             1.14.10     2023-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   datasets             * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   DBI                    1.2.1       2024-01-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dbplyr               * 2.4.0       2023-10-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   DelayedArray           0.29.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   dichromat              2.0-0.1     2022-05-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   digest                 0.6.34      2024-01-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   dplyr                  1.1.4       2023-11-17 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ensembldb              2.27.1      2023-11-20 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   evaluate               0.23        2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ExperimentHub        * 2.11.1      2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   fansi                  1.0.6       2023-12-08 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   farver                 2.1.1       2022-07-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   fastmap                1.1.1       2023-02-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   filelock               1.0.3       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   foreign                0.8-86      2023-11-28 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Formula                1.2-5       2023-02-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   generics               0.1.3       2022-07-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   GenomeInfoDb         * 1.39.5      2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   GenomeInfoDbData       1.2.11      2024-01-22 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomicAlignments      1.39.2      2024-01-16 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   GenomicFeatures        1.55.1      2023-10-29 [2] Bioconductor</span></span>
+<span><span class="co">##   GenomicRanges        * 1.55.1      2023-10-29 [2] Bioconductor</span></span>
+<span><span class="co">##   GGally                 2.2.0       2023-11-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ggbio                  1.51.0      2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   ggplot2              * 3.4.4       2023-10-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ggstats                0.5.1       2023-11-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   glue                   1.7.0       2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   graph                  1.81.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   graphics             * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   grDevices            * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   grid                   4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   gridExtra              2.3         2017-09-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   gtable                 0.3.4       2023-08-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   HiCExperiment        * 1.3.0       2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   HiContactsData       * 1.5.3       2024-01-22 [2] Github (js2264/HiContactsData@d5bebe7)</span></span>
+<span><span class="co">##   Hmisc                  5.1-1       2023-09-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   hms                    1.1.3       2023-03-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmlTable              2.4.2       2023-10-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmltools              0.5.7       2023-11-03 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   htmlwidgets            1.6.4       2023-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   httr                   1.4.7       2023-08-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   InteractionSet       * 1.31.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   IRanges              * 2.37.1      2024-01-19 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   jsonlite               1.8.8       2023-12-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   KEGGREST               1.43.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   knitr                  1.45        2023-10-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   labeling               0.4.3       2023-08-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lattice                0.22-5      2023-10-24 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lazyeval               0.2.2       2019-03-15 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   lifecycle              1.0.4       2023-11-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   magrittr               2.0.3       2022-03-30 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Matrix                 1.6-5       2024-01-11 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   MatrixGenerics       * 1.15.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   matrixStats          * 1.2.0       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   memoise                2.0.1       2021-11-26 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   methods              * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   mime                   0.12        2021-09-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   munsell                0.5.0       2018-06-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   nnet                   7.3-19      2023-05-03 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   OrganismDbi            1.45.0      2023-10-25 [2] Bioconductor</span></span>
+<span><span class="co">##   parallel               4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   pillar                 1.9.0       2023-03-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   pkgconfig              2.0.3       2019-09-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   plyr                   1.8.9       2023-10-02 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   png                    0.1-8       2022-11-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   prettyunits            1.2.0       2023-09-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   progress               1.2.3       2023-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   ProtGenerics           1.35.1      2024-01-17 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   purrr                  1.0.2       2023-08-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   R6                     2.5.1       2021-08-19 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rappdirs               0.3.3       2021-01-31 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RBGL                   1.79.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   RColorBrewer           1.1-3       2022-04-03 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Rcpp                   1.0.12      2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   RCurl                  1.98-1.14   2024-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   reshape2               1.4.4       2020-04-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   restfulr               0.0.15      2022-06-16 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rhdf5                  2.47.2      2024-01-15 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   rhdf5filters           1.15.1      2023-11-06 [2] Bioconductor</span></span>
+<span><span class="co">##   Rhdf5lib               1.25.1      2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   rjson                  0.2.21      2022-01-09 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rlang                  1.1.3       2024-01-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rmarkdown              2.25        2023-09-18 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rpart                  4.1.23      2023-12-05 [3] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   Rsamtools              2.19.3      2024-01-17 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   RSQLite                2.3.5       2024-01-21 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rstudioapi             0.15.0      2023-07-07 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   rtracklayer            1.63.0      2024-01-22 [2] Github (lawremi/rtracklayer@86407bb)</span></span>
+<span><span class="co">##   S4Arrays               1.3.2       2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   S4Vectors            * 0.41.3      2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   scales                 1.3.0       2023-11-28 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   sessioninfo            1.2.2       2021-12-06 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   SparseArray            1.3.3       2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   stats                * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   stats4               * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   strawr                 0.0.91      2023-03-29 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   stringi                1.8.3       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   stringr                1.5.1       2023-11-14 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   SummarizedExperiment * 1.33.2      2024-01-07 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   tibble                 3.2.1       2023-03-20 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tidyr                  1.3.0       2023-01-24 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tidyselect             1.2.0       2022-10-10 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   tools                  4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   tzdb                   0.4.0       2023-05-12 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   utf8                   1.2.4       2023-10-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   utils                * 4.4.0       2024-01-18 [3] local</span></span>
+<span><span class="co">##   VariantAnnotation      1.49.5      2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   vctrs                  0.6.5       2023-12-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   vroom                  1.6.5       2023-12-05 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   withr                  3.0.0       2024-01-16 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   xfun                   0.41        2023-11-01 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   XML                    3.99-0.16.1 2024-01-22 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   xml2                   1.3.6       2023-12-04 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   XVector                0.43.1      2024-01-10 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
+<span><span class="co">##   yaml                   2.3.8       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
+<span><span class="co">##   zlibbioc               1.49.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##   [1] /tmp/Rtmp4kTMSb/Rinstb104d8a34</span></span>
+<span><span class="co">##   [2] /usr/local/lib/R/site-library</span></span>
+<span><span class="co">##   [3] /usr/local/lib/R/library</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  ───────────────────────────────────────────────────────────────────────────</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
 </section><section id="references" class="level1 unnumbered"><h1 class="unnumbered">References</h1>
 
 
