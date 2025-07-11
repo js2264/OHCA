@@ -80,7 +80,7 @@ jobs:
         env:
           IMG: ${{ steps.docker.outputs.ImageID }}
         run: |
-          SHA=$(docker container create ${{ env.IMG }})
+          SHA=$(docker container create ghcr.io/js2264/ohca:latest)
           docker container cp ${SHA}:/${{ env.Pkgname }}_${{ env.pkgversion }}.tar.gz .
           tar --extract --gzip --file ${{ env.Pkgname }}_${{ env.pkgversion }}.tar.gz
           echo bundle_path=${{ env.Pkgname }}_${{ env.pkgversion }}.tar.gz >> "${GITHUB_ENV}"
