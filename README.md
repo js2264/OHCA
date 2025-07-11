@@ -3,6 +3,16 @@
 👉 [Book](https://js2264.github.io/OHCA/devel/) [![pages-build-deployment](https://github.com/js2264/OHCA/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/js2264/OHCA/actions/workflows/pages/pages-build-deployment)  
 👉 [Docker](https://github.com/js2264/OHCA/pkgs/container/ohca) [![Build docker (rendering book), push to Github container registry, and deploy book to GitHub Pages](https://github.com/js2264/OHCA/actions/workflows/biocbook.yml/badge.svg)](https://github.com/js2264/OHCA/actions/workflows/biocbook.yml)
 
+---
+
+*Please cite:* 
+
+Serizay J, Matthey-Doret C, Bignaud A, Baudry L, Koszul R (2024). “Orchestrating chromosome conformation capture analysis with Bioconductor.” _Nature Communications_, **15**, 1-9. [doi:10.1038/s41467-024-44761-x](https://doi.org/10.1038/s41467-024-44761-x).
+
+[![DOI](https://img.shields.io/badge/Nat._Commun-10.1038/s41467--024--44761--x-blue)](https://www.nature.com/articles/s41467-024-44761-x)
+
+---
+
 ## Package status 
 
 |Github repo|📘|Github checks|Bioc builds|Lifecycle|
