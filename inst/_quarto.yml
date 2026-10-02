@@ -1,6 +1,7 @@
 project:
   type: book
   output-dir: docs
+  post-render: assets/post-render.R
 
 metadata-files:
   - assets/_book.yml

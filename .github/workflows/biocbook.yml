@@ -6,6 +6,12 @@ on:
       - devel
       - RELEASE_**
 
+env:
+  ## quarto release the book is rendered with. quarto >= 1.11 renders 
+  ## `llms.txt` and a Markdown copy of every page, for AI assistants. Leave it
+  ## empty to use the quarto shipped with the Bioconductor image.
+  QUARTO_VERSION: "1.11.5"
+
 jobs:
   build-push:
     runs-on: ubuntu-latest
@@ -17,15 +23,15 @@ jobs:
     steps:
       
       - name: 🧾 Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: ⏳ Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v1
+        uses: catchpoint/workflow-telemetry-action@v2
 
       - name: 🐳 Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
       - name: 🐳 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
   
       - name: 📝 Get book info
         id: info
@@ -41,7 +47,7 @@ jobs:
           echo pkgversion=$(grep -m1 -E '^Version: +' DESCRIPTION | sed -E 's/.*: +//') >> "${GITHUB_ENV}"
 
       - name: 🔐 Log in to the Github Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ env.owner }}
@@ -49,7 +55,7 @@ jobs:
 
       - name: 🏷 Get metadata for Docker
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v6
         with:
           images: ghcr.io/${{ env.owner }}/${{ env.pkgname }}
           tags: |
@@ -59,42 +65,45 @@ jobs:
 
       - name: 📦 Install, build and check package in local Docker image
         id: docker
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           context: .
           load: true
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
             BIOC_VERSION=${{ github.ref_name }}
+            QUARTO_VERSION=${{ env.QUARTO_VERSION }}
+          secrets: |
+            "GITHUB_PAT=${{ secrets.GITHUB_TOKEN }}"
 
       - name: 🚀 Push local Docker image to ghcr.io
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           build-args: |
             BIOC_VERSION=${{ github.ref_name }}
+            QUARTO_VERSION=${{ env.QUARTO_VERSION }}
+          secrets: |
+            "GITHUB_PAT=${{ secrets.GITHUB_TOKEN }}"
 
       - name: 📚 Recover pkg artifacts generated during build in local Docker container (pkg bundle and book) 
         env:
           IMG: ${{ steps.docker.outputs.ImageID }}
         run: |
-          SHA=$(docker container create ghcr.io/js2264/ohca:latest)
+          SHA=$(docker container create ${{ env.IMG }})
           docker container cp ${SHA}:/${{ env.Pkgname }}_${{ env.pkgversion }}.tar.gz .
           tar --extract --gzip --file ${{ env.Pkgname }}_${{ env.pkgversion }}.tar.gz
           echo bundle_path=${{ env.Pkgname }}_${{ env.pkgversion }}.tar.gz >> "${GITHUB_ENV}"
           echo book_path=${{ env.Pkgname }}/inst/doc/book/ >> "${GITHUB_ENV}"
-          ls -l ./
-          ls -l ${{ env.Pkgname }}
-          ls -l ${{ env.Pkgname }}/inst/doc/book/
 
       - name: 🏷 Get gh-branch directory to deploy to
         run: |
           echo target_folder=$(echo ${{ github.ref_name }} | sed 's,RELEASE_,,' | tr '_' '.') >> "${GITHUB_ENV}"
 
       - name: 🚀 Deploy book to Github Pages on versioned branch
-        uses: JamesIves/github-pages-deploy-action@v4.4.3
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: ${{ env.book_path }}/ 
           target-folder: docs/${{ env.target_folder }}/ 
@@ -102,13 +111,13 @@ jobs:
           clean: false 
 
       - name: 💾 Upload package bundle artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: bundle
           path: ${{ env.bundle_path }}
 
       - name: 💾 Upload book artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: book
           path: ${{ env.book_path }}

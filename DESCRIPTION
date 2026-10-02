@@ -38,6 +38,8 @@ Imports:
     BiocStyle, 
     sessioninfo 
 Suggests: 
+    BiocBook (>= 1.11.2),
+    reticulate,
     multiHiCcompare,
     terra, 
     ggbio,

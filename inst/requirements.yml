@@ -1,0 +1,18 @@
+## The conda environment this book's python chunks run in, created at build
+## time by BiocBook::setup_python(). Any edit to this file gives the book a new
+## environment on the next render.
+##
+## Versions are pinned so that the rendered book does not change without a
+## commit. `nodefaults` keeps the Anaconda `defaults` channel out.
+name:
+    OHCA
+channels:
+    - conda-forge
+    - bioconda
+    - nodefaults
+dependencies:
+    - python=3.12
+    - cooler=0.10.4
+    - cooltools=0.7.1
+    - bioframe=0.8.0
+    - pandas=2.3.3
