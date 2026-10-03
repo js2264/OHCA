@@ -151,6 +151,7 @@ df <- map_dfr(1:{length(centros_yeast)-1}, function(i) {
         gi <- InteractionSet::GInteractions(centro1, centro2)
         imap_dfr(hics, ~ .x[gi] |> 
             interactions() |> 
+            as.data.frame() |> 
             as_tibble() |>
             mutate(
                 sample = .y, 
