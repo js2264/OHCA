@@ -16,3 +16,7 @@ dependencies:
     - cooltools=0.7.1
     - bioframe=0.8.0
     - pandas=2.3.3
+    ## matplotlib >= 3.11 links libraqm, which needs a more recent harfbuzz
+    ## than the one R sessions have already loaded on the Bioconductor images
+    ## (Ubuntu 24.04): `import matplotlib` then fails
+    - matplotlib-base=3.10
