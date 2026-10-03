@@ -26,16 +26,6 @@ RUN --mount=type=secret,id=GITHUB_PAT \
     GITHUB_PAT="$(cat /run/secrets/GITHUB_PAT 2>/dev/null || true)" \
     Rscript -e 'install.packages("remotes") ; repos <- BiocManager::repositories() ; remotes::install_github("js2264/HiContactsData") ; remotes::install_local(path = "/opt/pkg/", repos=repos, dependencies=TRUE, build_vignettes=FALSE, upgrade=TRUE) ; sessioninfo::session_info(installed.packages()[,"Package"], include_base = TRUE)'
 
-## TEMPORARY, to be reverted: HiCExperiment (<= 1.13.0) does not import
-## BiocGenerics' as.data.frame() generic, which breaks as.data.frame() on
-## GRanges/GInteractions with S4Vectors >= 0.51.10. Patch its NAMESPACE to
-## test the rest of the book on Bioconductor devel
-RUN Rscript -e 'bioc <- sprintf("https://bioconductor.org/packages/%s/bioc", BiocManager::version()) ; download.packages("HiCExperiment", destdir = "/tmp", repos = bioc, type = "source")' && \
-    cd /tmp && tar -xzf HiCExperiment_*.tar.gz && \
-    printf '\nimportFrom(BiocGenerics,as.data.frame)\n' >> HiCExperiment/NAMESPACE && \
-    R CMD INSTALL HiCExperiment && rm -rf /tmp/HiCExperiment* && \
-    Rscript -e 'stopifnot(identical(get("as.data.frame", asNamespace("HiCExperiment")), BiocGenerics::as.data.frame))'
-
 ## Install the book's python environment, if any page runs python, and point
 ## every R session in the image at it
 RUN if grep -rqsE '^```\{python' /opt/pkg/inst; then \
