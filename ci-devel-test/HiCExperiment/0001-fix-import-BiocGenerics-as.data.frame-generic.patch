@@ -1,0 +1,48 @@
+From 105b89aaff81ab0143f773ed3d9f8b2eccd8f17d Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 3 Oct 2026 09:06:34 +0000
+Subject: [PATCH] fix: import BiocGenerics' as.data.frame() generic
+
+HiCExperiment defined its as.data.frame() method on an implicit generic
+created from base, which does not see the methods of InteractionSet or
+GenomicRanges. Calls on GInteractions or GRanges only worked because
+S4Vectors' S3 method as.data.frame.Vector() dispatched again to the S4
+generic. S4Vectors 0.51.10 (Bioconductor 3.24) no longer does, so
+as.data.frame() on a GInteractions fails with 'no method for coercing this
+S4 class to a vector': in .hic2gi() (import() of .hic files), in HiContacts,
+which imports this generic, and in user code once HiCExperiment is attached.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01FLbRhpc2hEajWKBL7zXM8Q
+---
+ NAMESPACE  | 1 +
+ R/coerce.R | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/NAMESPACE b/NAMESPACE
+index d7874b3..9b8df58 100644
+--- a/NAMESPACE
++++ b/NAMESPACE
+@@ -64,6 +64,7 @@ importClassesFrom(BiocIO,BiocFile)
+ importClassesFrom(GenomicRanges,GRanges)
+ importClassesFrom(InteractionSet,GInteractions)
+ importClassesFrom(S4Vectors,Annotated)
++importFrom(BiocGenerics,as.data.frame)
+ importFrom(BiocGenerics,path)
+ importFrom(BiocIO,export)
+ importFrom(BiocIO,import)
+diff --git a/R/coerce.R b/R/coerce.R
+index b3b5563..83c190e 100644
+--- a/R/coerce.R
++++ b/R/coerce.R
+@@ -123,6 +123,7 @@ setMethod("as.matrix", "HiCExperiment", function(x, use.scores = "balanced", spa
+ 
+ #' @export
+ #' @name as
++#' @importFrom BiocGenerics as.data.frame
+ 
+ setMethod("as.data.frame", "HiCExperiment", function(x) {
+     as(x, 'data.frame')
+-- 
+2.43.0
+

@@ -26,6 +26,10 @@ RUN --mount=type=secret,id=GITHUB_PAT \
     GITHUB_PAT="$(cat /run/secrets/GITHUB_PAT 2>/dev/null || true)" \
     Rscript -e 'install.packages("remotes") ; repos <- BiocManager::repositories() ; remotes::install_github("js2264/HiContactsData") ; remotes::install_local(path = "/opt/pkg/", repos=repos, dependencies=TRUE, build_vignettes=FALSE, upgrade=TRUE) ; sessioninfo::session_info(installed.packages()[,"Package"], include_base = TRUE)'
 
+## TEMPORARY (throwaway branch `claude/ohca-devel-test`): HiCExperiment, 
+## HiContacts and plyinteractions with the fixes for S4Vectors >= 0.51.10
+RUN sh /opt/pkg/ci-devel-test/patch-deps.sh
+
 ## Install the book's python environment, if any page runs python, and point
 ## every R session in the image at it
 RUN if grep -rqsE '^```\{python' /opt/pkg/inst; then \
@@ -36,4 +40,8 @@ RUN if grep -rqsE '^```\{python' /opt/pkg/inst; then \
 
 ## Build/install using same approach than BBS
 RUN R CMD INSTALL /opt/pkg
+
+## TEMPORARY (throwaway branch `claude/ohca-devel-test`): render every chapter, 
+## and list those that fail
+RUN sh /opt/pkg/ci-devel-test/render-chapters.sh
 RUN R CMD build --keep-empty-dirs --no-resave-data /opt/pkg

@@ -1,0 +1,312 @@
+From 4e7b70ea5c37895226c07342005cd38442c2323d Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 3 Oct 2026 13:13:40 +0000
+Subject: [PATCH 2/3] fix: compute distance in join_overlap_left()
+
+03f887c added the `distance` argument of plyranges' join_overlap_left() and
+join_overlap_left_directed() generics (plyranges >= 1.31.5) to the
+GInteractions methods, but ignored it, and their documentation still had the
+old usage: R CMD check warned about a code/documentation mismatch.
+
+With `distance = TRUE`, the methods now add a `distance` column, as plyranges
+does for GRanges: the distance between each joined range of `y` and the
+interaction's pinned anchor, or the closer of its two anchors when it is not
+pinned (0 when they overlap, positive within `maxgap`), and NA for
+interactions joined to no range. Documented the argument, fixed the documented
+return value, and added an example and tests.
+
+plyinteractions now requires plyranges >= 1.31.5, whose generics have
+`distance`: with older versions, the methods do not match their generics.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01FLbRhpc2hEajWKBL7zXM8Q
+---
+ DESCRIPTION                            |  2 +-
+ R/join-overlap-left.R                  | 55 +++++++++++++++++++++++---
+ man/ginteractions-join-overlap-left.Rd | 43 +++++++++++++++++---
+ tests/testthat/test-overlaps.R         | 48 ++++++++++++++++++++++
+ 4 files changed, 136 insertions(+), 12 deletions(-)
+
+diff --git a/DESCRIPTION b/DESCRIPTION
+index 74ae9ae..a0d1476 100644
+--- a/DESCRIPTION
++++ b/DESCRIPTION
+@@ -20,7 +20,7 @@ Roxygen: list(markdown = TRUE)
+ Depends: 
+     R (>= 4.3.0),
+     InteractionSet,
+-    plyranges
++    plyranges (>= 1.31.5)
+ Imports:
+     Seqinfo, 
+     BiocGenerics, 
+diff --git a/R/join-overlap-left.R b/R/join-overlap-left.R
+index 6206286..9375775 100644
+--- a/R/join-overlap-left.R
++++ b/R/join-overlap-left.R
+@@ -6,12 +6,20 @@
+ #' in the \pkg{GenomicRanges} package for a description of these arguments
+ #' @param suffix Suffix to add to metadata 
+ #' columns (character vector of length 2, default to `c(".x", ".y")`).
++#' @param distance If `TRUE`, add a `distance` column: for each interaction 
++#' joined to a range of `y`, the distance between this range and the 
++#' interaction's anchor (the pinned anchor of a PinnedGInteractions, the 
++#' closer of the two anchors otherwise), as computed by 
++#' `GenomicRanges::distance()`: `0` when they overlap, positive when they are 
++#' within `maxgap` of each other. Interactions joined to no range get `NA`.
+ #'
+ #' @importFrom plyranges join_overlap_left
+ #' @importFrom plyranges join_overlap_left_directed
+ #' @importFrom InteractionSet countOverlaps
+ #' 
+-#' @return An integer vector of same length as x.
++#' @return A GInteractions object, with the metadata columns of `y` (and 
++#' `distance`) added. Interactions overlapping several ranges of `y` are 
++#' repeated, and those overlapping none are kept, with missing values.
+ #'
+ #' @name ginteractions-join-overlap-left
+ #' 
+@@ -53,6 +61,14 @@
+ #' gi |> pin_by("second") |> join_overlap_left(gr)
+ #' 
+ #' gi |> pin_by("second") |> join_overlap_left_directed(gr)
++#' 
++#' ####################################################################
++#' # 3. Distance between the joined ranges
++#' ####################################################################
++#' 
++#' join_overlap_left(gi, gr, maxgap = 25, distance = TRUE)
++#' 
++#' gi |> pin_by("second") |> join_overlap_left(gr, maxgap = 25, distance = TRUE)
+ NULL
+ 
+ #' @rdname ginteractions-join-overlap-left
+@@ -76,7 +92,9 @@ join_overlap_left.PinnedGInteractions <- function(
+         )
+     )
+ 
+-    .hits_to_left(unpin(x), y, hits, suffix) 
++    .hits_to_left(unpin(x), y, hits, suffix, distance = if (distance) {
++        .hits_distance(unpin(x), y, hits, as.integer(pin(x)), TRUE)
++    }) 
+ 
+ }
+ 
+@@ -97,7 +115,9 @@ join_overlap_left.GInteractions <- function(
+         use.region = 'both'
+     )
+ 
+-    .hits_to_left(x, y, hits, suffix) 
++    .hits_to_left(x, y, hits, suffix, distance = if (distance) {
++        .hits_distance(x, y, hits, c(1L, 2L), TRUE)
++    }) 
+ 
+ }
+ 
+@@ -122,7 +142,9 @@ join_overlap_left_directed.PinnedGInteractions <- function(
+         )
+     )
+ 
+-    .hits_to_left(unpin(x), y, hits, suffix) 
++    .hits_to_left(unpin(x), y, hits, suffix, distance = if (distance) {
++        .hits_distance(unpin(x), y, hits, as.integer(pin(x)), FALSE)
++    }) 
+ 
+ }
+ 
+@@ -143,7 +165,9 @@ join_overlap_left_directed.GInteractions <- function(
+         use.region = 'both'
+     )
+ 
+-    .hits_to_left(x, y, hits, suffix) 
++    .hits_to_left(x, y, hits, suffix, distance = if (distance) {
++        .hits_distance(x, y, hits, c(1L, 2L), FALSE)
++    }) 
+ 
+ }
+ 
+@@ -193,11 +217,12 @@ join_overlap_left_directed.GInteractions <- function(
+ #' @importFrom S4Vectors queryHits
+ #' @importFrom S4Vectors subjectLength
+ #' @importFrom S4Vectors queryLength
+-.hits_to_left <- function(x, y, hits, suffix) {
++.hits_to_left <- function(x, y, hits, suffix, distance = NULL) {
+ 
+     left <- x[S4Vectors::subjectHits(hits), ]
+     right <- y[S4Vectors::queryHits(hits), ]
+     mcols(left) <- .mcols_overlaps_update(left, right, suffix)
++    if (!is.null(distance)) mcols(left)$distance <- distance
+ 
+     # Create empty DF for left entries with non overlap
+     only_left <- rep(TRUE, S4Vectors::subjectLength(hits))
+@@ -209,6 +234,9 @@ join_overlap_left_directed.GInteractions <- function(
+     } else {
+         mcols(rng_only_left) <- mcols_outer
+     }
++    if (!is.null(distance)) {
++        mcols(rng_only_left)$distance <- rep(NA_integer_, sum(only_left))
++    }
+     names(mcols(rng_only_left)) <- names(mcols(left))
+ 
+     # Merge left and outer
+@@ -221,3 +249,18 @@ join_overlap_left_directed.GInteractions <- function(
+     left_outer
+ 
+ }
++
++## Distance between each range of `y` and the anchor of `x` it overlaps, for 
++## each pair of `hits` (queries in `y`, subjects in `x`): the given anchor, or 
++## the closer of the two. Pairs on different chromosomes (or strands, unless 
++## `ignore.strand`) are NA, as in `GenomicRanges::distance()`.
++.hits_distance <- function(x, y, hits, anchors, ignore.strand) {
++    gr <- y[S4Vectors::queryHits(hits)]
++    d <- lapply(anchors, function(i) {
++        a <- InteractionSet::anchors(x, type = c("first", "second")[[i]])
++        GenomicRanges::distance(
++            a[S4Vectors::subjectHits(hits)], gr, ignore.strand = ignore.strand
++        )
++    })
++    do.call(pmin, c(d, na.rm = TRUE))
++}
+diff --git a/man/ginteractions-join-overlap-left.Rd b/man/ginteractions-join-overlap-left.Rd
+index 17a966c..de620c5 100644
+--- a/man/ginteractions-join-overlap-left.Rd
++++ b/man/ginteractions-join-overlap-left.Rd
+@@ -8,16 +8,31 @@
+ \alias{join_overlap_left_directed.GInteractions}
+ \title{Join overlaps between a query GInteractions and a GRanges}
+ \usage{
+-\method{join_overlap_left}{PinnedGInteractions}(x, y, maxgap = -1L, minoverlap = 0L, suffix = c(".x", ".y"))
++\method{join_overlap_left}{PinnedGInteractions}(
++  x,
++  y,
++  maxgap = -1L,
++  minoverlap = 0L,
++  suffix = c(".x", ".y"),
++  distance = FALSE
++)
+ 
+-\method{join_overlap_left}{GInteractions}(x, y, maxgap = -1L, minoverlap = 0L, suffix = c(".x", ".y"))
++\method{join_overlap_left}{GInteractions}(
++  x,
++  y,
++  maxgap = -1L,
++  minoverlap = 0L,
++  suffix = c(".x", ".y"),
++  distance = FALSE
++)
+ 
+ \method{join_overlap_left_directed}{PinnedGInteractions}(
+   x,
+   y,
+   maxgap = -1L,
+   minoverlap = 0L,
+-  suffix = c(".x", ".y")
++  suffix = c(".x", ".y"),
++  distance = FALSE
+ )
+ 
+ \method{join_overlap_left_directed}{GInteractions}(
+@@ -25,7 +40,8 @@
+   y,
+   maxgap = -1L,
+   minoverlap = 0L,
+-  suffix = c(".x", ".y")
++  suffix = c(".x", ".y"),
++  distance = FALSE
+ )
+ }
+ \arguments{
+@@ -38,9 +54,18 @@ in the \pkg{GenomicRanges} package for a description of these arguments}
+ 
+ \item{suffix}{Suffix to add to metadata
+ columns (character vector of length 2, default to \code{c(".x", ".y")}).}
++
++\item{distance}{If \code{TRUE}, add a \code{distance} column: for each interaction
++joined to a range of \code{y}, the distance between this range and the
++interaction's anchor (the pinned anchor of a PinnedGInteractions, the
++closer of the two anchors otherwise), as computed by
++\code{GenomicRanges::distance()}: \code{0} when they overlap, positive when they are
++within \code{maxgap} of each other. Interactions joined to no range get \code{NA}.}
+ }
+ \value{
+-An integer vector of same length as x.
++A GInteractions object, with the metadata columns of \code{y} (and
++\code{distance}) added. Interactions overlapping several ranges of \code{y} are
++repeated, and those overlapping none are kept, with missing values.
+ }
+ \description{
+ Join overlaps between a query GInteractions and a GRanges
+@@ -83,4 +108,12 @@ gi |> pin_by("first") |> join_overlap_left_directed(gr)
+ gi |> pin_by("second") |> join_overlap_left(gr)
+ 
+ gi |> pin_by("second") |> join_overlap_left_directed(gr)
++
++####################################################################
++# 3. Distance between the joined ranges
++####################################################################
++
++join_overlap_left(gi, gr, maxgap = 25, distance = TRUE)
++
++gi |> pin_by("second") |> join_overlap_left(gr, maxgap = 25, distance = TRUE)
+ }
+diff --git a/tests/testthat/test-overlaps.R b/tests/testthat/test-overlaps.R
+index ea340d0..12b80d5 100644
+--- a/tests/testthat/test-overlaps.R
++++ b/tests/testthat/test-overlaps.R
+@@ -80,4 +80,52 @@ test_that("plyranges functions work", {
+         4L
+     )
+ 
++    ## Join, with distance
++    expect_identical(
++        join_overlap_left(gi, gr, distance = TRUE) |> mcols() |> colnames(), 
++        c('score', 'type.x', 'id', 'type.y', 'distance')
++    )
++    expect_identical(
++        join_overlap_left(gi, gr, distance = TRUE)$distance, 
++        c(0L, 0L, 0L, 0L, 0L)
++    )
++    expect_identical(
++        join_overlap_left_directed(gi, gr, distance = TRUE)$distance, 
++        c(0L, 0L, NA, 0L)
++    )
++    pinned_join <- gi |> 
++        pin_by(2) |> 
++        join_overlap_left(gr, maxgap = 25, distance = TRUE)
++    expect_identical(
++        pinned_join |> mcols() |> colnames(), 
++        c('score', 'type.x', 'id', 'type.y', 'distance')
++    )
++    expect_identical(
++        pinned_join$distance, 
++        c(0L, 20L, 20L, 0L)
++    )
++    pinned_join_directed <- gi |> 
++        pin_by(2) |> 
++        join_overlap_left_directed(gr, maxgap = 25, distance = TRUE)
++    expect_identical(
++        pinned_join_directed$distance, 
++        c(0L, 20L, NA, 0L)
++    )
++
++    ## Distance to the closer anchor, or to the pinned one
++    gi2 <- InteractionSet::GInteractions(
++        GenomicRanges::GRanges("chr1:100-110"), 
++        GenomicRanges::GRanges("chr1:150-160")
++    )
++    gr2 <- GenomicRanges::GRanges("chr1:165-170")
++    expect_identical(
++        join_overlap_left(gi2, gr2, maxgap = 10, distance = TRUE)$distance, 
++        4L
++    )
++    expect_identical(
++        (gi2 |> pin_by(1) |> 
++            join_overlap_left(gr2, maxgap = 10, distance = TRUE))$distance, 
++        NA_integer_
++    )
++
+ })
+-- 
+2.43.0
+

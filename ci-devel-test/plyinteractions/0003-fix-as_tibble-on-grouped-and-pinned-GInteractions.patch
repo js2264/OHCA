@@ -1,0 +1,143 @@
+From e8cbecf0413a70e6046cd1d4bf73ae35a67b6e47 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Sat, 3 Oct 2026 13:13:40 +0000
+Subject: [PATCH 3/3] fix: as_tibble() on grouped and pinned GInteractions
+
+anchors() on a grouped or pinned GInteractions dropped every argument but `x`,
+so first(), second() and as.data.frame() failed with 'unused argument (type =
+"first")', and so did as_tibble(): a grouped or pinned GInteractions could not
+be turned into a data frame. anchors() now passes its arguments on to the
+underlying GInteractions.
+
+The setters behind mutate() of core fields (start1, strand2, ...) reached
+the same error; now that anchors() works, they would rebuild a plain
+GInteractions and silently drop the grouping or the pinning. mutate() now
+stops with an explicit error instead, asking to ungroup() or unpin() first,
+except for the widths of an anchored PinnedGInteractions, which have their own
+setters.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01FLbRhpc2hEajWKBL7zXM8Q
+---
+ R/methods-DelegatingGInteractions.R     |  4 +++-
+ R/mutate.R                              | 26 +++++++++++++++++++++
+ man/delegating-ginteractions-methods.Rd |  2 +-
+ tests/testthat/test-dplyr.R             | 30 ++++++++++++++++++++++++-
+ 4 files changed, 59 insertions(+), 3 deletions(-)
+
+diff --git a/R/methods-DelegatingGInteractions.R b/R/methods-DelegatingGInteractions.R
+index e9e1ddb..f677f13 100644
+--- a/R/methods-DelegatingGInteractions.R
++++ b/R/methods-DelegatingGInteractions.R
+@@ -68,7 +68,9 @@ setMethod("strand2", "DelegatingGInteractions",
+     function(x) strand2(x@delegate)
+ )
+ #' @rdname delegating-ginteractions-methods
+-setMethod("anchors", "DelegatingGInteractions", function(x) anchors(x@delegate))
++setMethod("anchors", "DelegatingGInteractions", 
++    function(x, ...) anchors(x@delegate, ...)
++)
+ #' @rdname delegating-ginteractions-methods
+ setMethod("regions", "DelegatingGInteractions", function(x) regions(x@delegate))
+ #' @rdname delegating-ginteractions-methods
+diff --git a/R/mutate.R b/R/mutate.R
+index 4b396da..5062fb0 100644
+--- a/R/mutate.R
++++ b/R/mutate.R
+@@ -107,6 +107,32 @@ mutate.GInteractions <- function(.data, ...) {
+         .data
+     }
+ 
++    ## Core fields of grouped or pinned GInteractions cannot be modified in 
++    ## place: the setters below rebuild a plain GInteractions, which would 
++    ## silently drop the grouping or the pinning. Only the widths of an 
++    ## AnchoredPinnedGInteractions have dedicated setters.
++    if (is(.data, "DelegatingGInteractions")) {
++        supported <- if (is(.data, "AnchoredPinnedGInteractions")) {
++            c("width1", "width2") 
++        } else {
++            character(0)
++        }
++        unsupported <- setdiff(core_cols, supported)
++        if (length(unsupported)) {
++            undo <- if (is(.data, "GroupedGInteractions")) {
++                c("grouped", "ungroup()")
++            } else {
++                c("pinned", "unpin()")
++            }
++            stop(
++                "Core fields of a ", undo[[1]], " GInteractions cannot be ",
++                "modified (", paste0("`", unsupported, "`", collapse = ", "),
++                "): `", undo[[2]], "` it first.",
++                call. = FALSE
++            )
++        }
++    }
++
+     for (col in core_cols) {
+         modifier <- match.fun(paste0("set_", col))
+         .data <- modifier(.data, .mutated[[col]])
+diff --git a/man/delegating-ginteractions-methods.Rd b/man/delegating-ginteractions-methods.Rd
+index 8bda66c..36ace7c 100644
+--- a/man/delegating-ginteractions-methods.Rd
++++ b/man/delegating-ginteractions-methods.Rd
+@@ -51,7 +51,7 @@
+ 
+ \S4method{strand2}{DelegatingGInteractions}(x)
+ 
+-\S4method{anchors}{DelegatingGInteractions}(x)
++\S4method{anchors}{DelegatingGInteractions}(x, ...)
+ 
+ \S4method{regions}{DelegatingGInteractions}(x)
+ 
+diff --git a/tests/testthat/test-dplyr.R b/tests/testthat/test-dplyr.R
+index 3559d19..438e79f 100644
+--- a/tests/testthat/test-dplyr.R
++++ b/tests/testthat/test-dplyr.R
+@@ -120,7 +120,17 @@ test_that("dplyr functions work", {
+         mutate(gi, xxx = IRanges::RleList(c(1, 2), c(3, 4)))$xxx,
+         IRanges::RleList(c(1, 2), c(3, 4), c(1, 2), c(3, 4))
+     )
+-    ggi |> mutate(strand1 = '-') |> expect_error()
++    expect_error(mutate(ggi, strand1 = '-'), "ungroup()", fixed = TRUE)
++    expect_error(mutate(pgi, start2 = 1), "unpin()", fixed = TRUE)
++    expect_error(mutate(apgi, start2 = 1), "unpin()", fixed = TRUE)
++    expect_identical(
++        apgi |> mutate(width2 = 100) |> width2(), 
++        c(100L, 100L, 100L, 100L)
++    )
++    expect_s4_class(
++        apgi |> mutate(width2 = 100), 
++        "AnchoredPinnedGInteractions"
++    )
+ 
+     ## rename
+ 
+@@ -132,6 +142,24 @@ test_that("dplyr functions work", {
+         "start2", "end2", "width2", "strand2", "score", "xx")
+     )
+ 
++    ## as_tibble
++    expect_identical(
++        as_tibble(ggi), 
++        as_tibble(ungroup(ggi))
++    )
++    expect_identical(
++        as_tibble(pgi), 
++        as_tibble(gi)
++    )
++    expect_identical(
++        as_tibble(apgi), 
++        as_tibble(gi)
++    )
++    expect_identical(
++        dim(as_tibble(ggi)), 
++        c(4L, 13L)
++    )
++
+     ## select
+     expect_identical(
+         gi |> select(type) |> as_tibble() |> colnames(), 
+-- 
+2.43.0
+

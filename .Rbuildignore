@@ -6,3 +6,4 @@
 ^NOTES\.md$
 ^README\.Rmd$
 ^Dockerfile$
+^ci-devel-test$
