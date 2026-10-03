@@ -30,9 +30,9 @@ RUN --mount=type=secret,id=GITHUB_PAT \
 ## BiocGenerics' as.data.frame() generic, which breaks as.data.frame() on
 ## GRanges/GInteractions with S4Vectors >= 0.51.10. Patch its NAMESPACE to
 ## test the rest of the book on Bioconductor devel
-RUN Rscript -e 'download.packages("HiCExperiment", destdir = "/tmp", repos = BiocManager::repositories())' && \
+RUN Rscript -e 'bioc <- sprintf("https://bioconductor.org/packages/%s/bioc", BiocManager::version()) ; download.packages("HiCExperiment", destdir = "/tmp", repos = bioc, type = "source")' && \
     cd /tmp && tar -xzf HiCExperiment_*.tar.gz && \
-    echo 'importFrom(BiocGenerics,as.data.frame)' >> HiCExperiment/NAMESPACE && \
+    printf '\nimportFrom(BiocGenerics,as.data.frame)\n' >> HiCExperiment/NAMESPACE && \
     R CMD INSTALL HiCExperiment && rm -rf /tmp/HiCExperiment* && \
     Rscript -e 'stopifnot(identical(get("as.data.frame", asNamespace("HiCExperiment")), BiocGenerics::as.data.frame))'
 
