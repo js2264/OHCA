@@ -1,0 +1,270 @@
+# Interoperability with `python`: `cooltools` {#sec-python-cooltools}
+
+::: {.callout-note collapse="true"}
+
+## Pre-loading packages and objects 📦 {-}
+
+```{r}
+## `reticulate` is attached first, so that `import()` refers to
+## `HiCExperiment`'s rather than to `reticulate`'s
+library(reticulate)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+library(GenomicRanges)
+library(HiCExperiment)
+library(HiContactsData)
+library(HiContacts)
+library(BiocParallel)
+BiocBook::setup_python()
+```
+
+:::
+
+::: {.callout-note}
+
+## Aims
+
+This chapter shows how `python` tools dedicated to Hi-C analysis can be used
+side by side with `HiCExperiment` and `HiContacts`, within a single analysis:
+
+- Running `cooltools` (@Open2C_2024) on a `.mcool` file fetched in `R`;
+- Passing objects between `R` and `python`, in both directions;
+- Comparing the insulation scores and A/B compartments computed by `HiContacts`
+  and by `cooltools` from the same data.
+
+:::
+
+## Why `cooltools`?
+
+`cooltools` is the `python` toolkit developed by the Open2C community to
+analyze contact matrices stored in `.cool`/`.mcool` files, built on top of
+`cooler` (@Abdennur_2019) and `bioframe` (@Open2C_2024_bioframe). It is the
+reference implementation of many analyses covered in this book, and the 4DN
+consortium uses it to compute the insulation and compartment tracks it
+distributes (see the [chapter on public Hi-C data portals](disseminating.qmd)).
+
+Running it next to `HiContacts` is useful to compare results, to reproduce
+published analyses, or to use features only available in one of them. The
+`python` code of this chapter is executed every time the book is built,
+including when the *Bioconductor Build System* rebuilds it.
+
+## Setting up `python`
+
+`python` chunks of this book are executed through `reticulate`, in a `python`
+session living alongside the `R` session. `R` objects are available from
+`python` as `r.<object>`, and `python` objects from `R` as `py$<object>`.
+
+::: {.callout-tip icon='true'}
+
+## Installing `python` packages for this book
+
+The `python` packages used in this chapter are declared, with pinned versions,
+in the `conda` environment file of the book (`inst/requirements.yml`):
+
+```{r}
+#| echo: false
+#| comment: ""
+cat(readLines("../requirements.yml"), sep = "\n")
+```
+
+`BiocBook::setup_python()`, called at the top of this chapter, creates this
+environment if needed (fetching a standalone `micromamba` if it finds none on
+the machine) and activates it with `reticulate`. In the book's
+`Docker` image, the environment is already installed and activated.
+
+:::
+
+## Fetching data in `R`, reading it in `python`
+
+This chapter uses the micro-C dataset (@Krietenstein_2020) already analyzed in
+the [chapter on topological features](topological-features.qmd). It contains
+intra-chromosomal interactions within `chr17`, binned at `5000`, `100000` and
+`250000` bp. The `.mcool` file is fetched from `R`...
+
+```{r}
+mcool <- unname(HiContactsData('microC', 'mcool'))
+mcool
+```
+
+... and opened in `python` with `cooler`, using the file path defined in `R`:
+
+```{python}
+import cooler
+clr = cooler.Cooler(f"{r.mcool}::/resolutions/5000")
+clr.info
+```
+
+## Insulation and domain boundaries
+
+`cooltools.insulation()` computes the diamond insulation score (@Crane_2015) and
+calls domain boundaries. To match the analysis of the
+[topological features chapter](topological-features.qmd), it is run on the
+long arm of `chr17` (from 60 Mb), at 5 kb resolution, with a 100 kb window.
+`bioframe` defines this genomic region as a "view":
+
+```{python}
+import bioframe
+import cooltools
+view_chr17q = bioframe.make_viewframe([("chr17", 60_000_000, 83_257_441, "chr17q")])
+insulation = cooltools.insulation(clr, [100_000], view_df = view_chr17q, verbose = False)
+insulation[["chrom", "start", "end", "log2_insulation_score_100000", "is_boundary_100000"]].dropna()
+```
+
+`cooltools` called `r sum(py$insulation$is_boundary_100000)` domain boundaries 
+on this arm. 
+
+## A/B compartments: from `R` to `python` and back
+
+`cooltools.eigs_cis()` computes the eigenvectors of the contact matrix, and
+orients them with a "phasing track" (such as the GC content of each genomic
+bin), so that positive values correspond to the A compartment.
+
+The 250 kb bins of the contact matrix are listed in `python`...
+
+```{python}
+clr_250kb = cooler.Cooler(f"{r.mcool}::/resolutions/250000")
+bins = clr_250kb.bins()[:][["chrom", "start", "end"]]
+```
+
+... their GC content is computed in `R`, from the `BSgenome` reference
+sequence used throughout this book...
+
+```{r}
+hg38 <- BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38
+bins <- makeGRangesFromDataFrame(py$bins, starts.in.df.are.0based = TRUE)
+GC <- Biostrings::letterFrequency(
+    Biostrings::getSeq(hg38, bins), letters = "GC", as.prob = TRUE
+)[, 1]
+gc_track <- data.frame(py$bins, GC = GC)
+head(gc_track)
+```
+
+... and the GC track is passed back to `python` to phase the eigenvectors:
+
+```{python}
+#| warning: false
+view_chr17 = bioframe.make_viewframe([("chr17", 0, 83_257_441, "chr17")])
+eigenvalues, eigenvectors = cooltools.eigs_cis(
+    clr_250kb, phasing_track = r.gc_track, view_df = view_chr17, n_eigs = 3
+)
+eigenvectors.dropna().head()
+```
+
+## Do `R` and `python` agree?
+
+The same analyses are run with `HiContacts`, exactly as in the
+[chapter on topological features](topological-features.qmd):
+
+```{r}
+microC <- import(CoolFile(mcool), resolution = 250000)
+microC_compts <- getCompartments(microC, genome = hg38)
+hic <- zoom(microC, 5000) |>
+    refocus('chr17:60000001-83257441') |>
+    getDiamondInsulation(window_size = 100000, BPPARAM = SerialParam(progressbar = FALSE)) |>
+    getBorders()
+```
+
+The `python` results are retrieved in `R` as `data.frame`s, and matched to the
+`HiContacts` results bin by bin (`python` coordinates are 0-based, `R`
+coordinates are 1-based):
+
+```{r}
+insulation <- tibble(
+    start = start(metadata(hic)$insulation) - 1,
+    HiContacts = metadata(hic)$insulation$insulation
+) |> inner_join(
+    tibble(start = py$insulation$start, cooltools = py$insulation$log2_insulation_score_100000),
+    by = "start"
+)
+compartments <- tibble(
+    start = start(metadata(microC_compts)$eigens) - 1,
+    HiContacts = metadata(microC_compts)$eigens$eigen
+) |> inner_join(
+    tibble(start = py$eigenvectors$start, cooltools = py$eigenvectors$E1),
+    by = "start"
+)
+cors <- c(
+    insulation = cor(insulation$HiContacts, insulation$cooltools, use = "complete.obs"),
+    compartments = cor(compartments$HiContacts, compartments$cooltools, use = "complete.obs")
+)
+cors
+```
+
+```{r}
+#| label: fig-r-vs-python
+#| fig-cap: "Insulation scores (top, `chr17` long arm, 5 kb) and A/B compartment eigenvectors (bottom, `chr17`, 250 kb) computed by `HiContacts` (`R`) and by `cooltools` (`python`) from the same micro-C contact matrix."
+#| fig-width: 9
+#| fig-height: 6
+tracks <- function(df, ylab) {
+    tidyr::pivot_longer(df, c(HiContacts, cooltools), names_to = "tool") |>
+        ggplot(aes(x = start / 1e6, y = value, colour = tool)) +
+        geom_line(linewidth = 0.3, na.rm = TRUE) +
+        scale_colour_manual(values = c(HiContacts = "#0484a9", cooltools = "#e2711d")) +
+        labs(x = "chr17 (Mb)", y = ylab, colour = NULL) +
+        theme_bw() +
+        theme(legend.position = "top")
+}
+scatter <- function(df, r) {
+    ggplot(df, aes(x = HiContacts, y = cooltools)) +
+        geom_point(size = 0.4, alpha = 0.3, na.rm = TRUE) +
+        annotate("text", x = -Inf, y = Inf, hjust = -0.2, vjust = 1.5,
+            label = sprintf("r = %.3f", r)) +
+        labs(x = "HiContacts (R)", y = "cooltools (python)") +
+        theme_bw()
+}
+wrap_plots(
+    tracks(insulation, "Insulation score"), scatter(insulation, cors[["insulation"]]),
+    tracks(compartments, "Eigenvector"), scatter(compartments, cors[["compartments"]]),
+    ncol = 2, widths = c(3, 1), guides = "collect"
+) & theme(legend.position = "top")
+```
+
+Both tools agree closely (@fig-r-vs-python). The compartment eigenvectors are 
+almost identical (Pearson correlation of `r round(cors[["compartments"]], 3)`), 
+and so are their signs, both being phased with the same GC track. Insulation 
+scores are highly correlated as well (`r round(cors[["insulation"]], 3)`): the 
+two implementations differ in how they normalize the score (by its median in 
+`cooltools`, by its mean in `HiContacts`) and handle bins filtered out by the 
+balancing, not in what they measure. 
+
+Domain boundaries, on the other hand, are called from these scores with 
+different procedures. Both keep the local minima of the insulation score that 
+are prominent enough, but `HiContacts::getBorders()` measures each minimum 
+against the next local maximum and uses a fixed threshold (`0.2` by default), 
+while `cooltools.insulation()` uses the topographic prominence of each minimum 
+and sets its threshold from their distribution (Li's method, by default). The 
+two tools therefore call different sets of boundaries from very similar 
+scores: 
+
+```{r}
+borders_HiContacts <- topologicalFeatures(hic, "borders")
+borders_cooltools <- py$insulation |> 
+    filter(is_boundary_100000) |> 
+    makeGRangesFromDataFrame(starts.in.df.are.0based = TRUE)
+c(
+    HiContacts = length(borders_HiContacts), 
+    cooltools = length(borders_cooltools), 
+    `HiContacts borders within 10 kb of a cooltools boundary` = 
+        sum(overlapsAny(borders_HiContacts, borders_cooltools, maxgap = 10000))
+)
+```
+
+Comparing boundaries between studies, or between tools, thus requires using the 
+same calling procedure on both sides, rather than comparing lists of boundaries 
+called by different tools. 
+
+# Session info {-}
+
+::: {.callout-note collapse="true"}
+
+## Click to expand 👇 {-}
+
+```{r "session info"}
+#| cache: false
+sessioninfo::session_info(include_base = TRUE)
+```
+
+:::
+
+# References {-}

@@ -18,6 +18,7 @@ book:
       chapters:
         - pages/disseminating.qmd
         - pages/interoperability.qmd
+        - pages/interoperability-python.qmd
         - pages/workflow-yeast.qmd
         - pages/workflow-chicken.qmd
         - pages/workflow-centros.qmd

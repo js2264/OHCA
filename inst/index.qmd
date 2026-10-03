@@ -56,6 +56,7 @@ This book is divided in three parts:
 
 - [Data gateways: accessing public Hi-C data portals](pages/disseminating.qmd)
 - [Interoperability: Using HiCExperiment with other R packages](pages/interoperability.qmd)
+- [Interoperability with `python`: `cooltools`](pages/interoperability-python.qmd)
 - [Workflow 1: Distance-dependent interactions across yeast mutants](pages/workflow-yeast.qmd)
 - [Workflow 2: Chromosome compartment cohesion upon mitosis entry](pages/workflow-chicken.qmd)
 - [Workflow 3: Inter-centromere interactions in yeast](pages/workflow-centros.qmd)
