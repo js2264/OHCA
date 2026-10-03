@@ -1,0 +1,33 @@
+name: devel-interactionset
+
+## TEMPORARY, throwaway branch: on Bioconductor devel, does InteractionSet with
+## an S3 as.data.frame() method for GInteractions (js2264/InteractionSet,
+## branch js2264/as.data.frame-fix) fix base::as.data.frame() and its callers,
+## without patching the packages that call it?
+on:
+  push:
+    branches:
+      - claude/ohca-devel-test
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    container: bioconductor/bioconductor_docker:devel
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v7
+
+      - name: 📦 Install HiContacts and testthat from Bioconductor devel
+        run: Rscript -e 'BiocManager::install(c("HiContacts", "testthat", "tibble"), ask = FALSE, update = FALSE)'
+
+      - name: ❌ Before, with InteractionSet from Bioconductor devel
+        run: Rscript ci-devel-test/interactionset.R before
+
+      - name: 📦 Install InteractionSet from js2264/InteractionSet, branch js2264/as.data.frame-fix
+        run: |
+          git clone --depth 1 --branch js2264/as.data.frame-fix https://github.com/js2264/InteractionSet /tmp/InteractionSet
+          git -C /tmp/InteractionSet log -1 --format='%h %an: %s'
+          R CMD INSTALL /tmp/InteractionSet
+
+      - name: ✅ After, with the fixed InteractionSet
+        run: Rscript ci-devel-test/interactionset.R after
