@@ -14,12 +14,6 @@ cat("HARFBUZZ-DIAG at start:", unique(sub(".* ", "", grep("libharfbuzz", readLin
 ## `reticulate` is attached first, so that `import()` refers to
 ## `HiCExperiment`'s rather than to `reticulate`'s
 library(reticulate)
-## `python` packages are imported before other `R` packages are attached:
-## these can load the system's graphics libraries (e.g. `harfbuzz`), and
-## `matplotlib` from `conda` then fails to import if it needs a more recent
-## version of them
-BiocBook::setup_python()
-invisible(reticulate::import("matplotlib"))
 library(dplyr)
 library(ggplot2)
 library(patchwork)
@@ -28,6 +22,7 @@ library(HiCExperiment)
 library(HiContactsData)
 library(HiContacts)
 library(BiocParallel)
+BiocBook::setup_python()
 ```
 
 ```{r}
