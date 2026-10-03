@@ -43,5 +43,5 @@ RUN R CMD INSTALL /opt/pkg
 
 ## TEMPORARY (throwaway branch `claude/ohca-devel-test`): render every chapter, 
 ## and list those that fail
-RUN sh /opt/pkg/ci-devel-test/render-chapters.sh
+RUN CHAPTERS="pages/interoperability-python.qmd" sh /opt/pkg/ci-devel-test/render-chapters.sh
 RUN R CMD build --keep-empty-dirs --no-resave-data /opt/pkg

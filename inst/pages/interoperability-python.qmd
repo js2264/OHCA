@@ -1,5 +1,11 @@
 # Interoperability with `python`: `cooltools` {#sec-python-cooltools}
 
+```{r}
+#| include: false
+## TEMPORARY (throwaway branch): libharfbuzz loaded in this R session
+cat("HARFBUZZ-DIAG at start:", unique(sub(".* ", "", grep("libharfbuzz", readLines("/proc/self/maps"), value = TRUE))), "\n", file = stderr())
+```
+
 ::: {.callout-note collapse="true"}
 
 ## Pre-loading packages and objects 📦 {-}
@@ -23,6 +29,13 @@ library(HiContactsData)
 library(HiContacts)
 library(BiocParallel)
 ```
+
+```{r}
+#| include: false
+## TEMPORARY (throwaway branch): libharfbuzz loaded in this R session
+cat("HARFBUZZ-DIAG after setup:", unique(sub(".* ", "", grep("libharfbuzz", readLines("/proc/self/maps"), value = TRUE))), "\n", file = stderr())
+```
+
 
 :::
 
