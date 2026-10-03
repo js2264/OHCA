@@ -69,8 +69,8 @@ cat(readLines("../requirements.yml"), sep = "\n")
 ```
 
 `BiocBook::setup_python()`, called at the top of this chapter, creates this
-environment if needed (fetching a standalone `micromamba` if no `conda` is
-available on the machine) and activates it with `reticulate`. In the book's
+environment if needed (fetching a standalone `micromamba` if it finds none on
+the machine) and activates it with `reticulate`. In the book's
 `Docker` image, the environment is already installed and activated.
 
 :::
@@ -224,14 +224,18 @@ Both tools agree closely (@fig-r-vs-python). The compartment eigenvectors are
 almost identical (Pearson correlation of `r round(cors[["compartments"]], 3)`), 
 and so are their signs, both being phased with the same GC track. Insulation 
 scores are highly correlated as well (`r round(cors[["insulation"]], 3)`): the 
-two implementations differ in how they normalize the score and handle bins 
-filtered out by the balancing, not in what they measure. 
+two implementations differ in how they normalize the score (by its median in 
+`cooltools`, by its mean in `HiContacts`) and handle bins filtered out by the 
+balancing, not in what they measure. 
 
 Domain boundaries, on the other hand, are called from these scores with 
-different procedures: `HiContacts::getBorders()` keeps local minima of the 
-insulation score below an automatically estimated threshold, while 
-`cooltools.insulation()` thresholds their prominence. The two tools therefore 
-call different sets of boundaries from very similar scores: 
+different procedures. Both keep the local minima of the insulation score that 
+are prominent enough, but `HiContacts::getBorders()` measures each minimum 
+against the next local maximum and uses a fixed threshold (`0.2` by default), 
+while `cooltools.insulation()` uses the topographic prominence of each minimum 
+and sets its threshold from their distribution (Li's method, by default). The 
+two tools therefore call different sets of boundaries from very similar 
+scores: 
 
 ```{r}
 borders_HiContacts <- topologicalFeatures(hic, "borders")
