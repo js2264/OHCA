@@ -7,11 +7,12 @@ COPY . /opt/pkg
 ENV R_USER_CACHE_DIR=/opt/R-cache
 
 ## Optionally pin `quarto`, e.g. to a release that renders `llms.txt` for books
-## (quarto >= 1.11). Empty: keep the quarto shipped with the Bioconductor image
+## (quarto >= 1.11). Empty: keep the quarto shipped with the Bioconductor image.
+## The download is retried on transient errors (e.g. HTTP 503 from GitHub)
 ARG QUARTO_VERSION=""
 ARG TARGETARCH
 RUN if [ -n "${QUARTO_VERSION}" ]; then \
-      curl -fsSL -o /tmp/quarto.tar.gz "https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-${TARGETARCH:-amd64}.tar.gz" && \
+      curl -fsSL --retry 5 --retry-delay 10 -o /tmp/quarto.tar.gz "https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-linux-${TARGETARCH:-amd64}.tar.gz" && \
       mkdir -p "/opt/quarto-${QUARTO_VERSION}" && \
       tar -xzf /tmp/quarto.tar.gz -C "/opt/quarto-${QUARTO_VERSION}" --strip-components=1 && \
       ln -sf "/opt/quarto-${QUARTO_VERSION}/bin/quarto" /usr/local/bin/quarto && \
