@@ -1,0 +1,7 @@
+# OHCA
+
+> Every version of this book, one per Bioconductor release, each with its own llms.txt.
+
+## Versions
+
+- [devel](devel/llms.txt)
