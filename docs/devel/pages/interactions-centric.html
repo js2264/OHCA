@@ -2,14 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.11.5">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Orchestrating Hi-C analysis with Bioconductor - 6&nbsp; Interactions-centric analysis</title>
+<title>6&nbsp; Interactions-centric analysis – Orchestrating Hi-C analysis with Bioconductor</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -18,6 +24,7 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -55,6 +62,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
+  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -82,21 +90,28 @@ div.csl-indent {
 <link href="../pages/topological-features.html" rel="next">
 <link href="../pages/matrix-centric.html" rel="prev">
 <link href="../assets/cover.jpg" rel="icon" type="image/jpeg">
-<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5f883865545033bfab6feb3d329ab180.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-62123f91d1045bb168bf6a98c6a4e10b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -105,34 +120,35 @@ div.csl-indent {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
 </head>
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" aria-label="Toolbar"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/matrix-centric.html">In-depth Hi-C analysis</a></li><li class="breadcrumb-item"><a href="../pages/interactions-centric.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/matrix-centric.html">In-depth Hi-C analysis</a></li><li class="breadcrumb-item"><a href="../pages/interactions-centric.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span></a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Site"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Orchestrating Hi-C analysis with Bioconductor</a> 
         <div class="sidebar-tools-main">
     <div class="dropdown">
-      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label=""><i class="bi bi-git"></i></a>
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-git"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
 <li>
             <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/js2264/OHCA/">
@@ -146,7 +162,7 @@ div.csl-indent {
           </li>
       </ul>
 </div>
-    <a href="../Orchestrating-Hi-C-analysis-with-Bioconductor.pdf" rel="" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+    <a href="../Orchestrating-Hi-C-analysis-with-Bioconductor.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -171,13 +187,10 @@ div.csl-indent {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">Fundamentals concepts</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Fundamentals concepts</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/principles.html" class="sidebar-item-text sidebar-link">
@@ -206,13 +219,10 @@ div.csl-indent {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
- <span class="menu-text">In-depth Hi-C analysis</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">In-depth Hi-C analysis</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/matrix-centric.html" class="sidebar-item-text sidebar-link">
@@ -235,13 +245,10 @@ div.csl-indent {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
- <span class="menu-text">Advanced Hi-C topics</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">Advanced Hi-C topics</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/disseminating.html" class="sidebar-item-text sidebar-link">
@@ -252,6 +259,12 @@ div.csl-indent {
   <div class="sidebar-item-container"> 
   <a href="../pages/interoperability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Interoperability: using HiCExperiment with other R packages</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/interoperability-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with <code>python</code>: <code>cooltools</code></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -276,10 +289,10 @@ div.csl-indent {
 </li>
     </ul>
 </div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
 <li>
@@ -298,7 +311,7 @@ div.csl-indent {
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content page-columns page-full" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content page-columns page-full" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/matrix-centric.html">In-depth Hi-C analysis</a></li><li class="breadcrumb-item"><a href="../pages/interactions-centric.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span></a></li></ol></nav><div class="quarto-title">
 <h1 class="title">
 <span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Interactions-centric analysis</span>
 </h1>
@@ -314,20 +327,21 @@ div.csl-indent {
   </div>
   
 
+
 </header><div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Pre-loading packages and objects 📦
+<span class="screen-reader-only">Note</span>Pre-loading packages and objects 📦
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  Attaching package: 'dplyr'</span></span>
 <span><span class="co">##  The following objects are masked from 'package:stats':</span></span>
@@ -340,22 +354,35 @@ Pre-loading packages and objects 📦
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
 <span><span class="co">##  Loading required package: stats4</span></span>
 <span><span class="co">##  Loading required package: BiocGenerics</span></span>
+<span><span class="co">##  Loading required package: generics</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'generics'</span></span>
+<span><span class="co">##  The following object is masked from 'package:dplyr':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      explain</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      as.difftime, as.factor, as.ordered, intersect, is.element,</span></span>
+<span><span class="co">##      setdiff, setequal, union</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  Attaching package: 'BiocGenerics'</span></span>
-<span><span class="co">##  The following objects are masked from 'package:dplyr':</span></span>
+<span><span class="co">##  The following object is masked from 'package:dplyr':</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="co">##      combine, intersect, setdiff, union</span></span>
+<span><span class="co">##      combine</span></span>
 <span><span class="co">##  The following objects are masked from 'package:stats':</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##      IQR, mad, sd, var, xtabs</span></span>
+<span><span class="co">##  The following object is masked from 'package:utils':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      data</span></span>
 <span><span class="co">##  The following objects are masked from 'package:base':</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##      Filter, Find, Map, Position, Reduce, anyDuplicated, aperm,</span></span>
 <span><span class="co">##      append, as.data.frame, basename, cbind, colnames, dirname,</span></span>
-<span><span class="co">##      do.call, duplicated, eval, evalq, get, grep, grepl, intersect,</span></span>
-<span><span class="co">##      is.unsorted, lapply, mapply, match, mget, order, paste, pmax,</span></span>
-<span><span class="co">##      pmax.int, pmin, pmin.int, rank, rbind, rownames, sapply,</span></span>
-<span><span class="co">##      setdiff, table, tapply, union, unique, unsplit, which.max,</span></span>
+<span><span class="co">##      do.call, duplicated, eval, evalq, get, grep, grepl, is.unsorted,</span></span>
+<span><span class="co">##      lapply, mapply, match, mget, order, paste, pmax, pmax.int, pmin,</span></span>
+<span><span class="co">##      pmin.int, rank, rbind, rownames, sapply, saveRDS, scale,</span></span>
+<span><span class="co">##      sequence, table, tapply, transform, unique, unsplit, which.max,</span></span>
 <span><span class="co">##      which.min</span></span>
 <span><span class="co">##  Loading required package: S4Vectors</span></span>
 <span><span class="co">##  </span></span>
@@ -375,7 +402,7 @@ Pre-loading packages and objects 📦
 <span><span class="co">##  The following objects are masked from 'package:dplyr':</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##      collapse, desc, slice</span></span>
-<span><span class="co">##  Loading required package: GenomeInfoDb</span></span>
+<span><span class="co">##  Loading required package: Seqinfo</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">InteractionSet</span><span class="op">)</span></span>
 <span><span class="co">##  Loading required package: SummarizedExperiment</span></span>
 <span><span class="co">##  Loading required package: MatrixGenerics</span></span>
@@ -444,7 +471,9 @@ Pre-loading packages and objects 📦
 <span><span class="co">##  Attaching package: 'dbplyr'</span></span>
 <span><span class="co">##  The following objects are masked from 'package:dplyr':</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="co">##      ident, sql</span></span>
+<span><span class="co">##      ident, sql, sql_escape_ident, sql_escape_string</span></span>
+<span><span class="co">##  OpenTelemetry error: there is no package called 'otelsdk'</span></span>
+<span><span class="co">##  OpenTelemetry error: there is no package called 'otelsdk'</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  Attaching package: 'AnnotationHub'</span></span>
 <span><span class="co">##  The following object is masked from 'package:Biobase':</span></span>
@@ -472,7 +501,7 @@ Pre-loading packages and objects 📦
 <span><span class="co">##  loading from cache</span></span>
 <span><span class="va">pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span>
 <span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
-<span><span class="co">##  loading from cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  loading from cache</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -483,7 +512,7 @@ Pre-loading packages and objects 📦
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Aims
+<span class="screen-reader-only">Note</span>Aims
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -504,7 +533,7 @@ This encompasses:</p>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+<span class="screen-reader-only">Note</span>Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -515,12 +544,12 @@ Note
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Generating the example <code>hic</code> object 👇
+<span class="screen-reader-only">Tip</span>Generating the example <code>hic</code> object 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -528,7 +557,7 @@ Generating the example <code>hic</code> object 👇
 <div class="callout-body-container callout-body">
 <p>To demonstrate <code>HiContacts</code> functionalities, we will create an <code>HiCExperiment</code> object from an example <code>.cool</code> file provided in the <code>HiContactsData</code> package.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ---- This downloads example `.mcool` and `.pairs` files and caches them locally </span></span>
@@ -543,7 +572,7 @@ Generating the example <code>hic</code> object 👇
 <span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
 <span><span class="va">cf</span></span>
 <span><span class="co">##  CoolFile object</span></span>
-<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/f73da6b8a8_7752 </span></span>
+<span><span class="co">##  .mcool file: /opt/R-cache/R/ExperimentHub/15057bb43fd_7752 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -552,16 +581,16 @@ Generating the example <code>hic</code> object 👇
 <span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/PairsFile-class.html">PairsFile</a></span><span class="op">(</span><span class="va">pairsf</span><span class="op">)</span></span>
 <span><span class="va">pf</span></span>
 <span><span class="co">##  PairsFile object</span></span>
-<span><span class="co">##  resource: /root/.cache/R/ExperimentHub/f728f165f9_7753</span></span>
+<span><span class="co">##  resource: /opt/R-cache/R/ExperimentHub/15031c16370_7753</span></span>
 <span></span>
 <span><span class="co"># ---- This imports contacts from the chromosome `II` at resolution `2000`</span></span>
-<span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 471,364 contacts over 407 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -569,7 +598,7 @@ Generating the example <code>hic</code> object 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -581,21 +610,21 @@ Generating the example <code>hic</code> object 👇
 <p>Distance laws are generally computed directly from <code>.pairs</code> files. This is because the <code>.pairs</code> files are at 1-bp resolution whereas the contact matrices (for example from <code>.cool</code> files) are binned at a minimum resolution.</p>
 <p>An example <code>.pairs</code> file can be fetched from the <code>ExperimentHub</code> database using the <code>HiContactsData</code> package.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
 <span><span class="va">pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span>
 <span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
 <span><span class="co">##  loading from cache</span></span>
-<span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/PairsFile-class.html">PairsFile</a></span><span class="op">(</span><span class="va">pairsf</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/PairsFile-class.html">PairsFile</a></span><span class="op">(</span><span class="va">pairsf</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pf</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pf</span></span>
 <span><span class="co">##  PairsFile object</span></span>
-<span><span class="co">##  resource: /root/.cache/R/ExperimentHub/f728f165f9_7753</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  resource: /opt/R-cache/R/ExperimentHub/15031c16370_7753</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If needed, <code>PairsFile</code> connections can be imported directly into a <code>GInteractions</code> object with <code><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import()</a></code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">pf</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">pf</span><span class="op">)</span></span>
 <span><span class="co">##  GInteractions object with 471364 interactions and 3 metadata columns:</span></span>
 <span><span class="co">##             seqnames1   ranges1     seqnames2   ranges2 |     frag1     frag2</span></span>
 <span><span class="co">##                 &lt;Rle&gt; &lt;IRanges&gt;         &lt;Rle&gt; &lt;IRanges&gt; | &lt;numeric&gt; &lt;numeric&gt;</span></span>
@@ -625,13 +654,13 @@ Generating the example <code>hic</code> object 👇
 <span><span class="co">##    [471364]       203</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 549331 ranges and 0 metadata columns</span></span>
-<span><span class="co">##    seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##    seqinfo: 17 sequences from an unspecified genome</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can compute a P(s) per chromosome from this <code>.pairs</code> file using the <code>distanceLaw</code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContacts">HiContacts</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContacts">HiContacts</a></span><span class="op">)</span></span>
 <span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/Ps.html">distanceLaw</a></span><span class="op">(</span><span class="va">pf</span>, by_chr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
-<span><span class="co">##  Importing pairs file /root/.cache/R/ExperimentHub/f728f165f9_7753 in memory. This may take a while...</span></span>
+<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/15031c16370_7753 in memory. This may take a while...</span></span>
 <span><span class="va">ps</span></span>
 <span><span class="co">##  # A tibble: 115 × 6</span></span>
 <span><span class="co">##    chr   binned_distance          p     norm_p norm_p_unity slope</span></span>
@@ -642,24 +671,26 @@ Generating the example <code>hic</code> object 👇
 <span><span class="co">##  4 II                 19 0.0000424  0.0000212         45.5   1.55</span></span>
 <span><span class="co">##  5 II                 21 0.0000467  0.0000233         50.0   1.54</span></span>
 <span><span class="co">##  6 II                 23 0.0000870  0.0000290         62.1   1.53</span></span>
-<span><span class="co">##  # ℹ 109 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  # ℹ 109 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The <code><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPs()</a></code> and <code><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPsSlope()</a></code> functions are convenient <code>ggplot2</code>-based functions with pre-configured settings optimized for P(s) visualization.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPs</a></span><span class="op">(</span><span class="va">ps</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">binned_distance</span>, y <span class="op">=</span> <span class="va">norm_p</span>, color <span class="op">=</span> <span class="va">chr</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  Warning: Removed 67 rows containing missing values (`geom_line()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  Warning: Removed 67 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">##  (`geom_line()`).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="interactions-centric_files/figure-html/ps-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="interactions-centric_files/figure-html/ps-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPsSlope</a></span><span class="op">(</span><span class="va">ps</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">binned_distance</span>, y <span class="op">=</span> <span class="va">slope</span>, color <span class="op">=</span> <span class="va">chr</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  Warning: Removed 67 rows containing missing values (`geom_line()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPsSlope</a></span><span class="op">(</span><span class="va">ps</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">binned_distance</span>, y <span class="op">=</span> <span class="va">slope</span>, color <span class="op">=</span> <span class="va">chr</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">##  Warning: Removed 67 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">##  (`geom_line()`).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="interactions-centric_files/figure-html/ps-2.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="interactions-centric_files/figure-html/ps-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -668,16 +699,16 @@ Generating the example <code>hic</code> object 👇
 <span class="header-section-number">6.1.2</span> P(s) for multiple <code>.pairs</code> files</h3>
 <p>Let’s first import a second example dataset. We’ll import pairs identified in a <em>eco1</em> yeast mutant.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">eco1_pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_eco1'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">eco1_pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_eco1'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span>
 <span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
 <span><span class="co">##  downloading 1 resources</span></span>
 <span><span class="co">##  retrieving 1 resource</span></span>
 <span><span class="co">##  loading from cache</span></span>
-<span><span class="va">eco1_pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/PairsFile-class.html">PairsFile</a></span><span class="op">(</span><span class="va">eco1_pairsf</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">eco1_pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/PairsFile-class.html">PairsFile</a></span><span class="op">(</span><span class="va">eco1_pairsf</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">eco1_ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/Ps.html">distanceLaw</a></span><span class="op">(</span><span class="va">eco1_pf</span>, by_chr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
-<span><span class="co">##  Importing pairs file /root/.cache/R/ExperimentHub/87d2cb3cec7_7755 in memory. This may take a while...</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">eco1_ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/Ps.html">distanceLaw</a></span><span class="op">(</span><span class="va">eco1_pf</span>, by_chr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
+<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/7466252b1f0_7755 in memory. This may take a while...</span></span>
 <span><span class="va">eco1_ps</span></span>
 <span><span class="co">##  # A tibble: 115 × 6</span></span>
 <span><span class="co">##    chr   binned_distance          p     norm_p norm_p_unity slope</span></span>
@@ -688,30 +719,32 @@ Generating the example <code>hic</code> object 👇
 <span><span class="co">##  4 II                 19 0.0000412  0.0000206        13.5    1.45</span></span>
 <span><span class="co">##  5 II                 21 0.0000653  0.0000326        21.5    1.45</span></span>
 <span><span class="co">##  6 II                 23 0.0000803  0.0000268        17.6    1.44</span></span>
-<span><span class="co">##  # ℹ 109 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  # ℹ 109 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A little data wrangling can help plotting the distance laws for 2 different samples in the same plot.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
 <span><span class="va">merged_ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html">rbind</a></span><span class="op">(</span></span>
 <span>    <span class="va">ps</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="st">'WT'</span><span class="op">)</span>, </span>
 <span>    <span class="va">eco1_ps</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="st">'eco1'</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPs</a></span><span class="op">(</span><span class="va">merged_ps</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">binned_distance</span>, y <span class="op">=</span> <span class="va">norm_p</span>, color <span class="op">=</span> <span class="va">sample</span>, linetype <span class="op">=</span> <span class="va">chr</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'#c6c6c6'</span>, <span class="st">'#ca0000'</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  Warning: Removed 134 rows containing missing values (`geom_line()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  Warning: Removed 134 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">##  (`geom_line()`).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPsSlope</a></span><span class="op">(</span><span class="va">merged_ps</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">binned_distance</span>, y <span class="op">=</span> <span class="va">slope</span>, color <span class="op">=</span> <span class="va">sample</span>, linetype <span class="op">=</span> <span class="va">chr</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPsSlope</a></span><span class="op">(</span><span class="va">merged_ps</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">binned_distance</span>, y <span class="op">=</span> <span class="va">slope</span>, color <span class="op">=</span> <span class="va">sample</span>, linetype <span class="op">=</span> <span class="va">chr</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'#c6c6c6'</span>, <span class="st">'#ca0000'</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  Warning: Removed 135 rows containing missing values (`geom_line()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  Warning: Removed 135 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">##  (`geom_line()`).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -720,21 +753,23 @@ Generating the example <code>hic</code> object 👇
 <span class="header-section-number">6.1.3</span> P(s) from <code>HiCExperiment</code> objects</h3>
 <p>Alternatively, distance laws can be computed from binned matrices directly by providing <code>HiCExperiment</code> objects. For deeply sequenced datasets, this can be significantly faster than when using original <code>.pairs</code> files, but the smoothness of the resulting curves will be greatly impacted, notably at short distances.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ps_from_hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/Ps.html">distanceLaw</a></span><span class="op">(</span><span class="va">hic</span>, by_chr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ps_from_hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/Ps.html">distanceLaw</a></span><span class="op">(</span><span class="va">hic</span>, by_chr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
 <span><span class="co">##  pairsFile not specified. The P(s) curve will be an approximation.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPs</a></span><span class="op">(</span><span class="va">ps_from_hic</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">binned_distance</span>, y <span class="op">=</span> <span class="va">norm_p</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  Warning: Removed 9 rows containing missing values (`geom_line()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  Warning: Removed 9 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">##  (`geom_line()`).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPsSlope</a></span><span class="op">(</span><span class="va">ps_from_hic</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">binned_distance</span>, y <span class="op">=</span> <span class="va">slope</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  Warning: Removed 8 rows containing missing values (`geom_line()`).</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotPs.html">plotPsSlope</a></span><span class="op">(</span><span class="va">ps_from_hic</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">binned_distance</span>, y <span class="op">=</span> <span class="va">slope</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">##  Warning: Removed 8 rows containing missing values or values outside the scale range</span></span>
+<span><span class="co">##  (`geom_line()`).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-11-2.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-11-2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -743,7 +778,7 @@ Generating the example <code>hic</code> object 👇
 <span class="header-section-number">6.2</span> Cis/trans ratios</h2>
 <p>The ratio between cis interactions and trans interactions is often used to assess the overall quality of a Hi-C dataset. It can be computed <em>per chromosome</em> using the <code><a href="https://rdrr.io/pkg/HiContacts/man/cisTransRatio.html">cisTransRatio()</a></code> function. You will need to provide a <strong>genome-wide</strong> <code>HiCExperiment</code> to estimate cis/trans ratios!</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">full_hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">full_hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/cisTransRatio.html">cisTransRatio</a></span><span class="op">(</span><span class="va">full_hic</span><span class="op">)</span> </span>
 <span><span class="va">ct</span></span>
 <span><span class="co">##  # A tibble: 16 × 6</span></span>
@@ -756,19 +791,19 @@ Generating the example <code>hic</code> object 👇
 <span><span class="co">##  4 IV    1858062 418218 2276280   0.816     0.184</span></span>
 <span><span class="co">##  5 V      607090 220873  827963   0.733     0.267</span></span>
 <span><span class="co">##  6 VI     280282 127771  408053   0.687     0.313</span></span>
-<span><span class="co">##  # ℹ 10 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  # ℹ 10 more rows</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>It can be plotted using <code>ggplot2</code>-based visualization functions.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ct</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">chr</span>, y <span class="op">=</span> <span class="va">cis_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ct</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">chr</span>, y <span class="op">=</span> <span class="va">cis_pct</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>position <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/position_stack.html">position_stack</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>x<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_axis.html">guide_axis</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va"><a href="https://scales.r-lib.org/reference/percent_format.html">percent</a></span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">'Chromosomes'</span>, y <span class="op">=</span> <span class="st">'% of cis contacts'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">'Chromosomes'</span>, y <span class="op">=</span> <span class="st">'% of cis contacts'</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -779,52 +814,52 @@ Generating the example <code>hic</code> object 👇
 <p>Interaction profile of a genomic locus of interest with its surrounding environment or the rest of the genome is frequently generated. In some cases, this can help in identifying and/or comparing regulatory or structural interactions.</p>
 <p>For instance, we can compute the genome-wide virtual 4C profile of interactions anchored at the centromere in chromosome <code>II</code> (located at ~ 238kb).</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
 <span><span class="va">v4C</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/virtual4C.html">virtual4C</a></span><span class="op">(</span><span class="va">full_hic</span>, viewpoint <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="st">"II:230001-240000"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">v4C</span></span>
 <span><span class="co">##  GRanges object with 6045 ranges and 4 metadata columns:</span></span>
-<span><span class="co">##           seqnames        ranges strand |       score        viewpoint</span></span>
-<span><span class="co">##              &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |   &lt;numeric&gt;      &lt;character&gt;</span></span>
-<span><span class="co">##       [1]        I        1-2000      * |  0.00000000 II:230001-240000</span></span>
-<span><span class="co">##       [2]        I     2001-4000      * |  0.00000000 II:230001-240000</span></span>
-<span><span class="co">##       [3]        I     4001-6000      * |  0.00129049 II:230001-240000</span></span>
-<span><span class="co">##       [4]        I     6001-8000      * |  0.00000000 II:230001-240000</span></span>
-<span><span class="co">##       [5]        I    8001-10000      * |  0.00000000 II:230001-240000</span></span>
-<span><span class="co">##       ...      ...           ...    ... .         ...              ...</span></span>
-<span><span class="co">##    [6041]      XVI 940001-942000      * | 0.000775721 II:230001-240000</span></span>
-<span><span class="co">##    [6042]      XVI 942001-944000      * | 0.000000000 II:230001-240000</span></span>
-<span><span class="co">##    [6043]      XVI 944001-946000      * | 0.000000000 II:230001-240000</span></span>
-<span><span class="co">##    [6044]      XVI 946001-948000      * | 0.000000000 II:230001-240000</span></span>
-<span><span class="co">##    [6045]      XVI 948001-948066      * | 0.000000000 II:230001-240000</span></span>
-<span><span class="co">##              center in_viewpoint</span></span>
-<span><span class="co">##           &lt;numeric&gt;    &lt;logical&gt;</span></span>
-<span><span class="co">##       [1]    1000.5        FALSE</span></span>
-<span><span class="co">##       [2]    3000.5        FALSE</span></span>
-<span><span class="co">##       [3]    5000.5        FALSE</span></span>
-<span><span class="co">##       [4]    7000.5        FALSE</span></span>
-<span><span class="co">##       [5]    9000.5        FALSE</span></span>
-<span><span class="co">##       ...       ...          ...</span></span>
-<span><span class="co">##    [6041]    941000        FALSE</span></span>
-<span><span class="co">##    [6042]    943000        FALSE</span></span>
-<span><span class="co">##    [6043]    945000        FALSE</span></span>
-<span><span class="co">##    [6044]    947000        FALSE</span></span>
-<span><span class="co">##    [6045]    948034        FALSE</span></span>
+<span><span class="co">##           seqnames        ranges strand |       score    center in_viewpoint</span></span>
+<span><span class="co">##              &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |   &lt;numeric&gt; &lt;numeric&gt;    &lt;logical&gt;</span></span>
+<span><span class="co">##       [1]        I        1-2000      * |  0.00000000    1000.5        FALSE</span></span>
+<span><span class="co">##       [2]        I     2001-4000      * |  0.00000000    3000.5        FALSE</span></span>
+<span><span class="co">##       [3]        I     4001-6000      * |  0.00129049    5000.5        FALSE</span></span>
+<span><span class="co">##       [4]        I     6001-8000      * |  0.00000000    7000.5        FALSE</span></span>
+<span><span class="co">##       [5]        I    8001-10000      * |  0.00000000    9000.5        FALSE</span></span>
+<span><span class="co">##       ...      ...           ...    ... .         ...       ...          ...</span></span>
+<span><span class="co">##    [6041]      XVI 940001-942000      * | 0.000775721    941000        FALSE</span></span>
+<span><span class="co">##    [6042]      XVI 942001-944000      * | 0.000000000    943000        FALSE</span></span>
+<span><span class="co">##    [6043]      XVI 944001-946000      * | 0.000000000    945000        FALSE</span></span>
+<span><span class="co">##    [6044]      XVI 946001-948000      * | 0.000000000    947000        FALSE</span></span>
+<span><span class="co">##    [6045]      XVI 948001-948066      * | 0.000000000    948034        FALSE</span></span>
+<span><span class="co">##                  viewpoint</span></span>
+<span><span class="co">##                &lt;character&gt;</span></span>
+<span><span class="co">##       [1] II:230001-240000</span></span>
+<span><span class="co">##       [2] II:230001-240000</span></span>
+<span><span class="co">##       [3] II:230001-240000</span></span>
+<span><span class="co">##       [4] II:230001-240000</span></span>
+<span><span class="co">##       [5] II:230001-240000</span></span>
+<span><span class="co">##       ...              ...</span></span>
+<span><span class="co">##    [6041] II:230001-240000</span></span>
+<span><span class="co">##    [6042] II:230001-240000</span></span>
+<span><span class="co">##    [6043] II:230001-240000</span></span>
+<span><span class="co">##    [6044] II:230001-240000</span></span>
+<span><span class="co">##    [6045] II:230001-240000</span></span>
 <span><span class="co">##    -------</span></span>
-<span><span class="co">##    seqinfo: 16 sequences from an unspecified genome; no seqlengths</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##    seqinfo: 16 sequences from an unspecified genome; no seqlengths</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p><code>ggplot2</code> can be used to visualize the 4C-like profile over multiple chromosomes.</p>
-<div class="column-page-right">
-<div class="cell" data-layout-align="center" data-fig.asp="0.7">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">v4C</span><span class="op">)</span></span>
+<div class="page-columns page-full">
+<div class="cell page-columns page-full" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">v4C</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">center</span>, y <span class="op">=</span> <span class="va">score</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_area</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"identity"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Position"</span>, y <span class="op">=</span> <span class="st">"Contacts with viewpoint"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/unit_format.html">unit_format</a></span><span class="op">(</span>unit <span class="op">=</span> <span class="st">"M"</span>, scale <span class="op">=</span> <span class="fl">1e-06</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">seqnames</span>, scales <span class="op">=</span> <span class="st">'free_y'</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">seqnames</span>, scales <span class="op">=</span> <span class="st">'free_y'</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display page-columns page-full">
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full"><p class="page-columns page-full"><img src="interactions-centric_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img column-page-right" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
@@ -836,21 +871,21 @@ Generating the example <code>hic</code> object 👇
 <p>Scalograms were introduced in <span class="citation" data-cites="Lioy_2018">Lioy et al. (<a href="#ref-Lioy_2018" role="doc-biblioref">2018</a>)</span> to investigate distance-dependent contact frequencies for individual genomic bins along chromosomes.<br>
 To generate a scalogram, one needs to provide a <code>HiCExperiment</code> object with a valid associated <code>pairsFile</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pairsf</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pairsf</span></span>
 <span><span class="va">scalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/scalogram.html">scalogram</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> </span>
-<span><span class="co">##  Importing pairs file /root/.cache/R/ExperimentHub/f728f165f9_7753 in memory. This may take a while...</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotScalogram.html">plotScalogram</a></span><span class="op">(</span><span class="va">scalo</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">chr</span> <span class="op">==</span> <span class="st">'II'</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1e3</span>, <span class="fl">1e5</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/15031c16370_7753 in memory. This may take a while...</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotScalogram.html">plotScalogram</a></span><span class="op">(</span><span class="va">scalo</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">chr</span> <span class="op">==</span> <span class="st">'II'</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1e3</span>, <span class="fl">1e5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Several scalograms can be plotted together to compare distance-dependent contact frequencies along a given chromosome in different samples.</p>
-<div class="column-page-right">
-<div class="cell" data-layout-align="center" data-fig.asp="0.4">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">eco1_hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span></span>
+<div class="page-columns page-full">
+<div class="cell page-columns page-full" data-layout-align="center">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">eco1_hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_eco1'</span>, <span class="st">'mcool'</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>    focus <span class="op">=</span> <span class="st">'II'</span>, </span>
 <span>    resolution <span class="op">=</span> <span class="fl">2000</span></span>
@@ -862,16 +897,16 @@ To generate a scalogram, one needs to provide a <code>HiCExperiment</code> objec
 <span><span class="co">##  loading from cache</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">eco1_hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">eco1_pairsf</span></span>
 <span><span class="va">eco1_scalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/scalogram.html">scalogram</a></span><span class="op">(</span><span class="va">eco1_hic</span><span class="op">)</span> </span>
-<span><span class="co">##  Importing pairs file /root/.cache/R/ExperimentHub/87d2cb3cec7_7755 in memory. This may take a while...</span></span>
+<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/7466252b1f0_7755 in memory. This may take a while...</span></span>
 <span><span class="va">merged_scalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html">rbind</a></span><span class="op">(</span></span>
 <span>    <span class="va">scalo</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="st">'WT'</span><span class="op">)</span>, </span>
 <span>    <span class="va">eco1_scalo</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="st">'eco1'</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotScalogram.html">plotScalogram</a></span><span class="op">(</span><span class="va">merged_scalo</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">chr</span> <span class="op">==</span> <span class="st">'II'</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1e3</span>, <span class="fl">1e5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">sample</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure"><p><img src="interactions-centric_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" style="width:100.0%"></p>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">sample</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display page-columns page-full">
+<div class="quarto-figure quarto-figure-center page-columns page-full">
+<figure class="figure page-columns page-full"><p class="page-columns page-full"><img src="interactions-centric_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img column-page-right" style="width:100.0%"></p>
 </figure>
 </div>
 </div>
@@ -880,160 +915,165 @@ To generate a scalogram, one needs to provide a <code>HiCExperiment</code> objec
 <p>This example points out the overall longer interactions within the long arm of the chromosome <code>II</code> in an <code>eco1</code> mutant.</p>
 </section><section id="session-info" class="level1 unnumbered"><h1 class="unnumbered">Session info</h1>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Click to expand 👇
+<span class="screen-reader-only">Note</span>Click to expand 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">session_info</a></span><span class="op">(</span>include_base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://sessioninfo.r-lib.org/reference/session_info.html">session_info</a></span><span class="op">(</span>include_base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">##  ─ Session info ────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">##   setting  value</span></span>
-<span><span class="co">##   version  R Under development (unstable) (2024-01-17 r85813)</span></span>
-<span><span class="co">##   os       Ubuntu 22.04.3 LTS</span></span>
+<span><span class="co">##   version  R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">##   os       Ubuntu 24.04.4 LTS</span></span>
 <span><span class="co">##   system   x86_64, linux-gnu</span></span>
 <span><span class="co">##   ui       X11</span></span>
 <span><span class="co">##   language (EN)</span></span>
 <span><span class="co">##   collate  C</span></span>
 <span><span class="co">##   ctype    en_US.UTF-8</span></span>
 <span><span class="co">##   tz       Etc/UTC</span></span>
-<span><span class="co">##   date     2024-01-22</span></span>
-<span><span class="co">##   pandoc   3.1.1 @ /usr/local/bin/ (via rmarkdown)</span></span>
+<span><span class="co">##   date     2026-10-05</span></span>
+<span><span class="co">##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)</span></span>
+<span><span class="co">##   quarto   1.11.5 @ /usr/local/bin/quarto</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  ─ Packages ────────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">##   package              * version     date (UTC) lib source</span></span>
-<span><span class="co">##   abind                  1.4-5       2016-07-21 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   AnnotationDbi          1.65.2      2023-11-03 [2] Bioconductor</span></span>
-<span><span class="co">##   AnnotationHub        * 3.11.1      2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   base                 * 4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   beeswarm               0.4.0       2021-06-01 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   Biobase              * 2.63.0      2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   BiocFileCache        * 2.11.1      2023-10-26 [2] Bioconductor</span></span>
-<span><span class="co">##   BiocGenerics         * 0.49.1      2023-11-01 [2] Bioconductor</span></span>
-<span><span class="co">##   BiocIO                 1.13.0      2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   BiocManager            1.30.22     2023-08-08 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   BiocParallel           1.37.0      2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   BiocVersion            3.19.1      2023-10-26 [2] Bioconductor</span></span>
-<span><span class="co">##   Biostrings             2.71.1      2023-10-25 [2] Bioconductor</span></span>
-<span><span class="co">##   bit                    4.0.5       2022-11-15 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   bit64                  4.0.5       2020-08-30 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   bitops                 1.0-7       2021-04-24 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   blob                   1.2.4       2023-03-17 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   cachem                 1.0.8       2023-05-01 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   cli                    3.6.2       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   codetools              0.2-19      2023-02-01 [3] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   colorspace             2.1-0       2023-01-23 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   compiler               4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   crayon                 1.5.2       2022-09-29 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   curl                   5.2.0       2023-12-08 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   datasets             * 4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   DBI                    1.2.1       2024-01-12 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   dbplyr               * 2.4.0       2023-10-26 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   DelayedArray           0.29.0      2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   digest                 0.6.34      2024-01-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   dplyr                * 1.1.4       2023-11-17 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   evaluate               0.23        2023-11-01 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   ExperimentHub        * 2.11.1      2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   fansi                  1.0.6       2023-12-08 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   farver                 2.1.1       2022-07-06 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   fastmap                1.1.1       2023-02-24 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   filelock               1.0.3       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   generics               0.1.3       2022-07-05 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   GenomeInfoDb         * 1.39.5      2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   GenomeInfoDbData       1.2.11      2024-01-22 [2] Bioconductor</span></span>
-<span><span class="co">##   GenomicAlignments      1.39.2      2024-01-16 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   GenomicRanges        * 1.55.1      2023-10-29 [2] Bioconductor</span></span>
-<span><span class="co">##   ggbeeswarm             0.7.2       2023-04-29 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   ggplot2              * 3.4.4       2023-10-12 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   ggrastr                1.0.2       2023-06-01 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   glue                   1.7.0       2024-01-09 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   graphics             * 4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   grDevices            * 4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   grid                   4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   gtable                 0.3.4       2023-08-21 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   HiCExperiment        * 1.3.0       2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   HiContacts           * 1.5.0       2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   HiContactsData       * 1.5.3       2024-01-22 [2] Github (js2264/HiContactsData@d5bebe7)</span></span>
-<span><span class="co">##   hms                    1.1.3       2023-03-21 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   htmltools              0.5.7       2023-11-03 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   htmlwidgets            1.6.4       2023-12-06 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   httr                   1.4.7       2023-08-15 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   InteractionSet       * 1.31.0      2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   IRanges              * 2.37.1      2024-01-19 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   jsonlite               1.8.8       2023-12-04 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   KEGGREST               1.43.0      2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   knitr                  1.45        2023-10-30 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   labeling               0.4.3       2023-08-29 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   lattice                0.22-5      2023-10-24 [3] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   lifecycle              1.0.4       2023-11-07 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   magrittr               2.0.3       2022-03-30 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   Matrix                 1.6-5       2024-01-11 [3] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   MatrixGenerics       * 1.15.0      2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   matrixStats          * 1.2.0       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   memoise                2.0.1       2021-11-26 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   methods              * 4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   mime                   0.12        2021-09-28 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   munsell                0.5.0       2018-06-12 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   parallel               4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   pillar                 1.9.0       2023-03-22 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   pkgconfig              2.0.3       2019-09-22 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   png                    0.1-8       2022-11-29 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   purrr                  1.0.2       2023-08-10 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   R6                     2.5.1       2021-08-19 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   rappdirs               0.3.3       2021-01-31 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   Rcpp                   1.0.12      2024-01-09 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   RCurl                  1.98-1.14   2024-01-09 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   readr                  2.1.5       2024-01-10 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   restfulr               0.0.15      2022-06-16 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   rhdf5                  2.47.2      2024-01-15 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   rhdf5filters           1.15.1      2023-11-06 [2] Bioconductor</span></span>
-<span><span class="co">##   Rhdf5lib               1.25.1      2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   rjson                  0.2.21      2022-01-09 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   rlang                  1.1.3       2024-01-10 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   rmarkdown              2.25        2023-09-18 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   Rsamtools              2.19.3      2024-01-17 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   RSpectra               0.16-1      2022-04-24 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   RSQLite                2.3.5       2024-01-21 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   rtracklayer          * 1.63.0      2024-01-22 [2] Github (lawremi/rtracklayer@86407bb)</span></span>
-<span><span class="co">##   S4Arrays               1.3.2       2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   S4Vectors            * 0.41.3      2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   scales                 1.3.0       2023-11-28 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   sessioninfo            1.2.2       2021-12-06 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   SparseArray            1.3.3       2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   stats                * 4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   stats4               * 4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   strawr                 0.0.91      2023-03-29 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   stringi                1.8.3       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   stringr                1.5.1       2023-11-14 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   SummarizedExperiment * 1.33.2      2024-01-07 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   tibble                 3.2.1       2023-03-20 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   tidyr                  1.3.0       2023-01-24 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   tidyselect             1.2.0       2022-10-10 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   tools                  4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   tzdb                   0.4.0       2023-05-12 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   utf8                   1.2.4       2023-10-22 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   utils                * 4.4.0       2024-01-18 [3] local</span></span>
-<span><span class="co">##   vctrs                  0.6.5       2023-12-01 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   vipor                  0.4.7       2023-12-18 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   vroom                  1.6.5       2023-12-05 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   withr                  3.0.0       2024-01-16 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   xfun                   0.41        2023-11-01 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   XML                    3.99-0.16.1 2024-01-22 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   XVector                0.43.1      2024-01-10 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   yaml                   2.3.8       2023-12-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   zlibbioc               1.49.0      2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   package              * version   date (UTC) lib source</span></span>
+<span><span class="co">##   abind                  1.4-8     2024-09-12 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   AnnotationDbi          1.75.2    2026-07-21 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   AnnotationHub        * 4.3.2     2026-06-30 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   base                 * 4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   beeswarm               0.4.0     2021-06-01 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   Biobase              * 2.73.2    2026-07-29 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocBaseUtils          1.15.1    2026-05-10 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocFileCache        * 3.3.0     2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocGenerics         * 0.59.12   2026-08-11 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocIO                 1.23.3    2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocManager            1.30.27   2025-11-14 [2] CRAN (R 4.6.1)</span></span>
+<span><span class="co">##   BiocParallel           1.47.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocVersion            3.24.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   Biostrings             2.81.9    2026-09-06 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   bit                    4.6.0     2025-03-06 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   bit64                  4.8.6     2026-09-01 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   bitops                 1.1-0     2026-07-30 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   blob                   1.3.0     2026-01-14 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   cachem                 1.1.0     2024-05-16 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   cigarillo              1.3.1     2026-07-13 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   cli                    3.6.6     2026-04-09 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   codetools              0.2-20    2024-03-31 [3] CRAN (R 4.6.1)</span></span>
+<span><span class="co">##   compiler               4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   crayon                 1.5.3     2024-06-20 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   curl                   8.0.0     2026-08-25 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   datasets             * 4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   DBI                    1.3.0     2026-02-25 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   dbplyr               * 2.6.0     2026-06-17 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   DelayedArray           0.39.8    2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   dichromat              2.0-1     2026-07-22 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   digest                 0.6.39    2025-11-19 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   dplyr                * 1.2.1     2026-04-03 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   evaluate               1.0.5     2025-08-27 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   ExperimentHub        * 3.3.2     2026-08-12 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   farver                 2.1.2     2024-05-13 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   fastmap                1.2.0     2024-05-15 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   filelock               1.0.3     2023-12-11 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   generics             * 0.1.4     2025-05-09 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   GenomeInfoDb           1.49.1    2026-05-24 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   GenomicAlignments      1.49.2    2026-09-02 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   GenomicRanges        * 1.65.4    2026-09-02 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   ggbeeswarm             0.7.3     2025-11-29 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   ggplot2              * 4.0.3     2026-04-22 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   ggrastr                1.0.2     2023-06-01 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   glue                   1.8.1     2026-04-17 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   graphics             * 4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   grDevices            * 4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   grid                   4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   gtable                 0.3.6     2024-10-25 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   HiCExperiment        * 1.13.1    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   HiContacts           * 1.15.2    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   HiContactsData       * 1.5.3     2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)</span></span>
+<span><span class="co">##   hms                    1.1.4     2025-10-17 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   htmltools              0.5.9     2025-12-04 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   htmlwidgets            1.6.4     2023-12-06 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   httr                   1.4.9     2026-09-01 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   httr2                  1.3.0     2026-07-13 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   InteractionSet       * 1.41.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   IRanges              * 2.47.5    2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   jsonlite               2.0.0     2025-03-27 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   KEGGREST               1.53.6    2026-07-23 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   knitr                  1.52      2026-09-06 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   labeling               0.4.3     2023-08-29 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   lattice                0.23-1    2026-08-12 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   lifecycle              1.0.5     2026-01-08 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   magrittr               2.0.5     2026-04-04 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   Matrix                 1.7-6     2026-07-25 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   MatrixGenerics       * 1.25.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   matrixStats          * 1.5.0     2025-01-07 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   memoise                2.0.1     2021-11-26 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   methods              * 4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   otel                   0.2.0     2025-08-29 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   parallel               4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   pillar                 1.11.1    2025-09-17 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   pkgconfig              2.0.3     2019-09-22 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   png                    0.1-9     2026-03-15 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   purrr                  1.2.2     2026-04-10 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   R6                     2.6.1     2025-02-15 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   rappdirs               0.3.4     2026-01-17 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   RColorBrewer           1.1-3     2022-04-03 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   Rcpp                   1.1.2     2026-07-05 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   RCurl                  1.98-1.20 2026-08-21 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   readr                  2.2.0     2026-02-19 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   restfulr               0.0.17    2026-06-11 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   rhdf5                  2.57.18   2026-09-23 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   rhdf5filters           1.25.4    2026-08-06 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   Rhdf5lib               2.1.0     2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   rjson                  0.2.23    2024-09-16 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   rlang                  1.3.0     2026-07-05 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   rmarkdown              2.32      2026-09-01 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   Rsamtools              2.29.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   RSpectra               0.16-2    2024-07-18 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   RSQLite                3.53.3    2026-06-30 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   rtracklayer          * 1.73.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   S4Arrays               1.13.2    2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   S4Vectors            * 0.51.10   2026-09-16 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   S7                     0.2.2     2026-04-22 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   scales                 1.4.0     2025-04-24 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   Seqinfo              * 1.3.2     2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   sessioninfo            1.2.4     2026-06-04 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   SparseArray            1.13.4    2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   stats                * 4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   stats4               * 4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   strawr                 0.0.92    2024-07-16 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   stringi                1.8.9     2026-08-04 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   stringr                1.6.0     2025-11-04 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   SummarizedExperiment * 1.43.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   tibble                 3.3.1     2026-01-11 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   tidyr                  1.3.2     2025-12-19 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   tidyselect             1.2.1     2024-03-11 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   tools                  4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   tzdb                   0.5.0     2025-03-15 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   UCSC.utils             1.9.0     2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   utf8                   1.2.6     2025-06-08 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   utils                * 4.6.1     2026-09-11 [3] local</span></span>
+<span><span class="co">##   vctrs                  0.7.3     2026-04-11 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   vipor                  0.4.7     2023-12-18 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   vroom                  1.7.1     2026-03-31 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   withr                  3.0.3     2026-06-19 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   xfun                   0.61      2026-09-16 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   XML                    3.99-0.25 2026-09-27 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="co">##   [1] /tmp/Rtmpq5g2WV/Rinstb37571687</span></span>
+<span><span class="co">##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e</span></span>
 <span><span class="co">##   [2] /usr/local/lib/R/site-library</span></span>
 <span><span class="co">##   [3] /usr/local/lib/R/library</span></span>
+<span><span class="co">##   * ── Packages attached to the search path.</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="co">##  ───────────────────────────────────────────────────────────────────────────</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  ───────────────────────────────────────────────────────────────────────────</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1041,49 +1081,64 @@ Click to expand 👇
 </section><section id="references" class="level1 unnumbered"><h1 class="unnumbered">References</h1>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-line-spacing="2" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
 <div id="ref-Lioy_2018" class="csl-entry" role="listitem">
 Lioy, V. S., Cournac, A., Marbouty, M., Duigou, S., Mozziconacci, J., Espéli, O., Boccard, F., &amp; Koszul, R. (2018). Multiscale structuring of the e.&nbsp;Coli chromosome by nucleoid-associated and condensin proteins. <em>Cell</em>, <em>172</em>(4), 771–783.e18. <a href="https://doi.org/10.1016/j.cell.2017.12.027">https://doi.org/10.1016/j.cell.2017.12.027</a>
 </div>
 </div>
-</section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
@@ -1091,211 +1146,367 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
       return codeEl.innerText;
     }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
-    };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="../pages/matrix-centric.html" class="pagination-link">
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation" aria-label="Page"><div class="nav-page nav-page-previous">
+      <a href="../pages/matrix-centric.html" class="pagination-link" aria-label="Matrix-centric analysis">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Matrix-centric analysis</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../pages/topological-features.html" class="pagination-link">
+      <a href="../pages/topological-features.html" class="pagination-link" aria-label="Finding topological features in Hi-C">
         <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Finding topological features in Hi-C</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
-    <div class="nav-footer-left"><i>OHCA: Orchestrating Hi-C analysis with Bioconductor</i> was written by J. Serizay</div>   
+    <div class="nav-footer-left">
+<p><i>OHCA: Orchestrating Hi-C analysis with Bioconductor</i> was written by J. Serizay</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
-    <div class="nav-footer-right">This book was built with <a href="https://github.com/js2264/BiocBook/">BiocBook</a> with <span class="emoji" data-emoji="heart">❤️</span></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://github.com/js2264/BiocBook/">BiocBook</a> with <span class="emoji" data-emoji="heart">❤️</span></p>
+</div>
   </div>
 </footer>
 

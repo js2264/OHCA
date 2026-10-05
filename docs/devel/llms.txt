@@ -1,0 +1,19 @@
+# Orchestrating Hi-C analysis with Bioconductor
+
+## Pages
+
+- [Orchestrating Hi-C analysis with Bioconductor](index.llms.md)
+- [Preamble](pages/preamble.llms.md)
+- [[1]{.chapter-number}  [Hi-C pre-processing steps]{.chapter-title}](pages/principles.llms.md)
+- [[2]{.chapter-number}  [Hi-C data structures in R]{.chapter-title}](pages/data-representation.llms.md)
+- [[3]{.chapter-number}  [Manipulating Hi-C data in R]{.chapter-title}](pages/parsing.llms.md)
+- [[4]{.chapter-number}  [Hi-C data visualization]{.chapter-title}](pages/visualization.llms.md)
+- [[5]{.chapter-number}  [Matrix-centric analysis]{.chapter-title}](pages/matrix-centric.llms.md)
+- [[6]{.chapter-number}  [Interactions-centric analysis]{.chapter-title}](pages/interactions-centric.llms.md)
+- [[7]{.chapter-number}  [Finding topological features in Hi-C]{.chapter-title}](pages/topological-features.llms.md)
+- [[8]{.chapter-number}  [Data gateways: accessing public Hi-C data portals]{.chapter-title}](pages/disseminating.llms.md)
+- [[9]{.chapter-number}  [Interoperability: using HiCExperiment with other R packages]{.chapter-title}](pages/interoperability.llms.md)
+- [[[10]{.chapter-number}  [Interoperability with `python`: `cooltools`]{.chapter-title}]{#sec-python-cooltools .quarto-section-identifier}](pages/interoperability-python.llms.md)
+- [Workflow 1: Distance-dependent interactions across yeast mutants](pages/workflow-yeast.llms.md)
+- [Workflow 2: Chromosome compartment cohesion upon mitosis entry](pages/workflow-chicken.llms.md)
+- [Workflow 3: Inter-centromere interactions in yeast](pages/workflow-centros.llms.md)

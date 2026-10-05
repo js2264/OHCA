@@ -2,14 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.11.5">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Orchestrating Hi-C analysis with Bioconductor - 3&nbsp; Manipulating Hi-C data in R</title>
+<title>3&nbsp; Manipulating Hi-C data in R – Orchestrating Hi-C analysis with Bioconductor</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -18,6 +24,7 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -63,21 +70,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../pages/visualization.html" rel="next">
 <link href="../pages/data-representation.html" rel="prev">
 <link href="../assets/cover.jpg" rel="icon" type="image/jpeg">
-<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-5f883865545033bfab6feb3d329ab180.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../site_libs/bootstrap/bootstrap-62123f91d1045bb168bf6a98c6a4e10b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "start",
   "type": "textbox",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -86,34 +100,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
 </head>
-<body class="nav-sidebar docked">
+<body class="nav-sidebar docked quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" aria-label="Toolbar"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/principles.html">Fundamentals concepts</a></li><li class="breadcrumb-item"><a href="../pages/parsing.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulating Hi-C data in R</span></a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/principles.html">Fundamentals concepts</a></li><li class="breadcrumb-item"><a href="../pages/parsing.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulating Hi-C data in R</span></a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
   </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Site"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="../">Orchestrating Hi-C analysis with Bioconductor</a> 
         <div class="sidebar-tools-main">
     <div class="dropdown">
-      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label=""><i class="bi bi-git"></i></a>
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-git"></i></a>
       <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
 <li>
             <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/js2264/OHCA/">
@@ -127,7 +142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </li>
       </ul>
 </div>
-    <a href="../Orchestrating-Hi-C-analysis-with-Bioconductor.pdf" rel="" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+    <a href="../Orchestrating-Hi-C-analysis-with-Bioconductor.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -152,13 +167,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">Fundamentals concepts</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Fundamentals concepts</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/principles.html" class="sidebar-item-text sidebar-link">
@@ -187,13 +199,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
- <span class="menu-text">In-depth Hi-C analysis</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-controls="quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-2-label">In-depth Hi-C analysis</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-2" aria-labelledby="quarto-sidebar-section-2-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/matrix-centric.html" class="sidebar-item-text sidebar-link">
@@ -216,13 +225,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
- <span class="menu-text">Advanced Hi-C topics</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-controls="quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-3-label">Advanced Hi-C topics</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">
+      <ul id="quarto-sidebar-section-3" aria-labelledby="quarto-sidebar-section-3-label" class="collapse list-unstyled sidebar-section depth1 show">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../pages/disseminating.html" class="sidebar-item-text sidebar-link">
@@ -233,6 +239,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../pages/interoperability.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Interoperability: using HiCExperiment with other R packages</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../pages/interoperability-python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Interoperability with <code>python</code>: <code>cooltools</code></span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -257,10 +269,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
     </ul>
 </div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
 <li>
@@ -284,7 +296,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content" tabindex="-1"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/principles.html">Fundamentals concepts</a></li><li class="breadcrumb-item"><a href="../pages/parsing.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulating Hi-C data in R</span></a></li></ol></nav><div class="quarto-title">
 <h1 class="title">
 <span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Manipulating Hi-C data in R</span>
 </h1>
@@ -300,36 +312,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header><div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Pre-loading packages and objects 📦
+<span class="screen-reader-only">Note</span>Pre-loading packages and objects 📦
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span></span>
 <span><span class="co">##  Loading required package: stats4</span></span>
 <span><span class="co">##  Loading required package: BiocGenerics</span></span>
+<span><span class="co">##  Loading required package: generics</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##  Attaching package: 'generics'</span></span>
+<span><span class="co">##  The following objects are masked from 'package:base':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      as.difftime, as.factor, as.ordered, intersect, is.element,</span></span>
+<span><span class="co">##      setdiff, setequal, union</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  Attaching package: 'BiocGenerics'</span></span>
 <span><span class="co">##  The following objects are masked from 'package:stats':</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##      IQR, mad, sd, var, xtabs</span></span>
+<span><span class="co">##  The following object is masked from 'package:utils':</span></span>
+<span><span class="co">##  </span></span>
+<span><span class="co">##      data</span></span>
 <span><span class="co">##  The following objects are masked from 'package:base':</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##      Filter, Find, Map, Position, Reduce, anyDuplicated, aperm,</span></span>
 <span><span class="co">##      append, as.data.frame, basename, cbind, colnames, dirname,</span></span>
-<span><span class="co">##      do.call, duplicated, eval, evalq, get, grep, grepl, intersect,</span></span>
-<span><span class="co">##      is.unsorted, lapply, mapply, match, mget, order, paste, pmax,</span></span>
-<span><span class="co">##      pmax.int, pmin, pmin.int, rank, rbind, rownames, sapply,</span></span>
-<span><span class="co">##      setdiff, table, tapply, union, unique, unsplit, which.max,</span></span>
+<span><span class="co">##      do.call, duplicated, eval, evalq, get, grep, grepl, is.unsorted,</span></span>
+<span><span class="co">##      lapply, mapply, match, mget, order, paste, pmax, pmax.int, pmin,</span></span>
+<span><span class="co">##      pmin.int, rank, rbind, rownames, sapply, saveRDS, scale,</span></span>
+<span><span class="co">##      sequence, table, tapply, transform, unique, unsplit, which.max,</span></span>
 <span><span class="co">##      which.min</span></span>
 <span><span class="co">##  Loading required package: S4Vectors</span></span>
 <span><span class="co">##  </span></span>
@@ -341,7 +364,7 @@ Pre-loading packages and objects 📦
 <span><span class="co">##  </span></span>
 <span><span class="co">##      I, expand.grid, unname</span></span>
 <span><span class="co">##  Loading required package: IRanges</span></span>
-<span><span class="co">##  Loading required package: GenomeInfoDb</span></span>
+<span><span class="co">##  Loading required package: Seqinfo</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">InteractionSet</span><span class="op">)</span></span>
 <span><span class="co">##  Loading required package: SummarizedExperiment</span></span>
 <span><span class="co">##  Loading required package: MatrixGenerics</span></span>
@@ -401,11 +424,13 @@ Pre-loading packages and objects 📦
 <span><span class="co">##  Loading required package: AnnotationHub</span></span>
 <span><span class="co">##  Loading required package: BiocFileCache</span></span>
 <span><span class="co">##  Loading required package: dbplyr</span></span>
+<span><span class="co">##  OpenTelemetry error: there is no package called 'otelsdk'</span></span>
+<span><span class="co">##  OpenTelemetry error: there is no package called 'otelsdk'</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  Attaching package: 'AnnotationHub'</span></span>
 <span><span class="co">##  The following object is masked from 'package:Biobase':</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="co">##      cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##      cache</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -416,7 +441,7 @@ Pre-loading packages and objects 📦
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Aims
+<span class="screen-reader-only">Note</span>Aims
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -434,7 +459,7 @@ Aims
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Important reminder
+<span class="screen-reader-only">Important</span>Important reminder
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -445,12 +470,12 @@ Important reminder
 </div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Recap on <code>HiCExperiment</code> objects 👇
+<span class="screen-reader-only">Warning</span>Recap on <code>HiCExperiment</code> objects 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -460,7 +485,7 @@ Recap on <code>HiCExperiment</code> objects 👇
 <li>Creating a connection to a disk-stored contact matrix:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># coolf &lt;- "&lt;path-to-disk-stored-contact-matrix.cool&gt;"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># coolf &lt;- "&lt;path-to-disk-stored-contact-matrix.cool&gt;"</span></span>
 <span><span class="va">coolf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'mcool'</span><span class="op">)</span></span>
 <span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
 <span><span class="co">##  loading from cache</span></span>
@@ -471,28 +496,28 @@ Recap on <code>HiCExperiment</code> objects 👇
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">availableChromosomes</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span></span>
 <span><span class="co">##  Seqinfo object with 16 sequences from an unspecified genome:</span></span>
-<span><span class="co">##    seqnames seqlengths isCircular genome</span></span>
-<span><span class="co">##    I            230218       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##    II           813184       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##    III          316620       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##    IV          1531933       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##    V            576874       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##    ...             ...        ...    ...</span></span>
-<span><span class="co">##    XII         1078177       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##    XIII         924431       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##    XIV          784333       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##    XV          1091291       &lt;NA&gt;   &lt;NA&gt;</span></span>
-<span><span class="co">##    XVI          948066       &lt;NA&gt;   &lt;NA&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##    seqnames seqnames seqlengths isCircular genome</span></span>
+<span><span class="co">##    1               I     230218       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    2              II     813184       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    3             III     316620       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    4              IV    1531933       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    5               V     576874       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    ...           ...        ...        ...    ...</span></span>
+<span><span class="co">##    12            XII    1078177       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    13           XIII     924431       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    14            XIV     784333       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    15             XV    1091291       &lt;NA&gt;   &lt;NA&gt;</span></span>
+<span><span class="co">##    16            XVI     948066       &lt;NA&gt;   &lt;NA&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Importing a contact matrix over a specific genomic location, at a given resolution:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:10000-50000'</span>, resolution <span class="op">=</span> <span class="fl">4000</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:10000-50000'</span>, resolution <span class="op">=</span> <span class="fl">4000</span><span class="op">)</span></span>
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 10,801 contacts over 11 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:10,000-50,000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 4000 </span></span>
@@ -500,13 +525,13 @@ Recap on <code>HiCExperiment</code> objects 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Recovering genomic interactions stored in a <code>HiCExperiment</code>:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  GInteractions object with 45 interactions and 4 metadata columns:</span></span>
 <span><span class="co">##         seqnames1     ranges1     seqnames2     ranges2 |   bin_id1   bin_id2</span></span>
 <span><span class="co">##             &lt;Rle&gt;   &lt;IRanges&gt;         &lt;Rle&gt;   &lt;IRanges&gt; | &lt;numeric&gt; &lt;numeric&gt;</span></span>
@@ -536,18 +561,18 @@ Recap on <code>HiCExperiment</code> objects 👇
 <span><span class="co">##    [45]       295  0.133344</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 11 ranges and 4 metadata columns</span></span>
-<span><span class="co">##    seqinfo: 16 sequences from an unspecified genome</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##    seqinfo: 16 sequences from an unspecified genome</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Generating the example <code>hic</code> object 👇
+<span class="screen-reader-only">Tip</span>Generating the example <code>hic</code> object 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -555,7 +580,7 @@ Generating the example <code>hic</code> object 👇
 <div class="callout-body-container callout-body">
 <p>To demonstrate how to manipulate a <code>HiCExperiment</code> object, we will create an <code>HiCExperiment</code> object from an example <code>.cool</code> file provided in the <code>HiContactsData</code> package.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiCExperiment">HiCExperiment</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContactsData">HiContactsData</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># ---- This downloads an example `.mcool` file and caches it locally </span></span>
@@ -567,7 +592,7 @@ Generating the example <code>hic</code> object 👇
 <span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
 <span><span class="va">cf</span></span>
 <span><span class="co">##  CoolFile object</span></span>
-<span><span class="co">##  .mcool file: /root/.cache/R/ExperimentHub/f73da6b8a8_7752 </span></span>
+<span><span class="co">##  .mcool file: /opt/R-cache/R/ExperimentHub/15057bb43fd_7752 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -577,7 +602,7 @@ Generating the example <code>hic</code> object 👇
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -585,7 +610,7 @@ Generating the example <code>hic</code> object 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -604,26 +629,26 @@ Generating the example <code>hic</code> object 👇
 <p>Specifying a <code>focus</code> <strong>when</strong> importing a dataset in R (i.e.&nbsp;<code>"Subset first, then parse"</code>) is generally the recommended approach to import Hi-C data in R.</p>
 <p>The <code>focus</code> argument can be set when <code>import</code>ing a <code>ContactFile</code> in R, as follows:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## This code is not evaluated</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## This code is not evaluated</span></span>
 <span><span class="co">## Change `focus = "..."` accordingly (see below)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">"..."</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">"..."</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This ensures that only the needed data is parsed in R, reducing memory load and accelerating the import. Thus, this should be the preferred way of parsing <code>HiCExperiment</code> data, as disk-stored contact matrices allow <strong>efficient random access to indexed data</strong>.</p>
 <p><code>focus</code> can be any of the following string types:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#   "II"                                  --&gt; import contacts over an entire chromosome</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#   "II"                                  --&gt; import contacts over an entire chromosome</span></span>
 <span><span class="co">#   "II:300001-800000"                    --&gt; import on-diagonal contacts within a chromosome</span></span>
 <span><span class="co">#   "II:300001-400000|II:600001-700000"   --&gt; import off-diagonal contacts within a chromosome</span></span>
 <span><span class="co">#   "II|III"                              --&gt; import contacts between two chromosomes</span></span>
-<span><span class="co">#   "II:300001-800000|V:1-500000"         --&gt; import contacts between segments of two chromosomes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#   "II:300001-800000|V:1-500000"         --&gt; import contacts between segments of two chromosomes</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-More examples for import with <code>focus</code> argument 👇
+<span class="screen-reader-only">Important</span>More examples for import with <code>focus</code> argument 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -633,10 +658,10 @@ More examples for import with <code>focus</code> argument 👇
 <li>Subsetting to a specific <strong>on-diagonal</strong> genomic location using standard UCSC coordinates query:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-800000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-800000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 301,018 contacts over 250 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-800,000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -644,16 +669,16 @@ More examples for import with <code>focus</code> argument 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Subsetting to a specific <strong>off-diagonal</strong> genomic location using pairs of coordinates query:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-400000|II:600001-700000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-400000|II:600001-700000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 402 contacts over 100 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300001-400000|II:600001-700000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -661,16 +686,16 @@ More examples for import with <code>focus</code> argument 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Subsetting interactions to retain those constrained within a single chromosome:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 471,364 contacts over 407 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -678,16 +703,16 @@ More examples for import with <code>focus</code> argument 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Subsetting interactions to retain those between two chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II|III'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II|III'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 9,092 contacts over 566 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II|III" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -695,16 +720,16 @@ More examples for import with <code>focus</code> argument 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Subsetting interactions to retain those between parts of two chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-800000|V:1-500000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II:300001-800000|V:1-500000'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 7,147 contacts over 500 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300001-800000|V:1-500000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -712,7 +737,7 @@ More examples for import with <code>focus</code> argument 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -736,7 +761,7 @@ as well as a `focus`.
 hic 
 ##  `HiCExperiment` object with 306,212 contacts over 257 regions 
 ##  -------
-##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
 ##  focus: "II:300,001-813,184" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 2000 
@@ -751,7 +776,7 @@ hic
 import(cf, focus = 'III', resolution = 2000)
 ##  `HiCExperiment` object with 151,990 contacts over 159 regions 
 ##  -------
-##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
 ##  focus: "III" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 2000 
@@ -766,7 +791,7 @@ import(cf, focus = 'III', resolution = 2000)
 refocus(hic, 'III')
 ##  `HiCExperiment` object with 151,990 contacts over 159 regions 
 ##  -------
-##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
 ##  focus: "III" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 2000 
@@ -788,7 +813,7 @@ refocus(hic, 'III')
 </h4>
 <p><code>subsetByOverlaps</code> can take a <code>HiCExperiment</code> as a <code>query</code> and a <code>GRanges</code> as a query. In this case, the <code>GRanges</code> is used to extract a subset of a <code>HiCExperiment</code> <strong>constrained</strong> within a specific genomic location.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">telomere</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="st">"II:700001-813184"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">telomere</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="st">"II:700001-813184"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">subsetByOverlaps</a></span><span class="op">(</span><span class="va">hic</span>, <span class="va">telomere</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##  GInteractions object with 1540 interactions and 4 metadata columns:</span></span>
 <span><span class="co">##           seqnames1       ranges1     seqnames2       ranges2 |   bin_id1</span></span>
@@ -819,12 +844,12 @@ refocus(hic, 'III')
 <span><span class="co">##    [1540]       520        10       NaN</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 57 ranges and 4 metadata columns</span></span>
-<span><span class="co">##    seqinfo: 16 sequences from an unspecified genome</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##    seqinfo: 16 sequences from an unspecified genome</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>By default, <code>subsetByOverlaps(hic, telomere)</code> will only recover interactions <strong>constrained</strong> within <code>telomere</code>, i.e.&nbsp;interactions for which both ends are in <code>telomere</code>.</p>
 <p>Alternatively, <code>type = "any"</code> can be specified to get all interactions with at least one of their anchors within <code>telomere</code>.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">subsetByOverlaps</a></span><span class="op">(</span><span class="va">hic</span>, <span class="va">telomere</span>, type <span class="op">=</span> <span class="st">"any"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">subsetByOverlaps</a></span><span class="op">(</span><span class="va">hic</span>, <span class="va">telomere</span>, type <span class="op">=</span> <span class="st">"any"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/InteractionSet/man/interaction-accessors.html">interactions</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##  GInteractions object with 6041 interactions and 4 metadata columns:</span></span>
 <span><span class="co">##           seqnames1       ranges1     seqnames2       ranges2 |   bin_id1</span></span>
 <span><span class="co">##               &lt;Rle&gt;     &lt;IRanges&gt;         &lt;Rle&gt;     &lt;IRanges&gt; | &lt;numeric&gt;</span></span>
@@ -854,7 +879,7 @@ refocus(hic, 'III')
 <span><span class="co">##    [6041]       520        10         NaN</span></span>
 <span><span class="co">##    -------</span></span>
 <span><span class="co">##    regions: 257 ranges and 4 metadata columns</span></span>
-<span><span class="co">##    seqinfo: 16 sequences from an unspecified genome</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##    seqinfo: 16 sequences from an unspecified genome</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="hicexperiment..." class="level4" data-number="3.1.2.2"><h4 data-number="3.1.2.2" class="anchored" data-anchor-id="hicexperiment...">
 <span class="header-section-number">3.1.2.2</span> <code>&lt;HiCExperiment&gt;["..."]</code>
@@ -863,20 +888,20 @@ refocus(hic, 'III')
 <p><strong>This ensures that only the needed data is parsed in R, reducing memory load and accelerating the import.</strong> Thus, this should be the preferred way of parsing <code>HiCExperiment</code> data, as disk-stored contact matrices allow efficient random access to indexed data.</p>
 <p>The following string types can be used to subset a <code>HiCExperiment</code> object with the <code>[</code> notation:</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#   "II"                                  --&gt; import contacts over an entire chromosome</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#   "II"                                  --&gt; import contacts over an entire chromosome</span></span>
 <span><span class="co">#   "II:300001-800000"                    --&gt; import on-diagonal contacts within a chromosome</span></span>
 <span><span class="co">#   "II:300001-400000|II:600001-700000"   --&gt; import off-diagonal contacts within a chromosome</span></span>
 <span><span class="co">#   "II|III"                              --&gt; import contacts between two chromosomes</span></span>
 <span><span class="co">#   "II:300001-800000|V:1-500000"         --&gt; import contacts between segments of two chromosomes</span></span>
-<span><span class="co">#   c("II", "III", "IV")                  --&gt; import contacts within and between several chromosomes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">#   c("II", "III", "IV")                  --&gt; import contacts within and between several chromosomes</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-More examples for subsetting with <code>[</code> 👇
+<span class="screen-reader-only">Important</span>More examples for subsetting with <code>[</code> 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -886,10 +911,10 @@ More examples for subsetting with <code>[</code> 👇
 <li>Subsetting to a specific <strong>on-diagonal</strong> genomic location using standard UCSC coordinates query:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:800001-813184"</span><span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:800001-813184"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 1,040 contacts over 6 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:800,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -897,16 +922,16 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Subsetting to a specific <strong>off-diagonal</strong> genomic location using pairs of coordinates query:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:300001-320000|II:800001-813184"</span><span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:300001-320000|II:800001-813184"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 3 contacts over 6 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300001-320000|II:800001-813184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -914,16 +939,16 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Subsetting interactions to retain those constrained within a single chromosome:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II"</span><span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -931,16 +956,16 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Subsetting interactions to retain those between two chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II|IV"</span><span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II|IV"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 0 contacts over 0 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:1-813184|IV:1-1531933" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -948,16 +973,16 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Subsetting interactions to retain those between segments of two chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:300001-320000|IV:1-100000"</span><span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="st">"II:300001-320000|IV:1-100000"</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 0 contacts over 0 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300001-320000|IV:1-100000" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -965,16 +990,16 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>Subsetting interactions to retain those constrained within several chromosomes:</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'II'</span>, <span class="st">'III'</span>, <span class="st">'IV'</span><span class="op">)</span><span class="op">]</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'II'</span>, <span class="st">'III'</span>, <span class="st">'IV'</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II, III, IV" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -982,7 +1007,7 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Some notes:</p>
 <ul>
@@ -998,10 +1023,10 @@ More examples for subsetting with <code>[</code> 👇
 </h3>
 <p>“Zooming” refers to dynamically changing the <strong>resolution</strong> of a <code>HiCExperiment</code>. By <code>zoom</code>ing a <code>HiCExperiment</code>, one can refine or coarsen the contact matrix. This operation takes a<code>ContactFile</code> and <code>focus</code> from an existing <code>HiCExperiment</code> input and re-generates a new <code>HiCExperiment</code> with updated <code>resolution</code>, <code>interactions</code> and <code>scores</code>. Note that <code>zoom</code> will preserve existing <code>metadata</code>, <code>topologicalFeatures</code> and <code>pairsFile</code> information.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -1014,7 +1039,7 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">4000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 129 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 4000 </span></span>
@@ -1027,7 +1052,7 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 514 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 1000 </span></span>
@@ -1035,7 +1060,7 @@ More examples for subsetting with <code>[</code> 👇
 <span><span class="co">##  scores(2): count balanced </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(0) viewpoints(0) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1043,13 +1068,13 @@ More examples for subsetting with <code>[</code> 👇
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+<span class="screen-reader-only">Note</span>Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>The sum of raw counts do not change after <code>zoom</code>ing, however the number of individual <code>interactions</code> and <code>regions</code> changes.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  [1] 18513</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##  [1] 44363</span></span>
@@ -1060,7 +1085,7 @@ Note
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">1000</span><span class="op">)</span>, <span class="st">"count"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">##  [1] 306212</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">zoom</a></span><span class="op">(</span><span class="va">hic</span>, <span class="fl">4000</span><span class="op">)</span>, <span class="st">"count"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  [1] 306212</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  [1] 306212</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1090,7 +1115,7 @@ Important
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔️)?
+<span class="screen-reader-only">Tip</span>TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔️)?
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1130,7 +1155,7 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 </h4>
 <p>We have seen in the previous chapter that scores are stored in a <code>list</code> and are available using the <code>scores</code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  List of length 2</span></span>
 <span><span class="co">##  names(2): count balanced</span></span>
 <span></span>
@@ -1138,25 +1163,25 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="co">##  [1]  7 92 75 61 38 43</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"balanced"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  [1] 0.009657438 0.076622340 0.054101992 0.042940512 0.040905212 0.029293930</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  [1] 0.009657438 0.076622340 0.054101992 0.042940512 0.040905212 0.029293930</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Extra scores can be added to this list, e.g.&nbsp;to describe the “expected” interaction frequency for each interaction stored in the <code>HiCExperiment</code> object). This can be achieved using the <code>scores()&lt;-</code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"random"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"random"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span></span>
 <span><span class="co">##  List of length 3</span></span>
 <span><span class="co">##  names(3): count balanced random</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">scores</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">"random"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">##  [1] 0.7227776 0.4908796 0.8696518 0.1918134 0.5860512 0.5564170</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  [1] 0.8146293 0.3307768 0.6607427 0.3224511 0.2932789 0.6150977</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="topologicalfeatures" class="level4" data-number="3.2.2.2"><h4 data-number="3.2.2.2" class="anchored" data-anchor-id="topologicalfeatures">
 <span class="header-section-number">3.2.2.2</span> <code>topologicalFeatures</code>
 </h4>
 <p>The end-user can create additional <code>topologicalFeatures</code> or modify the existing ones using the <code>topologicalFeatures()&lt;-</code> function.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'CTCF'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'CTCF'</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"II:340-352"</span>, </span>
 <span>    <span class="st">"II:3520-3532"</span>, </span>
 <span>    <span class="st">"II:7980-7992"</span>, </span>
@@ -1197,7 +1222,7 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -1205,48 +1230,48 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
 <span><span class="co">##  pairsFile: N/A </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>All these objects can be used in <code>*Overlap</code> methods, as they all extend the <code>GRanges</code> class of objects.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ---- This counts the number of times `CTCF` anchors are being used in the </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ---- This counts the number of times `CTCF` anchors are being used in the </span></span>
 <span><span class="co">#      `loops` `GInteractions` object</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html">countOverlaps</a></span><span class="op">(</span></span>
 <span>    query <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'CTCF'</span><span class="op">)</span>, </span>
 <span>    subject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">topologicalFeatures</a></span><span class="op">(</span><span class="va">hic</span>, <span class="st">'loops'</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">##  [1] 5 5 5 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  [1] 5 5 5 0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="pairsfile" class="level4" data-number="3.2.2.3"><h4 data-number="3.2.2.3" class="anchored" data-anchor-id="pairsfile">
 <span class="header-section-number">3.2.2.3</span> <code>pairsFile</code>
 </h4>
 <p>If <code>pairsFile</code> is not specified when importing the <code>ContactFile</code> into a <code>HiCExperiment</code> object, one can add it later.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pairsf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContactsData/man/HiContactsData.html">HiContactsData</a></span><span class="op">(</span><span class="st">'yeast_wt'</span>, <span class="st">'pairs.gz'</span><span class="op">)</span></span>
 <span><span class="co">##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation</span></span>
-<span><span class="co">##  loading from cache</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  loading from cache</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pairsf</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pairsf</span></span>
 <span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 306,212 contacts over 257 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/root/.cache/R/ExperimentHub/f73da6b8a8_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
 <span><span class="co">##  focus: "II:300,001-813,184" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
 <span><span class="co">##  interactions: 18513 </span></span>
 <span><span class="co">##  scores(3): count balanced random </span></span>
 <span><span class="co">##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) </span></span>
-<span><span class="co">##  pairsFile: /root/.cache/R/ExperimentHub/f728f165f9_7753 </span></span>
-<span><span class="co">##  metadata(0):</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  pairsFile: /opt/R-cache/R/ExperimentHub/15031c16370_7753 </span></span>
+<span><span class="co">##  metadata(0):</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="metadata" class="level4" data-number="3.2.2.4"><h4 data-number="3.2.2.4" class="anchored" data-anchor-id="metadata">
 <span class="header-section-number">3.2.2.4</span> <code>metadata</code>
 </h4>
 <p>Metadata associated with a <code>HiCExperiment</code> can be updated at any point.</p>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html">metadata</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
 <span>    info <span class="op">=</span> <span class="st">"HiCExperiment created from an example .mcool file from `HiContactsData`"</span>, </span>
 <span>    date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/date.html">date</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -1255,7 +1280,7 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="co">##  [1] "HiCExperiment created from an example .mcool file from `HiContactsData`"</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  $date</span></span>
-<span><span class="co">##  [1] "Mon Jan 22 21:19:20 2024"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  [1] "Mon Oct  5 21:41:18 2026"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section></section><section id="coercing-hicexperiment-objects" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="coercing-hicexperiment-objects">
 <span class="header-section-number">3.3</span> Coercing <code>HiCExperiment</code> objects</h2>
@@ -1265,19 +1290,16 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <code><a href="https://rdrr.io/r/base/matrix.html">as.matrix()</a></code>: allows to coerce the <code>HiCExperiment</code> into a <code>sparse</code> or <code>dense</code> matrix (using the <code>sparse</code> logical argument, <code>TRUE</code> by default) and choosing specific <code>scores</code> of interest (using the <code>use.scores</code> argument, <code>"balanced"</code> by default).</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ----- `as.matrix` coerces a `HiCExperiment` into a dense `matrix` by default </span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># ----- `as.matrix` coerces a `HiCExperiment` into a dense `matrix` by default </span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">##  [1] "dgTMatrix"</span></span>
-<span><span class="co">##  attr(,"package")</span></span>
-<span><span class="co">##  [1] "Matrix"</span></span>
+<span><span class="co">##  [1] "matrix" "array"</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##  [1] 257 257</span></span>
 <span></span>
 <span><span class="co"># ----- One can specify which scores should be used when coercing into a matrix</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic</span>, use.scores <span class="op">=</span> <span class="st">"balanced"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
-<span><span class="co">##  5 x 5 sparse Matrix of class "dgTMatrix"</span></span>
-<span><span class="co">##                                                              </span></span>
+<span><span class="co">##              [,1]       [,2]       [,3]       [,4]       [,5]</span></span>
 <span><span class="co">##  [1,] 0.009657438 0.07662234 0.05410199 0.04294051 0.04090521</span></span>
 <span><span class="co">##  [2,] 0.076622340 0.05128277 0.09841564 0.06926737 0.05263611</span></span>
 <span><span class="co">##  [3,] 0.054101992 0.09841564 0.05657589 0.08723160 0.07316890</span></span>
@@ -1285,13 +1307,12 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="co">##  [5,] 0.040905212 0.05263611 0.07316890 0.08403496 0.04787415</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic</span>, use.scores <span class="op">=</span> <span class="st">"count"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
-<span><span class="co">##  5 x 5 sparse Matrix of class "dgTMatrix"</span></span>
-<span><span class="co">##                         </span></span>
-<span><span class="co">##  [1,]  7  92  75  61  38</span></span>
-<span><span class="co">##  [2,] 92 102 226 163  81</span></span>
-<span><span class="co">##  [3,] 75 226 150 237 130</span></span>
-<span><span class="co">##  [4,] 61 163 237 103 153</span></span>
-<span><span class="co">##  [5,] 38  81 130 153  57</span></span>
+<span><span class="co">##       [,1] [,2] [,3] [,4] [,5]</span></span>
+<span><span class="co">##  [1,]    7   92   75   61   38</span></span>
+<span><span class="co">##  [2,]   92  102  226  163   81</span></span>
+<span><span class="co">##  [3,]   75  226  150  237  130</span></span>
+<span><span class="co">##  [4,]   61  163  237  103  153</span></span>
+<span><span class="co">##  [5,]   38   81  130  153   57</span></span>
 <span></span>
 <span><span class="co"># ----- If needed, one can coerce a HiCExperiment into a sparse matrix</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">hic</span>, use.scores <span class="op">=</span> <span class="st">"count"</span>, sparse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
@@ -1301,14 +1322,14 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="co">##  [2,] 92 102 226 163  81</span></span>
 <span><span class="co">##  [3,] 75 226 150 237 130</span></span>
 <span><span class="co">##  [4,] 61 163 237 103 153</span></span>
-<span><span class="co">##  [5,] 38  81 130 153  57</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  [5,] 38  81 130 153  57</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>
 <code><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html">as.data.frame()</a></code>: simply coercing <code>interactions</code> into a rectangular data frame</li>
 </ul>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">##    seqnames1 start1   end1 width1 strand1 bin_id1    weight1 center1</span></span>
 <span><span class="co">##  1        II 300001 302000   2000       *     266 0.03714342  301000</span></span>
 <span><span class="co">##  2        II 300001 302000   2000       *     266 0.03714342  301000</span></span>
@@ -1324,12 +1345,12 @@ TL;DR: Which <code>HiCExperiment</code> slots are mutable (✅) / immutable (⛔
 <span><span class="co">##  5        II 308001 310000   2000       *     270 0.02898098  309000    38</span></span>
 <span><span class="co">##  6        II 310001 312000   2000       *     271 0.01834118  311000    43</span></span>
 <span><span class="co">##       balanced    random</span></span>
-<span><span class="co">##  1 0.009657438 0.7227776</span></span>
-<span><span class="co">##  2 0.076622340 0.4908796</span></span>
-<span><span class="co">##  3 0.054101992 0.8696518</span></span>
-<span><span class="co">##  4 0.042940512 0.1918134</span></span>
-<span><span class="co">##  5 0.040905212 0.5860512</span></span>
-<span><span class="co">##  6 0.029293930 0.5564170</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  1 0.009657438 0.8146293</span></span>
+<span><span class="co">##  2 0.076622340 0.3307768</span></span>
+<span><span class="co">##  3 0.054101992 0.6607427</span></span>
+<span><span class="co">##  4 0.042940512 0.3224511</span></span>
+<span><span class="co">##  5 0.040905212 0.2932789</span></span>
+<span><span class="co">##  6 0.029293930 0.6150977</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1346,141 +1367,141 @@ Warning
 </div>
 </section><section id="session-info" class="level1 unnumbered"><h1 class="unnumbered">Session info</h1>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Click to expand 👇
+<span class="screen-reader-only">Note</span>Click to expand 👇
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell" data-layout-align="center">
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">session_info</a></span><span class="op">(</span>include_base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://sessioninfo.r-lib.org/reference/session_info.html">session_info</a></span><span class="op">(</span>include_base <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">##  ─ Session info ────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">##   setting  value</span></span>
-<span><span class="co">##   version  R Under development (unstable) (2024-01-17 r85813)</span></span>
-<span><span class="co">##   os       Ubuntu 22.04.3 LTS</span></span>
+<span><span class="co">##   version  R version 4.6.1 (2026-06-24)</span></span>
+<span><span class="co">##   os       Ubuntu 24.04.4 LTS</span></span>
 <span><span class="co">##   system   x86_64, linux-gnu</span></span>
 <span><span class="co">##   ui       X11</span></span>
 <span><span class="co">##   language (EN)</span></span>
 <span><span class="co">##   collate  C</span></span>
 <span><span class="co">##   ctype    en_US.UTF-8</span></span>
 <span><span class="co">##   tz       Etc/UTC</span></span>
-<span><span class="co">##   date     2024-01-22</span></span>
-<span><span class="co">##   pandoc   3.1.1 @ /usr/local/bin/ (via rmarkdown)</span></span>
+<span><span class="co">##   date     2026-10-05</span></span>
+<span><span class="co">##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)</span></span>
+<span><span class="co">##   quarto   1.11.5 @ /usr/local/bin/quarto</span></span>
 <span><span class="co">##  </span></span>
 <span><span class="co">##  ─ Packages ────────────────────────────────────────────────────────────────</span></span>
-<span><span class="co">##   package              * version   date (UTC) lib source</span></span>
-<span><span class="co">##   abind                  1.4-5     2016-07-21 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   AnnotationDbi          1.65.2    2023-11-03 [2] Bioconductor</span></span>
-<span><span class="co">##   AnnotationHub        * 3.11.1    2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   base                 * 4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   Biobase              * 2.63.0    2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   BiocFileCache        * 2.11.1    2023-10-26 [2] Bioconductor</span></span>
-<span><span class="co">##   BiocGenerics         * 0.49.1    2023-11-01 [2] Bioconductor</span></span>
-<span><span class="co">##   BiocIO                 1.13.0    2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   BiocManager            1.30.22   2023-08-08 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   BiocParallel           1.37.0    2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   BiocVersion            3.19.1    2023-10-26 [2] Bioconductor</span></span>
-<span><span class="co">##   Biostrings             2.71.1    2023-10-25 [2] Bioconductor</span></span>
-<span><span class="co">##   bit                    4.0.5     2022-11-15 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   bit64                  4.0.5     2020-08-30 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   bitops                 1.0-7     2021-04-24 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   blob                   1.2.4     2023-03-17 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   cachem                 1.0.8     2023-05-01 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   cli                    3.6.2     2023-12-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   codetools              0.2-19    2023-02-01 [3] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   colorspace             2.1-0     2023-01-23 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   compiler               4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   crayon                 1.5.2     2022-09-29 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   curl                   5.2.0     2023-12-08 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   datasets             * 4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   DBI                    1.2.1     2024-01-12 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   dbplyr               * 2.4.0     2023-10-26 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   DelayedArray           0.29.0    2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   digest                 0.6.34    2024-01-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   dplyr                  1.1.4     2023-11-17 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   evaluate               0.23      2023-11-01 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   ExperimentHub        * 2.11.1    2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   fansi                  1.0.6     2023-12-08 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   fastmap                1.1.1     2023-02-24 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   filelock               1.0.3     2023-12-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   generics               0.1.3     2022-07-05 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   GenomeInfoDb         * 1.39.5    2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   GenomeInfoDbData       1.2.11    2024-01-22 [2] Bioconductor</span></span>
-<span><span class="co">##   GenomicRanges        * 1.55.1    2023-10-29 [2] Bioconductor</span></span>
-<span><span class="co">##   ggplot2              * 3.4.4     2023-10-12 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   glue                   1.7.0     2024-01-09 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   graphics             * 4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   grDevices            * 4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   grid                   4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   gtable                 0.3.4     2023-08-21 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   HiCExperiment        * 1.3.0     2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   HiContactsData       * 1.5.3     2024-01-22 [2] Github (js2264/HiContactsData@d5bebe7)</span></span>
-<span><span class="co">##   htmltools              0.5.7     2023-11-03 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   htmlwidgets            1.6.4     2023-12-06 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   httr                   1.4.7     2023-08-15 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   InteractionSet       * 1.31.0    2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   IRanges              * 2.37.1    2024-01-19 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   jsonlite               1.8.8     2023-12-04 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   KEGGREST               1.43.0    2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   knitr                  1.45      2023-10-30 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   lattice                0.22-5    2023-10-24 [3] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   lifecycle              1.0.4     2023-11-07 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   magrittr               2.0.3     2022-03-30 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   Matrix                 1.6-5     2024-01-11 [3] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   MatrixGenerics       * 1.15.0    2023-10-24 [2] Bioconductor</span></span>
-<span><span class="co">##   matrixStats          * 1.2.0     2023-12-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   memoise                2.0.1     2021-11-26 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   methods              * 4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   mime                   0.12      2021-09-28 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   munsell                0.5.0     2018-06-12 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   parallel               4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   pillar                 1.9.0     2023-03-22 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   pkgconfig              2.0.3     2019-09-22 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   png                    0.1-8     2022-11-29 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   purrr                  1.0.2     2023-08-10 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   R6                     2.5.1     2021-08-19 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   rappdirs               0.3.3     2021-01-31 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   Rcpp                   1.0.12    2024-01-09 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   RCurl                  1.98-1.14 2024-01-09 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   rhdf5                  2.47.2    2024-01-15 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   rhdf5filters           1.15.1    2023-11-06 [2] Bioconductor</span></span>
-<span><span class="co">##   Rhdf5lib               1.25.1    2023-12-11 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   rlang                  1.1.3     2024-01-10 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   rmarkdown              2.25      2023-09-18 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   RSQLite                2.3.5     2024-01-21 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   S4Arrays               1.3.2     2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   S4Vectors            * 0.41.3    2024-01-01 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   scales                 1.3.0     2023-11-28 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   sessioninfo            1.2.2     2021-12-06 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   SparseArray            1.3.3     2024-01-14 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   stats                * 4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   stats4               * 4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   strawr                 0.0.91    2023-03-29 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   SummarizedExperiment * 1.33.2    2024-01-07 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   tibble                 3.2.1     2023-03-20 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   tidyselect             1.2.0     2022-10-10 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   tools                  4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   tzdb                   0.4.0     2023-05-12 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   utf8                   1.2.4     2023-10-22 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   utils                * 4.4.0     2024-01-18 [3] local</span></span>
-<span><span class="co">##   vctrs                  0.6.5     2023-12-01 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   vroom                  1.6.5     2023-12-05 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   withr                  3.0.0     2024-01-16 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   xfun                   0.41      2023-11-01 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   XVector                0.43.1    2024-01-10 [2] Bioconductor 3.19 (R 4.4.0)</span></span>
-<span><span class="co">##   yaml                   2.3.8     2023-12-11 [2] CRAN (R 4.4.0)</span></span>
-<span><span class="co">##   zlibbioc               1.49.0    2023-10-24 [2] Bioconductor</span></span>
+<span><span class="co">##   package              * version date (UTC) lib source</span></span>
+<span><span class="co">##   abind                  1.4-8   2024-09-12 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   AnnotationDbi          1.75.2  2026-07-21 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   AnnotationHub        * 4.3.2   2026-06-30 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   base                 * 4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   Biobase              * 2.73.2  2026-07-29 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocBaseUtils          1.15.1  2026-05-10 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocFileCache        * 3.3.0   2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocGenerics         * 0.59.12 2026-08-11 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocIO                 1.23.3  2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocManager            1.30.27 2025-11-14 [2] CRAN (R 4.6.1)</span></span>
+<span><span class="co">##   BiocParallel           1.47.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   BiocVersion            3.24.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   Biostrings             2.81.9  2026-09-06 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   bit                    4.6.0   2025-03-06 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   bit64                  4.8.6   2026-09-01 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   blob                   1.3.0   2026-01-14 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   cachem                 1.1.0   2024-05-16 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   cli                    3.6.6   2026-04-09 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   codetools              0.2-20  2024-03-31 [3] CRAN (R 4.6.1)</span></span>
+<span><span class="co">##   compiler               4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   crayon                 1.5.3   2024-06-20 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   curl                   8.0.0   2026-08-25 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   datasets             * 4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   DBI                    1.3.0   2026-02-25 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   dbplyr               * 2.6.0   2026-06-17 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   DelayedArray           0.39.8  2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   dichromat              2.0-1   2026-07-22 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   digest                 0.6.39  2025-11-19 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   dplyr                  1.2.1   2026-04-03 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   evaluate               1.0.5   2025-08-27 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   ExperimentHub        * 3.3.2   2026-08-12 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   farver                 2.1.2   2024-05-13 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   fastmap                1.2.0   2024-05-15 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   filelock               1.0.3   2023-12-11 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   generics             * 0.1.4   2025-05-09 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   GenomicRanges        * 1.65.4  2026-09-02 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   ggplot2              * 4.0.3   2026-04-22 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   glue                   1.8.1   2026-04-17 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   graphics             * 4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   grDevices            * 4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   grid                   4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   gtable                 0.3.6   2024-10-25 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   HiCExperiment        * 1.13.1  2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   HiContactsData       * 1.5.3   2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)</span></span>
+<span><span class="co">##   htmltools              0.5.9   2025-12-04 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   htmlwidgets            1.6.4   2023-12-06 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   httr                   1.4.9   2026-09-01 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   httr2                  1.3.0   2026-07-13 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   InteractionSet       * 1.41.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   IRanges              * 2.47.5  2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   jsonlite               2.0.0   2025-03-27 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   KEGGREST               1.53.6  2026-07-23 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   knitr                  1.52    2026-09-06 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   lattice                0.23-1  2026-08-12 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   lifecycle              1.0.5   2026-01-08 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   magrittr               2.0.5   2026-04-04 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   Matrix                 1.7-6   2026-07-25 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   MatrixGenerics       * 1.25.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   matrixStats          * 1.5.0   2025-01-07 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   memoise                2.0.1   2021-11-26 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   methods              * 4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   otel                   0.2.0   2025-08-29 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   parallel               4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   pillar                 1.11.1  2025-09-17 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   pkgconfig              2.0.3   2019-09-22 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   png                    0.1-9   2026-03-15 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   purrr                  1.2.2   2026-04-10 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   R6                     2.6.1   2025-02-15 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   rappdirs               0.3.4   2026-01-17 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   RColorBrewer           1.1-3   2022-04-03 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   Rcpp                   1.1.2   2026-07-05 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   rhdf5                  2.57.18 2026-09-23 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   rhdf5filters           1.25.4  2026-08-06 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   Rhdf5lib               2.1.0   2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   rlang                  1.3.0   2026-07-05 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   rmarkdown              2.32    2026-09-01 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   RSQLite                3.53.3  2026-06-30 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   S4Arrays               1.13.2  2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   S4Vectors            * 0.51.10 2026-09-16 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   S7                     0.2.2   2026-04-22 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   scales                 1.4.0   2025-04-24 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   Seqinfo              * 1.3.2   2026-08-27 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   sessioninfo            1.2.4   2026-06-04 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   SparseArray            1.13.4  2026-09-30 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   stats                * 4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   stats4               * 4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   strawr                 0.0.92  2024-07-16 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   SummarizedExperiment * 1.43.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   tibble                 3.3.1   2026-01-11 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   tidyselect             1.2.1   2024-03-11 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   tools                  4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   tzdb                   0.5.0   2025-03-15 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   utils                * 4.6.1   2026-09-11 [3] local</span></span>
+<span><span class="co">##   vctrs                  0.7.3   2026-04-11 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   vroom                  1.7.1   2026-03-31 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   withr                  3.0.3   2026-06-19 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   xfun                   0.61    2026-09-16 [2] RSPM (R 4.6.0)</span></span>
+<span><span class="co">##   XVector                0.53.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
+<span><span class="co">##   yaml                   2.3.12  2025-12-10 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="co">##   [1] /tmp/Rtmpq5g2WV/Rinstb37571687</span></span>
+<span><span class="co">##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e</span></span>
 <span><span class="co">##   [2] /usr/local/lib/R/site-library</span></span>
 <span><span class="co">##   [3] /usr/local/lib/R/library</span></span>
+<span><span class="co">##   * ── Packages attached to the search path.</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="co">##  ───────────────────────────────────────────────────────────────────────────</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="co">##  ───────────────────────────────────────────────────────────────────────────</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1488,44 +1509,59 @@ Click to expand 👇
 </section><section id="references" class="level1 unnumbered"><h1 class="unnumbered">References</h1>
 
 
-</section><a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
@@ -1533,211 +1569,367 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
       return codeEl.innerText;
     }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
-    };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="../pages/data-representation.html" class="pagination-link">
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><nav class="page-navigation" aria-label="Page"><div class="nav-page nav-page-previous">
+      <a href="../pages/data-representation.html" class="pagination-link" aria-label="Hi-C data structures in R">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Hi-C data structures in R</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../pages/visualization.html" class="pagination-link">
+      <a href="../pages/visualization.html" class="pagination-link" aria-label="Hi-C data visualization">
         <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Hi-C data visualization</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer"><div class="nav-footer">
-    <div class="nav-footer-left"><i>OHCA: Orchestrating Hi-C analysis with Bioconductor</i> was written by J. Serizay</div>   
+    <div class="nav-footer-left">
+<p><i>OHCA: Orchestrating Hi-C analysis with Bioconductor</i> was written by J. Serizay</p>
+</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
-    <div class="nav-footer-right">This book was built with <a href="https://github.com/js2264/BiocBook/">BiocBook</a> with <span class="emoji" data-emoji="heart">❤️</span></div>
+    <div class="nav-footer-right">
+<p>This book was built with <a href="https://github.com/js2264/BiocBook/">BiocBook</a> with <span class="emoji" data-emoji="heart">❤️</span></p>
+</div>
   </div>
 </footer>
 
