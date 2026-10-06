@@ -1317,8 +1317,8 @@ This fetches files from the cloud, download them locally and returns the path of
 
 ``` downlit
 coolf
-##                                           EH7702 
-##  "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752"
+##                                          EH7702 
+##  "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752"
 ```
 
 Similarly, example files are available for other file formats:
@@ -1399,7 +1399,7 @@ library(HiCExperiment)
 # ----- This creates a connection to a `.(m)cool` file (path stored in `coolf`)
 CoolFile(coolf)
 ##  CoolFile object
-##  .mcool file: /opt/R-cache/R/ExperimentHub/15057bb43fd_7752 
+##  .mcool file: /opt/R-cache/R/ExperimentHub/15091e8cc7_7752 
 ##  resolution: 1000 
 ##  pairs file: 
 ##  metadata(0):
@@ -1407,7 +1407,7 @@ CoolFile(coolf)
 # ----- This creates a connection to a `.hic` file (path stored in `hicf`)
 HicFile(hicf)
 ##  HicFile object
-##  .hic file: /opt/R-cache/R/ExperimentHub/150704d0a00_7836 
+##  .hic file: /opt/R-cache/R/ExperimentHub/150e50153b_7836 
 ##  resolution: 1000 
 ##  pairs file: 
 ##  metadata(0):
@@ -1416,8 +1416,8 @@ HicFile(hicf)
 HicproFile(hicpromatrixf, hicproregionsf)
 ##  HicproFile object
 ##  HiC-Pro files:
-##    $ matrix:   /opt/R-cache/R/ExperimentHub/1504e10aea4_7837 
-##    $ regions:  /opt/R-cache/R/ExperimentHub/1501db398f4_7838 
+##    $ matrix:   /opt/R-cache/R/ExperimentHub/15075e7c476_7837 
+##    $ regions:  /opt/R-cache/R/ExperimentHub/150548a46b8_7838 
 ##  resolution: 1000 
 ##  pairs file: 
 ##  metadata(0):
@@ -1425,7 +1425,7 @@ HicproFile(hicpromatrixf, hicproregionsf)
 # ----- This creates a connection to a pairs file
 PairsFile(pairsf)
 ##  PairsFile object
-##  resource: /opt/R-cache/R/ExperimentHub/15031c16370_7753
+##  resource: /opt/R-cache/R/ExperimentHub/15073fb07c3_7753
 ```
 
 ### 2.3.3 `ContactFile` slots
@@ -1443,7 +1443,7 @@ Slots of a `CoolFile` object can be accessed as follow:
 cf <- CoolFile(coolf)
 cf
 ##  CoolFile object
-##  .mcool file: /opt/R-cache/R/ExperimentHub/15057bb43fd_7752 
+##  .mcool file: /opt/R-cache/R/ExperimentHub/15091e8cc7_7752 
 ##  resolution: 1000 
 ##  pairs file: 
 ##  metadata(0):
@@ -1519,7 +1519,7 @@ hic <- import(cf)
 hic
 ##  `HiCExperiment` object with 8,757,906 contacts over 12,079 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 ##  focus: "whole genome" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 1000 
@@ -1546,7 +1546,7 @@ These pieces of information are called `slots`. They can be directly accessed us
 
 ``` downlit
 fileName(hic)
-##  [1] "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752"
+##  [1] "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752"
 
 focus(hic)
 ##  NULL
@@ -1614,7 +1614,7 @@ hic <- import(hf)
 hic
 ##  `HiCExperiment` object with 13,681,280 contacts over 12,165 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/150704d0a00_7836" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/150e50153b_7836" 
 ##  focus: "whole genome" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 1000 
@@ -2043,7 +2043,7 @@ yeast_hic <- contacts_yeast(full = TRUE)
 yeast_hic
 ##  `HiCExperiment` object with 8,757,906 contacts over 763 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 ##  focus: "whole genome" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 16000 
@@ -2347,7 +2347,7 @@ pairsFile(yeast_hic) <- pairsf
 
 pairsFile(yeast_hic)
 ##                                           EH7703 
-##  "/opt/R-cache/R/ExperimentHub/15031c16370_7753"
+##  "/opt/R-cache/R/ExperimentHub/15073fb07c3_7753"
 
 readLines(pairsFile(yeast_hic), 25)
 ##   [1] "## pairs format v1.0"                                                             
@@ -2439,7 +2439,7 @@ The `HiCExperiment` data structure provided by the `HiCExperiment` package inher
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -2508,7 +2508,7 @@ The `HiCExperiment` data structure provided by the `HiCExperiment` package inher
 > ##   gridExtra              2.3.1     2026-06-25 [2] RSPM (R 4.6.0)
 > ##   gtable                 0.3.6     2024-10-25 [2] RSPM (R 4.6.0)
 > ##   HiCExperiment        * 1.13.1    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   HiContactsData       * 1.5.3     2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)
+> ##   HiContactsData       * 1.5.3     2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)
 > ##   Hmisc                  5.3-0     2026-09-06 [2] RSPM (R 4.6.0)
 > ##   htmlTable              2.5.0     2026-04-22 [2] RSPM (R 4.6.0)
 > ##   htmltools              0.5.9     2025-12-04 [2] RSPM (R 4.6.0)
@@ -2587,7 +2587,7 @@ The `HiCExperiment` data structure provided by the `HiCExperiment` package inher
 > ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

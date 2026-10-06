@@ -234,8 +234,8 @@ pairs <- list(
 ps <- imap_dfr(pairs, ~ distanceLaw(.x, by_chr = TRUE) |> 
     mutate(sample = .y) 
 )
-##  Importing pairs file /opt/R-cache/R/ExperimentHub/136a3879aeb_8630 in memory. This may take a while...
-##  Importing pairs file /opt/R-cache/R/ExperimentHub/136a609ddc19_8631 in memory. This may take a while...
+##  Importing pairs file /opt/R-cache/R/ExperimentHub/136927d37cda_8630 in memory. This may take a while...
+##  Importing pairs file /opt/R-cache/R/ExperimentHub/13697cb55c26_8631 in memory. This may take a while...
 plotPs(ps, aes(x = binned_distance, y = norm_p, group = interaction(sample, chr), color = sample)) + 
     scale_color_manual(values = c('black', 'red'))
 ##  Warning: Removed 2133 rows containing missing values or values outside the scale
@@ -443,7 +443,7 @@ ggplot(df, aes(x = center/1e3, y = balanced)) +
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -506,7 +506,7 @@ ggplot(df, aes(x = center/1e3, y = balanced)) +
 > ##   HiCcompare             1.35.2     2026-10-01 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiCExperiment        * 1.13.1     2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiContacts           * 1.15.2     2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   HiContactsData       * 1.5.3      2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)
+> ##   HiContactsData       * 1.5.3      2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)
 > ##   hms                    1.1.4      2025-10-17 [2] RSPM (R 4.6.0)
 > ##   htmltools              0.5.9      2025-12-04 [2] RSPM (R 4.6.0)
 > ##   htmlwidgets            1.6.4      2023-12-06 [2] RSPM (R 4.6.0)
@@ -602,7 +602,7 @@ ggplot(df, aes(x = center/1e3, y = balanced)) +
 > ##   yaml                   2.3.12     2025-12-10 [2] RSPM (R 4.6.0)
 > ##   zoo                    1.9-1      2026-09-25 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

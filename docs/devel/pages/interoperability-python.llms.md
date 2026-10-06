@@ -167,7 +167,7 @@ mcool <- unname(HiContactsData('microC', 'mcool'))
 ##  see ?HiContactsData and browseVignettes('HiContactsData') for documentation
 ##  loading from cache
 mcool
-##  [1] "/opt/R-cache/R/ExperimentHub/109b6e5d8c72_8601"
+##  [1] "/opt/R-cache/R/ExperimentHub/109b72474fcc_8601"
 ```
 
 … and opened in `python` with `cooler`, using the file path defined in `R`:
@@ -368,7 +368,7 @@ Comparing boundaries between studies, or between tools, thus requires using the 
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -434,7 +434,7 @@ Comparing boundaries between studies, or between tools, thus requires using the 
 > ##   gtable                        0.3.6     2024-10-25 [2] RSPM (R 4.6.0)
 > ##   HiCExperiment               * 1.13.1    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiContacts                  * 1.15.2    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   HiContactsData              * 1.5.3     2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)
+> ##   HiContactsData              * 1.5.3     2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)
 > ##   hms                           1.1.4     2025-10-17 [2] RSPM (R 4.6.0)
 > ##   htmltools                     0.5.9     2025-12-04 [2] RSPM (R 4.6.0)
 > ##   htmlwidgets                   1.6.4     2023-12-06 [2] RSPM (R 4.6.0)
@@ -514,7 +514,7 @@ Comparing boundaries between studies, or between tools, thus requires using the 
 > ##   XVector                       0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   yaml                          2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

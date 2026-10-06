@@ -160,7 +160,7 @@
 > hic
 > ##  `HiCExperiment` object with 10,801 contacts over 11 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II:10,000-50,000" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 4000 
@@ -224,7 +224,7 @@
 > cf <- CoolFile(coolf)
 > cf
 > ##  CoolFile object
-> ##  .mcool file: /opt/R-cache/R/ExperimentHub/15057bb43fd_7752 
+> ##  .mcool file: /opt/R-cache/R/ExperimentHub/15091e8cc7_7752 
 > ##  resolution: 1000 
 > ##  pairs file: 
 > ##  metadata(0):
@@ -234,7 +234,7 @@
 > hic
 > ##  `HiCExperiment` object with 306,212 contacts over 257 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II:300,001-813,184" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -287,7 +287,7 @@ This ensures that only the needed data is parsed in R, reducing memory load and 
 > import(cf, focus = 'II:300001-800000', resolution = 2000)
 > ##  `HiCExperiment` object with 301,018 contacts over 250 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II:300,001-800,000" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -304,7 +304,7 @@ This ensures that only the needed data is parsed in R, reducing memory load and 
 > import(cf, focus = 'II:300001-400000|II:600001-700000', resolution = 2000)
 > ##  `HiCExperiment` object with 402 contacts over 100 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II:300001-400000|II:600001-700000" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -321,7 +321,7 @@ This ensures that only the needed data is parsed in R, reducing memory load and 
 > import(cf, focus = 'II', resolution = 2000)
 > ##  `HiCExperiment` object with 471,364 contacts over 407 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -338,7 +338,7 @@ This ensures that only the needed data is parsed in R, reducing memory load and 
 > import(cf, focus = 'II|III', resolution = 2000)
 > ##  `HiCExperiment` object with 9,092 contacts over 566 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II|III" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -355,7 +355,7 @@ This ensures that only the needed data is parsed in R, reducing memory load and 
 > import(cf, focus = 'II:300001-800000|V:1-500000', resolution = 2000)
 > ##  `HiCExperiment` object with 7,147 contacts over 500 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II:300001-800000|V:1-500000" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -474,7 +474,7 @@ The following string types can be used to subset a `HiCExperiment` object with t
 > hic["II:800001-813184"]
 > ##  `HiCExperiment` object with 1,040 contacts over 6 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II:800,001-813,184" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -491,7 +491,7 @@ The following string types can be used to subset a `HiCExperiment` object with t
 > hic["II:300001-320000|II:800001-813184"]
 > ##  `HiCExperiment` object with 3 contacts over 6 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II:300001-320000|II:800001-813184" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -508,7 +508,7 @@ The following string types can be used to subset a `HiCExperiment` object with t
 > hic["II"]
 > ##  `HiCExperiment` object with 306,212 contacts over 257 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -525,7 +525,7 @@ The following string types can be used to subset a `HiCExperiment` object with t
 > hic["II|IV"]
 > ##  `HiCExperiment` object with 0 contacts over 0 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II:1-813184|IV:1-1531933" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -542,7 +542,7 @@ The following string types can be used to subset a `HiCExperiment` object with t
 > hic["II:300001-320000|IV:1-100000"]
 > ##  `HiCExperiment` object with 0 contacts over 0 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II:300001-320000|IV:1-100000" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -559,7 +559,7 @@ The following string types can be used to subset a `HiCExperiment` object with t
 > hic[c('II', 'III', 'IV')]
 > ##  `HiCExperiment` object with 306,212 contacts over 257 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II, III, IV" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -584,7 +584,7 @@ The following string types can be used to subset a `HiCExperiment` object with t
 hic
 ##  `HiCExperiment` object with 306,212 contacts over 257 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 ##  focus: "II:300,001-813,184" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 2000 
@@ -597,7 +597,7 @@ hic
 zoom(hic, 4000)
 ##  `HiCExperiment` object with 306,212 contacts over 129 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 ##  focus: "II:300,001-813,184" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 4000 
@@ -610,7 +610,7 @@ zoom(hic, 4000)
 zoom(hic, 1000)
 ##  `HiCExperiment` object with 306,212 contacts over 514 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 ##  focus: "II:300,001-813,184" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 1000 
@@ -699,7 +699,7 @@ scores(hic)
 ##  names(3): count balanced random
 
 head(scores(hic, "random"))
-##  [1] 0.8146293 0.3307768 0.6607427 0.3224511 0.2932789 0.6150977
+##  [1] 0.7583167 0.3949779 0.5622806 0.8567470 0.2859857 0.2910398
 ```
 
 #### 3.2.2.2 `topologicalFeatures`
@@ -748,7 +748,7 @@ topologicalFeatures(hic, 'loops')
 hic
 ##  `HiCExperiment` object with 306,212 contacts over 257 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 ##  focus: "II:300,001-813,184" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 2000 
@@ -786,14 +786,14 @@ pairsFile(hic) <- pairsf
 hic
 ##  `HiCExperiment` object with 306,212 contacts over 257 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 ##  focus: "II:300,001-813,184" 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 2000 
 ##  interactions: 18513 
 ##  scores(3): count balanced random 
 ##  topologicalFeatures: compartments(0) borders(0) loops(9) viewpoints(0) CTCF(4) 
-##  pairsFile: /opt/R-cache/R/ExperimentHub/15031c16370_7753 
+##  pairsFile: /opt/R-cache/R/ExperimentHub/15073fb07c3_7753 
 ##  metadata(0):
 ```
 
@@ -811,7 +811,7 @@ metadata(hic)
 ##  [1] "HiCExperiment created from an example .mcool file from `HiContactsData`"
 ##  
 ##  $date
-##  [1] "Mon Oct  5 21:41:18 2026"
+##  [1] "Tue Oct  6 10:00:09 2026"
 ```
 
 ## 3.3 Coercing `HiCExperiment` objects
@@ -875,12 +875,12 @@ as.data.frame(hic) |> head()
 ##  5        II 308001 310000   2000       *     270 0.02898098  309000    38
 ##  6        II 310001 312000   2000       *     271 0.01834118  311000    43
 ##       balanced    random
-##  1 0.009657438 0.8146293
-##  2 0.076622340 0.3307768
-##  3 0.054101992 0.6607427
-##  4 0.042940512 0.3224511
-##  5 0.040905212 0.2932789
-##  6 0.029293930 0.6150977
+##  1 0.009657438 0.7583167
+##  2 0.076622340 0.3949779
+##  3 0.054101992 0.5622806
+##  4 0.042940512 0.8567470
+##  5 0.040905212 0.2859857
+##  6 0.029293930 0.2910398
 ```
 
 > **WARNING:**
@@ -903,7 +903,7 @@ as.data.frame(hic) |> head()
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -952,7 +952,7 @@ as.data.frame(hic) |> head()
 > ##   grid                   4.6.1   2026-09-11 [3] local
 > ##   gtable                 0.3.6   2024-10-25 [2] RSPM (R 4.6.0)
 > ##   HiCExperiment        * 1.13.1  2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   HiContactsData       * 1.5.3   2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)
+> ##   HiContactsData       * 1.5.3   2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)
 > ##   htmltools              0.5.9   2025-12-04 [2] RSPM (R 4.6.0)
 > ##   htmlwidgets            1.6.4   2023-12-06 [2] RSPM (R 4.6.0)
 > ##   httr                   1.4.9   2026-09-01 [2] RSPM (R 4.6.0)
@@ -1009,7 +1009,7 @@ as.data.frame(hic) |> head()
 > ##   XVector                0.53.0  2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   yaml                   2.3.12  2025-12-10 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

@@ -572,7 +572,7 @@ This encompasses:</p>
 <span><span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/CoolFile-class.html">CoolFile</a></span><span class="op">(</span><span class="va">coolf</span><span class="op">)</span></span>
 <span><span class="va">cf</span></span>
 <span><span class="co">##  CoolFile object</span></span>
-<span><span class="co">##  .mcool file: /opt/R-cache/R/ExperimentHub/15057bb43fd_7752 </span></span>
+<span><span class="co">##  .mcool file: /opt/R-cache/R/ExperimentHub/15091e8cc7_7752 </span></span>
 <span><span class="co">##  resolution: 1000 </span></span>
 <span><span class="co">##  pairs file: </span></span>
 <span><span class="co">##  metadata(0):</span></span>
@@ -581,7 +581,7 @@ This encompasses:</p>
 <span><span class="va">pf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/PairsFile-class.html">PairsFile</a></span><span class="op">(</span><span class="va">pairsf</span><span class="op">)</span></span>
 <span><span class="va">pf</span></span>
 <span><span class="co">##  PairsFile object</span></span>
-<span><span class="co">##  resource: /opt/R-cache/R/ExperimentHub/15031c16370_7753</span></span>
+<span><span class="co">##  resource: /opt/R-cache/R/ExperimentHub/15073fb07c3_7753</span></span>
 <span></span>
 <span><span class="co"># ---- This imports contacts from the chromosome `II` at resolution `2000`</span></span>
 <span><span class="va">hic</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import</a></span><span class="op">(</span><span class="va">cf</span>, focus <span class="op">=</span> <span class="st">'II'</span>, resolution <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -590,7 +590,7 @@ This encompasses:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">hic</span></span>
 <span><span class="co">##  `HiCExperiment` object with 471,364 contacts over 407 regions </span></span>
 <span><span class="co">##  -------</span></span>
-<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" </span></span>
+<span><span class="co">##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" </span></span>
 <span><span class="co">##  focus: "II" </span></span>
 <span><span class="co">##  resolutions(5): 1000 2000 4000 8000 16000</span></span>
 <span><span class="co">##  active resolution: 2000 </span></span>
@@ -620,7 +620,7 @@ This encompasses:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pf</span></span>
 <span><span class="co">##  PairsFile object</span></span>
-<span><span class="co">##  resource: /opt/R-cache/R/ExperimentHub/15031c16370_7753</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="co">##  resource: /opt/R-cache/R/ExperimentHub/15073fb07c3_7753</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If needed, <code>PairsFile</code> connections can be imported directly into a <code>GInteractions</code> object with <code><a href="https://rdrr.io/pkg/BiocIO/man/IO.html">import()</a></code>.</p>
 <div class="cell" data-layout-align="center">
@@ -660,7 +660,7 @@ This encompasses:</p>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/js2264/HiContacts">HiContacts</a></span><span class="op">)</span></span>
 <span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/Ps.html">distanceLaw</a></span><span class="op">(</span><span class="va">pf</span>, by_chr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
-<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/15031c16370_7753 in memory. This may take a while...</span></span>
+<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/15073fb07c3_7753 in memory. This may take a while...</span></span>
 <span><span class="va">ps</span></span>
 <span><span class="co">##  # A tibble: 115 × 6</span></span>
 <span><span class="co">##    chr   binned_distance          p     norm_p norm_p_unity slope</span></span>
@@ -708,7 +708,7 @@ This encompasses:</p>
 </div>
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">eco1_ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/Ps.html">distanceLaw</a></span><span class="op">(</span><span class="va">eco1_pf</span>, by_chr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
-<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/7466252b1f0_7755 in memory. This may take a while...</span></span>
+<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/74639b34732_7755 in memory. This may take a while...</span></span>
 <span><span class="va">eco1_ps</span></span>
 <span><span class="co">##  # A tibble: 115 × 6</span></span>
 <span><span class="co">##    chr   binned_distance          p     norm_p norm_p_unity slope</span></span>
@@ -873,7 +873,7 @@ To generate a scalogram, one needs to provide a <code>HiCExperiment</code> objec
 <div class="cell" data-layout-align="center">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">pairsf</span></span>
 <span><span class="va">scalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/scalogram.html">scalogram</a></span><span class="op">(</span><span class="va">hic</span><span class="op">)</span> </span>
-<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/15031c16370_7753 in memory. This may take a while...</span></span>
+<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/15073fb07c3_7753 in memory. This may take a while...</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/plotScalogram.html">plotScalogram</a></span><span class="op">(</span><span class="va">scalo</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">chr</span> <span class="op">==</span> <span class="st">'II'</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1e3</span>, <span class="fl">1e5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -897,7 +897,7 @@ To generate a scalogram, one needs to provide a <code>HiCExperiment</code> objec
 <span><span class="co">##  loading from cache</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/HiCExperiment/man/AllGenerics.html">pairsFile</a></span><span class="op">(</span><span class="va">eco1_hic</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">eco1_pairsf</span></span>
 <span><span class="va">eco1_scalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/HiContacts/man/scalogram.html">scalogram</a></span><span class="op">(</span><span class="va">eco1_hic</span><span class="op">)</span> </span>
-<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/7466252b1f0_7755 in memory. This may take a while...</span></span>
+<span><span class="co">##  Importing pairs file /opt/R-cache/R/ExperimentHub/74639b34732_7755 in memory. This may take a while...</span></span>
 <span><span class="va">merged_scalo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/cbind.html">rbind</a></span><span class="op">(</span></span>
 <span>    <span class="va">scalo</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="st">'WT'</span><span class="op">)</span>, </span>
 <span>    <span class="va">eco1_scalo</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="st">'eco1'</span><span class="op">)</span></span>
@@ -938,7 +938,7 @@ To generate a scalogram, one needs to provide a <code>HiCExperiment</code> objec
 <span><span class="co">##   collate  C</span></span>
 <span><span class="co">##   ctype    en_US.UTF-8</span></span>
 <span><span class="co">##   tz       Etc/UTC</span></span>
-<span><span class="co">##   date     2026-10-05</span></span>
+<span><span class="co">##   date     2026-10-06</span></span>
 <span><span class="co">##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)</span></span>
 <span><span class="co">##   quarto   1.11.5 @ /usr/local/bin/quarto</span></span>
 <span><span class="co">##  </span></span>
@@ -995,7 +995,7 @@ To generate a scalogram, one needs to provide a <code>HiCExperiment</code> objec
 <span><span class="co">##   gtable                 0.3.6     2024-10-25 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##   HiCExperiment        * 1.13.1    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
 <span><span class="co">##   HiContacts           * 1.15.2    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
-<span><span class="co">##   HiContactsData       * 1.5.3     2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)</span></span>
+<span><span class="co">##   HiContactsData       * 1.5.3     2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)</span></span>
 <span><span class="co">##   hms                    1.1.4     2025-10-17 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##   htmltools              0.5.9     2025-12-04 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##   htmlwidgets            1.6.4     2023-12-06 [2] RSPM (R 4.6.0)</span></span>
@@ -1068,7 +1068,7 @@ To generate a scalogram, one needs to provide a <code>HiCExperiment</code> objec
 <span><span class="co">##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)</span></span>
 <span><span class="co">##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)</span></span>
 <span><span class="co">##  </span></span>
-<span><span class="co">##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e</span></span>
+<span><span class="co">##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701</span></span>
 <span><span class="co">##   [2] /usr/local/lib/R/site-library</span></span>
 <span><span class="co">##   [3] /usr/local/lib/R/library</span></span>
 <span><span class="co">##   * ── Packages attached to the search path.</span></span>

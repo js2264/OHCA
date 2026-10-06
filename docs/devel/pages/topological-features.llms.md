@@ -190,7 +190,7 @@ microC <- import(cf, resolution = 250000)
 microC
 ##  `HiCExperiment` object with 10,086,710 contacts over 334 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/109b6e5d8c72_8601" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/109b72474fcc_8601" 
 ##  focus: "whole genome" 
 ##  resolutions(3): 5000 100000 250000
 ##  active resolution: 250000 
@@ -229,7 +229,7 @@ microC_compts <- getCompartments(microC, genome = phasing_track)
 microC_compts
 ##  `HiCExperiment` object with 10,086,710 contacts over 334 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/109b6e5d8c72_8601" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/109b72474fcc_8601" 
 ##  focus: "whole genome" 
 ##  resolutions(3): 5000 100000 250000
 ##  active resolution: 250000 
@@ -403,7 +403,7 @@ hic <- zoom(microC, 5000) |>
 hic
 ##  `HiCExperiment` object with 2,156,222 contacts over 4,652 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/109b6e5d8c72_8601" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/109b72474fcc_8601" 
 ##  focus: "chr17:60,000,001-83,257,441" 
 ##  resolutions(3): 5000 100000 250000
 ##  active resolution: 5000 
@@ -794,7 +794,7 @@ A number of other R packages have been developed to identify focal chromatin loo
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -876,7 +876,7 @@ A number of other R packages have been developed to identify focal chromatin loo
 > ##   Gviz                          1.57.4    2026-08-11 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiCExperiment               * 1.13.1    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiContacts                  * 1.15.2    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   HiContactsData              * 1.5.3     2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)
+> ##   HiContactsData              * 1.5.3     2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)
 > ##   Hmisc                         5.3-0     2026-09-06 [2] RSPM (R 4.6.0)
 > ##   hms                           1.1.4     2025-10-17 [2] RSPM (R 4.6.0)
 > ##   htmlTable                     2.5.0     2026-04-22 [2] RSPM (R 4.6.0)
@@ -906,7 +906,7 @@ A number of other R packages have been developed to identify focal chromatin loo
 > ##   memoise                       2.0.1     2021-11-26 [2] RSPM (R 4.6.0)
 > ##   methods                     * 4.6.1     2026-09-11 [3] local
 > ##   nnet                          7.3-21    2026-08-03 [2] RSPM (R 4.6.0)
-> ##   OHCA                        * 1.9.1     2026-10-05 [1] Bioconductor
+> ##   OHCA                        * 1.9.2     2026-10-06 [1] Bioconductor
 > ##   otel                          0.2.0     2025-08-29 [2] RSPM (R 4.6.0)
 > ##   parallel                      4.6.1     2026-09-11 [3] local
 > ##   patchwork                   * 1.3.2     2025-08-25 [2] RSPM (R 4.6.0)
@@ -972,7 +972,7 @@ A number of other R packages have been developed to identify focal chromatin loo
 > ##   XVector                       0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   yaml                          2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

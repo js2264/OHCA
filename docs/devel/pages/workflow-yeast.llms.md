@@ -542,7 +542,7 @@ cowplot::plot_grid(
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -599,7 +599,7 @@ cowplot::plot_grid(
 > ##   gtools                 3.9.5      2023-11-20 [2] RSPM (R 4.6.0)
 > ##   HiCcompare             1.35.2     2026-10-01 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiCExperiment        * 1.13.1     2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   HiContactsData       * 1.5.3      2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)
+> ##   HiContactsData       * 1.5.3      2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)
 > ##   htmltools              0.5.9      2025-12-04 [2] RSPM (R 4.6.0)
 > ##   htmlwidgets            1.6.4      2023-12-06 [2] RSPM (R 4.6.0)
 > ##   httr                   1.4.9      2026-09-01 [2] RSPM (R 4.6.0)
@@ -687,7 +687,7 @@ cowplot::plot_grid(
 > ##   yaml                   2.3.12     2025-12-10 [2] RSPM (R 4.6.0)
 > ##   zoo                    1.9-1      2026-09-25 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

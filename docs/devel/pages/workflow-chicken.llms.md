@@ -101,7 +101,7 @@ names(hics) <- samples
 hics[["G2 block"]]
 ##  `HiCExperiment` object with 150,494,008 contacts over 4,109 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/fourDNData/12fe176e90c7_4DNFIT479GDR.mcool" 
+##  fileName: "/opt/R-cache/R/fourDNData/12fd795624ba_4DNFIT479GDR.mcool" 
 ##  focus: "whole genome" 
 ##  resolutions(13): 1000 2000 ... 5000000 10000000
 ##  active resolution: 250000 
@@ -367,7 +367,7 @@ This visualization suggests that interactions between genomic loci belonging to 
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -439,7 +439,7 @@ This visualization suggests that interactions between genomic loci belonging to 
 > ##   gtable                 0.3.6     2024-10-25 [2] RSPM (R 4.6.0)
 > ##   HiCExperiment        * 1.13.1    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiContacts           * 1.15.2    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   HiContactsData       * 1.5.3     2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)
+> ##   HiContactsData       * 1.5.3     2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)
 > ##   Hmisc                  5.3-0     2026-09-06 [2] RSPM (R 4.6.0)
 > ##   hms                    1.1.4     2025-10-17 [2] RSPM (R 4.6.0)
 > ##   htmlTable              2.5.0     2026-04-22 [2] RSPM (R 4.6.0)
@@ -522,7 +522,7 @@ This visualization suggests that interactions between genomic loci belonging to 
 > ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

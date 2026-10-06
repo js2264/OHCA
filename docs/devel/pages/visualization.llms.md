@@ -148,7 +148,7 @@
 > cf <- CoolFile(coolf)
 > cf
 > ##  CoolFile object
-> ##  .mcool file: /opt/R-cache/R/ExperimentHub/15057bb43fd_7752 
+> ##  .mcool file: /opt/R-cache/R/ExperimentHub/15091e8cc7_7752 
 > ##  resolution: 1000 
 > ##  pairs file: 
 > ##  metadata(0):
@@ -161,7 +161,7 @@
 > hic
 > ##  `HiCExperiment` object with 303,545 contacts over 289 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "V" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -234,7 +234,7 @@ We then plot the 2 matrices side by side. The first will be displayed in the top
 
 ``` downlit
 plotMatrix(hic, compare.to = hic2)
-##  [1] "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752 | /opt/R-cache/R/ExperimentHub/68d5955493f_7754"
+##  [1] "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752 | /opt/R-cache/R/ExperimentHub/68d1d6e230e_7754"
 ```
 
 ![](visualization_files/figure-html/unnamed-chunk-7-1.png)
@@ -391,7 +391,7 @@ aggr_loops <- aggregate(hic, targets = loops, flankingBins = 15)
 aggr_loops
 ##  `AggrHiCExperiment` object over 148 targets 
 ##  -------
-##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 ##  focus: 148 targets 
 ##  resolutions(5): 1000 2000 4000 8000 16000
 ##  active resolution: 1000 
@@ -461,7 +461,7 @@ plotMatrix(
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -518,7 +518,7 @@ plotMatrix(
 > ##   gtable                 0.3.6     2024-10-25 [2] RSPM (R 4.6.0)
 > ##   HiCExperiment        * 1.13.1    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiContacts           * 1.15.2    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   HiContactsData       * 1.5.3     2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)
+> ##   HiContactsData       * 1.5.3     2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)
 > ##   hms                    1.1.4     2025-10-17 [2] RSPM (R 4.6.0)
 > ##   htmltools              0.5.9     2025-12-04 [2] RSPM (R 4.6.0)
 > ##   htmlwidgets            1.6.4     2023-12-06 [2] RSPM (R 4.6.0)
@@ -589,7 +589,7 @@ plotMatrix(
 > ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

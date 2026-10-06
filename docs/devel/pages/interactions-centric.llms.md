@@ -203,7 +203,7 @@ This encompasses:
 > cf <- CoolFile(coolf)
 > cf
 > ##  CoolFile object
-> ##  .mcool file: /opt/R-cache/R/ExperimentHub/15057bb43fd_7752 
+> ##  .mcool file: /opt/R-cache/R/ExperimentHub/15091e8cc7_7752 
 > ##  resolution: 1000 
 > ##  pairs file: 
 > ##  metadata(0):
@@ -212,7 +212,7 @@ This encompasses:
 > pf <- PairsFile(pairsf)
 > pf
 > ##  PairsFile object
-> ##  resource: /opt/R-cache/R/ExperimentHub/15031c16370_7753
+> ##  resource: /opt/R-cache/R/ExperimentHub/15073fb07c3_7753
 >
 > # ---- This imports contacts from the chromosome `II` at resolution `2000`
 > hic <- import(cf, focus = 'II', resolution = 2000)
@@ -222,7 +222,7 @@ This encompasses:
 > hic
 > ##  `HiCExperiment` object with 471,364 contacts over 407 regions 
 > ##  -------
-> ##  fileName: "/opt/R-cache/R/ExperimentHub/15057bb43fd_7752" 
+> ##  fileName: "/opt/R-cache/R/ExperimentHub/15091e8cc7_7752" 
 > ##  focus: "II" 
 > ##  resolutions(5): 1000 2000 4000 8000 16000
 > ##  active resolution: 2000 
@@ -253,7 +253,7 @@ pf <- PairsFile(pairsf)
 ``` downlit
 pf
 ##  PairsFile object
-##  resource: /opt/R-cache/R/ExperimentHub/15031c16370_7753
+##  resource: /opt/R-cache/R/ExperimentHub/15073fb07c3_7753
 ```
 
 If needed, `PairsFile` connections can be imported directly into a `GInteractions` object with [`import()`](https://rdrr.io/pkg/BiocIO/man/IO.html).
@@ -297,7 +297,7 @@ We can compute a P(s) per chromosome from this `.pairs` file using the `distance
 ``` downlit
 library(HiContacts)
 ps <- distanceLaw(pf, by_chr = TRUE) 
-##  Importing pairs file /opt/R-cache/R/ExperimentHub/15031c16370_7753 in memory. This may take a while...
+##  Importing pairs file /opt/R-cache/R/ExperimentHub/15073fb07c3_7753 in memory. This may take a while...
 ps
 ##  # A tibble: 115 × 6
 ##    chr   binned_distance          p     norm_p norm_p_unity slope
@@ -345,7 +345,7 @@ eco1_pf <- PairsFile(eco1_pairsf)
 
 ``` downlit
 eco1_ps <- distanceLaw(eco1_pf, by_chr = TRUE) 
-##  Importing pairs file /opt/R-cache/R/ExperimentHub/7466252b1f0_7755 in memory. This may take a while...
+##  Importing pairs file /opt/R-cache/R/ExperimentHub/74639b34732_7755 in memory. This may take a while...
 eco1_ps
 ##  # A tibble: 115 × 6
 ##    chr   binned_distance          p     norm_p norm_p_unity slope
@@ -507,7 +507,7 @@ To generate a scalogram, one needs to provide a `HiCExperiment` object with a va
 ``` downlit
 pairsFile(hic) <- pairsf
 scalo <- scalogram(hic) 
-##  Importing pairs file /opt/R-cache/R/ExperimentHub/15031c16370_7753 in memory. This may take a while...
+##  Importing pairs file /opt/R-cache/R/ExperimentHub/15073fb07c3_7753 in memory. This may take a while...
 plotScalogram(scalo |> filter(chr == 'II'), ylim = c(1e3, 1e5))
 ```
 
@@ -528,7 +528,7 @@ eco1_pairsf <- HiContactsData('yeast_eco1', 'pairs.gz')
 ##  loading from cache
 pairsFile(eco1_hic) <- eco1_pairsf
 eco1_scalo <- scalogram(eco1_hic) 
-##  Importing pairs file /opt/R-cache/R/ExperimentHub/7466252b1f0_7755 in memory. This may take a while...
+##  Importing pairs file /opt/R-cache/R/ExperimentHub/74639b34732_7755 in memory. This may take a while...
 merged_scalo <- rbind(
     scalo |> mutate(sample = 'WT'), 
     eco1_scalo |> mutate(sample = 'eco1')
@@ -557,7 +557,7 @@ This example points out the overall longer interactions within the long arm of t
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -614,7 +614,7 @@ This example points out the overall longer interactions within the long arm of t
 > ##   gtable                 0.3.6     2024-10-25 [2] RSPM (R 4.6.0)
 > ##   HiCExperiment        * 1.13.1    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiContacts           * 1.15.2    2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   HiContactsData       * 1.5.3     2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)
+> ##   HiContactsData       * 1.5.3     2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)
 > ##   hms                    1.1.4     2025-10-17 [2] RSPM (R 4.6.0)
 > ##   htmltools              0.5.9     2025-12-04 [2] RSPM (R 4.6.0)
 > ##   htmlwidgets            1.6.4     2023-12-06 [2] RSPM (R 4.6.0)
@@ -687,7 +687,7 @@ This example points out the overall longer interactions within the long arm of t
 > ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

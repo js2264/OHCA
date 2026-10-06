@@ -4,8 +4,8 @@
 
 **Package:** OHCA\
 **Authors:** Jacques Serizay \[aut, cre\]\
-**Compiled:** 2026-10-05\
-**Package version:** 1.9.1\
+**Compiled:** 2026-10-06\
+**Package version:** 1.9.2\
 **R version:** **R version 4.6.1 (2026-06-24)**\
 **BioC version:** **3.24**\
 **License:** MIT + file LICENSE\
@@ -183,7 +183,7 @@ The actual rendering of this book is done by GitHub Actions, and the rendered st
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -311,7 +311,7 @@ The actual rendering of this book is done by GitHub Actions, and the rendered st
 > ##   HiCcompare                    1.35.2     2026-10-01 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiCExperiment                 1.13.1     2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   HiContacts                    1.15.2     2026-10-04 [2] Bioconductor 3.24 (R 4.6.1)
-> ##   HiContactsData                1.5.3      2026-10-05 [2] Github (js2264/HiContactsData@d5bebe7)
+> ##   HiContactsData                1.5.3      2026-10-06 [2] Github (js2264/HiContactsData@d5bebe7)
 > ##   highr                         0.12       2026-03-06 [2] RSPM (R 4.6.0)
 > ##   Hmisc                         5.3-0      2026-09-06 [2] RSPM (R 4.6.0)
 > ##   hms                           1.1.4      2025-10-17 [2] RSPM (R 4.6.0)
@@ -369,7 +369,7 @@ The actual rendering of this book is done by GitHub Actions, and the rendered st
 > ##   nlme                          3.1-171    2026-09-01 [2] RSPM (R 4.6.0)
 > ##   nnet                          7.3-21     2026-08-03 [2] RSPM (R 4.6.0)
 > ##   numDeriv                      2016.8-1.1 2019-06-06 [2] RSPM (R 4.6.0)
-> ##   OHCA                          1.9.1      2026-10-05 [1] Bioconductor
+> ##   OHCA                          1.9.2      2026-10-06 [1] Bioconductor
 > ##   openssl                       2.4.2      2026-06-09 [2] RSPM (R 4.6.0)
 > ##   OrganismDbi                   1.55.1     2026-04-29 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   otel                          0.2.0      2025-08-29 [2] RSPM (R 4.6.0)
@@ -411,9 +411,7 @@ The actual rendering of this book is done by GitHub Actions, and the rendered st
 > ##   rcmdcheck                     1.4.0      2021-09-27 [2] RSPM (R 4.6.0)
 > ##   RColorBrewer                  1.1-3      2022-04-03 [2] RSPM (R 4.6.0)
 > ##   Rcpp                          1.1.2      2026-07-05 [2] RSPM (R 4.6.0)
-> ##   RcppArmadillo                 15.6.0-1   2026-09-08 [2] RSPM (R 4.6.0)
 > ##   RcppEigen                     0.3.4.0.2  2024-08-24 [2] RSPM (R 4.6.0)
-> ##   RcppParallel                  6.2.1      2026-08-27 [2] RSPM (R 4.6.0)
 > ##   RcppTOML                      0.2.3      2025-03-08 [2] RSPM (R 4.6.0)
 > ##   RCurl                         1.98-1.20  2026-08-21 [2] RSPM (R 4.6.0)
 > ##   Rdpack                        2.6.6      2026-02-08 [2] RSPM (R 4.6.0)
@@ -424,7 +422,6 @@ The actual rendering of this book is done by GitHub Actions, and the rendered st
 > ##   reshape2                      1.4.5      2025-11-12 [2] RSPM (R 4.6.0)
 > ##   restfulr                      0.0.17     2026-06-11 [2] RSPM (R 4.6.0)
 > ##   reticulate                    1.47.0     2026-09-03 [2] RSPM (R 4.6.0)
-> ##   Rfast                         2.1.5.2    2025-10-10 [2] RSPM (R 4.6.0)
 > ##   rhdf5                         2.57.18    2026-09-23 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   rhdf5filters                  1.25.4     2026-08-06 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   Rhdf5lib                      2.1.0      2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
@@ -503,11 +500,10 @@ The actual rendering of this book is done by GitHub Actions, and the rendered st
 > ##   xtable                        1.8-8      2026-02-22 [2] RSPM (R 4.6.0)
 > ##   XVector                       0.53.0     2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   yaml                          2.3.12     2025-12-10 [2] RSPM (R 4.6.0)
-> ##   zigg                          0.0.2      2025-02-07 [2] RSPM (R 4.6.0)
 > ##   zip                           3.0.2      2026-08-04 [2] RSPM (R 4.6.0)
 > ##   zoo                           1.9-1      2026-09-25 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.

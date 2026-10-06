@@ -172,7 +172,7 @@ This effectively downloads and caches the queried file locally.
 
 ``` downlit
 cf
-##  [1] "/opt/R-cache/R/fourDNData/1132774cf9d0_4DNFIZL8OZE1.mcool"
+##  [1] "/opt/R-cache/R/fourDNData/113223b0b67a_4DNFIZL8OZE1.mcool"
 
 availableChromosomes(cf)
 ##  Seqinfo object with 24 sequences from an unspecified genome:
@@ -196,7 +196,7 @@ availableResolutions(cf)
 import(cf, focus = "chr4:10000001-20000000", resolution = 5000)
 ##  `HiCExperiment` object with 656 contacts over 2,000 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/fourDNData/1132774cf9d0_4DNFIZL8OZE1.mcool" 
+##  fileName: "/opt/R-cache/R/fourDNData/113223b0b67a_4DNFIZL8OZE1.mcool" 
 ##  focus: "chr4:10,000,001-20,000,000" 
 ##  resolutions(13): 1000 2000 ... 5000000 10000000
 ##  active resolution: 5000 
@@ -323,7 +323,7 @@ This is a more efficient way to import datasets, as it aggregates the different 
 hic
 ##  `HiCExperiment` object with 453,301 contacts over 12,366 regions 
 ##  -------
-##  fileName: "/opt/R-cache/R/fourDNData/1132774cf9d0_4DNFIZL8OZE1.mcool" 
+##  fileName: "/opt/R-cache/R/fourDNData/113223b0b67a_4DNFIZL8OZE1.mcool" 
 ##  focus: "whole genome" 
 ##  resolutions(13): 1000 2000 ... 5000000 10000000
 ##  active resolution: 250000 
@@ -446,7 +446,7 @@ hicfile <- DNAZooData(species = 'Hypsibius_dujardini')
 
 hicfile
 ##  HicFile object
-##  .hic file: /opt/R-cache/R/DNAZooData/11324b3abfef_nHd_3.1_HiC.hic 
+##  .hic file: /opt/R-cache/R/DNAZooData/1132110a9e2f_nHd_3.1_HiC.hic 
 ##  resolution: 5000 
 ##  pairs file: 
 ##  metadata(6): organism draftAssembly ... credits assemblyURL
@@ -507,7 +507,7 @@ metadata(hicfile)$assemblyURL
 > ##   collate  C
 > ##   ctype    en_US.UTF-8
 > ##   tz       Etc/UTC
-> ##   date     2026-10-05
+> ##   date     2026-10-06
 > ##   pandoc   3.11 @ /usr/bin/ (via rmarkdown)
 > ##   quarto   1.11.5 @ /usr/local/bin/quarto
 > ##  
@@ -615,7 +615,7 @@ metadata(hicfile)$assemblyURL
 > ##   XVector                0.53.0    2026-04-28 [2] Bioconductor 3.24 (R 4.6.1)
 > ##   yaml                   2.3.12    2025-12-10 [2] RSPM (R 4.6.0)
 > ##  
-> ##   [1] /tmp/RtmpIHYEk6/Rinstb5256c58e
+> ##   [1] /tmp/Rtmpu8u3NE/Rinstb3e0c7701
 > ##   [2] /usr/local/lib/R/site-library
 > ##   [3] /usr/local/lib/R/library
 > ##   * ── Packages attached to the search path.
