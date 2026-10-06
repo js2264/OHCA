@@ -1,5 +1,15 @@
 # Interoperability with `python`: `cooltools` {#sec-python-cooltools}
 
+```{r}
+#| include: false
+## The `python` environment has its own `libcurl`, which needs a more recent
+## OpenSSL (>= 3.2) than the system's on Ubuntu 24.04, the OS of the
+## Bioconductor builders and images: once `R` has loaded the system's OpenSSL,
+## `import cooler` fails, as `h5py` loads that `libcurl`. Loading the system's
+## `libcurl` first, through `R`'s `curl` package, makes `h5py` use it instead.
+invisible(curl::curl_version())
+```
+
 ::: {.callout-note collapse="true"}
 
 ## Pre-loading packages and objects 📦 {-}

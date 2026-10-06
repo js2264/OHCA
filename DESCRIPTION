@@ -1,6 +1,6 @@
 Package: OHCA
 Title: Orchestrating Hi-C analysis with Bioconductor
-Version: 1.9.1
+Version: 1.9.2
 Date: 2023-04-14
 Authors@R:
     c(person(given = "Jacques",
@@ -25,7 +25,6 @@ Imports:
     fourDNData, 
     plyinteractions, 
     GenomicInteractions, 
-    Rfast, 
     WGCNA, 
     diffHic, 
     strawr, 
@@ -33,6 +32,7 @@ Imports:
     GOTHiC, 
     BSgenome.Hsapiens.UCSC.hg38, 
     cowplot,
+    curl,
     fs,
     knitr,
     BiocStyle, 
