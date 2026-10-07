@@ -32,13 +32,12 @@ Imports:
     GOTHiC, 
     BSgenome.Hsapiens.UCSC.hg38, 
     cowplot,
-    curl,
     fs,
     knitr,
     BiocStyle, 
     sessioninfo 
 Suggests: 
-    BiocBook (>= 1.11.2),
+    BiocBook (>= 1.11.5),
     reticulate,
     multiHiCcompare,
     terra, 
