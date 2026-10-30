@@ -122,6 +122,10 @@ jobs:
           git fetch --depth 1 origin gh-pages
           versions=$(git ls-tree --name-only origin/gh-pages docs/ | sed 's,^docs/,,' | sort -rV)
           mkdir -p llms-index
+          ## Serve every file as it is: otherwise, GitHub Pages runs Jekyll,
+          ## which turns the Markdown copy of each page (<page>.md) into an
+          ## HTML page that collides with the book's own <page>.html
+          touch llms-index/.nojekyll
           {
             echo "# ${{ env.Pkgname }}"
             echo
