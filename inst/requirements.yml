@@ -4,6 +4,11 @@
 ##
 ## Versions are pinned so that the rendered book does not change without a
 ## commit. `nodefaults` keeps the Anaconda `defaults` channel out.
+##
+## conda provides python itself; the packages the chapter imports come from
+## PyPI, under `pip:`. Their wheels carry their own compiled libraries, so they
+## cannot pick up the older ones R has already loaded on the Bioconductor
+## builders (see `?BiocBook::BiocBook-python`).
 name:
     OHCA
 channels:
@@ -12,11 +17,9 @@ channels:
     - nodefaults
 dependencies:
     - python=3.12
-    - cooler=0.10.4
-    - cooltools=0.7.1
-    - bioframe=0.8.0
-    - pandas=2.3.3
-    ## matplotlib >= 3.11 links libraqm, which needs a more recent harfbuzz
-    ## than the one R sessions have already loaded on the Bioconductor images
-    ## (Ubuntu 24.04): `import matplotlib` then fails
-    - matplotlib-base=3.10
+    - pip:
+        - cooler==0.10.4
+        - cooltools==0.7.1
+        - bioframe==0.8.0
+        - pandas==2.3.3
+        - matplotlib==3.11.2
