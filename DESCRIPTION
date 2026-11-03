@@ -44,6 +44,8 @@ Suggests:
     ggbio,
     patchwork, 
     HiCool
+Remotes:
+    js2264/BiocBook@devel
 biocViews:
     HiC,
     DNA3DStructure, 
